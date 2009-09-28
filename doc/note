@@ -1,0 +1,63 @@
+Extjs on cachefly
+
+http://extjs.cachefly.net/ext-3.0.0/adapter/ext/ext-base.js
+http://extjs.cachefly.net/ext-3.0.0/ext-all.js
+http://extjs.cachefly.net/ext-3.0.0/resources/css/ext-all.css
+
+// directly access it
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js
+// alias the newest 3.0.x version
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0/ext-core.js
+// alias the newest 3.x.x version
+http://ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js
+// directly access the uncompressed code
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core-debug.js
+
+
+
+
+
+
+
+
+## add event listener when page load
+var newBody = 
+'<html>' +
+'<head>' +
+'<title>My New Page</title>' +
+'</head>' +
+'<body>' +
+'<p>This page is a complete replacement of the original.</p>' +
+'</body>' +
+'</html>';
+window.addEventListener(
+    'load', 
+    function() { document.body.innerHTML = newBody; },
+    true);
+    
+    
+    
+    
+var paragraphCount = Ext.DomQuery.select("/html/body/form[id='aspnetForm']/div[id='mainContent']/div:nth(3)/div:nth(1)/div:nth(5)", document, null, XPathResult.ANY_TYPE, null );
+
+alert( 'This document contains ' + paragraphCount.numberValue + ' paragraph elements' );
+
+
+
+//get all divs - iterator style
+var result = document.evaluate("/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[3]/div[1]/div[5]", document.documentElement, null,XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+if (result){
+    var node = result.iterateNext();
+    while(node) {
+        alert(node.innerHTML);
+        node = node.iterateNext();
+    }
+}
+
+
+
+XPath.single(null,'//a[text()="ÏÂÒ»Ò³"]')
+
+
+
+    

@@ -10,7 +10,7 @@ window.addEventListener('load',function() {
   }
   var sf=document.createElement('script');
   sf.setAttribute("type","text/javascript");
-  sf.setAttribute("src", "http://localhost/js/crawler_loader.js");  
+  sf.setAttribute("src", "http://localhost:8080/crawler/js/crawler_loader.js");  
   document.getElementsByTagName("head")[0].appendChild(sf);  
 },true);
 

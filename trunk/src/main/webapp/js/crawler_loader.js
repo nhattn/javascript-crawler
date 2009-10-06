@@ -71,7 +71,7 @@ var metaInfo = {
 }
 
 function scriptloaded(){	
-    return;
+    //return;
 	var info = metaInfo;	
 	var result = XPath.array(document.documentElement, metaInfo.path)			
 	if (result){

@@ -46,20 +46,19 @@ function clog(txt){
 	if(window.console) window.console.log(txt);
 }
 
-
-
 var metaInfo = {
 	path : "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[3]/div[1]/div",
 	start : 3,
 	stop : -1,
 	mapping : [
-		{path:'div[2]/a[1]', attr:'novel:cat1'},
-		{path:'div[2]/a[2]', attr:'novel:cat2'},
-		{path:'div[3]/span/a', attr:'novel:name'},
-		{path:'div[3]/a', attr:'chapter:fullname'},
-		{path:'div[4]', attr:'novel:totalchar'},
-		{path:'div[5]/a', attr:'novel:author'},
-		{path:'div[6]', attr:'novel:updatetime'}						
+		{path:'div[2]/a[1]', attr:'textContent', name:'novel:Cat1'},
+		{path:'div[2]/a[2]', attr:'textContent', name:'novel:Cat2'},
+		{path:'div[3]/span/a', attr:'textContent', name:'novel:Name'},
+		{path:'div[3]/span/a', attr:'href', name:'novel:AllChapter'},
+		{path:'div[3]/a', attr:'textContent', name:'chapter:FullName'},
+		{path:'div[4]', attr:'textContent', name:'novel:TotalChar'},
+		{path:'div[5]/a', attr:'textContent', name:'novel:Author'},
+		{path:'div[6]', attr:'textContent', name:'novel:UpdateTime'}						
 	],
 	nextAction : function(){
 		var link = XPath.single(null, '//a[text()="ÏÂÒ»Ò³"]');		
@@ -72,6 +71,7 @@ var metaInfo = {
 }
 
 function scriptloaded(){	
+    return;
 	var info = metaInfo;	
 	var result = XPath.array(document.documentElement, metaInfo.path)			
 	if (result){
@@ -99,7 +99,7 @@ function parseMappedNode(node, mapping){
 	for(var i=0;i<mapping.length;i++){
 		var m = mapping[i];
 		var n = XPath.single(node, m.path);		
-		r[m.attr] = n.textContent;		
+		r[m.name] = n[m.attr];		
 	}
 	return r;
 }
@@ -108,6 +108,7 @@ function objToString(obj){
 	var r = [];
 	for(var i in obj){
 		r.push(i);
+		r.push('=');
 		r.push(obj[i]);
 		r.push(', ');
 	}

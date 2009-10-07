@@ -51,18 +51,36 @@ public class GateServlet extends HttpServlet {
         return ServicePackage + uri;
     }
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServiceBase service = lookupService(req);        
+        ServiceBase service = lookupService(req);
+        allowCrossDomain(resp);
         service.get(req, resp);
     }
 
+    @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServiceBase service = lookupService(req);
+        allowCrossDomain(resp);
         service.put(req, resp);
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServiceBase service = lookupService(req);
+        allowCrossDomain(resp);
         service.post(req, resp);
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        allowCrossDomain(resp);
+    }
+
+    private void allowCrossDomain(HttpServletResponse resp) {
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER");
+        resp.setHeader("Access-Control-Max-Age", "0");
     }
 }

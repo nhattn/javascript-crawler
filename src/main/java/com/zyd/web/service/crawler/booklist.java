@@ -13,4 +13,17 @@ public class booklist extends ServiceBase {
     public void put(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.getWriter().write("dkdkdk");
     }
+    
+    @Override
+    public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("got data");
+        System.out.println(req.getParameter("data"));
+        resp.getWriter().write("dkdkdk");
+    }
+    
+    @Override
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.getWriter().write("dkdkdk");
+    }
 }

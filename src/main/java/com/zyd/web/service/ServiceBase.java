@@ -22,6 +22,5 @@ public class ServiceBase {
     private void serviceNotFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String msg = "The requested service: " + req.getRequestURI() + ", method:" + req.getMethod() + " is not found.";
         resp.getWriter().write(msg);
-        resp.flushBuffer();
     }
 }

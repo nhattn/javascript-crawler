@@ -79,7 +79,7 @@ public class GateServlet extends HttpServlet {
 
     private void allowCrossDomain(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Methods", "GET");
         resp.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER");
         resp.setHeader("Access-Control-Max-Age", "0");
     }

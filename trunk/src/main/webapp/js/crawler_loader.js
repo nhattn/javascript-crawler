@@ -37,8 +37,8 @@ XPath = {
 	}
 }
 
-//var extfile = 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js';
-var extfile = 'http://localhost:8080/crawler/js/ext-core-debug.js';
+var extfile = 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js';
+//var extfile = 'http://localhost:8080/crawler/js/ext-core-debug.js';
 
 CWR = Crawler;
 CWR.loadJSFile(extfile, function(){scriptloaded();});
@@ -72,12 +72,31 @@ var metaInfo = {
 	}
 }
 
-function scriptloaded(){	
+
+function testajax(){
+    var invocation = new XMLHttpRequest();
+    var url = 'http://arunranga.com/examples/access-control/simpleXSInvocation.html';
+    var url = 'http://localhost:8080/crawler/service/crawler/booklist';    
+    var body = '<?xml version="1.0"?><person><name>Arun</name></person>';        
+    var cba =  function(){try{var a = invocation.readyState+'  '+invocation.status; console.log(a);}catch(e){console.log(e)}};       
+    invocation.open('POST', url, true);
+    invocation.onreadystatechange = cba;
+    invocation.send(body);            
+    callOtherDomain();
+}
+function scriptloaded1(){    
+    testajax();
+}
+
+function scriptloaded(){   
+    Ext.lib.Ajax.useDefaultXhrHeader=false;
+    var url = 'http://arunranga.com/examples/access-control/simpleXSInvocation.html';
+    var url = 'http://localhost:8080/crawler/service/crawler/booklist';
     Ext.Ajax.request({
-        url: "http://localhost:8080/crawler/service/crawler/booklist",
-        success: function(){alert(1);},
-        failure: function(){alert(2);},
-        method: 'GET'        
+        url: url,
+        success: function(){console.log('suc');},
+        failure: function(){console.log('fail');},
+        method: 'POST'        
      });    
     
     return;

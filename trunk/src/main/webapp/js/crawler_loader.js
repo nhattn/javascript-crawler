@@ -10,13 +10,11 @@ Crawler = {
 }
 
 XPath = {
-	version : '0.1',
-	
+	version : '0.1',	
 	iterator : function(node, path){
 		if(!node) node = document.documentElement;
 		return document.evaluate(path, node, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-	},
-	
+	},	
 	array : function(node,path){
 		var r = [];
 		var nodes = XPath.iterator(node,path);
@@ -28,8 +26,7 @@ XPath = {
 			}
 		}
 		return r;
-	},
-	
+	},	
 	single : function(node, path){
 		if(!node) node = document.documentElement;
 		var r = document.evaluate(path, node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
@@ -40,25 +37,30 @@ XPath = {
 	}
 }
 
+//var extfile = 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js';
+var extfile = 'http://localhost:8080/crawler/js/ext-core-debug.js';
+
 CWR = Crawler;
-CWR.loadJSFile('http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js', function(){scriptloaded();});
+CWR.loadJSFile(extfile, function(){scriptloaded();});
+
 function clog(txt){
 	if(window.console) window.console.log(txt);
 }
 
 var metaInfo = {
+    dataUrl : 'http://localhost:8080/crawler/service/crawler/booklist',
 	path : "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[3]/div[1]/div",
 	start : 3,
 	stop : -1,
 	mapping : [
-		{path:'div[2]/a[1]', attr:'textContent', name:'novel:Cat1'},
-		{path:'div[2]/a[2]', attr:'textContent', name:'novel:Cat2'},
-		{path:'div[3]/span/a', attr:'textContent', name:'novel:Name'},
-		{path:'div[3]/span/a', attr:'href', name:'novel:AllChapter'},
-		{path:'div[3]/a', attr:'textContent', name:'chapter:FullName'},
-		{path:'div[4]', attr:'textContent', name:'novel:TotalChar'},
-		{path:'div[5]/a', attr:'textContent', name:'novel:Author'},
-		{path:'div[6]', attr:'textContent', name:'novel:UpdateTime'}						
+		{path:'div[2]/a[1]', attr:'textContent', name:'book.cat1'},
+		{path:'div[2]/a[2]', attr:'textContent', name:'book.cat2'},
+		{path:'div[3]/span/a', attr:'textContent', name:'book.name'},
+		{path:'div[3]/span/a', attr:'href', name:'book.allChapterLink'},
+		{path:'div[3]/a', attr:'textContent', name:'chapter.link'},
+		{path:'div[4]', attr:'textContent', name:'book.totalChar'},
+		{path:'div[5]/a', attr:'textContent', name:'book.author'},
+		{path:'div[6]', attr:'textContent', name:'book.updateTime'}						
 	],
 	nextAction : function(){
 		var link = XPath.single(null, '//a[text()="ÏÂÒ»Ò³"]');		
@@ -71,7 +73,16 @@ var metaInfo = {
 }
 
 function scriptloaded(){	
-    //return;
+    Ext.Ajax.request({
+        url: "http://localhost:8080/crawler/service/crawler/booklist",
+        success: function(){alert(1);},
+        failure: function(){alert(2);},
+        method: 'GET'        
+     });    
+    
+    return;
+    
+    // return;
 	var info = metaInfo;	
 	var result = XPath.array(document.documentElement, metaInfo.path)			
 	if (result){
@@ -81,17 +92,33 @@ function scriptloaded(){
 			stop = info.stop
 		}else if(info.stop == 0){
 			stop = result.length;
-		}else{
+		}else if(info.stop <0){
 			stop = result.length + info.stop;
 		}
+		var books = [];		
 	    for(var i=start;i<stop;i++){
 	        var node = result[i];
-	        clog(objToString(parseMappedNode(node,info.mapping)));
+	        var entry = parseMappedNode(node,info.mapping);
+	        books.push(entry);
+	        clog(objToString(entry));
 	    }
+	    postData(books, info.dataUrl);
 	}
+	return;
 	if(info.nextAction){		
 		info.nextAction();
 	}
+}
+
+function postData(data, url){
+    data = JSON.stringify(data);
+    Ext.Ajax.request({
+        url: url,
+        success: function(){alert(1);},
+        failure: function(){alert(2);},
+        method: 'POST',
+        params: { data: data }
+     });
 }
 
 function parseMappedNode(node, mapping){

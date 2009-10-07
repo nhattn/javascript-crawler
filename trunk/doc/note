@@ -60,4 +60,25 @@ XPath.single(null,'//a[text()="обр╩рЁ"]')
 
 
 
-    
+
+
+
+<list>
+   <novel>
+       <name>
+       <length>
+       <updateTime>
+       <chapter>
+           <name>
+           <updateTime>
+           <url>
+       <author>
+       <allListUrl>
+   <novel>
+</list>     
+   
+   
+   
+   
+   
+       

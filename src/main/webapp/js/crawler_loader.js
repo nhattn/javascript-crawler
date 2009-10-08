@@ -57,7 +57,7 @@ var metaInfo = {
 		{path:'div[2]/a[2]', attr:'textContent', name:'book.cat2'},
 		{path:'div[3]/span/a', attr:'textContent', name:'book.name'},
 		{path:'div[3]/span/a', attr:'href', name:'book.allChapterLink'},
-		{path:'div[3]/a', attr:'textContent', name:'chapter.link'},
+		{path:'div[3]/a', attr:'textContent', name:'book.chapters.link'},
 		{path:'div[4]', attr:'textContent', name:'book.totalChar'},
 		{path:'div[5]/a', attr:'textContent', name:'book.author'},
 		{path:'div[6]', attr:'textContent', name:'book.updateTime'}						
@@ -72,36 +72,9 @@ var metaInfo = {
 	}
 }
 
-
-function testajax(){
-    var invocation = new XMLHttpRequest();
-    var url = 'http://arunranga.com/examples/access-control/simpleXSInvocation.html';
-    var url = 'http://localhost:8080/crawler/service/crawler/booklist';    
-    var body = '<?xml version="1.0"?><person><name>Arun</name></person>';        
-    var cba =  function(){try{var a = invocation.readyState+'  '+invocation.status; console.log(a);}catch(e){console.log(e)}};       
-    invocation.open('POST', url, true);
-    invocation.onreadystatechange = cba;
-    invocation.send(body);            
-    callOtherDomain();
-}
-function scriptloaded1(){    
-    testajax();
-}
-
 function scriptloaded(){   
     Ext.lib.Ajax.useDefaultXhrHeader=false;
-    var url = 'http://arunranga.com/examples/access-control/simpleXSInvocation.html';
-    var url = 'http://localhost:8080/crawler/service/crawler/booklist';
-    Ext.Ajax.request({
-        url: url,
-        success: function(){console.log('suc');},
-        failure: function(){console.log('fail');},
-        method: 'POST'        
-     });    
-    
-    return;
-    
-    // return;
+        
 	var info = metaInfo;	
 	var result = XPath.array(document.documentElement, metaInfo.path)			
 	if (result){
@@ -131,13 +104,14 @@ function scriptloaded(){
 
 function postData(data, url){
     data = JSON.stringify(data);
+    var url = 'http://localhost:8080/crawler/service/crawler/booklist';
     Ext.Ajax.request({
         url: url,
-        success: function(){alert(1);},
-        failure: function(){alert(2);},
+        success: function(){console.log('suc');},
+        failure: function(){console.log('fail');},
         method: 'POST',
-        params: { data: data }
-     });
+        params: { data: data }        
+     });        
 }
 
 function parseMappedNode(node, mapping){

@@ -78,7 +78,11 @@ XPath.single(null,'//a[text()="обр╩рЁ"]')
 </list>     
    
    
+var p= new RegExp("http://[^\.]*\.qidian\.com/book/bookStore\.aspx*", 'i');
+p.test(window.location.toString())
+
+
+
    
-   
-   
+    
        

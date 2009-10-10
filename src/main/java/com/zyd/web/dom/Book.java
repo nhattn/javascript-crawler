@@ -7,6 +7,8 @@ public class Book {
     public String id = null;
     public String name = null;
     public String author = null;
+    public String description = null;
+
     public String cat1 = null;
     public String cat2 = null;
     public String allChapterLink = null;
@@ -18,6 +20,14 @@ public class Book {
     public List<Chapter> chapters = new ArrayList<Chapter>();
 
     public String tempLink = null;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getId() {
         return id;

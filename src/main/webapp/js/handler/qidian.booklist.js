@@ -1,4 +1,4 @@
-function handlerProcess(){    
+function handlerProcess(){
     var metaInfo = {
             dataUrl : 'http://localhost:8080/crawler/service/crawler/booklist',
             path : "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[3]/div[1]/div",
@@ -27,16 +27,6 @@ function handlerProcess(){
         return r;
     }
     
-    function callback(r, suc){
-        if(!suc){
-            Crawler.clog("failed");            
-        }else{            
-            //Crawler.clog(r.responseText);
-            var nextAction = Ext.util.JSON.decode(r.responseText);
-            Crawler.clog(nextAction);
-            Crawler.action(nextAction);         
-        }        
-    }
     var info = metaInfo;    
     var result = XPath.array(document.documentElement, metaInfo.path);           
     if (result){
@@ -57,6 +47,6 @@ function handlerProcess(){
             //Crawler.clog(Crawler.objToString(entry));
         }
         var params = {data : Ext.util.JSON.encode(books)};
-        Crawler.postData(params, info.dataUrl, callback);
+        Crawler.postData(params, info.dataUrl);
     }    
 }

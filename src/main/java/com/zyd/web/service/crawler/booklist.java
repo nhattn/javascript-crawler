@@ -1,6 +1,5 @@
 package com.zyd.web.service.crawler;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -11,12 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
-
 import com.zyd.web.Util;
 import com.zyd.web.core.BookManager;
 import com.zyd.web.core.LinkManager;
 import com.zyd.web.core.SiteManager;
+import com.zyd.web.core.TemplateManager;
 import com.zyd.web.dom.Book;
 import com.zyd.web.dom.WebSite;
 import com.zyd.web.service.ServiceBase;
@@ -46,14 +44,14 @@ public class booklist extends ServiceBase {
             b.site = site;
         }
         bm.addBookList(books);
-        
+
         // add links for analysis
         LinkManager lm = LinkManager.getInstance();
-        for(Book b: books){
+        for (Book b : books) {
             lm.addLink(b.tempLink);
         }
 
-        String s = FileUtils.readFileToString(new File(nextLinkFile), "GBK");
+        String s = TemplateManager.getInstance().getNextAction("Eval.XPath.Link", "//a[text()=\"ÏÂÒ»Ò³\"]/@href");
         Writer writer = new OutputStreamWriter(resp.getOutputStream(), "GBK");
         writer.write(s);
         writer.flush();

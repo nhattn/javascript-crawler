@@ -18,7 +18,7 @@ public class BookManager {
 
     private static HashMap<String, Book> bookCache = new HashMap<String, Book>();
     private static List<Book> bookList = new ArrayList<Book>();
-    
+
     private BookManager() {
     }
 
@@ -93,6 +93,7 @@ public class BookManager {
                 b.cat2 = obj.getString("cat2");
                 b.totalChar = obj.getString("totalChar");
                 b.tempLink = obj.getString("nextLink");
+                b.updateTime = obj.getString("updateTime");
                 ret.add(b);
             }
         } catch (Exception e) {
@@ -100,8 +101,56 @@ public class BookManager {
         }
         return ret;
     }
-    
-    public List<Book> getAllBooks(){
+
+    public Book parseBook(String s) {
+        Book b = new Book();
+        JSONObject obj = null;
+        try {
+            obj = new JSONObject(s);
+            b.name = obj.getString("name");
+            b.author = obj.getString("author");
+//            b.cat1 = obj.getString("cat1");
+            b.cat2 = obj.getString("cat2");
+            b.totalChar = obj.getString("totalChar");
+            b.allChapterLink = obj.getString("allChapterLink");
+            b.description = obj.getString("description");
+            b.updateTime = obj.getString("updateTime");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    public List<Book> getAllBooks() {
         return bookList;
+    }
+
+    public void updateBook(Book o, Book n) {
+        if (o.getAllChapterLink() == null)
+            o.setAllChapterLink(n.allChapterLink);
+        if (o.getAuthor() == null)
+            o.setAuthor(n.getAuthor());
+        if (o.getCat1() == null)
+            o.setCat1(n.getCat1());
+        if (o.getCat2() == null)
+            o.setCat1(n.getCat2());
+        if (o.getChapters() == null || o.getChapters().size() == 0)
+            o.setChapters(n.getChapters());
+        if (o.getDescription() == null)
+            o.setDescription(n.getDescription());
+        if (o.getHit() == null)
+            o.setHit(n.getHit());
+        if (o.getId() == null)
+            o.setId(n.getId());
+        if (o.getName() == null)
+            o.setName(n.getName());
+        if (o.getSite() == null)
+            o.setSite(n.getSite());
+        if (o.getTempLink() == null)
+            o.setTempLink(n.getTempLink());
+        if (o.getTotalChar() == null)
+            o.setTotalChar(n.getTotalChar());
+        if (o.getUpdateTime() == null)
+            o.setUpdateTime(n.getUpdateTime());
     }
 }

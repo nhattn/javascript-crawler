@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TemplateManager {
     private static TemplateManager instance = new TemplateManager();
@@ -44,5 +46,22 @@ public class TemplateManager {
         File f = new File(templateHome, name);
         String s = FileUtils.readFileToString(f, "GBK");
         return s;
+    }
+
+    public String getNextAction(String action, String... paras) {
+        String r = "{'action':'No.Action'}";
+        JSONObject nextAction = new JSONObject();
+        try {
+            nextAction.put("action", action);
+            if (paras != null && paras.length > 0) {
+                for (int i = 0; i < paras.length; i++) {
+                    nextAction.put("para" + 1, paras[i]);
+                }
+            }
+            r = nextAction.toString();            
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return r;
     }
 }

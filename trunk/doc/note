@@ -96,4 +96,14 @@ https://addons.mozilla.org/en-US/firefox/addon/748
 
    
     
-       
+
+
+
+
+var path = "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td"; 
+var text = XPath.single(null, path).textContent;
+Crawler.extract(text, '小说类别：');       
+
+
+
+var n = XPath.single(null,"/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td");

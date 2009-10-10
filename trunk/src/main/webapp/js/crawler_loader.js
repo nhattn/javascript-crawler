@@ -22,8 +22,9 @@ Crawler = {
 	    }
 	    return r.join('');
 	},
+	
 	postData : function(params, url, callback){
-	    if(!callback) callback = function(){}	        
+	    if(!callback) callback = Crawler.callback       
 	    Ext.Ajax.request({
 	        url: url,
 	        success: function(r){callback(r,true); },
@@ -39,17 +40,85 @@ Crawler = {
 	    
 	    var act = obj.action;
 	    if(act == 'Eval.XPath.Link'){
-	        var link = XPath.single(null, obj.para, XPathResult.STRING_TYPE);
+	        var link = XPath.single(null, obj.para1, XPathResult.STRING_TYPE);
 	        if(!link){
 	            Crawler.clog("Error, can not locate link for XPath: "+obj.para);
 	        }else{  
 	            eval(link.stringValue);
 	        }       	        
-	    }else if(act == "Goto.Next.Link"){
+	    }else if(act == 'Goto.Next.Link'){
 	        // request a new link then go to that link
-	        var url = Crawler.serverUrl + '/link?action=redirect';
+	        var url = Crawler.serverUrl + '/service/crawler/link?action=redirect';
 	        window.location = url;  	        
+	    }else if(act == 'No.Action'){
+	        Crawler.clog('No action got from server.');
+	    }else if(act == 'Goto.XPath.Link'){
+            var link = XPath.single(null, obj.para1, XPathResult.STRING_TYPE);
+            if(!link){
+                Crawler.clog("Error, can not locate link for XPath: "+obj.para);
+            }else{  
+                window.location = link.stringValue;
+            }  	        
 	    }
+	},
+	
+	callback : function(r, suc){
+	    if(!suc){
+	        Crawler.clog("failed");            
+	    }else{            
+	        //Crawler.clog(r.responseText);
+	        var nextAction = null;
+	        try{
+	            nextAction = Ext.util.JSON.decode(r.responseText);
+	        }catch(e){
+	            alert(e);
+	        }
+	        //Crawler.clog(nextAction);
+	        if(nextAction){
+	            Crawler.action(nextAction);
+	        }else{
+	            // nothing to do, keep loop, TODO:
+	        }
+	    }        
+	},	
+	
+	killSpace : function(s){
+	    return s.replace(/\s+/g, ' ');
+	},
+	
+	/**
+	 *  s is something like "小说类别：虚拟网游 总点击：4736 总推荐：419 总字数：228132 更新：2009年10月10日".
+	 *  extract the value for keys like "小说类别" or "总点击".
+	 */
+	extract : function(s, key, defaultValue){
+	    var start, end;
+	    if(typeof defaultValue == undefined){
+	        defaultValue = '';
+	    }
+	    s = Crawler.killSpace(s);
+	    start = s.indexOf(key);
+	    if(start<0){
+	        return defaultValue;
+	    }
+	    
+	    start = start + key.length;
+	    var space =  /^\s$/;
+	    while(start<s.length && space.test(s.charAt(start++))){
+	        // skip all the spaces
+	    }	    
+	    start--;
+	    end = start+1;
+        var nspace =  /^\S$/;
+        while(end<s.length && nspace.test(s.charAt(end++))){
+            // skip all the none spaces
+        }   	    
+        var r = '';
+        try{
+            r = s.substring(start,end);
+        }catch(e){
+            alert(e);
+        }        
+        return r.trim();
 	}
 }
 
@@ -97,8 +166,8 @@ Crawler.loadJSFile(extfile, function(){loadHandler();});
 
 var handlerMapping = [
 {pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx', file:'qidian.booklist'},
-{pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx', file:'qidian.bookcover'}
-
+{pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx', file:'qidian.bookcover'},
+{pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx', file:'qidian.chapterlist'}
 ];
 
 function locateHandler(){

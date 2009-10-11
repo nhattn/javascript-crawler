@@ -12,6 +12,12 @@ Crawler = {
 	clog : function(txt){
 	    if(window.console) window.console.log(txt);
 	},
+	log : function(txt){
+	    Crawler.clog(txt);
+	},
+	error: function(txt){
+	    Crawler.clog('Error: '+txt);
+	},
 	objToString : function(obj){
 	    var r = [];
 	    for(var i in obj){
@@ -157,6 +163,9 @@ XPath = {
 		    }
 		}
 		throw 'Invalid xpath:'+path;		
+	}, 
+	stringv : function(node,path){
+	    return XPath.single(node, path, XPathResult.STRING_TYPE).stringValue;
 	}
 }
 
@@ -167,14 +176,15 @@ Crawler.loadJSFile(extfile, function(){loadHandler();});
 var handlerMapping = [
 {pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx', file:'qidian.booklist'},
 {pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx', file:'qidian.bookcover'},
-{pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx', file:'qidian.chapterlist'}
+{pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx', file:'qidian.chapterlist'},
+{pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx', file:'qidian.chapter'}
 ];
 
 function locateHandler(){
     var url = window.location.toString(), m = handlerMapping;
     for(var i=0;i<m.length;i++){
         var reg = new RegExp(m[i].pattern, 'i');
-        if(reg.test(url) == true){
+        if(reg.test(url) == true){            
             return m[i].file;
         }
     }
@@ -185,5 +195,5 @@ function loadHandler(){
     // find out which web site, based on mapping file, locate the js files.
     Ext.lib.Ajax.useDefaultXhrHeader=false;
     var file = Crawler.serverUrl+Crawler.handlerPath+'/'+locateHandler()+'.js';
-    Crawler.loadJSFile(file, function(){handlerProcess();})
+    Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){alert(e);}})
 }

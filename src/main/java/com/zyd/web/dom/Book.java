@@ -8,7 +8,6 @@ public class Book {
     public String name = null;
     public String author = null;
     public String description = null;
-
     public String cat1 = null;
     public String cat2 = null;
     public String allChapterLink = null;
@@ -17,9 +16,11 @@ public class Book {
     public String totalChar = null;
 
     public WebSite site = null;
-    public List<Chapter> chapters = new ArrayList<Chapter>();
+    public List<Chapter> chapters = null;
 
     public String tempLink = null;
+
+    public String linkWithChapterUrl = null;
 
     public String getDescription() {
         return description;
@@ -81,6 +82,14 @@ public class Book {
         return updateTime;
     }
 
+    public String getLinkWithChapterUrl() {
+        return linkWithChapterUrl;
+    }
+
+    public void setLinkWithChapterUrl(String linkWithChapterUrl) {
+        this.linkWithChapterUrl = linkWithChapterUrl;
+    }
+
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
@@ -125,4 +134,17 @@ public class Book {
         this.tempLink = tempLink;
     }
 
+    public boolean addChapter(Chapter chapter) {
+        if (this.chapters == null) {
+            this.chapters = new ArrayList<Chapter>();
+        }
+        for (Chapter c : this.chapters) {
+            if (c.name == chapter.name) {
+                return false;
+            }
+        }
+        this.chapters.add(chapter);
+        chapter.book = this;
+        return true;
+    }
 }

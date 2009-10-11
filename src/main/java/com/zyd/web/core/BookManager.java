@@ -1,7 +1,6 @@
 package com.zyd.web.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import org.json.JSONObject;
 
 import com.zyd.web.Util;
 import com.zyd.web.dom.Book;
-import com.zyd.web.service.crawler.booklist;
+import com.zyd.web.dom.Chapter;
 
 public class BookManager {
 
@@ -107,18 +106,67 @@ public class BookManager {
         JSONObject obj = null;
         try {
             obj = new JSONObject(s);
-            b.name = obj.getString("name");
-            b.author = obj.getString("author");
-//            b.cat1 = obj.getString("cat1");
-            b.cat2 = obj.getString("cat2");
-            b.totalChar = obj.getString("totalChar");
-            b.allChapterLink = obj.getString("allChapterLink");
-            b.description = obj.getString("description");
-            b.updateTime = obj.getString("updateTime");
+            if (obj.has("name"))
+                b.name = obj.getString("name");
+            if (obj.has("author"))
+                b.author = obj.getString("author");
+            if (obj.has("cat1"))
+                b.cat1 = obj.getString("cat1");
+            if (obj.has("cat2"))
+                b.cat2 = obj.getString("cat2");
+            if (obj.has("totalChar"))
+                b.totalChar = obj.getString("totalChar");
+            if (obj.has("allChapterLink"))
+                b.allChapterLink = obj.getString("allChapterLink");
+            if (obj.has("description"))
+                b.description = obj.getString("description");
+            if (obj.has("updateTime"))
+                b.updateTime = obj.getString("updateTime");
+            if (obj.has("linkWithChapterUrl"))
+                b.linkWithChapterUrl = obj.getString("linkWithChapterUrl");
+
+            if (obj.has("chapters")) {
+                List<Chapter> list = new ArrayList<Chapter>();
+                JSONArray chapters = obj.getJSONArray("chapters");
+                int len = chapters.length();
+                for (int i = 0; i < len; i++) {
+                    JSONObject c = chapters.getJSONObject(i);
+                    Chapter chapter = new Chapter();
+                    if (c.has("volume"))
+                        chapter.volume = c.getString("volume");
+                    if (c.has("updateTime"))
+                        chapter.updateTime = c.getString("updateTime");
+                    if (c.has("totalChar"))
+                        chapter.totalChar = c.getString("totalChar");
+                    if (c.has("name"))
+                        chapter.name = c.getString("name");
+                    if (c.has("link"))
+                        chapter.link = c.getString("link");
+                    chapter.book = b;
+                    list.add(chapter);
+                }
+                b.chapters = list;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return b;
+    }
+
+    public Chapter parseChapter(String s) {
+        Chapter r = new Chapter();
+        try {
+            JSONObject o = new JSONObject(s);
+            if (o.has("content"))
+                r.content = o.getString("content");
+            if (o.has("name"))
+                r.name = o.getString("name");
+            if (o.has("linkBookByUrl"))
+                r.linkBookByUrl = o.getString("linkBookByUrl");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return r;
     }
 
     public List<Book> getAllBooks() {
@@ -152,5 +200,15 @@ public class BookManager {
             o.setTotalChar(n.getTotalChar());
         if (o.getUpdateTime() == null)
             o.setUpdateTime(n.getUpdateTime());
+        if (o.getLinkWithChapterUrl() == null)
+            o.setUpdateTime(n.getLinkWithChapterUrl());
+        // process chapters
+        if (n.getChapters() == null) {
+        } else if (o.getChapters() == null) {
+            o.setChapters(n.getChapters());
+        } else {
+            //TODO: sync two chapters
+        }
+
     }
 }

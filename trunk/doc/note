@@ -107,3 +107,15 @@ Crawler.extract(text, '小说类别：');
 
 
 var n = XPath.single(null,"/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td");
+
+
+
+var path = "/html/body/form[@id='form1']/center/div[@id='content']/div";
+var nodes = XPath.array(null, p);
+for(var i=0;i<nodes.length;i++){
+    var links = XPath.array(nodes[i], './/a');
+    for(var j=0;j<links.length;j++){
+        var l = links[j];
+        console.log(l);
+    }
+}

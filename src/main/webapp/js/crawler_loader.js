@@ -195,5 +195,5 @@ function loadHandler(){
     // find out which web site, based on mapping file, locate the js files.
     Ext.lib.Ajax.useDefaultXhrHeader=false;
     var file = Crawler.serverUrl+Crawler.handlerPath+'/'+locateHandler()+'.js';
-    Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){alert(e);}})
+    Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){Crawler.error(e);}})
 }

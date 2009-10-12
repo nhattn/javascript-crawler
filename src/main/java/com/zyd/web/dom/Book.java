@@ -14,6 +14,7 @@ public class Book {
     public String updateTime = null;
     public String hit = null;
     public String totalChar = null;
+    public String finished = null;
 
     public WebSite site = null;
     public List<Chapter> chapters = null;

@@ -37,7 +37,9 @@ public class chapterlist extends ServiceBase {
         } else {
             bm.updateBook(obook, nbook);
         }
-        if (nbook.chapters != null) {
+        
+        if (nbook.chapters != null && false) {
+            //TODO: do not grab chapter text for now
             List<Chapter> list = obook.chapters;
             boolean linkBook = false;
             if ("y".equals(nbook.linkWithChapterUrl))

@@ -119,3 +119,76 @@ for(var i=0;i<nodes.length;i++){
         console.log(l);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+Book
+    id
+    name 
+    author
+    hit
+    finished        
+    
+Chapter
+    id
+    bookId
+    name
+    hit
+    hasContent
+    isPic
+
+Site
+    id
+    name
+    domainName
+    url    
+    
+BookSite
+    id
+    bookId
+    siteId    
+    updateTime
+    coverUrl
+    allChapterUrl
+    
+ChapterSite
+    id    
+    chapterId    
+    siteId
+    updateTime
+    url
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

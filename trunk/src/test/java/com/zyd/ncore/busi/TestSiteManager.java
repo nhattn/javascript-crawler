@@ -40,19 +40,19 @@ public class TestSiteManager extends TestCase {
         assertNull("Add site 4", sm.addSite("aa.com"));
 
         // test load site
-        assertNotNull("Load site 1", sm.loadSiteByUrl("http://www.aa.com"));
-        assertNotNull("Load site 2", sm.loadSiteByUrl("http://bb.com"));
-        assertNotNull("Load site 3", sm.loadSiteByUrl("https://cc.dd.com"));
-        assertNotNull("Load site 3", sm.loadSiteByUrl("https://ii.ff.com/ur1/ur2"));
+        assertNotNull("Load site 1", sm.findSiteByUrl("http://www.aa.com"));
+        assertNotNull("Load site 2", sm.findSiteByUrl("http://bb.com"));
+        assertNotNull("Load site 3", sm.findSiteByUrl("https://cc.dd.com"));
+        assertNotNull("Load site 3", sm.findSiteByUrl("https://ii.ff.com/ur1/ur2"));
 
-        assertEquals("Load site 4", "www.aa.com", sm.loadSiteByUrl("http://www.aa.com").getDomainName());
-        assertEquals("Load site 5", "www.aa.com", sm.loadSiteByUrl("https://bb.aa.com").getDomainName());
+        assertEquals("Load site 4", "www.aa.com", sm.findSiteByUrl("http://www.aa.com").getDomainName());
+        assertEquals("Load site 5", "www.aa.com", sm.findSiteByUrl("https://bb.aa.com").getDomainName());
     }
 
     public void testAddBookToSite() {
         sm.clearCache();
-        List<Book> books = TestUtil.getBookList(100);
-        List<Site> sites = TestUtil.getSiteList();
+        List<Book> books = ATestUtil.getBookList(100);
+        List<Site> sites = ATestUtil.getSiteList();
 
         for (int i = 0; i < books.size(); i++) {
             Book b = books.get(i);
@@ -98,10 +98,10 @@ public class TestSiteManager extends TestCase {
     public void testAddChapterToSite() {
         sm.clearCache();
         List<Chapter> chapters = new ArrayList<Chapter>();
-        List<Site> sites = TestUtil.getSiteList();
+        List<Site> sites = ATestUtil.getSiteList();
 
         for (int i = 0; i < 100; i++) {
-            Chapter c = TestUtil.getChapter();
+            Chapter c = ATestUtil.getChapter();
             Site s1 = sites.get(i % sites.size());
             ChapterSite cs1 = sm.addChapterToSite(c, s1);
             assertNotNull(cs1);

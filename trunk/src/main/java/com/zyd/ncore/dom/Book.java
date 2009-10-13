@@ -3,6 +3,8 @@ package com.zyd.ncore.dom;
 import java.util.Date;
 import java.util.List;
 
+import com.zyd.ncore.Utils;
+
 public class Book {
     public String id;
     public String name;
@@ -17,15 +19,15 @@ public class Book {
 
     // Site related info
     public String allChapterUrl;
-    public String urlToGrawl;
+    public String urlToCrawl;
     public String coverUrl;
 
     public String getUrlToGrawl() {
-        return urlToGrawl;
+        return urlToCrawl;
     }
 
     public void setUrlToGrawl(String urlToGrawl) {
-        this.urlToGrawl = urlToGrawl;
+        this.urlToCrawl = urlToGrawl;
     }
 
     public String getCoverUrl() {
@@ -45,11 +47,11 @@ public class Book {
     }
 
     public String getUrlToCrawl() {
-        return urlToGrawl;
+        return urlToCrawl;
     }
 
     public void seUrlToCrawl(String tempUrl) {
-        this.urlToGrawl = tempUrl;
+        this.urlToCrawl = tempUrl;
     }
 
     public String getId() {
@@ -132,4 +134,38 @@ public class Book {
         this.chapters = chapters;
     }
 
+    @Override
+    public int hashCode() {
+        StringBuffer buf = new StringBuffer();
+        buf.append(name);
+        buf.append('$');
+        buf.append(author);
+        buf.append('$');
+        return buf.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj instanceof Book == false) {
+            return false;
+        }
+        Book ob = (Book) obj;
+        if (Utils.strictEqual(name, ob.getName()) == false)
+            return false;
+        if (Utils.strictEqual(author, ob.getAuthor()) == false)
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append('[');
+        buf.append(name);
+        buf.append(',');
+        buf.append(author);
+        buf.append(']');
+        return buf.toString();
+
+    }
 }

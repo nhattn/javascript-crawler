@@ -2,6 +2,8 @@ package com.zyd.ncore.dom;
 
 import java.util.Date;
 
+import com.zyd.ncore.Utils;
+
 public class Chapter {
     public String id;
     public String name;
@@ -126,5 +128,22 @@ public class Chapter {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "[chapter:" + this.name + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj instanceof Chapter == false)
+            return false;
+        return Utils.strictEqual(this.name, ((Chapter) obj).getName());
     }
 }

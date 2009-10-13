@@ -1,5 +1,7 @@
 package com.zyd.ncore.dom;
 
+import com.zyd.ncore.Utils;
+
 public class Site {
     public String id;
     public String name;
@@ -36,5 +38,22 @@ public class Site {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "[site: " + domainName + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj instanceof Site == false)
+            return false;
+        return Utils.strictEqual(domainName, ((Site) obj).getDomainName());
+    }
+
+    @Override
+    public int hashCode() {
+        return domainName.hashCode();
     }
 }

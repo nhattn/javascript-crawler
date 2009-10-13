@@ -151,6 +151,14 @@ public class BookManager {
      * @return
      */
     public boolean compareAndUpdateBook(Book oldBook, Book newBook) {
-        throw new UnsupportedOperationException();
+        boolean changed = false;
+        if (!Utils.strictEqual(oldBook.getTotalChar(), newBook.getTotalChar()) && newBook.getTotalChar() != 0) {
+            oldBook.setTotalChar(newBook.getTotalChar());
+            changed = true;
+        }
+        if (!Utils.strictEqual(oldBook.getUpdateTime(), newBook.getUpdateTime()) && newBook.getUpdateTime() != null) {
+            oldBook.setUpdateTime(newBook.getUpdateTime());
+        }
+        return changed;
     }
 }

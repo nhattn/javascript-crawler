@@ -44,9 +44,9 @@ function handlerProcess(){
             var node = result[i];
             var entry = parseMappedNode(node,info.mapping);
             books.push(entry);
-            //Crawler.clog(Crawler.objToString(entry));
         }
         var params = {data : Ext.util.JSON.encode(books)};
+        //Crawler.log(params.data);        
         Crawler.postData(params, info.dataUrl);
     }    
 }

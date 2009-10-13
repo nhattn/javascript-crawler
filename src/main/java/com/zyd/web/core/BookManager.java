@@ -2,6 +2,7 @@ package com.zyd.web.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -173,6 +174,10 @@ public class BookManager {
         return bookList;
     }
 
+    public int getTotalBookCount() {
+        return (new HashSet<Book>(bookList)).size();
+    }
+
     public void updateBook(Book o, Book n) {
         if (o.getAllChapterLink() == null)
             o.setAllChapterLink(n.allChapterLink);
@@ -209,6 +214,5 @@ public class BookManager {
         } else {
             //TODO: sync two chapters
         }
-
     }
 }

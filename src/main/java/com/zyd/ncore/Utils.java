@@ -1,5 +1,7 @@
 package com.zyd.ncore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
@@ -56,6 +58,15 @@ public class Utils {
         return null;
     }
 
+    public static <T> boolean strictEqual(T o1, T o2) {
+        if (o1 == null && o2 == null)
+            return true;
+        if (o1 != null && o2 != null) {
+            return o1.equals(o2);
+        }
+        return false;
+    }
+
     public static String getDomain(String s) {
         if (s == null)
             return null;
@@ -74,9 +85,24 @@ public class Utils {
         }
         i = s.lastIndexOf('.', i - 1);
         if (i != -1) {
-            s = s.substring(i+1);
+            s = s.substring(i + 1);
         }
         return "www." + s;
+    }
+
+    private static DateFormat[] dateFormats = new SimpleDateFormat[]{
+       new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
+    };
+
+    public static Date parseDate(String s) {
+        Date date = new Date();
+        for (DateFormat d : dateFormats) {
+            try {
+                date = d.parse(s);
+            } catch (Exception e) {
+            }
+        }
+        return date;
     }
 
     public static void main(String[] args) {
@@ -86,5 +112,7 @@ public class Utils {
         System.out.println(getDomain("cc.bbb.com"));
         System.out.println(getDomain("bbb.com"));
         System.out.println(getDomain("http://bbb.com"));
+        
+        System.out.println(parseDate("09-10-13 13:57"));
     }
 }

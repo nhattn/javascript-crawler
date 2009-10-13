@@ -28,9 +28,9 @@ function handlerProcess(){
     book.author = XPath.stringv(null, "/html/body/form[@id='form1']/center/table/tbody/tr/td[1]/a/b/text()");
     book.chapters = chapters;
     book.linkWithChapterUrl = 'y';
-    //c.log(book);
     var params = {data : Ext.util.JSON.encode(book)};
-    Crawler.postData(params, metaInfo.dataUrl);
+    c.log(params.data);
+    //Crawler.postData(params, metaInfo.dataUrl);
 }
 
 var metaInfo = {

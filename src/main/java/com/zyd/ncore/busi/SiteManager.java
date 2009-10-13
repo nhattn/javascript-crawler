@@ -148,7 +148,7 @@ public class SiteManager {
      * @param s
      * @return
      */
-    public Site loadSiteByUrl(String s) {
+    public Site findSiteByUrl(String s) {
         if (s == null)
             return null;
         String domain = Utils.getDomain(s);
@@ -161,7 +161,7 @@ public class SiteManager {
      * @return the new added site with everything set(id)
      */
     public Site addSite(String url) {
-        if (loadSiteByUrl(url) != null)
+        if (findSiteByUrl(url) != null)
             return null;
         String domain = Utils.getDomain(url);
         Site site = new Site();
@@ -173,7 +173,11 @@ public class SiteManager {
         return site;
     }
 
-    public void clearSite() {
+    public int getSiteCount() {
+        return siteCache.size();
+    }
+
+    public void clearSites() {
         siteCache.clear();
     }
 
@@ -186,7 +190,7 @@ public class SiteManager {
     }
 
     public void clearCache() {
-        clearSite();
+        clearSites();
         clearBook();
         clearChapter();
     }

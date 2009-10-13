@@ -38,8 +38,12 @@ public class CrawlerManager {
      * @return the number of books added for this call.
      */
     public int processBookList(HttpServletRequest req) {
-        String fromUrl = req.getHeader("Referer"), data = req.getParameter("data");
-        List<Book> books = json.parseBookList(data), booksWithId = new ArrayList<Book>();
+        String fromUrl = req.getHeader("Referer"), jsonBookListString = req.getParameter("data");
+        return processBookList(jsonBookListString, fromUrl);
+    }
+
+    public int processBookList(String jsonBookListString, String fromUrl) {
+        List<Book> books = json.parseBookList(jsonBookListString), booksWithId = new ArrayList<Book>();
 
         // process books
         int added = 0;
@@ -67,8 +71,12 @@ public class CrawlerManager {
      * @return whether or not anything has changed.
      */
     public boolean processBook(HttpServletRequest req) {
-        String fromUrl = req.getHeader("Referer"), data = req.getParameter("data");
-        Book book = json.parseBook(data), bookWithId = null;
+        String fromUrl = req.getHeader("Referer"), jsonBookListString = req.getParameter("data");
+        return processBook(jsonBookListString, fromUrl);
+    }
+
+    public boolean processBook(String jsonBookListString, String fromUrl) {
+        Book book = json.parseBook(jsonBookListString), bookWithId = null;
         boolean changed = false;
 
         AResult r = addBookIfNecessary(book);
@@ -149,7 +157,7 @@ public class CrawlerManager {
 
     private AResult createSiteIfNecessary(String url) {
         AResult r = new AResult();
-        Site site = siteManager.loadSiteByUrl(url);
+        Site site = siteManager.findSiteByUrl(url);
         if (site == null) {
             site = siteManager.addSite(url);
             r.added = true;
@@ -166,5 +174,11 @@ public class CrawlerManager {
         ChapterSite chapterSite = null;
         boolean added = false;
         boolean updated = false;
+    }
+
+    public void clearAll() {
+        this.siteManager.clearSites();
+        this.linkManager.clearLinks();
+        this.bookManager.clearBooks();
     }
 }

@@ -53,7 +53,8 @@ public class BookManager {
      * TODO: what if different websites have same book with same name&author, 
      * but acutally are different content.
      * @param book must have name & author
-     * @return the same book instance with everything populated or a new book instance.
+     * @return the same book instance with everything populated or a new book instance. the book instance will not contain chapter information. 
+     * to load chapter information, call loadBookChapter method.
      * should not modify it.
      */
     public Book findBook(Book book) {
@@ -67,7 +68,7 @@ public class BookManager {
      * chapter should not be in the book already.
      * @param book must be a valid book instance got from findBook.
      * @param chapter must have name
-     * @return the same chapter instance as passed in, or if chapter is already 
+     * @return the chapter object created, or if chapter is already 
      * in the book, return null.
      */
     public Chapter addChapterToBook(Book book, Chapter chapter) {
@@ -132,5 +133,24 @@ public class BookManager {
         if (b != null)
             return b.chapters;
         return null;
+    }
+
+    /**
+     * compares and updates oldBook with content in the newBook.
+     * This won't update the chapter information
+     * 
+     * if both oldBook and newBook have an attribute but with different value,
+     * the value in old book takes precedence.
+     * 
+     * this call will update the book store as well as oldBook.
+     * 
+     * if this book has a new all chapter url or cover url, 
+     * also need to update the booksite table.
+     * @param oldBook
+     * @param newBook
+     * @return
+     */
+    public boolean compareAndUpdateBook(Book oldBook, Book newBook) {
+        throw new UnsupportedOperationException();
     }
 }

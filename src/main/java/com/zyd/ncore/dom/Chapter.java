@@ -1,12 +1,42 @@
 package com.zyd.ncore.dom;
 
+import java.util.Date;
+
 public class Chapter {
     public String id;
     public String name;
     public String description;
     public String content;
     public String volume;
-    
+
+    // site related info
+    public Date updateTime;
+    public String chapterUrl;
+
+    public String getChapterUrl() {
+        return chapterUrl;
+    }
+
+    public void setChapterUrl(String chapterUrl) {
+        this.chapterUrl = chapterUrl;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
     /**
      * the sequence of this chapter in the book.
      * sometimes chapters have the same name.
@@ -15,7 +45,7 @@ public class Chapter {
     public int hit;
     public int totalChar;
     public boolean hasContent;
-    public boolean isPicture;    
+    public boolean isPicture;
     public Book book;
 
     public String getId() {

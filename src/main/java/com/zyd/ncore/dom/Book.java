@@ -15,6 +15,43 @@ public class Book {
     public Date updateTime;
     public List<Chapter> chapters;
 
+    // Site related info
+    public String allChapterUrl;
+    public String urlToGrawl;
+    public String coverUrl;
+
+    public String getUrlToGrawl() {
+        return urlToGrawl;
+    }
+
+    public void setUrlToGrawl(String urlToGrawl) {
+        this.urlToGrawl = urlToGrawl;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
+    public String getAllChapterUrl() {
+        return allChapterUrl;
+    }
+
+    public void setAllChapterUrl(String allChapterUrl) {
+        this.allChapterUrl = allChapterUrl;
+    }
+
+    public String getUrlToCrawl() {
+        return urlToGrawl;
+    }
+
+    public void seUrlToCrawl(String tempUrl) {
+        this.urlToGrawl = tempUrl;
+    }
+
     public String getId() {
         return id;
     }

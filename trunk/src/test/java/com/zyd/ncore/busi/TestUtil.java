@@ -10,10 +10,12 @@ import org.apache.commons.lang.StringUtils;
 
 import com.zyd.ncore.dom.Book;
 import com.zyd.ncore.dom.Chapter;
+import com.zyd.ncore.dom.Site;
 
-public class Util {
+public class TestUtil {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
+    static String[] domains = new String[] { "http://www.qidian.com", "http://17k.com", "http://aa.kanshu.com" };
 
     public static String getNoRepeatString() {
         StringBuffer buf = new StringBuffer();
@@ -35,6 +37,8 @@ public class Util {
             b.setId(Integer.toString(10000 + i));
             b.setName("小说书名" + i);
             b.setAuthor("作者" + i);
+            b.setAllChapterUrl(domains[i % 3] + "/all_chapter_" + i);
+            b.setCoverUrl(domains[i % 3] + "/cover_" + i);
             books.add(b);
         }
         return books;
@@ -50,6 +54,15 @@ public class Util {
         return c;
     }
 
+    public static List<Site> getSiteList() {
+        List<Site> r = new ArrayList<Site>();
+        SiteManager sm = SiteManager.getInstance();
+        for (String s : domains) {
+            r.add(sm.addSite(s));
+        }
+        return r;
+    }
+
     public static void buildModel(int bookCount, int chapterPerBook) {
         List<Book> books = getBookList(bookCount);
         BookManager bm = BookManager.getInstance();
@@ -58,6 +71,7 @@ public class Util {
             for (int i = 0; i < chapterPerBook; i++) {
                 Chapter c = getChapter();
                 c.setName(book.getName() + ":+章节" + i);
+                c.setChapterUrl(book.getAllChapterUrl()+"/chapter_"+i);
                 bm.addChapterToBook(book, c);
             }
         }

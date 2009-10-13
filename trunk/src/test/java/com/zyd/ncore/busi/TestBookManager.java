@@ -19,7 +19,7 @@ public class TestBookManager extends TestCase {
 
     public void testAddBook() {
         bm.clearBooks();
-        List<Book> books = Util.getBookList(100);
+        List<Book> books = TestUtil.getBookList(100);
         int len = books.size();
 
         for (Book b : books) {
@@ -39,7 +39,7 @@ public class TestBookManager extends TestCase {
 
     public void testFindBook() {
         bm.clearBooks();
-        List<Book> books = Util.getBookList(100);
+        List<Book> books = TestUtil.getBookList(100);
 
         for (Book b : books) {
             bm.addBook(b);
@@ -59,11 +59,11 @@ public class TestBookManager extends TestCase {
 
     public void testAddChapterToBook() {
         bm.clearBooks();
-        List<Book> books = Util.getBookList(100);
+        List<Book> books = TestUtil.getBookList(100);
         for (Book b : books) {
             bm.addBook(b);
             for (int i = 0; i < 10; i++) {
-                Chapter c = Util.getChapter();
+                Chapter c = TestUtil.getChapter();
                 c.setId(null);
                 c = bm.addChapterToBook(b, c);
                 assertNotNull("Add chapter1", c);
@@ -76,11 +76,11 @@ public class TestBookManager extends TestCase {
 
     public void testFindChapterInBook() {
         bm.clearBooks();
-        List<Book> books = Util.getBookList(100);
+        List<Book> books = TestUtil.getBookList(100);
         for (Book b : books) {
             bm.addBook(b);
             for (int i = 0; i < 10; i++) {
-                Chapter c = Util.getChapter();
+                Chapter c = TestUtil.getChapter();
                 c.setName(b.getName() + ":chapter:" + i);
                 bm.addChapterToBook(b, c);
             }
@@ -99,7 +99,7 @@ public class TestBookManager extends TestCase {
     public void testListBook() {
         bm.clearBooks();
         // make sure returns correct number of books
-        Util.buildModel(100, 50);
+        TestUtil.buildModel(100, 50);
         BookFilter filter = new BookFilter();
         filter.setStart(0);
         filter.setCount(50);
@@ -121,7 +121,7 @@ public class TestBookManager extends TestCase {
 
     public void testLoadBookChapter() {
         bm.clearBooks();
-        Util.buildModel(100, 50);
+        TestUtil.buildModel(100, 50);
         BookFilter filter = new BookFilter();
         filter.setStart(0);
         filter.setCount(100);

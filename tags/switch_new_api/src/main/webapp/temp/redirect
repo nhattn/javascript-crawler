@@ -1,0 +1,9 @@
+<html>
+<head>
+    <script>
+        window.location = '$p0$';
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -2,6 +2,7 @@ Crawler = {
 	version:'0.1',
 	serverUrl : 'http://localhost:8080/crawler',
 	handlerPath : '/js/handler',
+	extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
 	loadJSFile : function(fileurl, callback){
   		var sf=document.createElement('script');
   		sf.setAttribute("type","text/javascript");
@@ -17,6 +18,7 @@ Crawler = {
 	},
 	error: function(txt){
 	    Crawler.clog('Error: '+txt);
+	    //alert(txt);
 	},
 	objToString : function(obj){
 	    var r = [];
@@ -33,41 +35,63 @@ Crawler = {
 	    if(!callback) callback = Crawler.callback       
 	    Ext.Ajax.request({
 	        url: url,
-	        success: function(r){callback(r,true); },
-	        failure: function(r){callback(r,false);},
+	        success: function(r){try{callback(r,true);}catch(e){Crawler.error('crawler_loader.postdata:'+e);} },
+	        failure: function(r){try{callback(r,false);}catch(e){Crawler.error('crawler_loader.postdata:'+e);} },
 	        method: 'POST',
 	        params: params        
 	     });        
-	},
+	},	
 	action : function(obj){
+	    var processed = false;
 	    if(!obj || !obj.action) {
-	        Crawler.clog('Error, no action specified');
-	    }
-	    
-	    var act = obj.action;
-	    if(act == 'Eval.XPath.Link'){
-	        var link = XPath.single(null, obj.para1, XPathResult.STRING_TYPE);
-	        if(!link){
-	            Crawler.clog("Error, can not locate link for XPath: "+obj.para);
-	        }else{  
-	            eval(link.stringValue);
-	        }       	        
-	    }else if(act == 'Goto.Next.Link'){
-	        // request a new link then go to that link
-	        var url = Crawler.serverUrl + '/service/crawler/link?action=redirect';
-	        window.location = url;  	        
-	    }else if(act == 'No.Action'){
-	        Crawler.clog('No action got from server.');
-	    }else if(act == 'Goto.XPath.Link'){
-            var link = XPath.single(null, obj.para1, XPathResult.STRING_TYPE);
-            if(!link){
-                Crawler.clog("Error, can not locate link for XPath: "+obj.para);
-            }else{  
-                window.location = link.stringValue;
-            }  	        
+	        Crawler.clog('Error, no action specified');	        
+	    }	    	    
+	    switch(obj.action){
+    	    case 'Eval.XPath.Link.Href' :{
+    	        // xpath should point to the A node, will take out the href
+    	        var link = XPath.single(null, obj.param1);
+    	        if(!link){
+    	            Crawler.error("Error, can not locate link for XPath: "+obj.param1);    	            
+    	        }else{  
+    	           try{
+    	               eval(link.href);
+    	               processed = true;
+    	           }catch(e){
+    	               Crawler.error('Error, can not eval xpath link:'+link+':'+e);    	                   	               
+    	           }
+    	        }
+    	        break;
+    	    }
+    	    case 'Goto.XPath.Link.Href' : {
+                // xpath should point to the A node, will take out the href    	        
+                var link = XPath.single(null, obj.param1);
+                if(!link){
+                    Crawler.clog("Error, can not locate link for XPath: "+obj.param1);                    
+                }else{  
+                    window.location = link.href;
+                    processed = true;
+                }      
+                break;
+            }    	    
+    	    case 'Goto.Next.Link': {
+    	        // request a new link then go to that link
+    	        var url = Crawler.serverUrl + '/service/link?action=redirect';
+    	        window.location = url;
+    	        // must return here, or there will be loops.
+    	        return;
+    	    }
+    	    case 'No.Action' : {    	        
+    	        break;
+    	    }    	   
+	    }//end switch
+	    if(!processed){
+	        Crawler.log("Crawler.action: Goto next link by default.");
+	        Crawler.nextLink();
 	    }
 	},
-	
+	nextLink : function(){
+	   Crawler.action({action:'Goto.Next.Link'});
+	},
 	callback : function(r, suc){
 	    if(!suc){
 	        Crawler.clog("failed");            
@@ -77,17 +101,17 @@ Crawler = {
 	        try{
 	            nextAction = Ext.util.JSON.decode(r.responseText);
 	        }catch(e){
-	            alert(e);
-	        }
-	        //Crawler.clog(nextAction);
+	            Crawler.error("Crawler callback, can not execute next action:");
+	            Crawler.error(r.responseText);
+	        }	        
 	        if(nextAction){
 	            Crawler.action(nextAction);
 	        }else{
-	            // nothing to do, keep loop, TODO:
+	            Crawler.nextLink();
 	        }
 	    }        
 	},	
-	
+		
 	killSpace : function(s){
 	    return s.replace(/\s+/g, ' ');
 	},
@@ -122,10 +146,26 @@ Crawler = {
         try{
             r = s.substring(start,end);
         }catch(e){
-            alert(e);
+            Crawler.error("crawler_loader.extract:"+e+":"+e);
         }        
         return r.trim();
-	}
+	},			
+    locateHandler : function(){
+        var url = window.location.toString(), m = handlerMapping;
+        for(var i=0;i<m.length;i++){
+            var reg = new RegExp(m[i].pattern, 'i');
+            if(reg.test(url) == true){            
+                return m[i].file;
+            }
+        }
+        return 'nomatch';
+    },
+    loadHandler: function(){
+        // find out which web site, based on mapping file, locate the js files.
+        Ext.lib.Ajax.useDefaultXhrHeader=false;
+        var file = Crawler.serverUrl+Crawler.handlerPath+'/'+ Crawler.locateHandler() +'.js';
+        Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){Crawler.error(e);}})
+    }	
 }
 
 XPath = {
@@ -136,7 +176,13 @@ XPath = {
 	},	
 	array : function(node,path){
 		var r = [];
-		var nodes = XPath.iterator(node,path);
+		var nodes = null;
+		try{
+		  nodes = XPath.iterator(node,path);
+		}catch(e){		
+            Crawler.error('Wrong xpath:'+e+':'+path);
+            return null;        
+		}
 		if(nodes){
 			var n = nodes.iterateNext();
 			while(n){
@@ -153,8 +199,13 @@ XPath = {
 		if(!node) {
 		    node = document.documentElement;
 		}
-		var r = document.evaluate(path, node, null, type , null);
-		
+		var r = null;
+		try{
+		  r = document.evaluate(path, node, null, type , null);
+		}catch(e){
+	        Crawler.error('Wrong xpath:'+e+':'+path);
+		    return null;
+		}
 		if(r){
 		    if(type == XPathResult.FIRST_ORDERED_NODE_TYPE && r.singleNodeValue) {
 		        return r.singleNodeValue;
@@ -162,38 +213,21 @@ XPath = {
 		        return r;
 		    }
 		}
-		throw 'Invalid xpath:'+path;		
+		Crawler.error('Wrong xpath:'+path);
+        return null;		
 	}, 
+	
 	stringv : function(node,path){
 	    return XPath.single(node, path, XPathResult.STRING_TYPE).stringValue;
 	}
 }
 
-var extfile = 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js';
-
-Crawler.loadJSFile(extfile, function(){loadHandler();});
+Crawler.loadJSFile(Crawler.extFile, function(){Crawler.loadHandler();});
 
 var handlerMapping = [
-{pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx', file:'qidian.booklist'},
-{pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx', file:'qidian.bookcover'},
-{pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx', file:'qidian.chapterlist'},
-{pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx', file:'qidian.chapter'}
+    {pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx',         file:'qidian/booklist'},
+    {pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx',               file:'qidian/bookcover'},
+    {pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx',         file:'qidian/chapterlist'},
+    {pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx',  file:'qidian/chapter'}
 ];
-
-function locateHandler(){
-    var url = window.location.toString(), m = handlerMapping;
-    for(var i=0;i<m.length;i++){
-        var reg = new RegExp(m[i].pattern, 'i');
-        if(reg.test(url) == true){            
-            return m[i].file;
-        }
-    }
-    return 'nomatch';
-}
-
-function loadHandler(){
-    // find out which web site, based on mapping file, locate the js files.
-    Ext.lib.Ajax.useDefaultXhrHeader=false;
-    var file = Crawler.serverUrl+Crawler.handlerPath+'/'+locateHandler()+'.js';
-    Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){Crawler.error(e);}})
-}
+    

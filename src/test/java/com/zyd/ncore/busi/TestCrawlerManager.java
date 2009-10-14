@@ -28,7 +28,7 @@ public class TestCrawlerManager extends TestCase {
         cm.clearAll();
         String url = "http://www.qidian.com/Book/BookStore.aspx?Type=Cmd&F=W";
         String jsonList = ATestUtil.getBookJsonString();
-        cm.processBookList(jsonList, url);
+        assertEquals(100, cm.processBookList(jsonList, url));
         //validate book count
         BookFilter filter = new BookFilter();
         filter.setStart(0);
@@ -103,7 +103,7 @@ public class TestCrawlerManager extends TestCase {
         cm.clearAll();
         String s = ATestUtil.getBookWithChapterJsonString();
         String url = "http://www.qidian.com";
-        cm.processBook(s, url);
+        assertEquals(true, cm.processBook(s, url));
         BookFilter filter = new BookFilter();
         filter.setStart(0);
         filter.setCount(Integer.MAX_VALUE);

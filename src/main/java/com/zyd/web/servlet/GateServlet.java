@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.web.service.ServiceBase;
+import com.zyd.web.ServiceBase;
 
 public class GateServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;

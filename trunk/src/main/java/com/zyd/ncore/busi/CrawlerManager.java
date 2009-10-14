@@ -91,7 +91,8 @@ public class CrawlerManager {
         changed = changed || r.added;
 
         // process chapter        
-        List<Chapter> chapters = bookManager.loadBookChapter(bookWithId);
+        //List<Chapter> chapters = bookManager.loadBookChapter(bookWithId);        
+        List<Chapter> chapters = book.getChapters();
         if (chapters != null && chapters.size() > 0) {
             for (Chapter chapter : chapters) {
                 r = addChapterToBookIfNecessary(bookWithId, chapter);

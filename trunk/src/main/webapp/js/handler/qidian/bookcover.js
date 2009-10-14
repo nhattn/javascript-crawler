@@ -1,6 +1,9 @@
 function handlerProcess(){
-    var path, value, book = {}, C=Crawler;
-    
+    var info = {
+        dataUrl : Crawler.serverUrl + '/service/book',
+        nextLinkPath: "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[1]/table/tbody/tr[3]/td/a"    
+    };
+    var path, value, book = {}, C=Crawler;    
     path = "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[1]/td/h1/b";
     value = XPath.single(null, path).textContent;
     if(!value) value = '';
@@ -37,9 +40,32 @@ function handlerProcess(){
     book.updateTime = C.extract(value, '¸üÐÂ£º');    
     //C.clog(C.objToString(book));    
     var params = {data : Ext.util.JSON.encode(book)};
-    Crawler.postData(params, metaInfo.dataUrl);
+    
+    var gotoChapterList = function(r, suc){
+        if(!suc){
+            try{Crawler.error("qidian.bookcover.gotoChapterList:"+r.responseText);}catch(e){}                
+            Crawler.nextLink();
+            return;
+        }        
+        try{            
+            r = Ext.util.JSON.decode(r.responseText);
+        }catch(e){
+            Crawler.error('qidian.bookcover:'+e+':'+r.responseText);
+            Crawler.nextLink();
+            return;
+        }
+        if(r.result){
+            // something changed, updateTime changed? go and update book
+            if(XPath.single(null, info.nextLinkPath)){
+                Crawler.action({action:'Goto.XPath.Link.Href',param1:info.nextLinkPath});
+            }else{
+                Crawler.nextLink();
+            }            
+        }else{
+            // nothing changed, ignore, gotonextlink
+            Crawler.nextLink();
+        }
+    }
+    Crawler.postData(params, info.dataUrl, gotoChapterList);
 }
 
-var metaInfo = {
-    dataUrl : Crawler.serverUrl + '/service/crawler/book'        
-}

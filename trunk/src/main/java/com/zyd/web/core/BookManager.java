@@ -8,7 +8,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.zyd.web.Util;
+import com.zyd.ncore.Utils;
 import com.zyd.web.dom.Book;
 import com.zyd.web.dom.Chapter;
 
@@ -67,7 +67,7 @@ public class BookManager {
             return false;
         } else {
             String k = book.name + "$" + book.author;
-            book.id = Util.getUniqueBookId();
+            book.id = Utils.getUniqueBookId();
             bookCache.put(k, book);
             bookList.add(book);
             return true;

@@ -9,6 +9,8 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.zyd.Config;
+
 public class TemplateManager {
     private static TemplateManager instance = new TemplateManager();
 
@@ -42,8 +44,7 @@ public class TemplateManager {
     }
 
     private String loadTemplateFile(String name) throws IOException {
-        String templateHome = "E:\\workspace\\crawler\\src\\main\\webapp\\temp";
-        File f = new File(templateHome, name);
+        File f = new File(Config.TemplatePath, name);
         String s = FileUtils.readFileToString(f, "GBK");
         return s;
     }
@@ -58,7 +59,7 @@ public class TemplateManager {
                     nextAction.put("para" + 1, paras[i]);
                 }
             }
-            r = nextAction.toString();            
+            r = nextAction.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }

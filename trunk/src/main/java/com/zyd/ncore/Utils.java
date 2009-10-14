@@ -1,16 +1,88 @@
 package com.zyd.ncore;
 
+import java.beans.XMLEncoder;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Utils {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
+
+    public static String getUniqueBookId() {
+        Date d = new Date();
+        StringBuffer buf = new StringBuffer(Long.toString(d.getTime()));
+        String l = StringUtils.leftPad(Integer.toString(Math.abs(rand.nextInt())), 15, '0');
+        buf.append(l);
+        return buf.toString();
+    }
+
+    public static String objToXml(Object obj) throws UnsupportedEncodingException {
+        return objToXml(obj, "UTF-8");
+    }
+
+    public static String objToXml(Object obj, String encoding) throws UnsupportedEncodingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        XMLEncoder enc = new XMLEncoder(out);
+        enc.writeObject(obj);
+        enc.close();
+        return new String(out.toByteArray(), encoding);
+    }
+
+    public static String stringToFlatList(List<String> list) {
+        StringBuffer buf = new StringBuffer();
+        for (String s : list) {
+            buf.append(s);
+            buf.append("\r\n");
+        }
+        return buf.toString();
+    }
+
+    public static String mapToJsonString(HashMap<String, Object> map) throws IOException {
+        JSONObject obj = new JSONObject();
+        Set<String> names = map.keySet();
+        try {
+            for (String name : names) {
+                obj.put(name, map.get(name).toString());
+            }
+        } catch (JSONException e) {
+            throw new IOException(e);
+        }
+        return obj.toString();
+    }
+
+    /**
+     * pass a string array like {"name1", "value1", "name2", "value2"}
+     * @param values
+     * @return
+     * @throws IOException
+     */
+    public static String stringArrayToJsonString(String[] values) throws IOException {
+        JSONObject obj = new JSONObject();
+
+        try {
+            if (values.length % 2 != 0)
+                throw new IOException("Wrong number of values for method, not even.");
+            for (int i = 0; i < values.length; i++) {
+                obj.put(values[i++], values[i]);
+            }
+        } catch (JSONException e) {
+            throw new IOException(e);
+        }
+        return obj.toString();
+    }
 
     private static String getNoRepeatString() {
         StringBuffer buf = new StringBuffer();
@@ -90,8 +162,7 @@ public class Utils {
         return "www." + s;
     }
 
-    private static DateFormat[] dateFormats = new SimpleDateFormat[]{
-       new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
+    private static DateFormat[] dateFormats = new SimpleDateFormat[] { new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
     };
 
     public static Date parseDate(String s) {
@@ -112,7 +183,7 @@ public class Utils {
         System.out.println(getDomain("cc.bbb.com"));
         System.out.println(getDomain("bbb.com"));
         System.out.println(getDomain("http://bbb.com"));
-        
+
         System.out.println(parseDate("09-10-13 13:57"));
     }
 }

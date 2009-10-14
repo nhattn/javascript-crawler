@@ -7,14 +7,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import com.zyd.Config;
 import com.zyd.web.dom.Book;
 
 public class LinkManager {
     private static LinkManager instance = new LinkManager();
     private static HashSet<String> links = new HashSet<String>();
     private static HashMap<String, Book> linkWithBook = new HashMap<String, Book>();
+    private static String IdlePageUrl = Config.ServerUrl + "/html/wait.html";
 
     private LinkManager() {
+
     }
 
     public static LinkManager getInstance() {
@@ -60,7 +63,7 @@ public class LinkManager {
     public synchronized String nextLink() {
         Iterator<String> it = links.iterator();
         if (it.hasNext() == false) {
-            return null;
+            return IdlePageUrl;
         }
         String l = it.next();
         links.remove(l);

@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 import com.zyd.web.core.BookManager;
 import com.zyd.web.dom.Book;
-import com.zyd.web.service.crawler.booklist;
+import com.zyd.web.service.booklist;
 
 public class TestBookManager extends TestCase {
 

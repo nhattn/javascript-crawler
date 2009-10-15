@@ -3,6 +3,9 @@ package com.zyd.ncore.dom;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.zyd.ncore.Utils;
 
 public class Book {
@@ -21,14 +24,6 @@ public class Book {
     public String allChapterUrl;
     public String urlToCrawl;
     public String coverUrl;
-
-    public String getUrlToGrawl() {
-        return urlToCrawl;
-    }
-
-    public void setUrlToGrawl(String urlToGrawl) {
-        this.urlToCrawl = urlToGrawl;
-    }
 
     public String getCoverUrl() {
         return coverUrl;
@@ -167,5 +162,94 @@ public class Book {
         buf.append(']');
         return buf.toString();
 
+    }
+
+    public String toXMLString(String encoding) {
+        return toXMLString(encoding, false);
+    }
+
+    public String toXMLString(String encoding, boolean addHeader) {
+        StringBuffer buf = new StringBuffer();
+        if (addHeader) {
+            buf.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
+        }
+        buf.append("<book>");
+
+        buf.append("<id>");
+        buf.append(this.getId());
+        buf.append("</id>");
+
+        buf.append("<name>");
+        buf.append(this.getName());
+        buf.append("</name>");
+
+        buf.append("<author>");
+        buf.append(this.getAuthor());
+        buf.append("</author>");
+
+        buf.append("<description>");
+        buf.append(this.getDescription());
+        buf.append("</description>");
+
+        buf.append("<category>");
+        buf.append(this.getCategory());
+        buf.append("</category>");
+
+        buf.append("<totalChar>");
+        buf.append(this.getTotalChar());
+        buf.append("</totalChar>");
+
+        buf.append("<hit>");
+        buf.append(this.getHit());
+        buf.append("</hit>");
+
+        buf.append("<finished>");
+        buf.append(this.isFinished());
+        buf.append("</finished>");
+
+        buf.append("<updateTime>");
+        buf.append(this.getUpdateTime());
+        buf.append("</updateTime>");
+
+        List<Chapter> chapters = this.getChapters();
+        if (chapters != null && chapters.size() != 0) {
+            buf.append("<chapters>");
+            for (Chapter c : chapters) {
+                buf.append(c.toXMLString(encoding));
+            }
+            buf.append("</chapters>");
+        }
+
+        buf.append("</book>");
+        return buf.toString();
+    }
+
+    public JSONObject toJsonObject() {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("id", this.getId());
+            js.put("name", this.getName());
+            js.put("author", this.getAuthor());
+            js.put("description", this.getDescription());
+            js.put("category", this.getCategory());
+            js.put("totalChar", this.getDescription());
+            js.put("finished", this.isFinished());
+            js.put("updateTime", this.getUpdateTime());
+            List<Chapter> chapters = this.getChapters();
+            if (chapters != null && chapters.size() != 0) {
+                JSONArray arr = new JSONArray();
+                for (Chapter c : chapters) {
+                    arr.put(c.toJsonObject());
+                }
+                js.put("chapters", arr);
+            }            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return js;
+    }
+
+    public String toJsonString() {
+        return toJsonObject().toString();
     }
 }

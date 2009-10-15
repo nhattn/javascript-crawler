@@ -17,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.zyd.ncore.dom.Book;
+
 public class Utils {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
@@ -34,11 +36,32 @@ public class Utils {
     }
 
     public static String objToXml(Object obj, String encoding) throws UnsupportedEncodingException {
+        if (obj instanceof List<?>) {
+            List<?> list = (List<?>) obj;
+            if (list.size() > 0 && list.get(0) instanceof Book) {
+                try {
+                    return bookListToXml((List<Book>) obj, encoding);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         XMLEncoder enc = new XMLEncoder(out);
         enc.writeObject(obj);
         enc.close();
         return new String(out.toByteArray(), encoding);
+    }
+
+    public static String bookListToXml(List<Book> books, String encoding) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
+        buf.append("<books>");
+        for (Book book : books) {
+            buf.append(book.toXMLString(encoding));
+        }
+        buf.append("</books>");
+        return buf.toString();
     }
 
     public static String stringToFlatList(List<String> list) {
@@ -88,7 +111,7 @@ public class Utils {
         StringBuffer buf = new StringBuffer();
         Date d = new Date();
         buf.append(Long.toString(d.getTime() + rand.nextInt(100000)));
-        String s = StringUtils.rightPad(buf.toString(), 15);
+        String s = StringUtils.rightPad(buf.toString(), 15, '0');
         if (usedString.contains(s)) {
             return getNoRepeatString();
         } else {
@@ -162,16 +185,26 @@ public class Utils {
         return "www." + s;
     }
 
-    private static DateFormat[] dateFormats = new SimpleDateFormat[] { new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
+    private static DateFormat[] dateFormats = new SimpleDateFormat[] { 
+    new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
+    new SimpleDateFormat("yyyy年MM月dd日"), /* 2009年10月15日*/
+    new SimpleDateFormat("yyyy-MM-dd"),/*2008-10-17*/
+    new SimpleDateFormat("yyyy-MM-d"),/*2008-10-17*/
+    new SimpleDateFormat("yyyy-M-dd"),/*2008-1-17*/
+    new SimpleDateFormat("yyyy-M-d"),/*2008-1-1*/
     };
 
     public static Date parseDate(String s) {
-        Date date = new Date();
+        Date date = null;
         for (DateFormat d : dateFormats) {
             try {
                 date = d.parse(s);
             } catch (Exception e) {
             }
+        }
+        if (date == null) {
+            System.err.println("Unable to parse date string :" + s);
+            date = new Date();
         }
         return date;
     }

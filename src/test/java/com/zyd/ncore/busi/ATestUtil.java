@@ -1,14 +1,23 @@
 package com.zyd.ncore.busi;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
+import com.zyd.Config;
 import com.zyd.ncore.dom.Book;
 import com.zyd.ncore.dom.Chapter;
 import com.zyd.ncore.dom.Site;
@@ -17,6 +26,11 @@ public class ATestUtil {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
     static String[] domains = new String[] { "http://www.qidian.com", "http://17k.com", "http://aa.kanshu.com" };
+
+    public static String BookUrl = Config.ServerUrl + "/service/book";
+    public static String BookListUrl = Config.ServerUrl + "/service/booklist";
+    public static String ControllerUrl = Config.ServerUrl + "/service/controller";
+    public static String ChapterUrl = Config.ServerUrl + "/service/chapter";
 
     public static String getNoRepeatString() {
         StringBuffer buf = new StringBuffer();
@@ -98,5 +112,74 @@ public class ATestUtil {
 
     public static <T> int getUniqueObjectCount(Collection<T> cols) {
         return (new HashSet<T>(cols)).size();
+    }
+
+    public static String postAndGetString(String url, Map<String, String> params) {
+        String r = null;
+        try {
+            HttpClient client = new HttpClient();
+
+            PostMethod method = new PostMethod(url);
+            method.addRequestHeader("Referer", "http://www.test.com");            
+            if (params != null) {
+                for (String k : params.keySet()) {
+                    method.setParameter(k, params.get(k));
+                }
+            }
+            int statusCode = client.executeMethod(method);
+
+            if (statusCode != HttpStatus.SC_OK) {
+                return null;
+            }
+            InputStream ins = method.getResponseBodyAsStream();
+            r = IOUtils.toString(ins);
+            ins.close();
+            method.releaseConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    public static String getAndGetString(String url, Map<String, String> params) {
+        String r = null;
+        try {
+            HttpClient client = new HttpClient();
+
+            if (params != null) {
+                StringBuffer buf = new StringBuffer();
+                for (String k : params.keySet()) {
+                    buf.append(k);
+                    buf.append('=');
+                    buf.append(params.get(k));
+                }
+                if (url.indexOf('?') > 0) {
+                    url = url + "&" + buf.toString();
+                } else {
+                    url = url + "?" + buf.toString();
+                }
+            }
+
+            GetMethod method = new GetMethod(url);
+            method.addRequestHeader("Referer", "http://www.test.com");
+            int statusCode = client.executeMethod(method);
+
+            if (statusCode != HttpStatus.SC_OK) {
+                return null;
+            }
+            InputStream ins = method.getResponseBodyAsStream();
+            r = IOUtils.toString(ins);
+            ins.close();
+            method.releaseConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    public static boolean clearServerData() throws Exception {
+        String s = getAndGetString(Config.ServerUrl + "/service/controller?action=ClearAllData", null);
+        JSONObject o = new JSONObject(s);
+        return o.getBoolean("result");
     }
 }

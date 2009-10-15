@@ -68,6 +68,6 @@ public class booklist extends ServiceBase {
         } else {
             s = Utils.objToXml(bookList, "UTF-8");
         }
-        output(s, resp);
+        output(s,"UTF-8", resp);
     }
 }

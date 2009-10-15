@@ -16,6 +16,10 @@ import com.zyd.web.dom.Book;
 import com.zyd.web.dom.Chapter;
 
 public class chapter extends ServiceBase {
+    /**
+     * method: post
+     * description a
+     */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setHeader("Content-Type", "application/javascript; charset=GBK");

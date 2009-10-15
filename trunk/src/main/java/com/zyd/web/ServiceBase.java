@@ -41,15 +41,15 @@ public class ServiceBase {
     /**
      * 
      * @param type one of "html", "xml", "js", "text"
-     * @param response
+     * @param resp
      */
-    protected void setResponseType(String type, HttpServletResponse response) {
+    protected void setResponseType(String type, HttpServletResponse resp) {
         String types = ResponseTypes.get(type);
         if (types == null) {
             System.err.println("Error: invalid type:" + type);
             types = ResponseTypes.get("text");
         }
-        response.setHeader("Content-Type", types);
+        resp.setHeader("Content-Type", types);
     }
 
     protected void output(String s, String encoding, HttpServletResponse response) throws IOException {

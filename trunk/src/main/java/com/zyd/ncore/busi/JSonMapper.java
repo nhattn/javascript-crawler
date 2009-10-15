@@ -27,6 +27,7 @@ public class JSonMapper {
             JSONObject obj = new JSONObject(s);
             b = jsonObjectToBook(obj);
         } catch (Exception e) {
+            System.err.println(s);
             e.printStackTrace();
             b = new Book();
             b.setName("Error_Book_Name");

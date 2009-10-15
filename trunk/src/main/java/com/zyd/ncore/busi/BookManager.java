@@ -48,20 +48,30 @@ public class BookManager {
         return bookCache.get(k);
     }
 
+    private Book getBookById(String id) {
+        for (Book b : bookList) {
+            if (id.equals(b.getId()))
+                return b;
+        }
+        return null;
+    }
+
     /**
      * find a book by name + author
      * TODO: what if different websites have same book with same name&author, 
      * but acutally are different content.
      * @param book must have name & author
-     * @return the same book instance with everything populated or a new book instance. the book instance will not contain chapter information. 
+     * @return the book found. the book instance will not contain chapter information. 
      * to load chapter information, call loadBookChapter method.
      * should not modify it.
      */
     public Book findBook(Book book) {
-        if (book.getName() == null || book.getAuthor() == null)
-            return null;
-        return getBookByNameAuthor(book.getName(), book.getAuthor());
-
+        if (book.getName() != null && book.getAuthor() != null)
+            return getBookByNameAuthor(book.getName(), book.getAuthor());
+        else if (book.getId() != null) {
+            return getBookById(book.getId());
+        }
+        return null;
     }
 
     /**
@@ -145,7 +155,7 @@ public class BookManager {
      * this call will update the book store as well as oldBook.
      * 
      * if this book has a new all chapter url or cover url, 
-     * also need to update the booksite table.
+     * also need to update the booksite table. //TODO: not implemented
      * @param oldBook
      * @param newBook
      * @return
@@ -157,7 +167,22 @@ public class BookManager {
             changed = true;
         }
         if (!Utils.strictEqual(oldBook.getUpdateTime(), newBook.getUpdateTime()) && newBook.getUpdateTime() != null) {
-            oldBook.setUpdateTime(newBook.getUpdateTime());
+            if (oldBook.getUpdateTime() == null || (oldBook.getUpdateTime().getTime() < newBook.getUpdateTime().getTime())) {
+                oldBook.setUpdateTime(newBook.getUpdateTime());
+                changed = true;
+            }
+        }
+        if (!Utils.strictEqual(oldBook.getHit(), newBook.getHit()) && newBook.getHit() != 0) {
+            oldBook.setHit(newBook.getHit());
+            changed = true;
+        }
+        if (oldBook.isFinished() != newBook.isFinished() && newBook.isFinished() == true) {
+            oldBook.setFinished(true);
+            changed = true;
+        }
+        if (oldBook.getTotalChar() != newBook.getTotalChar() && newBook.getTotalChar() > oldBook.getTotalChar()) {
+            oldBook.setTotalChar(newBook.getTotalChar());
+            changed = true;
         }
         return changed;
     }

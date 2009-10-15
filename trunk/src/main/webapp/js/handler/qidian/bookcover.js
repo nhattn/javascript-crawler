@@ -29,19 +29,21 @@ function handlerProcess(){
     
     path = "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[1]/table/tbody/tr[3]/td/a";
     value = XPath.single(null, path).href;
-    book.allChapterLink = value    
+    book.allChapterUrl = value    
     
     path = "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td";    
     value = XPath.single(null, path).textContent;    
-    book.cat2 = C.extract(value, '小说类别：');
-    book.hits = C.extract(value, '总点击：');
+    book.category = C.extract(value, '小说类别：');
+    book.hit = C.extract(value, '总点击：');
     book.recomendation = C.extract(value, '总推荐：');
     book.totalChar = C.extract(value, '总字数：');
     book.updateTime = C.extract(value, '更新：');    
+    book.coverUrl = window.location.href;
     //C.clog(C.objToString(book));    
     var params = {data : Ext.util.JSON.encode(book)};
     
     var gotoChapterList = function(r, suc){
+        return;
         if(!suc){
             try{Crawler.error("qidian.bookcover.gotoChapterList:"+r.responseText);}catch(e){}                
             Crawler.nextLink();
@@ -66,6 +68,7 @@ function handlerProcess(){
             Crawler.nextLink();
         }
     }
+    Crawler.log(params.data);
     Crawler.postData(params, info.dataUrl, gotoChapterList);
 }
 

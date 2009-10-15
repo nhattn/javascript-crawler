@@ -13,7 +13,7 @@ function handlerProcess(){
             for(var j=0;j<links.length;j++){
                 var l = links[j], chapter = {}, s;
                 s = l.title;
-                chapter.link = l.href;
+                chapter.chapterUrl = l.href;
                 chapter.totalChar = c.extract(s, '×ÖÊý£º');
                 chapter.updateTime = s.match(dateRegex)[0];
                 chapter.name = l.textContent.trim();
@@ -29,12 +29,12 @@ function handlerProcess(){
     book.author = XPath.stringv(null, "/html/body/form[@id='form1']/center/table/tbody/tr/td[1]/a/b/text()");
     book.chapters = chapters;    
     var params = {data : Ext.util.JSON.encode(book)};
-    //c.log(params.data);
-    Crawler.postData(params, metaInfo.dataUrl, function(){Crawler.nextLink();});
+    c.log(params.data);
+    Crawler.postData(params, metaInfo.dataUrl, function(){return;Crawler.nextLink();});
 }
 
 var metaInfo = {
-    dataUrl : Crawler.serverUrl + '/service/chapterlist'        
+    dataUrl : Crawler.serverUrl + '/service/book'        
 }
 
 //Crawler.action({action:'Goto.Next.Link'});

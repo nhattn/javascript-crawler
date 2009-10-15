@@ -40,5 +40,7 @@ function handlerProcess() {
         }
         //Crawler.log(r.responseText);    
     };
-    Crawler.postData(params, info.dataUrl, function(r, suc){callback(r,suc);});
+    
+    Crawler.log(params.data);    
+    //Crawler.postData(params, info.dataUrl, function(r, suc){callback(r,suc);});
 }

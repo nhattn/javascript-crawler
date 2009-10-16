@@ -23,7 +23,6 @@ public class TestChapter extends TestCase {
     @Override
     protected void setUp() throws Exception {
         jm = JSonMapper.getInstance();
-        System.out.println(Charset.defaultCharset());
         System.setProperty("file.encoding", "GBK");
         System.out.println(Charset.defaultCharset());
     }
@@ -64,7 +63,6 @@ public class TestChapter extends TestCase {
         obj = new JSONObject(r);
         assertTrue(obj.getBoolean("result"));
         // verify there is chapter
-        System.out.println(ATestData.book2_chapters);
         book = jm.parseBook(ATestData.book2_chapters);
 
         ps.clear();
@@ -104,7 +102,6 @@ public class TestChapter extends TestCase {
         ps.put("withChapter", "true");
         r = ATestUtil.getAndGetString(ATestUtil.BookUrl, ps);
         obj = new JSONObject(r);
-        System.out.println(r);
         assertTrue(obj.has("chapters"));
         assertEquals(obj.getJSONArray("chapters").length(), book.getChapters().size());
         //verify every chapter is there
@@ -118,7 +115,7 @@ public class TestChapter extends TestCase {
         for (Chapter c : book2.getChapters()) {
             assertTrue(set.remove(c.getName()));
         }
-        
+
     }
 
 }

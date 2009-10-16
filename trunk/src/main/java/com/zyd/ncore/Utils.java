@@ -203,7 +203,8 @@ public class Utils {
             }
         }
         if (date == null) {
-            System.err.println("Unable to parse date string :" + s);
+            //System.err.println("Unable to parse date string :" + s); 
+            //TODO: have to report this
             date = new Date();
         }
         return date;

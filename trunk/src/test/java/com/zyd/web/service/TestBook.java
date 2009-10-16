@@ -64,7 +64,6 @@ public class TestBook extends TestCase {
         assertTrue(obj.getBoolean("result"));
     }
 
-    
     public void testAddDuplicateBook() throws Exception {
         assertTrue(ATestUtil.clearServerData());
         String s = ATestData.book1;

@@ -225,9 +225,15 @@ XPath = {
 Crawler.loadJSFile(Crawler.extFile, function(){Crawler.loadHandler();});
 
 var handlerMapping = [
+    // qidian.com                      
     {pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx',         file:'qidian/booklist'},
     {pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx',               file:'qidian/bookcover'},
     {pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx',         file:'qidian/chapterlist'},
-    {pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx',  file:'qidian/chapter'}
+    {pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx',  file:'qidian/chapter'},
+
+    //tszw.com
+    {pattern:'http://www\.tszw\.com/toplistlastupdate/[0-9]+/[0-9]+.html',         file:'tszw/booklist'},
+    {pattern:'http://www\.tszw\.com/Article_[0-9]+\.html',                         file:'tszw/bookcover'}
+    
 ];
     

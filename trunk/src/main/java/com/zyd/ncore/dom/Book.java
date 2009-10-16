@@ -232,7 +232,7 @@ public class Book {
             js.put("author", this.getAuthor());
             js.put("description", this.getDescription());
             js.put("category", this.getCategory());
-            js.put("totalChar", this.getDescription());
+            js.put("totalChar", this.getTotalChar());
             js.put("finished", this.isFinished());
             js.put("updateTime", this.getUpdateTime());
             List<Chapter> chapters = this.getChapters();

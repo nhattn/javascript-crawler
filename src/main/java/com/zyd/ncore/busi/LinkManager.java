@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.zyd.Config;
-import com.zyd.web.dom.Book;
+import com.zyd.ncore.dom.Book;
 
 public class LinkManager {
     private static LinkManager instance = new LinkManager();

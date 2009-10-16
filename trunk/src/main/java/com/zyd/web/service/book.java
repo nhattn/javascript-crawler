@@ -41,7 +41,7 @@ public class book extends ServiceBase {
      * parameters: name, the name of the book; author. these two is necessary if no id is there. 
      *             or id, the id of the book.
      *             
-     *             withChapter, whether or not also return the chapter list with this request, 'true' or 'false', default to "false"
+     *             withChapter, whether or not also return the chapter list with this request, 'true' or 'false', default to "false" TODO:
      *             format, "json" or "xml", default to "xml"
      * response: a json/xml string describing the book. fields has the same name-value as {@link Book} 
      */

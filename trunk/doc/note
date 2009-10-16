@@ -149,7 +149,8 @@ Book
     name 
     author
     hit
-    finished        
+    finished      
+    bookCover  
     
 Chapter
     id
@@ -157,13 +158,14 @@ Chapter
     name
     hit
     hasContent
-    isPic
+    isPicuture
 
 Site
     id
     name
     domainName
     url    
+
     
 BookSite
     id
@@ -172,6 +174,10 @@ BookSite
     updateTime
     coverUrl
     allChapterUrl
+
+
+
+    
     
 ChapterSite
     id    

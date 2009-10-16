@@ -7,10 +7,10 @@ import junit.framework.TestCase;
 
 import org.json.JSONObject;
 
+import com.zyd.core.busi.JSonMapper;
+import com.zyd.core.dom.Book;
 import com.zyd.ncore.busi.ATestData;
 import com.zyd.ncore.busi.ATestUtil;
-import com.zyd.ncore.busi.JSonMapper;
-import com.zyd.ncore.dom.Book;
 
 public class TestBook extends TestCase {
     JSonMapper jm;

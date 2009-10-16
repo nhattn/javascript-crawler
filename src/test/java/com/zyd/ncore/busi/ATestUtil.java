@@ -19,9 +19,11 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.zyd.Config;
-import com.zyd.ncore.dom.Book;
-import com.zyd.ncore.dom.Chapter;
-import com.zyd.ncore.dom.Site;
+import com.zyd.core.busi.BookManager;
+import com.zyd.core.busi.SiteManager;
+import com.zyd.core.dom.Book;
+import com.zyd.core.dom.Chapter;
+import com.zyd.core.dom.Site;
 
 public class ATestUtil {
     static Random rand = new Random();

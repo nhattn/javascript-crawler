@@ -7,12 +7,15 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import com.zyd.ncore.dom.Book;
-import com.zyd.ncore.dom.BookFilter;
-import com.zyd.ncore.dom.BookSite;
-import com.zyd.ncore.dom.Chapter;
-import com.zyd.ncore.dom.ChapterSite;
-import com.zyd.ncore.dom.Site;
+import com.zyd.core.busi.BookManager;
+import com.zyd.core.busi.CrawlerManager;
+import com.zyd.core.busi.SiteManager;
+import com.zyd.core.dom.Book;
+import com.zyd.core.dom.BookFilter;
+import com.zyd.core.dom.BookSite;
+import com.zyd.core.dom.Chapter;
+import com.zyd.core.dom.ChapterSite;
+import com.zyd.core.dom.Site;
 
 public class TestCrawlerManager extends TestCase {
     CrawlerManager cm = CrawlerManager.getInstance();

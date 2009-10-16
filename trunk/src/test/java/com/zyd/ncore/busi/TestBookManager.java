@@ -4,9 +4,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.zyd.ncore.dom.Book;
-import com.zyd.ncore.dom.BookFilter;
-import com.zyd.ncore.dom.Chapter;
+import com.zyd.core.busi.BookManager;
+import com.zyd.core.dom.Book;
+import com.zyd.core.dom.BookFilter;
+import com.zyd.core.dom.Chapter;
 
 public class TestBookManager extends TestCase {
     BookManager bm;

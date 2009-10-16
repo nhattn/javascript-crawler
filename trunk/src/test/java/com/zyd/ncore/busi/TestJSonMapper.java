@@ -5,8 +5,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.zyd.ncore.dom.Book;
-import com.zyd.ncore.dom.Chapter;
+import com.zyd.core.busi.JSonMapper;
+import com.zyd.core.dom.Book;
+import com.zyd.core.dom.Chapter;
 
 public class TestJSonMapper extends TestCase {
     JSonMapper jm;

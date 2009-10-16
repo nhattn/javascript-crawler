@@ -5,11 +5,13 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.zyd.ncore.dom.Book;
-import com.zyd.ncore.dom.BookSite;
-import com.zyd.ncore.dom.Chapter;
-import com.zyd.ncore.dom.ChapterSite;
-import com.zyd.ncore.dom.Site;
+import com.zyd.core.busi.BookManager;
+import com.zyd.core.busi.SiteManager;
+import com.zyd.core.dom.Book;
+import com.zyd.core.dom.BookSite;
+import com.zyd.core.dom.Chapter;
+import com.zyd.core.dom.ChapterSite;
+import com.zyd.core.dom.Site;
 
 public class TestSiteManager extends TestCase {
     BookManager bm;

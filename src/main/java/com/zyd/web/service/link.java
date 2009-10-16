@@ -11,9 +11,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.zyd.ncore.Utils;
-import com.zyd.ncore.busi.LinkManager;
-import com.zyd.ncore.busi.TemplateManager;
+import com.zyd.core.Utils;
+import com.zyd.core.busi.LinkManager;
+import com.zyd.core.busi.TemplateManager;
 import com.zyd.web.ServiceBase;
 
 public class link extends ServiceBase {
@@ -76,7 +76,7 @@ public class link extends ServiceBase {
             data = "[]";
         }
 
-        com.zyd.ncore.busi.LinkManager lm = com.zyd.ncore.busi.LinkManager.getInstance();
+        com.zyd.core.busi.LinkManager lm = com.zyd.core.busi.LinkManager.getInstance();
         int count = 0;
         try {
             JSONArray arr = new JSONArray(data);

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.zyd.ncore.Utils;
-import com.zyd.ncore.busi.CrawlerManager;
+import com.zyd.core.Utils;
+import com.zyd.core.busi.CrawlerManager;
 import com.zyd.web.ServiceBase;
 
 public class chapterlist extends ServiceBase {

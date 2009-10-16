@@ -6,8 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.ncore.Utils;
-import com.zyd.ncore.busi.CrawlerManager;
+import com.zyd.core.Utils;
+import com.zyd.core.busi.CrawlerManager;
 import com.zyd.web.ServiceBase;
 
 public class controller extends ServiceBase {

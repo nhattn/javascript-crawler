@@ -25,7 +25,6 @@ public class book extends ServiceBase {
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //        req.setCharacterEncoding("GBK");
         setResponseType("js", resp);
         String data = req.getParameter("data"), fromUrl = req.getHeader("referer");
         boolean changed = false;
@@ -48,7 +47,12 @@ public class book extends ServiceBase {
      */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name"), author = req.getParameter("author"), id = req.getParameter("id"), format = req.getParameter("format");
+        String name = req.getParameter("name"), author = req.getParameter("author"), id = req.getParameter("id"), format = req.getParameter("format");        
+        if (name != null)
+            name = new String(name.getBytes("iso-8859-1"));
+        if (author != null)
+            author = new String(author.getBytes("iso-8859-1"));
+
         BookManager bm = BookManager.getInstance();
         Book book = null;
 

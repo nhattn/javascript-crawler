@@ -18,7 +18,7 @@ import com.zyd.web.dom.Chapter;
 public class chapter extends ServiceBase {
     /**
      * method: post
-     * description a
+     * description: 
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

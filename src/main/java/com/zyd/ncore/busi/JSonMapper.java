@@ -64,8 +64,9 @@ public class JSonMapper {
             b.setAuthor(obj.getString("author"));
         if (obj.has("category"))
             b.setCategory(obj.getString("category"));
-        if (obj.has("totalChar"))
+        if (obj.has("totalChar")) {
             b.setTotalChar(Integer.parseInt(obj.getString("totalChar")));
+        }
         if (obj.has("allChapterUrl"))
             b.setAllChapterUrl(obj.getString("allChapterUrl"));
         if (obj.has("coverUrl"))

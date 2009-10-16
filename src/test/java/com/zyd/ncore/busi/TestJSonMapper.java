@@ -17,7 +17,7 @@ public class TestJSonMapper extends TestCase {
     }
 
     public void testParseBookList() {
-        String s = ATestUtil.getBookJsonString();
+        String s = ATestData.book4;
         String[] names = new String[] { "羽皇", "谁仙谁魔", "九龙大帝", "极品偷生记", "禁书目录之我的前身是金闪", "异世之中华神系", "鲜花插在牛鼻上", "虚拟圣骑", "异界之丧尸召唤", "战栗传说", "网游之术士三代", "王者归来之九世轮回", "星武仙途", "证魂道", "独孤剑说", "末日之丧尸横行",
                 "黑色漫步", "天道记", "傲笑天涯行", "宦仕行", "三国之征服", "上位不是偶然", "传奇进化", "混阳", "幻想之神界纵横", "魔妖英雄传", "异界之萨满传奇", "穿越回归之完美", "邪灵道", "印术师传奇", "漂亮女家教", "御时", "意阕天", "墓变", "莫归路", "莫风天下", "潇洒修仙人",
                 "魔兽世界之日暮之泪", "家督的野望", "双圜记", "彭氏军史评论", "混沌鼎天", "官气", "天法道", "我是仙仙仙", "一世孽障", "潜龙无影", "天书之天书一现", "篮球也是一种生活", "红书传", "狼魂之灵", "金龙之玩转异世", "杯莫停", "官路迷情", "天道玲珑", "流传", "末世降临", "三到延安",
@@ -79,13 +79,12 @@ public class TestJSonMapper extends TestCase {
         assertEquals(100, list.size());
         for (Book book : list) {
             assertNotNull(bookSet.remove(book));
-        }
-        System.out.println(bookSet);
+        }        
         assertEquals(0, bookSet.size());
     }
 
     public void testParseBookWithChapter() {
-        String s = ATestUtil.getBookWithChapterJsonString();
+        String s = ATestData.bookchapters;
         Book book = jm.parseBook(s);
         assertNotNull(book);
         assertNotNull(book.getName());

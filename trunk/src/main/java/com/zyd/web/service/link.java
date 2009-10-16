@@ -13,8 +13,8 @@ import org.json.JSONException;
 
 import com.zyd.ncore.Utils;
 import com.zyd.ncore.busi.LinkManager;
+import com.zyd.ncore.busi.TemplateManager;
 import com.zyd.web.ServiceBase;
-import com.zyd.web.core.TemplateManager;
 
 public class link extends ServiceBase {
     /**

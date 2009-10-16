@@ -43,7 +43,6 @@ function handlerProcess(){
     var params = {data : Ext.util.JSON.encode(book)};
     
     var gotoChapterList = function(r, suc){
-        return;
         if(!suc){
             try{Crawler.error("qidian.bookcover.gotoChapterList:"+r.responseText);}catch(e){}                
             Crawler.nextLink();

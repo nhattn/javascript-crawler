@@ -165,12 +165,12 @@ public class Book {
     }
 
     public String toXMLString(String encoding) {
-        return toXMLString(encoding, false);
+        return toXMLString(false, false, encoding);
     }
 
-    public String toXMLString(String encoding, boolean addHeader) {
+    public String toXMLString(boolean withChapter, boolean withHeader, String encoding) {
         StringBuffer buf = new StringBuffer();
-        if (addHeader) {
+        if (withHeader) {
             buf.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
         }
         buf.append("<book>");
@@ -210,21 +210,21 @@ public class Book {
         buf.append("<updateTime>");
         buf.append(this.getUpdateTime());
         buf.append("</updateTime>");
-
-        List<Chapter> chapters = this.getChapters();
-        if (chapters != null && chapters.size() != 0) {
-            buf.append("<chapters>");
-            for (Chapter c : chapters) {
-                buf.append(c.toXMLString(encoding));
+        if (withChapter == true) {
+            List<Chapter> chapters = this.getChapters();
+            if (chapters != null && chapters.size() != 0) {
+                buf.append("<chapters>");
+                for (Chapter c : chapters) {
+                    buf.append(c.toXMLString());
+                }
+                buf.append("</chapters>");
             }
-            buf.append("</chapters>");
         }
-
         buf.append("</book>");
         return buf.toString();
     }
 
-    public JSONObject toJsonObject() {
+    public JSONObject toJsonObject(boolean withChapter) {
         JSONObject js = new JSONObject();
         try {
             js.put("id", this.getId());
@@ -235,21 +235,27 @@ public class Book {
             js.put("totalChar", this.getTotalChar());
             js.put("finished", this.isFinished());
             js.put("updateTime", this.getUpdateTime());
-            List<Chapter> chapters = this.getChapters();
-            if (chapters != null && chapters.size() != 0) {
-                JSONArray arr = new JSONArray();
-                for (Chapter c : chapters) {
-                    arr.put(c.toJsonObject());
+            if (withChapter == true) {
+                List<Chapter> chapters = this.getChapters();
+                if (chapters != null && chapters.size() != 0) {
+                    JSONArray arr = new JSONArray();
+                    for (Chapter c : chapters) {
+                        arr.put(c.toJsonObject());
+                    }
+                    js.put("chapters", arr);
                 }
-                js.put("chapters", arr);
-            }            
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return js;
     }
 
+    public String toJsonString(boolean withChapter) {
+        return toJsonObject(withChapter).toString();
+    }
+
     public String toJsonString() {
-        return toJsonObject().toString();
+        return toJsonString(false);
     }
 }

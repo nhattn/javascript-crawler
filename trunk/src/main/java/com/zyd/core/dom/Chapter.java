@@ -149,9 +149,17 @@ public class Chapter {
         return Utils.strictEqual(this.name, ((Chapter) obj).getName());
     }
 
-    public String toXMLString(String encoding) {
+    /**
+     * 
+     * @param withHeader  weather or not add a "<?xml..." header
+     * @param encoding what encoding to add in the header
+     * @return
+     */
+    public String toXMLString(boolean withHeader, String encoding) {
         StringBuffer buf = new StringBuffer();
-        //buf.append("<?xml version=\"1.0\" encoding=\""+encoding+"\"?>"); 
+        if (withHeader) {
+            buf.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
+        }
         buf.append("<chapter>");
 
         buf.append("<id>");
@@ -203,6 +211,10 @@ public class Chapter {
 
         buf.append("</chapter>");
         return buf.toString();
+    }
+
+    public String toXMLString() {
+        return toXMLString(false, null);
     }
 
     public JSONObject toJsonObject() {

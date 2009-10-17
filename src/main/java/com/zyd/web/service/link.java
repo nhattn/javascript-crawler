@@ -32,7 +32,7 @@ public class link extends ServiceBase {
         String action = req.getParameter("action"), counts = req.getParameter("count");
         LinkManager lm = LinkManager.getInstance();
         String s = "";
-        if (StringUtils.isNotBlank(action) ==false|| (action.equals("list") == false && action.equals("get") == false && action.equals("redirect") == false)) {
+        if (StringUtils.isNotBlank(action) == false || (action.equals("list") == false && action.equals("get") == false && action.equals("redirect") == false)) {
             action = "list";
         }
         if (StringUtils.isNotBlank(counts) == false || StringUtils.isNumeric(counts) == false) {
@@ -76,7 +76,7 @@ public class link extends ServiceBase {
             data = "[]";
         }
 
-        com.zyd.core.busi.LinkManager lm = com.zyd.core.busi.LinkManager.getInstance();
+        LinkManager lm = LinkManager.getInstance();
         int count = 0;
         try {
             JSONArray arr = new JSONArray(data);

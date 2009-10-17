@@ -47,7 +47,7 @@ public class book extends ServiceBase {
      */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name"), author = req.getParameter("author"), id = req.getParameter("id"), format = req.getParameter("format");        
+        String name = req.getParameter("name"), author = req.getParameter("author"), id = req.getParameter("id"), format = req.getParameter("format");
         if (name != null)
             name = new String(name.getBytes("iso-8859-1"));
         if (author != null)
@@ -69,22 +69,25 @@ public class book extends ServiceBase {
         }
         book = bm.findBook(book);
         String content = "no book found";
+        boolean withChapter = false;
         if (book != null) {
-            String withChapter = req.getParameter("withChapter");
-            if (StringUtils.isNotBlank(withChapter)) {
-                if ("true".equals(withChapter)) {
+            String s = req.getParameter("withChapter");
+            if (StringUtils.isNotBlank(s)) {
+                if ("true".equals(s)) {
+                    withChapter = true;
                     bm.loadBookChapter(book);
-                } else if ("false".equals(withChapter)) {
+                } else if ("false".equals(s)) {
+                    withChapter = false;
                 } else {
-                    throw new ServletException("Invalid request parameter value for withChapter:" + withChapter);
+                    throw new ServletException("Invalid request parameter value for withChapter:" + s);
                 }
             }
             if ("xml".equals(format)) {
                 setResponseType("xml", resp);
-                content = book.toXMLString(Config.Encoding, true);
+                content = book.toXMLString(withChapter, true, Config.Encoding);
             } else if (format == null || "json".equals(format)) {
                 setResponseType("js", resp);
-                content = book.toJsonString();
+                content = book.toJsonString(withChapter);
             } else {
                 throw new ServletException("Invalid request parameter value for format:" + format);
             }

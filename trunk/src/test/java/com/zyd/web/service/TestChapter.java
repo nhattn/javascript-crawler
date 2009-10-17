@@ -1,6 +1,5 @@
 package com.zyd.web.service;
 
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +23,43 @@ public class TestChapter extends TestCase {
     protected void setUp() throws Exception {
         jm = JSonMapper.getInstance();
         System.setProperty("file.encoding", "GBK");
-        System.out.println(Charset.defaultCharset());
+    }
+
+    public void testAddOneChapter() throws Exception {
+        assertTrue(ATestUtil.clearServerData());
+        // add chapters
+        Map<String, String> ps = new HashMap<String, String>();
+        ps.put("data", ATestData.book2_chapters);
+        String r = ATestUtil.postAndGetString(ATestUtil.BookUrl, ps);
+        assertNotNull(r);
+        JSONObject obj = new JSONObject(r);
+        assertTrue(obj.getBoolean("result"));
+        // verify there is chapter
+        Book book = jm.parseBook(ATestData.book2_chapters);
+
+        ps.clear();
+        ps.put("name", book.getName());
+        ps.put("author", book.getAuthor());
+        ps.put("format", "json");
+        ps.put("withChapter", "true");
+        r = ATestUtil.getAndGetString(ATestUtil.BookUrl, ps);
+        System.out.println(r);
+        obj = new JSONObject(r);
+
+        assertTrue(obj.has("chapters"));
+        assertEquals(obj.getJSONArray("chapters").length(), book.getChapters().size());
+
+        // test with chapter property
+        ps.clear();
+        ps.put("name", book.getName());
+        ps.put("author", book.getAuthor());
+        ps.put("format", "json");
+        ps.put("withChapter", "false");
+        r = ATestUtil.getAndGetString(ATestUtil.BookUrl, ps);
+        obj = new JSONObject(r);
+        if (obj.has("chapters")) {
+            assertEquals(obj.getJSONArray("chapters").length(), 0);
+        }
     }
 
     public void testAddChapter() throws Exception {

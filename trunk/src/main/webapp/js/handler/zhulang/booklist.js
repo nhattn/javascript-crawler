@@ -1,9 +1,9 @@
 function handlerProcess() {
     var info = {
         dataUrl : Crawler.serverUrl + '/service/link',
-        path : "/html/body/div[3]/div[@id='centerm']/div[@id='content']//a",
-        nextPagePath : "//div[@id='pagelink']/strong//following-sibling::a[1]",
-        regex : 'http://www\.tszw\.com/Article_[0-9]+\.html'
+        path : "/html/body/div[4]/div[3]/div/div[3]//a",
+        nextPagePath : "/html/body/div[4]/div[3]/div/div[4]/form[@id='frmjumppage']/ul/li[4]/a",
+        regex : 'http://www\.zhulang\.com/[0-9]+/index\.html'
     };
 
     var links = HandlerHelper.getMatchLinks(info.path, info.regex);

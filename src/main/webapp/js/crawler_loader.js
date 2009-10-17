@@ -17,8 +17,9 @@ Crawler = {
 	    Crawler.clog(txt);
 	},
 	error: function(txt){
-	    Crawler.clog('Error: '+txt);
-	    //alert(txt);
+	    Crawler.clog('Error: '+txt);	    
+	    var i=9/0;
+	    alert(txt);
 	},
 	objToString : function(obj){
 	    var r = [];
@@ -76,6 +77,7 @@ Crawler = {
     	    case 'Goto.Next.Link': {
     	        // request a new link then go to that link
     	        var url = Crawler.serverUrl + '/service/link?action=redirect';
+    	        return;
     	        window.location = url;
     	        // must return here, or there will be loops.
     	        return;
@@ -163,7 +165,7 @@ Crawler = {
     loadHandler: function(){
         // find out which web site, based on mapping file, locate the js files.
         Ext.lib.Ajax.useDefaultXhrHeader=false;
-        var file = Crawler.serverUrl+Crawler.handlerPath+'/'+ Crawler.locateHandler() +'.js';
+        var file = Crawler.serverUrl+Crawler.handlerPath+'/'+ Crawler.locateHandler() +'.js?' + (new Date()).getTime() ;
         Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){Crawler.error(e);}})
     }	
 }
@@ -222,6 +224,125 @@ XPath = {
 	}
 }
 
+HandlerHelper = {
+    bookListUrl: Crawler.serverUrl + '/service/link',
+    bookUrl:     Crawler.serverUrl + '/service/book',
+    
+    getMatchLinks: function(links, reg){
+        if(typeof reg == 'string'){
+            reg = new RegExp(reg,'i');
+        }
+        if(typeof links == 'string'){
+            links = XPath.array(null, links);
+        }
+        var r = [];
+        for(var i = 0; i < links.length; i++) {
+            var l = links[i].href.toString();
+            if (reg.test(l)) {
+                r.push(l);
+            }
+        }        
+        return r;
+    },
+    
+    postBookLinkList: function(linkArray, nextAction){
+        var data = {'data': Ext.util.JSON.encode(linkArray)};
+        
+        var callback = function(r,suc){                    
+            try{
+                var obj = Ext.util.JSON.decode(r.responseText);
+                if(obj.result == 0 ){             
+                    //Crawler.nextLink(); TODO 
+                    Crawler.action(nextAction);
+                }else{
+                    Crawler.action(nextAction);
+                }
+            }catch(e){
+                Crawler.error('HandlerHelper:'+e+':'+r.responseText);
+                Crawler.nextLink();            
+            }                                    
+        };            
+        Crawler.postData(data, HandlerHelper.bookListUrl, function(r, suc){callback(r,suc);});    
+    },
+    
+    parseBookCover: function(mapping){    
+        var book = {};
+        for(var i=0;i<mapping.length;i++){
+            var m = mapping[i];
+            switch(m.op){
+            case 'run.func':            
+                book[m.name] = m.param1.apply(null, HandlerHelper.getParams(m).slice(1)).trim();
+                break;
+            case 'xpath.textcontent.regex':
+                book[m.name] = HandlerHelper.extractFromXpathNodeText.apply(HandlerHelper, HandlerHelper.getParams(m)).trim();                 
+                break;
+            case 'assign.value':
+                book[m.name] = m.param1;
+                break;
+            default:
+                Crawler.error('wrong op'+m.op);
+            }        
+        }
+        return book;
+    },
+    
+    postBookCover: function(book, nextAction) {
+        var params = {data : Ext.util.JSON.encode(book)};
+        var callback = function(r, suc) {        
+            if (!suc) {
+                Crawler.error("postbookcover:" + r.responseText);
+                Crawler.nextLink();
+                return;
+            }
+            
+            try {
+                r = Ext.util.JSON.decode(r.responseText);                        
+                if (r.result) {
+                    Crawler.action(nextAction);
+                }else{
+                    Crawler.nextLink();
+                }
+            } catch (e) {
+                Crawler.error('postbookcover:' + e + ':' + r.responseText);
+                Crawler.nextLink();
+            }        
+        }    
+        Crawler.postData(params, HandlerHelper.bookUrl, callback);
+    },
+
+    getParams: function(obj){
+        var r = [];
+        for(var i=1;i<10;i++){
+            if(obj['param'+i]){
+                r.push(obj['param'+i]);
+            }else{
+                return r;
+            }
+        }
+        return r;
+    },
+    extractFromXpathNodeText: function(xp, reg){
+        var r = XPath.single(null, xp).textContent;        
+        if(typeof reg == 'object'){
+            r =  HandlerHelper.getRegGroup(r, reg);
+        }
+        return r;
+    },
+    getRegGroup: function(s, r){
+        if(typeof s != 'string' || typeof r == undefined){
+            Crawler.log('HandlerHelper: getRegGroup:Can not match:'+s+':'+r);
+        }
+        var arr = s.match(r);        
+        if(arr && arr.length>1)
+            return arr[1];
+        else{
+            Crawler.log('HandlerHelper: getRegGroup:Can not match:'+s+':'+r);
+            return 'Can not match:'+s+':'+r;
+        }
+    }
+    
+}
+
 Crawler.loadJSFile(Crawler.extFile, function(){Crawler.loadHandler();});
 
 var handlerMapping = [
@@ -233,7 +354,12 @@ var handlerMapping = [
 
     //tszw.com
     {pattern:'http://www\.tszw\.com/toplistlastupdate/[0-9]+/[0-9]+.html',         file:'tszw/booklist'},
-    {pattern:'http://www\.tszw\.com/Article_[0-9]+\.html',                         file:'tszw/bookcover'}
+    {pattern:'http://www\.tszw\.com/Article_[0-9]+\.html',                         file:'tszw/bookcover'},
+        
+    //17k.com    
+    {pattern:'http://all\.17k\.com/[0-9|_]+\.html',         file:'www17k/booklist'},
     
+    //zhulang.com    
+    {pattern:'http://s\.zhulang\.com/w_book_list\.php',     file:'zhulang/booklist'},
 ];
     

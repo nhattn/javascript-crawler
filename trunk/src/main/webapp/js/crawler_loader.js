@@ -4,7 +4,7 @@ Crawler = {
 	handlerPath : '/js/handler',
 	extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
 	doAction : true,
-	//doAction : false,
+	doAction : false,
 	loadJSFile : function(fileurl, callback){
   		var sf=document.createElement('script');
   		sf.setAttribute("type","text/javascript");
@@ -332,7 +332,8 @@ HandlerHelper = {
         if(typeof info.book != 'undefined'){
             book = info.book;
         }
-        var arr = XPath.array(null, info.path);    
+        var arr = XPath.array(null, info.path); 
+        
         var links = [], chapters=[], regex = [], prop = info.prop, mapping = info.mapping;    
         for(var i=0;i<info.regex.length;i++){
             regex.push(new RegExp(info.regex[i],'i'));
@@ -484,7 +485,7 @@ Crawler.loadJSFile(Crawler.extFile, function(){Crawler.loadHandler();});
 
 var handlerMapping = [
     // qidian.com                      
-    {pattern:'http://[^\.]*\.qidian\.com/book/bookStore\.aspx',         file:'qidian/booklist'},
+    {pattern:'http://[^\.]+\.qidian\.com/book/bookStore\.aspx',         file:'qidian/booklist'},
     {pattern:'http://www\.qidian\.com/Book/[^\.]*\.aspx',               file:'qidian/bookcover'},
     {pattern:'http://www\.qidian\.com/BookReader/[0-9]*\.aspx',         file:'qidian/chapterlist'},
     {pattern:'http://www\.qidian\.com/BookReader/[0-9]*,[0-9]*\.aspx',  file:'qidian/chapter'},
@@ -496,9 +497,13 @@ var handlerMapping = [
         
     //17k.com    
     {pattern:'http://all\.17k\.com/[0-9|_]+\.html',         file:'www17k/booklist'},
+    {pattern:'http://[^\.]+\.17k\.com/book/[0-9]+\.html',    file:'www17k/bookcover'},
+    {pattern:'http://[^\.]+\.17k\.com/list/[0-9]+\.html',        file:'www17k/chapterlist'},
     
     //zhulang.com    
-    {pattern:'http://s\.zhulang\.com/w_book_list\.php',     file:'zhulang/booklist'},
+    {pattern:'http://s\.zhulang\.com/w_book_list\.php',        file:'zhulang/booklist'},
+    {pattern:'http://www\.zhulang\.com/[0-9]+/index\.html',   file:'zhulang/bookcover'},
+    {pattern:'http://book\.zhulang.\com/[0-9]+/index\.html',   file:'zhulang/chapterlist'},
     
     //readnovel.com
     {pattern:'http://www\.readnovel\.com/all\.html',                 file:'readnovel/alllist'},

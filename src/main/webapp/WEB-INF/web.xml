@@ -4,13 +4,27 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
+	<filter>
+		<filter-name>JavascriptFilter</filter-name>
+		<filter-class>
+			 com.zyd.web.filter.JavascriptFilter
+        </filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>GBK</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>JavascriptFilter</filter-name>
+		<url-pattern>*.js</url-pattern>
+	</filter-mapping>
 	<servlet>
-		<servlet-name>gateServlet</servlet-name>
+		<servlet-name>GateServlet</servlet-name>
 		<servlet-class>com.zyd.web.servlet.GateServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>gateServlet</servlet-name>
+		<servlet-name>GateServlet</servlet-name>
 		<url-pattern>/service/*</url-pattern>
 	</servlet-mapping>
 </web-app>

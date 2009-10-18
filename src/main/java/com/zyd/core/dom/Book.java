@@ -3,6 +3,8 @@ package com.zyd.core.dom;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -188,7 +190,7 @@ public class Book {
         buf.append("</author>");
 
         buf.append("<description>");
-        buf.append(this.getDescription());
+        buf.append(StringEscapeUtils.escapeXml(this.getDescription()));
         buf.append("</description>");
 
         buf.append("<category>");
@@ -230,7 +232,7 @@ public class Book {
             js.put("id", this.getId());
             js.put("name", this.getName());
             js.put("author", this.getAuthor());
-            js.put("description", this.getDescription());
+            js.put("description", StringEscapeUtils.escapeXml(this.getDescription()));
             js.put("category", this.getCategory());
             js.put("totalChar", this.getTotalChar());
             js.put("finished", this.isFinished());

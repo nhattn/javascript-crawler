@@ -59,6 +59,7 @@ public class Utils {
         buf.append("<books>");
         for (Book book : books) {
             buf.append(book.toXMLString(encoding));
+            buf.append("\n");
         }
         buf.append("</books>");
         return buf.toString();

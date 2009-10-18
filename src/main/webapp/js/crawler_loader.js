@@ -3,6 +3,8 @@ Crawler = {
 	serverUrl : 'http://localhost:8080/crawler',
 	handlerPath : '/js/handler',
 	extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
+	doAction : true,
+	//doAction : false,
 	loadJSFile : function(fileurl, callback){
   		var sf=document.createElement('script');
   		sf.setAttribute("type","text/javascript");
@@ -17,8 +19,7 @@ Crawler = {
 	    Crawler.clog(txt);
 	},
 	error: function(txt){
-	    Crawler.clog('Error: '+txt);	    
-	    var i=9/0;
+	    Crawler.clog('Error: '+txt);	    	    
 	    alert(txt);
 	},
 	objToString : function(obj){
@@ -43,6 +44,7 @@ Crawler = {
 	     });        
 	},	
 	action : function(obj){
+	    if(!Crawler.doAction) return;
 	    var processed = false;
 	    if(!obj || !obj.action) {
 	        Crawler.clog('Error, no action specified');	        
@@ -76,8 +78,7 @@ Crawler = {
             }    	    
     	    case 'Goto.Next.Link': {
     	        // request a new link then go to that link
-    	        var url = Crawler.serverUrl + '/service/link?action=redirect';
-    	        return;
+    	        var url = Crawler.serverUrl + '/service/link?action=redirect';    	        
     	        window.location = url;
     	        // must return here, or there will be loops.
     	        return;
@@ -124,7 +125,7 @@ Crawler = {
 	 */
 	extract : function(s, key, defaultValue){
 	    var start, end;
-	    if(typeof defaultValue == undefined){
+	    if(typeof defaultValue == 'undefined'){
 	        defaultValue = '';
 	    }
 	    s = Crawler.killSpace(s);
@@ -166,7 +167,20 @@ Crawler = {
         // find out which web site, based on mapping file, locate the js files.
         Ext.lib.Ajax.useDefaultXhrHeader=false;
         var file = Crawler.serverUrl+Crawler.handlerPath+'/'+ Crawler.locateHandler() +'.js?' + (new Date()).getTime() ;
-        Crawler.loadJSFile(file, function(){try{handlerProcess();}catch(e){Crawler.error(e);}})
+        Crawler.loadJSFile(file, function(){
+            try{
+                if(typeof handlerPreprocess != 'undefined'){                    
+                    handlerPreprocess();
+                }
+            }catch(e){
+                Crawler.error(e);
+            }
+            try{
+                handlerProcess();
+            }catch(e){
+                Crawler.error(e);
+            }
+        });
     }	
 }
 
@@ -246,14 +260,17 @@ HandlerHelper = {
     },
     
     postBookLinkList: function(linkArray, nextAction){
-        var data = {'data': Ext.util.JSON.encode(linkArray)};
-        
+        if(!linkArray || linkArray.length==0){
+            Crawler.nextLink();  
+            return;
+        }
+        var data = {'data': Ext.util.JSON.encode(linkArray)};        
         var callback = function(r,suc){                    
             try{
                 var obj = Ext.util.JSON.decode(r.responseText);
                 if(obj.result == 0 ){             
-                    //Crawler.nextLink(); TODO 
-                    Crawler.action(nextAction);
+                    Crawler.nextLink();  
+//                    Crawler.action(nextAction);
                 }else{
                     Crawler.action(nextAction);
                 }
@@ -310,6 +327,97 @@ HandlerHelper = {
         Crawler.postData(params, HandlerHelper.bookUrl, callback);
     },
 
+    parseChapterList: function(info){
+        var book = {};
+        if(typeof info.book != 'undefined'){
+            book = info.book;
+        }
+        var arr = XPath.array(null, info.path);    
+        var links = [], chapters=[], regex = [], prop = info.prop, mapping = info.mapping;    
+        for(var i=0;i<info.regex.length;i++){
+            regex.push(new RegExp(info.regex[i],'i'));
+        }
+        for(var i=0;i<arr.length;i++){                
+            var n = arr[i];
+            var v = n[prop];
+            if(regex.length>0){            
+                for(var j=0;j<regex.length;j++){
+                    if(regex[j].test(v)==true){
+                        links.push(n);
+                    }
+                }
+            }else{
+                links.push(n);
+            }
+        }
+        var volInfo = HandlerHelper.parseChapterListVolumeInfo(info.volumePath);
+        for(var i=0;i<links.length;i++){
+            var n = links[i];        
+            var chapter = HandlerHelper.parseChapterEntry(n, mapping, volInfo);
+            chapters.push(chapter);
+        }    
+        book.chapters = chapters;
+        if(info.bookMapping && info.bookMapping.length!=0){
+            for(var i=0;i<info.bookMapping.length;i++){
+                HandlerHelper.mapObject(book, document, info.bookMapping[i]);
+            }
+        }
+        return book;
+    },
+
+    parseChapterListVolumeInfo: function(xp){
+        if(!xp) return [];
+        var vols = [], arr = XPath.array(null,xp);        
+        for(var i=0;i<arr.length;i++){
+            var n = arr[i], obj = {};
+            obj.name = n.textContent;
+            // n can be a text node, which has no style and tag
+            if(!n.tagName) {
+                n = n.parentNode;
+            }
+            obj.xy = (new Ext.Element(n)).getXY();
+            vols.push(obj);
+        }
+        return vols;    
+    },
+
+    parseChapterEntry: function(node, mapping, volInfo){    
+        var chapter = {};
+        for(var i=0;i<mapping.length;i++){
+            var m = mapping[i];
+            switch(m.op){
+            case 'provided.node.textcontent':            
+                chapter[m.name] = node.textContent;
+                break;
+            case 'provided.node.property.regex':
+                var v = node[m.param1];
+                if(m.param2){
+                    chapter[m.name] = HandlerHelper.getRegGroup(v, m.param2);
+                }else{
+                    chapter[m.name] = v;
+                }
+                break;
+            case 'assign.value':
+                chapter[m.name] = m.param1;
+                break;
+            default:
+                Crawler.error('wrong op'+m.op);
+            }        
+        }
+        var xy = (new Ext.Element(node)).getXY();
+        for(var i=0;i<volInfo.length;i++){
+            var v = volInfo[i];
+            if(xy[1]>v.xy[1]){
+                chapter.volume=v.name;
+            }
+        }
+        return chapter;
+    },
+    
+    postBookChapters: function(book){
+        HandlerHelper.postBookCover(book, {action:'Goto.Next.Link'});
+    },
+
     getParams: function(obj){
         var r = [];
         for(var i=1;i<10;i++){
@@ -329,17 +437,46 @@ HandlerHelper = {
         return r;
     },
     getRegGroup: function(s, r){
-        if(typeof s != 'string' || typeof r == undefined){
+        if(typeof s != 'string' || typeof r == 'undefined'){
             Crawler.log('HandlerHelper: getRegGroup:Can not match:'+s+':'+r);
+        }
+        if(typeof r == 'string'){
+            r = new RegExp(r,'i');
         }
         var arr = s.match(r);        
         if(arr && arr.length>1)
             return arr[1];
         else{
-            Crawler.log('HandlerHelper: getRegGroup:Can not match:'+s+':'+r);
-            return 'Can not match:'+s+':'+r;
+            //Crawler.log('HandlerHelper: getRegGroup:Can not match:'+s+':'+r);
+            //return 'Can not match:'+s+':'+r;
+            return '';
         }
-    }
+    },
+    
+    mapObject: function (obj, node, mapping){
+        if(node) node = document.documentElement;
+        var processed = false;
+        switch(mapping.op){
+        case 'xpath.node.textcontent':
+            var n = XPath.single(node, mapping.param1);
+            if(n){
+                obj[mapping.name] = n.textContent;
+                processed = true;
+            }
+            break;
+        case 'xpath.node.textcontent.regex.group':
+            var n = XPath.single(node, mapping.param1);
+            if(n){
+                n = n.textContent;
+                obj[mapping.name] = HandlerHelper.getRegGroup(n, mapping.param2);            
+                processed = true;
+            }
+            break;
+        }    
+        if(!processed){
+            Crawler.log('mapObject error:'+arguments);
+        }
+    }    
     
 }
 
@@ -355,11 +492,18 @@ var handlerMapping = [
     //tszw.com
     {pattern:'http://www\.tszw\.com/toplistlastupdate/[0-9]+/[0-9]+.html',         file:'tszw/booklist'},
     {pattern:'http://www\.tszw\.com/Article_[0-9]+\.html',                         file:'tszw/bookcover'},
+    {pattern:'http://www\.tszw\.com/[0-9]+/[0-9]+[/index\.html]?',                 file:'tszw/chapterlist'},
         
     //17k.com    
     {pattern:'http://all\.17k\.com/[0-9|_]+\.html',         file:'www17k/booklist'},
     
     //zhulang.com    
     {pattern:'http://s\.zhulang\.com/w_book_list\.php',     file:'zhulang/booklist'},
+    
+    //readnovel.com
+    {pattern:'http://www\.readnovel\.com/all\.html',                 file:'readnovel/alllist'},
+    {pattern:'http://www\.readnovel\.com/archive/[0-9]+/[0-9]+',     file:'readnovel/monthlist'},
+    {pattern:'http://www\.readnovel\.com/partlist/[0-9]+',           file:'readnovel/bookcover'}
+    
 ];
     

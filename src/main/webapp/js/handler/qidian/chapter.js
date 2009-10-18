@@ -20,7 +20,7 @@ function handlerProcess(){
     
     //c.log(chapter.content);
     var params = {data : Ext.util.JSON.encode(chapter)};
-    Crawler.postData(params, metaInfo.dataUrl);
+    Crawler.postData(params, metaInfo.dataUrl);    
 }
 
 var metaInfo = {

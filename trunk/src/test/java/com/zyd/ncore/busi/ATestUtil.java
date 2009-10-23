@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.zyd.Config;
+import com.zyd.core.Utils;
 import com.zyd.core.busi.BookManager;
 import com.zyd.core.busi.SiteManager;
 import com.zyd.core.dom.Book;
@@ -52,7 +53,7 @@ public class ATestUtil {
         List<Book> books = new ArrayList<Book>();
         for (int i = 0; i < count; i++) {
             Book b = new Book();
-            b.setId(Integer.toString(10000 + i));
+            b.setId(Utils.nextBookId());
             b.setName("小说书名" + i);
             b.setAuthor("作者" + i);
             b.setAllChapterUrl(domains[i % 3] + "/all_chapter_" + i);

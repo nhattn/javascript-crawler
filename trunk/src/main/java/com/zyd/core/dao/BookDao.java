@@ -53,11 +53,16 @@ public class BookDao {
     public int deleteAllBooks() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.createQuery("delete from")
-        
+        int r = session.createQuery("delete Book").executeUpdate();
+        session.getTransaction().commit();
+        return r;
     }
 
     public List listBook(BookFilter filter) {
-        throw new UnsupportedOperationException();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List r = session.createQuery("from Book").setFirstResult(filter.start).setMaxResults(filter.count).list();
+        session.getTransaction().commit();
+        return r;
     }
 }

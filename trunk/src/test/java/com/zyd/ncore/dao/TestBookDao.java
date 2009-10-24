@@ -16,13 +16,11 @@ public class TestBookDao extends TestCase {
     @Override
     protected void setUp() throws Exception {
         dao = new BookDao();
-
     }
 
     public void testSingleOperations() throws Exception {
         int bookCount = 100;
         List<Book> books = ATestUtil.getBookList(bookCount);
-
         // add books
         for (Book book : books) {
             book.setId(null);
@@ -51,5 +49,15 @@ public class TestBookDao extends TestCase {
         HashSet<Book> bookSet = new HashSet<Book>(books);
         bookSet.removeAll(books2);
         assertEquals(0, bookSet.size());
+    }
+
+    public void testDeleteBooks() throws Exception {
+        System.out.println(dao.deleteAllBooks());
+    }
+
+    public static void main(String[] args) throws Exception {
+        TestBookDao d = new TestBookDao();
+        d.setUp();
+        d.testSingleOperations();
     }
 }

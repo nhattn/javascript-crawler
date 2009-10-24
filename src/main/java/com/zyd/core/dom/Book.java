@@ -3,6 +3,7 @@ package com.zyd.core.dom;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -259,5 +260,9 @@ public class Book {
 
     public String toJsonString() {
         return toJsonString(false);
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(PropertyUtils.describe(new Book()));
     }
 }

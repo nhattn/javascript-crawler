@@ -10,9 +10,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,8 +188,7 @@ public class Utils {
         return "www." + s;
     }
 
-    private static DateFormat[] dateFormats = new SimpleDateFormat[] { 
-    new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
+    private static DateFormat[] dateFormats = new SimpleDateFormat[] { new SimpleDateFormat("yy-MM-dd HH:mm"), /*09-10-13 13:57*/
     new SimpleDateFormat("yyyy年MM月dd日"), /* 2009年10月15日*/
     new SimpleDateFormat("yyyy-MM-dd"),/*2008-10-17*/
     new SimpleDateFormat("yyyy-MM-d"),/*2008-10-17*/
@@ -209,6 +210,16 @@ public class Utils {
             date = new Date();
         }
         return date;
+    }
+
+    public static void toDBEncoding(Object obj) {
+        try {
+            Map maps = BeanUtils.describe(obj);
+            Set set = maps.keySet();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

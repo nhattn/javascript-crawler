@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.zyd.core.dom">
-	<class name="Person" table="PERSON">
+	<class name="Book" table="book">
 		<id name="id">
 			<generator class="assigned" />
 		</id>

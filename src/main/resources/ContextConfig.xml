@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="location" value="classpath:Env.properties" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		autowire="byName" destroy-method="close">
+		<property name="driverClassName" value="${dataSource.driverClassName}" />
+		<property name="url" value="${dataSource.url}" />
+		<property name="username" value="${dataSource.username}" />
+		<property name="password" value="${dataSource.password}" />
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery" value="select now()" />
+	</bean>
+
+	<bean id="contextBean" class="com.zyd.core.util.SpringContext">
+	</bean>
+	
+	<bean id="bookDao" class="com.zyd.core.dao.BookDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="bookManager" class="com.zyd.core.busi.BookManager">
+		<property name="bookDao" ref="bookDao" />
+	</bean>
+
+
+</beans>
+    

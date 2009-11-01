@@ -1,11 +1,13 @@
 package com.zyd.core.dom;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,12 +23,14 @@ public class Book {
     public int hit;
     public boolean finished;
     public Date updateTime;
-    public List<Chapter> chapters;
+    public List<Chapter> chapters = new ArrayList<Chapter>();
 
     // Site related info
     public String allChapterUrl;
     public String urlToCrawl;
     public String coverUrl;
+
+    private Set<Chapter> chapterset = new HashSet<Chapter>();
 
     public String getCoverUrl() {
         return coverUrl;
@@ -46,6 +50,18 @@ public class Book {
 
     public String getUrlToCrawl() {
         return urlToCrawl;
+    }
+
+    public Set<Chapter> getChapterset() {
+        return chapterset;
+    }
+
+    public void setChapterset(Set<Chapter> chapterset) {
+        this.chapterset = chapterset;
+    }
+
+    public void setUrlToCrawl(String urlToCrawl) {
+        this.urlToCrawl = urlToCrawl;
     }
 
     public void seUrlToCrawl(String tempUrl) {
@@ -126,6 +142,12 @@ public class Book {
 
     public List<Chapter> getChapters() {
         return chapters;
+    }
+
+    public void addChapter(Chapter c) {
+        chapters.add(c);
+        chapterset.add(c);
+        c.setBook(this);
     }
 
     public void setChapters(List<Chapter> chapters) {

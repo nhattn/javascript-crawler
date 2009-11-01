@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zyd.core.dom">
+	<class name="Book" table="book">
+		<id name="id" column="book_id">
+			<generator class="assigned" />
+		</id>
+		<property name="name" />
+		<property name="author" />
+		<property name="description" />
+		<property name="totalChar" />
+		<property name="hit" />
+		<property name="finished" />
+		<property name="updateTime" />
+		<!--
+			<set name="chapterset" table="chapter" cascade="all" inverse="true">
+			<key column="book_id" /> <one-to-many class="Chapter" /> </set>
+		-->
+		<bag name="chapters" table="chapter" cascade="all" inverse="true">
+			<key column="book_id" />
+			<one-to-many class="Chapter" />
+		</bag>
+	</class>
+	<class name="Chapter" table="chapter">
+		<id name="id" column="chapter_id">
+			<generator class="assigned" />
+		</id>
+		<property name="name" />
+		<property name="description" />
+		<property name="totalChar" />
+		<property name="hit" />
+		<property name="updateTime" />
+		<property name="sequence" />
+		<property name="picture" />
+		<property name="hasContent" />
+		<many-to-one name="book" column="book_id" not-null="true" />
+		<!--
+		-->
+	</class>
+	<class name="Site" table="site">
+		<id name="id" column="site_id">
+			<generator class="assigned" />
+		</id>
+		<property name="name" />
+		<property name="domainName" />
+		<property name="url" />
+	</class>
+
+
+</hibernate-mapping>

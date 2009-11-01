@@ -29,28 +29,28 @@ create table chapter(
 
 
 drop table site;
-create table site{
+create table site(
 	site_id    		varchar(255),
 	name			varchar(255),
 	domainName		varchar(255),
 	url				varchar(1000)
-}
+);
 
 drop table booksite;
-create table booksite{
+create table booksite(
 	booksite_id     varchar(255),
 	book_id			varchar(255),
 	site_id		    varchar(255),
 	coverUrl        varchar(1000),
 	allChapterUrl	varchar(1000),
 	updateTime      datetime
-}
+);
 
-drop chaptersite;
-create table chaptersite{
+drop table chaptersite;
+create table chaptersite(
 	chaptersite_id 	varchar(255),
 	chapter_id		varchar(255),
 	site_id			varchar(255),
 	updateTime		datetime,
 	url				varchar(1000)
-}
+);

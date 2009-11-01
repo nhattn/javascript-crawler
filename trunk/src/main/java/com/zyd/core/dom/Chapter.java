@@ -21,7 +21,7 @@ public class Chapter {
     public int hit;
     public int totalChar;
     public boolean hasContent;
-    public boolean isPicture;
+    public boolean picture;
     public Book book;
 
     // site related info
@@ -116,12 +116,12 @@ public class Chapter {
         this.hasContent = hasContent;
     }
 
-    public boolean isPicture() {
-        return isPicture;
+    public boolean getPicture() {
+        return picture;
     }
 
     public void setPicture(boolean isPicture) {
-        this.isPicture = isPicture;
+        this.picture = isPicture;
     }
 
     public Book getBook() {
@@ -187,7 +187,7 @@ public class Chapter {
         buf.append("</updateTime>");
 
         buf.append("<isPicture>");
-        buf.append(this.isPicture());
+        buf.append(this.getPicture());
         buf.append("</isPicture>");
 
         buf.append("<content>");
@@ -226,7 +226,7 @@ public class Chapter {
             js.put("totalChar", this.getTotalChar());
             js.put("hit", this.getHit());
             js.put("updateTime", this.getUpdateTime());
-            js.put("isPicture", this.isPicture);
+            js.put("isPicture", this.picture);
             js.put("content", this.getContent());
             js.put("volume", this.getVolume());
             js.put("sequence", this.getSequence());

@@ -67,7 +67,7 @@ public class book extends ServiceBase {
         if (book == null) {
             throw new ServletException("Invalid request: not enough parameter");
         }
-        book = bm.findBook(book);
+        book = bm.findBook(book, false);
         String content = "no book found";
         boolean withChapter = false;
         if (book != null) {

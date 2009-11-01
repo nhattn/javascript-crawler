@@ -172,6 +172,26 @@ public class BookDao {
 		return chapter;
 	}
 
+	public List<Chapter> loadBookChapters(Book book) {
+		if (book == null)
+			return Collections.EMPTY_LIST;
+		List<Chapter> r = loadBookChapters(book.getId());
+		book.setChapters(r);
+		return r;
+	}
+
+	public List<Chapter> loadBookChapters(String bookId) {
+		if (StringUtils.isBlank(bookId))
+			return Collections.EMPTY_LIST;
+		String LoadBookChaptersSql = "select * from chapter where book_id=?";
+		final Object[] values = new Object[] { bookId };
+		final int[] types = new int[] { Types.VARCHAR };
+		@SuppressWarnings("unchecked")
+		List<Chapter> chapters = (List<Chapter>) jt.query(LoadBookChaptersSql,
+				values, types, new ChapterlistExtractor());
+		return chapters;
+	}
+
 	public int getBookCount() {
 		String GetBookCountSql = "select count(0) from book";
 		return jt.queryForInt(GetBookCountSql);

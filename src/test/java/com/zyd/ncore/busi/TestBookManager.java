@@ -49,15 +49,15 @@ public class TestBookManager extends TestCase {
 		}
 
 		for (Book b : books) {
-			assertNotNull("Find book1", bm.findBook(b, false));
+			assertNotNull("Find book1", bm.findBook(b));
 		}
 
 		for (Book b : books) {
 			b.setName(b.getName() + " x ");
-			assertNull("Find book2", bm.findBook(b, false));
+			assertNull("Find book2", bm.findBook(b));
 		}
 
-		assertNull("Find book3", bm.findBook(new Book(), false));
+		assertNull("Find book3", bm.findBook(new Book()));
 	}
 
 	public void testAddChapterToBook() {
@@ -124,22 +124,24 @@ public class TestBookManager extends TestCase {
 	}
 
 	public void testLoadBookChapter() {
+		int bookCount = 50, chapterCount = 100;
 		bm.clearBooks();
-		ATestUtil.buildModel(100, 50);
+		ATestUtil.buildModel(bookCount, chapterCount);
 		BookFilter filter = new BookFilter();
 		filter.setStart(0);
 		filter.setCount(100);
 		List<Book> books = bm.listBook(filter);
 
 		for (Book book : books) {
+			System.out.println(book);
 			List<Chapter> chapters = bm.loadBookChapter(book);
 			assertNotNull("Load book chapter1", chapters);
 			assertNotNull("Load book chapter1", book.getChapters());
-			if (chapters.size() != 50) {
+			if (chapters.size() != chapterCount) {
 				chapters.size();
 			}
 
-			assertEquals("Chapter count", 50, chapters.size());
+			assertEquals("Chapter count", bookCount, chapters.size());
 			for (Chapter c : chapters) {
 				assertTrue("Chapter name", c.getName().startsWith(
 						book.getName()));

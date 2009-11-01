@@ -39,7 +39,7 @@ public class BookManager {
 	 *         return null.
 	 */
 	public Book addBook(Book book) {
-		Book r = findBook(book, false);
+		Book r = findBook(book);
 		if (r != null)
 			return null;
 		return dao.addBook(book);
@@ -55,7 +55,7 @@ public class BookManager {
 	 *         information. to load chapter information, call loadBookChapter
 	 *         method. should not modify it.
 	 */
-	public Book findBook(Book book, boolean loadChapter) {
+	public Book findBook(Book book) {
 		if (book.getName() != null && book.getAuthor() != null) {
 			List<Book> books = dao.findBookByNameAuthor(book);
 			if (books != null && books.size() > 0) {
@@ -143,17 +143,7 @@ public class BookManager {
 	 * @return also returns the same chapters loaded
 	 */
 	public List<Chapter> loadBookChapter(Book book) {
-		Book b = findBook(book, true);
-		if (b != null)
-			return b.chapters;
-		return null;
-	}
-	
-	public List<Chapter> loadBookChapters(String bookId){
-		List<Chapter> chapters;
-		String LoadBookChaptersSql = "select * from chapter where book_id=?";
-		
-		return null;
+		return dao.loadBookChapters(book);
 	}
 
 	/**

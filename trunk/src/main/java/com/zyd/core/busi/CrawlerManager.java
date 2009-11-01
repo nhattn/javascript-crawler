@@ -108,7 +108,7 @@ public class CrawlerManager {
 
     private AResult addBookIfNecessary(Book book) {
         AResult r = new AResult();
-        Book bookWithId = bookManager.findBook(book, false);
+        Book bookWithId = bookManager.findBook(book);
         if (bookWithId == null) {
             bookWithId = bookManager.addBook(book);
             r.added = true;

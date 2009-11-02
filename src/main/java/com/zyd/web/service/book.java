@@ -13,9 +13,18 @@ import com.zyd.core.Utils;
 import com.zyd.core.busi.BookManager;
 import com.zyd.core.busi.CrawlerManager;
 import com.zyd.core.dom.Book;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class book extends ServiceBase {
+	private CrawlerManager cm;
+	private BookManager bm;
+
+	public book() {
+		cm = (CrawlerManager) SpringContext.getContext().getBean("crawlerManager");
+		bm = (BookManager) SpringContext.getContext().getBean("bookManager");
+	}
+
 	/**
 	 * method: post description: add a new book parameters: data, a json string
 	 * cotaining a single book response: a json string "{'result':'true'}" or
@@ -24,17 +33,14 @@ public class book extends ServiceBase {
 	 * added etc.
 	 */
 	@Override
-	public void post(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		setResponseType("js", resp);
-		String data = req.getParameter("data"), fromUrl = req
-				.getHeader("referer");
+		String data = param(req, "data"), fromUrl = req.getHeader("referer");
 		boolean changed = false;
 		if (StringUtils.isNotBlank(data)) {
-			changed = CrawlerManager.getInstance().processBook(data, fromUrl);
+			changed = cm.processBook(data, fromUrl);
 		}
-		String s = Utils.stringArrayToJsonString(new String[] { "result",
-				Boolean.toString(changed) });
+		String s = Utils.stringArrayToJsonString(new String[] { "result", Boolean.toString(changed) });
 		output(s, resp);
 	}
 
@@ -49,17 +55,13 @@ public class book extends ServiceBase {
 	 * fields has the same name-value as {@link Book}
 	 */
 	@Override
-	public void get(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String name = req.getParameter("name"), author = req
-				.getParameter("author"), id = req.getParameter("id"), format = req
-				.getParameter("format");
+	public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String name = param(req, "name"), author = param(req, "author"), id = req.getParameter("id"), format = req.getParameter("format");
 		if (name != null)
 			name = new String(name.getBytes("iso-8859-1"));
 		if (author != null)
 			author = new String(author.getBytes("iso-8859-1"));
 
-		BookManager bm = BookManager.getInstance();
 		Book book = null;
 
 		if (StringUtils.isNotBlank(name) && StringUtils.isNotBlank(author)) {
@@ -85,9 +87,7 @@ public class book extends ServiceBase {
 				} else if ("false".equals(s)) {
 					withChapter = false;
 				} else {
-					throw new ServletException(
-							"Invalid request parameter value for withChapter:"
-									+ s);
+					throw new ServletException("Invalid request parameter value for withChapter:" + s);
 				}
 			}
 			if ("xml".equals(format)) {
@@ -97,8 +97,7 @@ public class book extends ServiceBase {
 				setResponseType("js", resp);
 				content = book.toJsonString(withChapter);
 			} else {
-				throw new ServletException(
-						"Invalid request parameter value for format:" + format);
+				throw new ServletException("Invalid request parameter value for format:" + format);
 			}
 		}
 		output(content, resp);

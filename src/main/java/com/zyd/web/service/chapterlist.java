@@ -10,9 +10,15 @@ import org.apache.commons.lang.StringUtils;
 
 import com.zyd.core.Utils;
 import com.zyd.core.busi.CrawlerManager;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class chapterlist extends ServiceBase {
+	private CrawlerManager cm;
+
+	public chapterlist() {
+		cm = (CrawlerManager) SpringContext.getContext().getBean("crawlerManager");
+	}
     /**
      * method: post
      * description: add chapters to a book
@@ -27,7 +33,7 @@ public class chapterlist extends ServiceBase {
         String data = req.getParameter("data"), fromUrl = req.getHeader("referer");
         boolean changed = false;
         if (StringUtils.isNotBlank(data)) {
-            changed = CrawlerManager.getInstance().processBook(data, fromUrl);
+            changed = cm.processBook(data, fromUrl);
         }
         String s = Utils.stringArrayToJsonString(new String[] { "result", Boolean.toString(changed) });
         output(s, resp);

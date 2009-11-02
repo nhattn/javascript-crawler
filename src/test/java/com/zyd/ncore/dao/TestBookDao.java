@@ -25,9 +25,9 @@ public class TestBookDao extends TestCase {
 	}
 
 	public void testSingleOperations() throws Exception {
-		dao.deleteAllBooks();
+		ATestUtil.clearData();
 		int bookCount = 100;
-		List<Book> books = ATestUtil.getBookList(bookCount);
+		List<Book> books = ATestUtil.getBookList(bookCount, false);
 		// add books
 		for (Book book : books) {
 			book.setId(null);
@@ -67,7 +67,7 @@ public class TestBookDao extends TestCase {
 	public void testDeleteBooks() throws Exception {
 		dao.deleteAllBooks();
 		int bookCount = 100;
-		List<Book> books = ATestUtil.getBookList(bookCount);
+		List<Book> books = ATestUtil.getBookList(bookCount, false);
 		// add books
 		for (Book book : books) {
 			book.setId(null);
@@ -101,8 +101,7 @@ public class TestBookDao extends TestCase {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		// Book book = (Book) session.load(Book.class, "bookid");
-		Book book = (Book) session.createQuery("from Book").list().iterator()
-				.next();
+		Book book = (Book) session.createQuery("from Book").list().iterator().next();
 		List<Chapter> cc = book.getChapters();
 		System.out.println(cc);
 		Chapter c = ATestUtil.getChapter();
@@ -113,16 +112,13 @@ public class TestBookDao extends TestCase {
 
 	}
 
-	public static void main(String[] args) {
+	public static void mainx(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		System.out.println(session.createQuery("select count(*) from Book")
-				.uniqueResult());
+		System.out.println(session.createQuery("select count(*) from Book").uniqueResult());
 		Book book = new Book();
 		book.setId("bookid");
-		List list = session.createQuery(
-				"from Chapter c where c.book.name = :book").setParameter(
-				"book", "book name").list();
+		List list = session.createQuery("from Chapter c where c.book.name = :book").setParameter("book", "book name").list();
 		System.out.println(list);
 		session.getTransaction().commit();
 

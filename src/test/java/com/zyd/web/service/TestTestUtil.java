@@ -23,7 +23,7 @@ public class TestTestUtil extends TestCase {
         System.out.println(ATestUtil.postAndGetString(url, ps));
     }
 
-    public void testClearCache() throws Exception {
+    public void atestClearCache() throws Exception {
         assertTrue(ATestUtil.clearServerData());
     }
 }

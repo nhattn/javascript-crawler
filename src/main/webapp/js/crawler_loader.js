@@ -34,7 +34,9 @@ Crawler = {
 	},
 	
 	postData : function(params, url, callback){
-	    if(!callback) callback = Crawler.callback       
+	    if(!callback) callback = Crawler.callback
+	    var encoding = document.characterSet;
+	    params.encoding = encoding;
 	    Ext.Ajax.request({
 	        url: url,
 	        success: function(r){try{callback(r,true);}catch(e){Crawler.error('crawler_loader.postdata:'+e);} },

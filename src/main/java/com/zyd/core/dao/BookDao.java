@@ -34,15 +34,20 @@ public class BookDao {
 	 * @return
 	 */
 	public Book addBook(Book book) {
-		book.setId(Utils.nextBookId());
-		final String AddBookSql = "insert into book(book_id, name, author, description, totalChar, hit, finished, updateTime) values(?,?,?,?,?,?,?,?)";
-		Object[] values = new Object[] { book.getId(), book.getName(),
-				book.getAuthor(), book.getDescription(), book.getTotalChar(),
-				book.getHit(), book.isFinished(), book.getUpdateTime() };
-		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-				Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.BOOLEAN,
-				Types.DATE };
-		jt.update(AddBookSql, values, types);
+		try {
+			book.setId(Utils.nextBookId());
+			final String AddBookSql = "insert into book(book_id, name, author, description, totalChar, hit, finished, updateTime) values(?,?,?,?,?,?,?,?)";
+			// Object[] values = new Object[] { book.getId(), new
+			// String(book.getName().getBytes("utf-8"), "iso-8859-1"), new
+			// String(book.getAuthor().getBytes("iso-8859-1"),"GBK"), new
+			// String(book.getDescription().getBytes("GBK"), "iso-8859-1"),
+			// book.getTotalChar(), book.getHit(),
+			// book.isFinished(), book.getUpdateTime() };
+			Object[] values = new Object[] { book.getId(), book.getName(), book.getAuthor(), book.getDescription(), book.getTotalChar(), book.getHit(), book.isFinished(), book.getUpdateTime() };
+			int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.BOOLEAN, Types.DATE };
+			jt.update(AddBookSql, values, types);
+		} catch (Exception e) {
+		}
 		return book;
 	}
 
@@ -58,8 +63,17 @@ public class BookDao {
 		final String FindBookById = "select * from book where book_id=?";
 		Object[] values = new Object[] { bookId };
 		int[] types = new int[] { Types.VARCHAR };
-		Book b = (Book) jt.queryForObject(FindBookById, values, types,
-				new BookRowMapper());
+		Book b = (Book) jt.queryForObject(FindBookById, values, types, new BookRowMapper());
+		return b;
+	}
+
+	public Book loadBookById(Book book) {
+		if (StringUtils.isBlank(book.getId()))
+			return null;
+		final String FindBookById = "select * from book where book_id=?";
+		Object[] values = new Object[] { book.getId() };
+		int[] types = new int[] { Types.VARCHAR };
+		Book b = (Book) jt.queryForObject(FindBookById, values, types, new BookRowMapper(book));
 		return b;
 	}
 
@@ -77,8 +91,7 @@ public class BookDao {
 		Object[] values = new Object[] { name, author };
 		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR };
 		@SuppressWarnings("unchecked")
-		List<Book> r = (List<Book>) jt.query(FindBookByNameAuthor, values,
-				types, new BookListExtractor());
+		List<Book> r = (List<Book>) jt.query(FindBookByNameAuthor, values, types, new BookListExtractor());
 		return r;
 	}
 
@@ -101,8 +114,7 @@ public class BookDao {
 		Object[] values = new Object[] { start, count };
 		int[] types = new int[] { Types.INTEGER, Types.INTEGER };
 		@SuppressWarnings("unchecked")
-		List<Book> r = (List<Book>) jt.query(ListBookSql, values, types,
-				new BookListExtractor());
+		List<Book> r = (List<Book>) jt.query(ListBookSql, values, types, new BookListExtractor());
 		return r;
 	}
 
@@ -115,15 +127,13 @@ public class BookDao {
 	 *            name is exact name
 	 * @return
 	 */
-	public List<Chapter> findChapterInBookByName(Book book, Chapter chapter,
-			boolean useLike) {
+	public List<Chapter> findChapterInBookByName(Book book, Chapter chapter, boolean useLike) {
 		if (book == null || chapter == null)
 			return Collections.EMPTY_LIST;
 		return findChapterInBookByName(book.getId(), chapter.getName(), useLike);
 	}
 
-	public List<Chapter> findChapterInBookByName(String bookId,
-			String chapterName, boolean useLike) {
+	public List<Chapter> findChapterInBookByName(String bookId, String chapterName, boolean useLike) {
 		if (StringUtils.isBlank(bookId) || StringUtils.isBlank(chapterName))
 			return Collections.EMPTY_LIST;
 		final String FindChapterInBookByNameSql = "select * from chapter where book_id=? and name ";
@@ -137,8 +147,7 @@ public class BookDao {
 		Object[] values = new Object[] { bookId, chapterName };
 		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR };
 		@SuppressWarnings("unchecked")
-		List<Chapter> r = (List<Chapter>) jt.query(sql, values, types,
-				new ChapterlistExtractor());
+		List<Chapter> r = (List<Chapter>) jt.query(sql, values, types, new ChapterlistExtractor());
 		return r;
 	}
 
@@ -160,14 +169,9 @@ public class BookDao {
 			return null;
 		final String AddChapterToBookSql = "insert into chapter(chapter_id, name, description, totalChar, hit, updateTime, isPicture, hasContent, book_id, sequence) values(?,?,?,?,?,?,?,?,?,?)";
 		chapter.setId(Utils.nextChapterId());
-		final Object[] values = new Object[] { chapter.getId(),
-				chapter.getName(), chapter.getDescription(),
-				chapter.getTotalChar(), chapter.getHit(),
-				chapter.getUpdateTime(), chapter.getPicture(),
+		final Object[] values = new Object[] { chapter.getId(), chapter.getName(), chapter.getDescription(), chapter.getTotalChar(), chapter.getHit(), chapter.getUpdateTime(), chapter.getPicture(),
 				chapter.isHasContent(), bookId, chapter.getSequence() };
-		final int[] types = new int[] { Types.VARCHAR, Types.VARCHAR,
-				Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.DATE,
-				Types.BOOLEAN, Types.BOOLEAN, Types.VARCHAR, Types.INTEGER };
+		final int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.DATE, Types.BOOLEAN, Types.BOOLEAN, Types.VARCHAR, Types.INTEGER };
 		jt.update(AddChapterToBookSql, values, types);
 		return chapter;
 	}
@@ -187,8 +191,7 @@ public class BookDao {
 		final Object[] values = new Object[] { bookId };
 		final int[] types = new int[] { Types.VARCHAR };
 		@SuppressWarnings("unchecked")
-		List<Chapter> chapters = (List<Chapter>) jt.query(LoadBookChaptersSql,
-				values, types, new ChapterlistExtractor());
+		List<Chapter> chapters = (List<Chapter>) jt.query(LoadBookChaptersSql, values, types, new ChapterlistExtractor());
 		return chapters;
 	}
 
@@ -197,9 +200,31 @@ public class BookDao {
 		return jt.queryForInt(GetBookCountSql);
 	}
 
+	public Chapter loadChapterById(Chapter chapter) {
+		String LoadChapterbyIdSql = "select * from chapter where chapter_id=?";
+		final Object[] values = new Object[] { chapter.getId() };
+		final int[] types = new int[] { Types.VARCHAR };
+		return (Chapter) jt.queryForObject(LoadChapterbyIdSql, values, types, new ChapterRowMapper(chapter));
+	}
+
 	private static final class BookRowMapper implements RowMapper {
+		private Book book;
+
+		public BookRowMapper(Book b) {
+			this.book = b;
+		}
+
+		public BookRowMapper() {
+
+		}
+
 		public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Book b = new Book();
+			Book b;
+			if (this.book == null) {
+				b = new Book();
+			} else {
+				b = this.book;
+			}
 			b.setId(rs.getString("book_id"));
 			b.setName(rs.getString("name"));
 			b.setAuthor(rs.getString("author"));
@@ -213,8 +238,7 @@ public class BookDao {
 	}
 
 	private static final class BookListExtractor implements ResultSetExtractor {
-		public Object extractData(ResultSet rs) throws SQLException,
-				DataAccessException {
+		public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 			List<Book> r = new ArrayList<Book>();
 			BookRowMapper mapper = new BookRowMapper();
 			int counter = 0;
@@ -226,8 +250,22 @@ public class BookDao {
 	}
 
 	private static final class ChapterRowMapper implements RowMapper {
+		private Chapter chapter;
+
+		public ChapterRowMapper() {
+		}
+
+		public ChapterRowMapper(Chapter chapter) {
+			this.chapter = chapter;
+		}
+
 		public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Chapter c = new Chapter();
+			Chapter c;
+			if (this.chapter == null) {
+				c = new Chapter();
+			} else {
+				c = this.chapter;
+			}
 			c.setId(rs.getString("chapter_id"));
 			c.setName(rs.getString("name"));
 			c.setDescription(rs.getString("description"));
@@ -240,10 +278,8 @@ public class BookDao {
 		}
 	}
 
-	private static final class ChapterlistExtractor implements
-			ResultSetExtractor {
-		public Object extractData(ResultSet rs) throws SQLException,
-				DataAccessException {
+	private static final class ChapterlistExtractor implements ResultSetExtractor {
+		public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 			List<Chapter> r = new ArrayList<Chapter>();
 			ChapterRowMapper mapper = new ChapterRowMapper();
 			int count = 0;

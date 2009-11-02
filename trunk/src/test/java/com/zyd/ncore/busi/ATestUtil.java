@@ -32,13 +32,11 @@ import com.zyd.core.util.SpringContext;
 public class ATestUtil {
 	static Random rand = new Random();
 	static HashSet<String> usedString = new HashSet<String>();
-	static String[] domains = new String[] { "http://www.qidian.com",
-			"http://17k.com", "http://aa.kanshu.com" };
+	static String[] domains = new String[] { "http://www.qidian.com", "http://17k.com", "http://aa.kanshu.com" };
 
 	public static String BookUrl = Config.ServerUrl + "/service/book";
 	public static String BookListUrl = Config.ServerUrl + "/service/booklist";
-	public static String ControllerUrl = Config.ServerUrl
-			+ "/service/controller";
+	public static String ControllerUrl = Config.ServerUrl + "/service/controller";
 	public static String ChapterUrl = Config.ServerUrl + "/service/chapter";
 
 	public static String getNoRepeatString() {
@@ -54,33 +52,46 @@ public class ATestUtil {
 		}
 	}
 
-	public static List<Book> getBookList(int count) {
+	public static List<Book> getBookList(int count, boolean shoudPersistent) {
+		BookManager bm = (BookManager) SpringContext.getContext().getBean("bookManager");
 		List<Book> books = new ArrayList<Book>();
 		for (int i = 0; i < count; i++) {
 			Book b = new Book();
-			b.setId(Utils.nextBookId());
 			b.setName("小说书名" + i);
 			b.setAuthor("作者" + i);
 			b.setAllChapterUrl(domains[i % 3] + "/all_chapter_" + i);
 			b.setCoverUrl(domains[i % 3] + "/cover_" + i);
+			if (shoudPersistent) {
+				b = bm.addBook(b);
+			} else {
+				b.setId(Utils.nextBookId());
+			}
 			books.add(b);
 		}
 		return books;
 	}
 
 	public static Chapter getChapter() {
+		// BookManager bm =
+		// (BookManager)SpringContext.getContext().getBean("bookManager");
 		Chapter c = new Chapter();
 		String s = getNoRepeatString();
 		c.setId(s);
 		c.setName("章节名称" + s);
 		c.setContent("内容" + s);
 		c.setDescription("章节简介" + s);
+		// if(shouldPersistent){
+		// bm.addChapterToBook(book, chapter)
+		// }
 		return c;
 	}
 
-	public static List<Site> getSiteList() {
+	public static List<Site> getSiteList(boolean persistent) {
+		if (persistent == false) {
+			throw new UnsupportedOperationException();
+		}
 		List<Site> r = new ArrayList<Site>();
-		SiteManager sm = SiteManager.getInstance();
+		SiteManager sm = (SiteManager) SpringContext.getContext().getBean("siteManager");
 		for (String s : domains) {
 			r.add(sm.addSite(s));
 		}
@@ -88,9 +99,8 @@ public class ATestUtil {
 	}
 
 	public static void buildModel(int bookCount, int chapterPerBook) {
-		List<Book> books = getBookList(bookCount);
-		BookManager bm = (BookManager) SpringContext.getContext().getBean(
-				"bookManager");
+		List<Book> books = getBookList(bookCount, true);
+		BookManager bm = (BookManager) SpringContext.getContext().getBean("bookManager");
 		for (Book book : books) {
 			bm.addBook(book);
 			for (int i = 0; i < chapterPerBook; i++) {
@@ -114,8 +124,7 @@ public class ATestUtil {
 			PostMethod method = new PostMethod(url);
 			// method.getParams().setContentCharset("UTF-8");
 			method.addRequestHeader("Referer", "http://www.test.com");
-			method.addRequestHeader("Content-Type",
-					"application/x-www-form-urlencoded; charset=UTF-8");
+			method.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 			if (params != null) {
 				for (String k : params.keySet()) {
 					method.setParameter(k, params.get(k));
@@ -161,9 +170,7 @@ public class ATestUtil {
 
 			GetMethod method = new GetMethod(url);
 			method.addRequestHeader("Referer", "http://www.test.com");
-			method
-					.addRequestHeader("Content-Type",
-							"text/plain; charset=UTF-8");
+			method.addRequestHeader("Content-Type", "text/plain; charset=UTF-8");
 
 			int statusCode = client.executeMethod(method);
 
@@ -181,8 +188,7 @@ public class ATestUtil {
 	}
 
 	public static boolean clearServerData() throws Exception {
-		String s = getAndGetString(Config.ServerUrl
-				+ "/service/controller?action=ClearAllData", null);
+		String s = getAndGetString(Config.ServerUrl + "/service/controller?action=ClearAllData", null);
 		JSONObject o = new JSONObject(s);
 		return o.getBoolean("result");
 	}
@@ -192,8 +198,7 @@ public class ATestUtil {
 		for (String a : encoding) {
 			for (String b : encoding) {
 				try {
-					String sss = a + ":" + b + ":"
-							+ new String(s.getBytes(a), b);
+					String sss = a + ":" + b + ":" + new String(s.getBytes(a), b);
 					if (sss.indexOf('?') >= 0) {
 						sss = "***" + sss;
 					}
@@ -206,8 +211,15 @@ public class ATestUtil {
 	}
 
 	public static ApplicationContext setUpSpring() {
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(
-				"classpath*:**/ContextConfig.xml");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:**/ContextConfig.xml");
 		return ctx;
+	}
+
+	public static void clearData() {
+		BookManager bm = (BookManager) SpringContext.getContext().getBean("bookManager");
+		bm.deleteAllBook();
+
+		SiteManager sm = (SiteManager) SpringContext.getContext().getBean("siteManager");
+		sm.deleteAllSites();
 	}
 }

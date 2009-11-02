@@ -7,17 +7,19 @@ import junit.framework.TestCase;
 
 import org.json.JSONObject;
 
-import com.zyd.core.busi.JSonMapper;
+import com.zyd.core.busi.BookManager;
+import com.zyd.core.busi.JsonMapper;
 import com.zyd.core.dom.Book;
+import com.zyd.core.util.SpringContext;
 import com.zyd.ncore.busi.ATestData;
 import com.zyd.ncore.busi.ATestUtil;
 
 public class TestBook extends TestCase {
-    JSonMapper jm;
+    JsonMapper jm;
 
     @Override
     protected void setUp() throws Exception {
-        jm = JSonMapper.getInstance();
+    	jm = (JsonMapper) SpringContext.getContext().getBean("jsonMapper");
     }
 
     public void testAddBook() throws Exception {

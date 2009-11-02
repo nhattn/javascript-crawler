@@ -5,31 +5,30 @@ import java.util.List;
 
 import com.zyd.core.Utils;
 import com.zyd.core.dao.BookDao;
+import com.zyd.core.dao.SiteDao;
 import com.zyd.core.dom.Book;
 import com.zyd.core.dom.BookFilter;
 import com.zyd.core.dom.Chapter;
 
 public class BookManager {
 
-	private static BookManager instance = new BookManager();
-	private BookDao dao;
+	private BookDao bookDao;
+	private SiteDao siteDao;
 
 	private BookManager() {
-		if (instance == null)
-			instance = this;
 	}
 
 	public void setBookDao(BookDao dao) {
-		this.dao = dao;
+		this.bookDao = dao;
 	}
 
-	public static BookManager getInstance() {
-		return instance;
+	public void setSiteDao(SiteDao dao) {
+		this.siteDao = dao;
 	}
 
-	public void clearBooks() {
-		dao.deleteAllBooks();
-		dao.deleteAllChapters();
+	public void deleteAllBooks() {
+		bookDao.deleteAllBooks();
+		bookDao.deleteAllChapters();
 	}
 
 	/**
@@ -42,7 +41,7 @@ public class BookManager {
 		Book r = findBook(book);
 		if (r != null)
 			return null;
-		return dao.addBook(book);
+		return bookDao.addBook(book);
 	}
 
 	/**
@@ -57,14 +56,14 @@ public class BookManager {
 	 */
 	public Book findBook(Book book) {
 		if (book.getName() != null && book.getAuthor() != null) {
-			List<Book> books = dao.findBookByNameAuthor(book);
+			List<Book> books = bookDao.findBookByNameAuthor(book);
 			if (books != null && books.size() > 0) {
 				return books.get(0);
 			} else {
 				return null;
 			}
 		} else if (book.getId() != null) {
-			return dao.findBookById(book);
+			return bookDao.findBookById(book);
 		}
 		return null;
 	}
@@ -83,7 +82,7 @@ public class BookManager {
 		Chapter nchapter = findChapterInBook(book, chapter);
 		if (nchapter != null)
 			return null;
-		dao.addChapterToBook(book, chapter);
+		bookDao.addChapterToBook(book, chapter);
 		return chapter;
 	}
 
@@ -96,28 +95,24 @@ public class BookManager {
 	 * @return chapter as found, or null if not found
 	 */
 	public Chapter findChapterInBook(Book book, Chapter chapter) {
-		List<Chapter> list = dao.findChapterInBookByName(book, chapter, false);
+		List<Chapter> list = bookDao.findChapterInBookByName(book, chapter, false);
 		if (list.size() == 0)
 			return null;
 		else if (list.size() == 1)
 			return list.get(0);
 		else {
-			System.out
-					.println("Error, more than one chapter matched the same name:"
-							+ chapter.getName());
+			System.out.println("Error, more than one chapter matched the same name:" + chapter.getName());
 			return null;
 		}
 	}
 
-	public List<Chapter> findChapterInBook(Book book, Chapter chapter,
-			boolean useLikeInChapterName) {
-		List<Chapter> list = dao.findChapterInBookByName(book, chapter,
-				useLikeInChapterName);
+	public List<Chapter> findChapterInBook(Book book, Chapter chapter, boolean useLikeInChapterName) {
+		List<Chapter> list = bookDao.findChapterInBookByName(book, chapter, useLikeInChapterName);
 		return list;
 	}
 
 	public int getBookCount() {
-		return dao.getBookCount();
+		return bookDao.getBookCount();
 	}
 
 	/**
@@ -132,7 +127,7 @@ public class BookManager {
 			filter.setStart(0);
 		if (filter.getCount() == 0)
 			return (List<Book>) Collections.EMPTY_LIST;
-		return dao.listBook(filter);
+		return bookDao.listBook(filter);
 	}
 
 	/**
@@ -143,7 +138,7 @@ public class BookManager {
 	 * @return also returns the same chapters loaded
 	 */
 	public List<Chapter> loadBookChapter(Book book) {
-		return dao.loadBookChapters(book);
+		return bookDao.loadBookChapters(book);
 	}
 
 	/**
@@ -164,36 +159,35 @@ public class BookManager {
 	 */
 	public boolean compareAndUpdateBook(Book oldBook, Book newBook) {
 		boolean changed = false;
-		if (!Utils.strictEqual(oldBook.getTotalChar(), newBook.getTotalChar())
-				&& newBook.getTotalChar() != 0) {
+		if (!Utils.strictEqual(oldBook.getTotalChar(), newBook.getTotalChar()) && newBook.getTotalChar() != 0) {
 			oldBook.setTotalChar(newBook.getTotalChar());
 			changed = true;
 		}
-		if (!Utils
-				.strictEqual(oldBook.getUpdateTime(), newBook.getUpdateTime())
-				&& newBook.getUpdateTime() != null) {
-			if (oldBook.getUpdateTime() == null
-					|| (oldBook.getUpdateTime().getTime() < newBook
-							.getUpdateTime().getTime())) {
+		if (!Utils.strictEqual(oldBook.getUpdateTime(), newBook.getUpdateTime()) && newBook.getUpdateTime() != null) {
+			if (oldBook.getUpdateTime() == null || (oldBook.getUpdateTime().getTime() < newBook.getUpdateTime().getTime())) {
 				oldBook.setUpdateTime(newBook.getUpdateTime());
 				changed = true;
 			}
 		}
-		if (!Utils.strictEqual(oldBook.getHit(), newBook.getHit())
-				&& newBook.getHit() != 0) {
+		if (!Utils.strictEqual(oldBook.getHit(), newBook.getHit()) && newBook.getHit() != 0) {
 			oldBook.setHit(newBook.getHit());
 			changed = true;
 		}
-		if (oldBook.isFinished() != newBook.isFinished()
-				&& newBook.isFinished() == true) {
+		if (oldBook.isFinished() != newBook.isFinished() && newBook.isFinished() == true) {
 			oldBook.setFinished(true);
 			changed = true;
 		}
-		if (oldBook.getTotalChar() != newBook.getTotalChar()
-				&& newBook.getTotalChar() > oldBook.getTotalChar()) {
+		if (oldBook.getTotalChar() != newBook.getTotalChar() && newBook.getTotalChar() > oldBook.getTotalChar()) {
 			oldBook.setTotalChar(newBook.getTotalChar());
 			changed = true;
 		}
 		return changed;
+	}
+
+	public void deleteAllBook() {
+		bookDao.deleteAllBooks();
+		bookDao.deleteAllChapters();
+		siteDao.deleteAllBookSite();
+		siteDao.deleteAllChapterSite();
 	}
 }

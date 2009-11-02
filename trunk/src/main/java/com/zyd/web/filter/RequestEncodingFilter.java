@@ -9,17 +9,22 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-public class JavascriptFilter implements Filter {
+public class RequestEncodingFilter implements Filter {
 
 	private String encoding = null;
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		res.setContentType(this.encoding);
+		/*
+		 * String pageEncoding = req.getParameter("encoding"); if (pageEncoding
+		 * != null) { } else { if (req.getCharacterEncoding() == null)
+		 * req.setCharacterEncoding(this.encoding); }
+		req.setCharacterEncoding("GBK");
+		 */
 		chain.doFilter(req, res);
 	}
 
 	public void init(FilterConfig config) throws ServletException {
-		this.encoding = "application/javascript; charset=" + config.getInitParameter("encoding");
+		this.encoding = config.getInitParameter("encoding");
 	}
 
 	public void destroy() {

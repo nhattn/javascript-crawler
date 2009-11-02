@@ -5,16 +5,17 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.zyd.core.busi.JSonMapper;
+import com.zyd.core.busi.JsonMapper;
 import com.zyd.core.dom.Book;
 import com.zyd.core.dom.Chapter;
+import com.zyd.core.util.SpringContext;
 
 public class TestJSonMapper extends TestCase {
-    JSonMapper jm;
+    JsonMapper jm;
 
     @Override
     protected void setUp() throws Exception {
-        jm = JSonMapper.getInstance();
+    	jm = (JsonMapper) SpringContext.getContext().getBean("jsonMapper");
     }
 
     public void testParseBookList() {

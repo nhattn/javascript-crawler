@@ -1,9 +1,7 @@
 package com.zyd.core.busi;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -20,14 +18,6 @@ import com.zyd.core.dom.Site;
 
 public class SiteManager {
 	private static SiteManager instance = new SiteManager();
-
-	private static HashMap<String, HashMap<String, BookSite>> siteBookCache = new HashMap<String, HashMap<String, BookSite>>();
-	private static HashMap<String, HashMap<String, ChapterSite>> siteChapterCache = new HashMap<String, HashMap<String, ChapterSite>>();
-	private static HashMap<String, Site> siteCache = new HashMap<String, Site>();
-
-	public static SiteManager getInstance() {
-		return instance;
-	}
 
 	private JdbcTemplate jt = null;
 	private SiteDao dao = null;
@@ -50,19 +40,13 @@ public class SiteManager {
 	public BookSite addBookToSite(Book book, Site site) {
 		if (findBookInSite(book, site) != null)
 			return null;
-		String siteKey = site.getDomainName();
-		HashMap<String, BookSite> bookMap = siteBookCache.get(siteKey);
-		if (bookMap == null) {
-			bookMap = new HashMap<String, BookSite>();
-			siteBookCache.put(siteKey, bookMap);
-		}
 		BookSite bookSite = new BookSite();
-		bookSite.setId(Utils.nextBookSiteId());
 		bookSite.setBook(book);
 		bookSite.setSite(site);
 		bookSite.setAllChapterUrl(book.getAllChapterUrl());
 		bookSite.setCoverUrl(book.getCoverUrl());
-		bookMap.put(book.getId(), bookSite);
+		bookSite.setUpdateTime(new Date());
+		bookSite = dao.addBookSite(bookSite);
 		return bookSite;
 	}
 
@@ -75,41 +59,26 @@ public class SiteManager {
 	 * @return
 	 */
 	public boolean updateBookSite(Book book, Site site) {
-		BookSite bookSite = findBookInSite(book, site);
-		if (bookSite == null) {
-			// TODO: error or add book to site
-			return false;
-		}
-		bookSite.setAllChapterUrl(Utils.getUpdateObject(bookSite
-				.getAllChapterUrl(), book.getAllChapterUrl()));
-		bookSite.setCoverUrl(Utils.getUpdateObject(bookSite.getCoverUrl(), book
-				.getCoverUrl()));
-		bookSite.setUpdateTime(Utils.getUpdateObject(bookSite.getUpdateTime(),
-				book.getUpdateTime()));
-		// TODO: should tell if book is changed
+		/*
+		 * BookSite bookSite = findBookInSite(book, site); if (bookSite == null)
+		 * { // TODO: error or add book to site return false; }
+		 * bookSite.setAllChapterUrl(Utils.getUpdateObject(bookSite
+		 * .getAllChapterUrl(), book.getAllChapterUrl()));
+		 * bookSite.setCoverUrl(Utils.getUpdateObject(bookSite.getCoverUrl(),
+		 * book .getCoverUrl()));
+		 * bookSite.setUpdateTime(Utils.getUpdateObject(bookSite
+		 * .getUpdateTime(), book.getUpdateTime())); // TODO: should tell if
+		 * book is changed
+		 */
 		throw new UnsupportedOperationException();
 	}
 
 	public BookSite findBookInSite(Book book, Site site) {
-		String siteKey = site.getDomainName();
-		HashMap<String, BookSite> bookMap = siteBookCache.get(siteKey);
-		if (bookMap == null)
-			return null;
-		return bookMap.get(book.getId());
+		return dao.findBookInSite(book, site);
 	}
 
 	public List<BookSite> findSiteForBook(Book book) {
-		List<BookSite> r = new ArrayList<BookSite>();
-		Collection<HashMap<String, BookSite>> values = siteBookCache.values();
-		String k = book.getId();
-		for (HashMap<String, BookSite> map : values) {
-			BookSite s = map.get(k);
-			if (s != null) {
-				r.add(s);
-			}
-
-		}
-		return r;
+		return dao.findSiteForBook(book);
 	}
 
 	/**
@@ -123,20 +92,13 @@ public class SiteManager {
 	public ChapterSite addChapterToSite(Chapter chapter, Site site) {
 		if (findChapterInSite(chapter, site) != null)
 			return null;
-		String siteKey = site.getDomainName();
-		HashMap<String, ChapterSite> chapterMap = siteChapterCache.get(siteKey);
-		if (chapterMap == null) {
-			chapterMap = new HashMap<String, ChapterSite>();
-			siteChapterCache.put(siteKey, chapterMap);
-		}
 		ChapterSite chapterSite = new ChapterSite();
 		chapterSite.setChapter(chapter);
 		chapterSite.setSite(site);
 		chapterSite.setId(Utils.nextChapterSiteId());
 		chapterSite.setUpdateTime(chapter.getUpdateTime());
 		chapterSite.setUrl(chapter.getChapterUrl());
-
-		chapterMap.put(chapter.getId(), chapterSite);
+		chapterSite = dao.addChapterSite(chapterSite);
 		return chapterSite;
 	}
 
@@ -154,18 +116,14 @@ public class SiteManager {
 	public ChapterSite findChapterInSite(Chapter chapter, Site site) {
 		if (chapter == null || site == null)
 			return null;
-		ChapterSite r = dao.findChapterInSite(chapter.getId(), site.getId());
+		ChapterSite r = dao.findChapterInSite(chapter, site);
 		return r;
 	}
 
 	public List<ChapterSite> findSiteForChapter(Chapter chapter) {
 		if (chapter == null)
 			return Collections.EMPTY_LIST;
-		List<ChapterSite> r = dao.findSiteForChapter(chapter.getId());
-		for (ChapterSite s : r) {
-			dao.loadSiteById(s.getSite());
-		}
-		// TODO: how about chapters
+		List<ChapterSite> r = dao.findSiteForChapter(chapter);
 		return r;
 	}
 
@@ -200,24 +158,10 @@ public class SiteManager {
 	}
 
 	public int getSiteCount() {
-		return siteCache.size();
+		return dao.getSiteCount();
 	}
 
-	public void clearSites() {
-		siteCache.clear();
-	}
-
-	public void clearBook() {
-		siteBookCache.clear();
-	}
-
-	public void clearChapter() {
-		siteChapterCache.clear();
-	}
-
-	public void clearCache() {
-		clearSites();
-		clearBook();
-		clearChapter();
+	public void deleteAllSites() {
+		int n = dao.deleteAllSites();
 	}
 }

@@ -4,10 +4,25 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:**/ContextConfig.xml</param-value>
+	</context-param>
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>
+			com.zyd.web.filter.RequestEncodingFilter
+        </filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>ISO-8859-1</param-value>
+		</init-param>
+	</filter>
+
 	<filter>
 		<filter-name>JavascriptFilter</filter-name>
 		<filter-class>
-			 com.zyd.web.filter.JavascriptFilter
+			com.zyd.web.filter.JavascriptFilter
         </filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
@@ -18,6 +33,13 @@
 		<filter-name>JavascriptFilter</filter-name>
 		<url-pattern>*.js</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/service/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>GateServlet</servlet-name>
 		<servlet-class>com.zyd.web.servlet.GateServlet</servlet-class>

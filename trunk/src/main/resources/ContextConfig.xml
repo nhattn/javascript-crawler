@@ -22,15 +22,38 @@
 
 	<bean id="contextBean" class="com.zyd.core.util.SpringContext">
 	</bean>
-	
+
 	<bean id="bookDao" class="com.zyd.core.dao.BookDao">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="bookManager" class="com.zyd.core.busi.BookManager">
+	<bean id="siteDao" class="com.zyd.core.dao.SiteDao">
+		<property name="dataSource" ref="dataSource" />
 		<property name="bookDao" ref="bookDao" />
 	</bean>
+	<bean id="jsonMapper" class="com.zyd.core.busi.JsonMapper">
+	</bean>
 
+	<bean id="bookManager" class="com.zyd.core.busi.BookManager">
+		<property name="bookDao" ref="bookDao" />
+		<property name="siteDao" ref="siteDao" />
+	</bean>
+
+	<bean id="siteManager" class="com.zyd.core.busi.SiteManager">
+		<property name="siteDao" ref="siteDao" />
+	</bean>
+
+	<bean id="linkManager" class="com.zyd.core.busi.LinkManager">
+	</bean>
+	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager">
+	</bean>
+
+	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
+		<property name="bookManager" ref="bookManager" />
+		<property name="jsonMapper" ref="jsonMapper" />
+		<property name="siteManager" ref="siteManager" />
+		<property name="linkManager" ref="linkManager" />
+	</bean>
 
 </beans>
     

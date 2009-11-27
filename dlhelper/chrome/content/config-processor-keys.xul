@@ -1,0 +1,50 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/content/bindings.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-config-processor-keys"
+		title="&title.config-processor-keys;"
+        flex="1"
+        onload="onLoad()"
+        ondialogaccept="onDialogAccept(); return true;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttonlabelextra2="&label.quickkeys.change;"
+        ondialogextra2="configureQuickKeys()"
+        buttons="cancel,accept">
+        
+    <html:style>
+    </html:style>
+
+	<script><![CDATA[
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+var prefService=Components.classes["@mozilla.org/preferences-service;1"]
+	                                   .getService(Components.interfaces.nsIPrefService);
+var pref=prefService.getBranch("dwhelper.");
+
+function onLoad() {
+	var keymap="0:download,2:convert-choice,3:quick-download";
+	try {
+		keymap=pref.getCharPref("processor-keymap");
+	} catch(e) {}
+	document.getElementById("keymapwidget").value=keymap;
+}
+
+function onDialogAccept() {
+	var value=document.getElementById("keymapwidget").value;
+	pref.setCharPref("processor-keymap",value);
+	window.arguments[0].ok=true;
+}
+
+]]>
+	</script>
+
+	<ProcessorKeyMap id="keymapwidget" style="width: 400px; height: 200px;"/>
+
+</dialog>

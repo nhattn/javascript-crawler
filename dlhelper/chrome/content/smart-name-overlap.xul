@@ -1,0 +1,44 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/content/bindings.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-smart-name-overlap"
+        flex="1"
+        title="&smartname.overlap.title;"
+        onload="onLoad()"
+        ondialogaccept="onOk()"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttons="cancel,accept">
+        
+    <html:style>
+    </html:style>
+
+	<script><![CDATA[
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+
+function onLoad() {
+	var dialogData=window.arguments[0];
+	var sno=document.getElementById("overlap");
+	sno.value=dialogData.overlap;
+	window.sizeToContent();
+}
+
+function onOk() {
+	var data=window.arguments[0];
+	data.ok=true;
+	data.value=document.getElementById("overlap").value;
+}
+
+]]>
+	</script>
+
+	<SmartNameOverlap id="overlap" flex="1"/>
+
+</dialog>

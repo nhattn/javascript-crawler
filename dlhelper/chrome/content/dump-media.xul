@@ -1,0 +1,95 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-dump-media"
+		title="&title.media-dump;"
+        flex="1"
+        onload="onLoad()"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttons="accept">
+        
+    <html:style>
+tree {
+	width: 450px;
+	height: 250px;
+}
+    </html:style>
+
+	<script><![CDATA[
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+
+function buildTreeChildren(entry,tree) {
+	var treechildren=document.createElement("treechildren");
+	tree.appendChild(treechildren);
+	var keys=entry.getKeys({});
+	for(var i in keys) {
+		var key=keys[i];
+		var treeitem=document.createElement("treeitem");
+		treechildren.appendChild(treeitem);
+		var treerow=document.createElement("treerow");
+		treeitem.appendChild(treerow);
+		var treecell=document.createElement("treecell");
+		treerow.appendChild(treecell);
+		treecell.setAttribute("label",key);
+		var value=Util.getPropsString(entry,key);
+		if(value) {
+			treecell=document.createElement("treecell");
+			treerow.appendChild(treecell);
+			treecell.setAttribute("label",value);
+		} else {
+			try {
+				var array=entry.get(key,Components.interfaces.nsIArray);
+				treeitem.setAttribute("container","true");
+				treeitem.setAttribute("open","true");
+				var treechildren1=document.createElement("treechildren");
+				treeitem.appendChild(treechildren1);
+				var j=array.enumerate();
+				var index=0;
+				while(j.hasMoreElements()) {
+					var item=j.getNext().QueryInterface(Components.interfaces.nsIProperties);
+					var treeitem1=document.createElement("treeitem");
+					treeitem1.setAttribute("container","true");
+					treeitem1.setAttribute("open","true");
+					treechildren1.appendChild(treeitem1);
+					var treerow1=document.createElement("treerow");
+					treeitem1.appendChild(treerow1);
+					var treecell1=document.createElement("treecell");
+					treerow1.appendChild(treecell1);
+					treecell1.setAttribute("label",""+index);
+					buildTreeChildren(item,treeitem1);
+					index++;
+				}
+			} catch(e) {
+				treecell=document.createElement("treecell");
+				treerow.appendChild(treecell);
+				treecell.setAttribute("label","...");
+			}
+		}
+	}
+}
+
+function onLoad() {
+	var tree=document.getElementById("entry");
+	var entry=window.arguments[0];
+	buildTreeChildren(entry,tree);
+	window.sizeToContent();
+}
+
+]]>
+	</script>
+
+	<tree id="entry" flex="1" hidecolumnpicker="true" editable="true">
+		<treecols>
+			<treecol id="prop-name" label="&label.dump-media.prop-name;" flex="1" primary="true" />  
+			<treecol id="prop-value" label="&label.dump-media.prop-value;" flex="2" editable="true"/>  
+		</treecols>
+	</tree>
+
+</dialog>

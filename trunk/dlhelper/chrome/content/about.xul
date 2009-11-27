@@ -1,0 +1,70 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/skin/dwhelper.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-about"
+		title="&title.about;"
+        flex="1"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttons="accept"
+        onload="onLoad()"
+        >
+
+	<script type="application/x-javascript"
+		src="chrome://dwhelper/content/dwhutil.js" />
+	<script>
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+
+function onLoad() {
+	var fullName=Util.getFText("version.fullname",
+		[ Util.getVersion("{b9db16a4-6edc-47ec-a1f4-b86292ed211d}")],1);
+	document.getElementById("about-version").value=fullName;
+}
+
+function knowMore() {
+	var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+	                            .getService(Components.interfaces.nsIWindowMediator);
+	var w = wm.getMostRecentWindow("navigator:browser");
+	var browser=w.getBrowser();
+	browser.selectedTab=browser.addTab("http://www.downloadhelper.net/");
+	window.close();
+}
+	</script>
+
+	<html:div>
+		<tabbox style="width: 300px;" flex="1">
+			<tabs>
+				<tab label="&version.name;"/>
+			</tabs>
+			<tabpanels flex="1">
+				<tabpanel flex="1">
+					<vbox flex="1">
+						<hbox>
+							<image src="chrome://dwhelper/skin/dwhelper-anim.gif" style="width: 48px; height: 48px;"/>
+							<label id="about-version" style="padding: 20px;" />
+						</hbox>
+						<description>
+						&about.for-free;
+						</description>
+						<description flex="1">
+							&about.know-more; 
+							<html:a onclick="knowMore()" style="color: Blue; text-decoration: underline; cursor: pointer;">&about.link;</html:a>
+							&about.know-more2; 							
+						</description>
+						<description>
+						&about.locale-credit;
+						</description>
+					</vbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</html:div>
+
+</dialog>

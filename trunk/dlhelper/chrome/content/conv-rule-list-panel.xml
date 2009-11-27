@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="ConvRuleListPanel" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1">
+				<vbox>
+					<button anonid="xButNew" label="&button.conv-rule-list.new;" oncommand="this.parentNode.parentNode.parentNode.newRule()"/>
+					<button anonid="xButEdit" label="&button.conv-rule-list.edit;" oncommand="this.parentNode.parentNode.parentNode.edit()"/>
+					<button anonid="xButUp" label="&button.conv-rule-list.up;" oncommand="this.parentNode.parentNode.parentNode.move(true)"/>
+					<button anonid="xButDown" label="&button.conv-rule-list.down;" oncommand="this.parentNode.parentNode.parentNode.move(false)"/>
+					<button anonid="xButRemove" label="&button.conv-rule-list.remove;" oncommand="this.parentNode.parentNode.parentNode.remove()"/>
+					<button anonid="xButDefault" label="&button.conv-rule-list.default;" oncommand="this.parentNode.parentNode.parentNode.revertDefault()"/>
+				</vbox>
+				<ConvRuleList anonid="xList" flex="1"/>
+			</hbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+setTimeout(function(x) { x.updateControl(); },0,this);
+				]]>
+			</constructor>
+
+			<method name="updateControl">
+				<body>
+				<![CDATA[
+var rule=this.xList.getSelectedRule();
+if(rule) {
+	this.xButRemove.setAttribute("hidden","false");
+	this.xButUp.setAttribute("hidden","false");
+	this.xButDown.setAttribute("hidden","false");
+	this.xButEdit.setAttribute("hidden","false");
+} else {
+	this.xButRemove.setAttribute("hidden","true");
+	this.xButUp.setAttribute("hidden","true");
+	this.xButDown.setAttribute("hidden","true");
+	this.xButEdit.setAttribute("hidden","true");
+}
+				]]>
+				</body>
+			</method>
+
+			<method name="edit">
+				<body>
+				<![CDATA[
+var rule=this.xList.getSelectedRule();
+if(rule) {
+	openDialog("chrome://dwhelper/content/conv-rule.xul","dwhelper-conv-rule","chrome,centerscreen,modal",
+		{
+			ref: rule,
+			datasource: this.xList.getDataSource()
+		});
+	this.fixOrder();
+	this.xList.select(rule);
+}
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+			<method name="newRule">
+				<body>
+				<![CDATA[
+var datasource=this.xList.getDataSource();
+var rule=this.convertMgr.makeDefaultRule(datasource);
+var data={
+	ref: rule,
+	datasource: datasource
+}
+openDialog("chrome://dwhelper/content/conv-rule.xul","dwhelper-conv-rule","chrome,centerscreen,modal",data);
+if(data.ok!=true)
+	this.util.removeReferenceS(datasource,rule);
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+			<method name="revertDefault">
+				<body>
+				<![CDATA[
+var r=confirm(this.util.getText("confirm.conv-rule.revert-default"));
+if(r==false)
+	return;
+var datasource=this.xList.getDataSource();
+this.convertMgr.makeDefaultDataSource(datasource);
+setTimeout(function(w) { w.sizeToContent(); },0,window);
+				]]>
+				</body>
+			</method>
+
+			<method name="remove">
+				<body>
+				<![CDATA[
+var rule=this.xList.getSelectedRule();
+if(rule) {
+	this.util.removeReferenceS(this.xList.getDataSource(),rule);
+}
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+ 
+			<method name="fixOrder">
+				<body>
+				<![CDATA[
+var datasource=this.xList.getDataSource();
+var RDF = this.util.getRDF();
+datasource.beginUpdateBatch();
+var rootRes=RDF.GetResource("urn:root");
+for(var i=1;;i++) {
+	var propRes=RDF.GetResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#_"+i);
+	if(datasource.hasArcOut(rootRes,propRes)) {
+		var targetRes=datasource.GetTarget(rootRes,propRes,true);
+		datasource.Unassert(rootRes,propRes,targetRes);
+		datasource.Assert(rootRes,propRes,targetRes,true);
+	} else {
+		break;
+	}
+}
+datasource.endUpdateBatch();
+				]]>
+				</body>
+			</method>
+
+			<method name="move">
+				<parameter name="up"/>
+				<body>
+				<![CDATA[
+var rule=this.xList.getSelectedRule();
+if(rule) {
+	var sibling=this.util.getChildResourcesS(this.xList.getDataSource(),"urn:root",{});
+	var index0=null;
+	var index1=null;
+	for(var i=0;i<sibling.length;i++) {
+		if(sibling[i].Value==rule) {
+			index0=i;
+			if(up && i>0)
+				index1=i-1;
+			if(up==false && i<sibling.length-1)
+				index1=i+1;
+			break;
+		}
+	}
+	if(index0==null || index1==null)
+		return;
+	var datasource=this.xList.getDataSource();
+	var RDF = this.util.getRDF();
+	datasource.beginUpdateBatch();
+	datasource.Change(RDF.GetResource("urn:root"),
+		RDF.GetResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#_"+(index0+1)),
+			sibling[index0],sibling[index1]);	
+	datasource.Change(RDF.GetResource("urn:root"),
+		RDF.GetResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#_"+(index1+1)),
+			sibling[index1],sibling[index0]);	
+	datasource.endUpdateBatch();
+	this.xList.select(rule);
+}
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+			<method name="save">
+				<body>
+				<![CDATA[
+this.convertMgr.setDataSource(this.xList.getDataSource());
+				]]>
+				</body>
+			</method>
+
+
+		</implementation>
+		
+		<handlers>
+
+			<handler event="RuleSelect">
+				<![CDATA[
+this.updateControl();
+setTimeout(function(w) { w.sizeToContent(); },0,window);
+				]]>
+			</handler>
+
+			<handler event="RuleDblClicked">
+				<![CDATA[
+this.updateControl();
+this.edit();
+				]]>
+			</handler>
+		</handlers>
+
+	</binding>
+
+</bindings>

@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Yardım">
+<!ENTITY menu.manual-check "URL&apos;yi denetle">
+<!ENTITY menu.preferences "Tercihler ...">
+<!ENTITY menu.about "Hakkında ...">
+<!ENTITY label.download-one-by-one "Birer birer indir">
+<!ENTITY label.storagedir "Depolama dizini">
+<!ENTITY button.changedir "Dizini değiştir">
+<!ENTITY error.nohome "Ana dizin bulunmuyor">
+<!ENTITY error.notadirectory "bir dizin değil">
+<!ENTITY title.preferences "Seçenekler">
+<!ENTITY title.about "DownloadHelper Hakkında">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "Menü girişi süre dolma zamanı (ms)">
+<!ENTITY label.icon-animation "Simge hareketlensin">
+<!ENTITY menu.ytlinks "Bu videoları Youtube&apos;dan indir">
+<!ENTITY label.download-mode "İndirme kipi">
+<!ENTITY label.download-mode.normal "Normal">
+<!ENTITY label.download-mode.onebyone "Birer birer">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Künye">
+<!ENTITY title.general "Genel">
+<!ENTITY title.medialink "MedyaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "MedyaLink yöntemi, dosyaları sayfa üzerindeki HTML linklerine bakarak indirir.">
+<!ENTITY button.add "Ekle">
+<!ENTITY button.default "Öntanımlı">
+<!ENTITY button.remove "Kaldır">
+<!ENTITY label.file-extensions "Dosya uzantıları">
+<!ENTITY title.mediareq "Medyaİstem">
+<!ENTITY mediareq.description "Medyaİstem yöntemi, dışarı giden HTTP istemlerini inceleyerek dosyanın ortam dosyası olup olmadığına karar verir.">
+<!ENTITY title.support-dev "DownloadHelper gelişimini destekleyin">
+<!ENTITY label.donate-not-again "Beni bir daha bunun için rahatsız etme">
+<!ENTITY label.donate "Bağışta bulun">
+<!ENTITY label.cancel "Vazgeç">
+<!ENTITY label.congratulations "Tebrikler !">
+<!ENTITY label.keep-spaces "Dosya adlarındaki boşlukları koru">
+<!ENTITY title.sites "DownloadHelper Medya Siteleri">
+<!ENTITY button.sites.close "Kapat">
+<!ENTITY button.sites.open "Aç">
+<!ENTITY button.sites.report "Çalışan site bildir">
+<!ENTITY column.sites.name "Ad">
+<!ENTITY column.sites.rating "Derecelendirme">
+<!ENTITY column.sites.count "Yorumlar">
+<!ENTITY column.sites.date "Eklenme tarihi">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "Kapat">
+<!ENTITY label.site.name "Ad">
+<!ENTITY caption.site.site "Medya sitesi">
+<!ENTITY title.site "Medya sitesi">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "Eklenme">
+<!ENTITY label.site.rating "Derecelendirme">
+<!ENTITY label.site.no-rating "Henüz yok">
+<!ENTITY button.site.check "Siteyi denetle">
+<!ENTITY button.site.comment "Yorum ekle">
+<!ENTITY label.comment.site "Site">
+<!ENTITY title.comment "Yorum">
+<!ENTITY caption.comment.comment "Bir yorum ekle">
+<!ENTITY label.comment.author "Rumuz">
+<!ENTITY help.comment.author "İsim veya rumuzunuz">
+<!ENTITY label.comment.title "Başlık">
+<!ENTITY help.comment.title "Yorumun başlığı">
+<!ENTITY label.comment.comment "Yorum">
+<!ENTITY help.comment.comment "Paragrafları ayırmak için boş satır koymayı unutmayınız">
+<!ENTITY label.comment.tags "Etiketler">
+<!ENTITY help.comment.tags "Boşlukla ayrılmış alakalı etiketler (örn. &apos;türkçe haberler&apos;, veya &apos;yetişkin&apos;)">
+<!ENTITY label.comment.rating "Derecelendirme">
+<!ENTITY help.comment.rating "0 = alakam yok, 5 = harika site">
+<!ENTITY button.comment.close "Kapat">
+<!ENTITY button.comment.submit "Yorumu gönder">
+<!ENTITY label.comment.wait "Yorumunuz gönderiliyor. Lütfen bekleyin ...">
+<!ENTITY title.report "Çalışan site bildir">
+<!ENTITY caption.report.report "Bir çalışan site daha bildir">
+<!ENTITY message.report.check-new "Lütfen bu sitenin site listesinde bulunmadığından emin olun">
+<!ENTITY label.report.name "Site adı">
+<!ENTITY help.report.name "Site için yaygın ad, örn. YouTube">
+<!ENTITY label.report.url "Site URL&apos;si">
+<!ENTITY help.report.url "Sitenin adresi, örn. http://www.youtube.com">
+<!ENTITY label.report.author "İsminiz">
+<!ENTITY help.report.author "Bildirinin künyesi için isim. Boş da bırakabilirsiniz">
+<!ENTITY label.report.description "Açıklama">
+<!ENTITY help.report.description "Bu sitede ne bulunabileceği hakkında kısa bir açıklama">
+<!ENTITY button.report.submit "Site gönder">
+<!ENTITY button.report.close "Kapat">
+<!ENTITY label.report.wait "Siteniz gönderiliyor. Lütfen bekleyin ...">
+<!ENTITY menu.sites "Desteklenen siteler">
+<!ENTITY label.sites.list-adult "Doğrudan erişilebilen yetişkin içerikli siteleri de göster">
+<!ENTITY label.report.adult "Yetişkin içeriğe doğrudan erişilebilir">
+<!ENTITY label.context-menu "Sağ-tık menüsünde görüntüle">
+<!ENTITY menu.to-sumo "SUMO.tv&apos;ye video gönder">
+<!ENTITY label.enable-plugin-method "Plugin imzası yöntemini etkinleştir">
+<!ENTITY label.yt-unmodified-filename "YouTube dosya adlarını koru (CJK)">
+<!ENTITY label.disable-dwcount-cookie "İndirme sayısını tutan çerezi devredışı bırak">
+<!ENTITY column.sites.duration "İlgi">
+<!ENTITY title.mediaweight "MedyaAğırlık">
+<!ENTITY label.mediaweight-enabled "MedyaAğırlık etkin">
+<!ENTITY label.mediaweight-threshold "Medya boyut eşiği">
+<!ENTITY label.enable-medialink-method "MedyaLink etkin">
+<!ENTITY mediaweight.description "MedyaAğırlık yöntemi, HTTP cevaplarını inceler ve belge boyutuna dayanarak ortam dosyasının varlığını tespit eder.">
+<!ENTITY title.history "Geçmiş">
+<!ENTITY title.download-queue "İndirme sırası">
+<!ENTITY column.media-url "Ortam URL&apos;si">
+<!ENTITY column.source-url "Kaynak URL">
+<!ENTITY column.view-date "İzleme tarihi">
+<!ENTITY column.file-name "Dosya adı">
+<!ENTITY title.histlist "Geçmiş">
+<!ENTITY label.histlist-enabled "Geçmiş etkin (beta)">
+<!ENTITY label.histlist-clearonexit "Çıkışta geçmişi temizle">
+<!ENTITY button.medialist.watch "Seyret">
+<!ENTITY button.medialist.download "İndir">
+<!ENTITY button.medialist.more "Dahası">
+<!ENTITY button.medialist.go-source "Kaynak sayfayı ziyaret et">
+<!ENTITY button.medialist.remove "Kaldır">
+<!ENTITY button.remove-downloads "Seçili olanı kaldır">
+<!ENTITY history.description "Bu özellik, belirli şartlar altında, izlemiş olduğunuz videoları hatırlar, böylece bunları daha sonra kolayca bulabilir ve içlerinden seçtiklerinizi toplu halde indirebilirsiniz.">
+<!ENTITY about.for-free "Bu Firefox eklentisi size ücretsiz olarak sunulmuştur.">
+<!ENTITY about.know-more "Daha fazla bilgi için, şu">
+<!ENTITY about.link "link">
+<!ENTITY about.know-more2 "i takip edin.">
+<!ENTITY about.locale-credit "Türkçe&apos;ye çevirisi Hasan Ateş tarafından yapılmıştır.">
+<!ENTITY title.conversion "Dönüştürme">
+<!ENTITY conversion.description "Bu özellik sayesinde videolar indirilir indirilmez otomatik olarak başka biçimlere dönüştürülür.">
+<!ENTITY conversion.rules-description "Dönüştürme kuralları yukarıdan aşağıya doğru değerlendirilir.">
+<!ENTITY label.conversion-enabled "Dönüştürme etkin">
+<!ENTITY title.conversion-rule "Dönüştürme Kuralı">
+<!ENTITY column.conversion.rules "Dönüştürme kuralları">
+<!ENTITY button.conv-rule-list.edit "Kuralı Düzenle">
+<!ENTITY button.conv-rule-list.up "Yukarı Çıkar">
+<!ENTITY button.conv-rule-list.down "Aşağı İndir">
+<!ENTITY button.conv-rule-list.remove "Kuralı Kaldır">
+<!ENTITY button.conv-rule-list.default "Öntanımlıyı geri getir">
+<!ENTITY button.conv-rule-list.new "Yeni Kural">
+<!ENTITY button.conv-rule.change-directory "Değiştir...">
+<!ENTITY label.conv-rule.convert "Dönüştür">
+<!ENTITY label.conv-rule.do-not-convert "Dönüştürme">
+<!ENTITY label.conv-rule.files-with-ext "Şu uzantılı dosyaları">
+<!ENTITY label.conv-rule.from-site "Şu siteden">
+<!ENTITY label.conv-rule.all-sites "TÜMÜ">
+<!ENTITY label.conv-rule.all-files "TÜMÜ">
+<!ENTITY label.conv-rule.kbps "Kb/s">
+<!ENTITY label.conv-rule.bitrate "Bit hızı">
+<!ENTITY label.conv-rule.output-directory "Dizin">
+<!ENTITY label.conv-rule.default-directory "ÖNTANIMLI">
+<!ENTITY caption.conv-rule.input "Girdi">
+<!ENTITY caption.conv-rule.output "Çıktı">
+<!ENTITY title.convert-register "Dönüştürücü Tescili">
+<!ENTITY text.convert-register.benefits "Dönüştürücüyü tescil ettirmek şu avantajları sağlar:">
+<!ENTITY text.convert-register.item.nologo "Dönüştürülen videolarda DownloadHelper logosu gözükmez">
+<!ENTITY text.convert-register.item.mp3 "MP3 ses dosyalarına dönüştürme imkanı">
+<!ENTITY text.convert-register.item.faster "Dönüştürmeler çok daha hızlı olur">
+<!ENTITY text.convert-register.item.support "Destek alınabilir">
+<!ENTITY label.convert-register.code "Tescil Kodu">
+<!ENTITY button.convert-register.cancel "Vazgeç">
+<!ENTITY button.convert-register.get-code "Tescil kodu al">
+<!ENTITY button.convert-register.ok "Tamam">
+<!ENTITY title.converter-queue "Dönüştürücü Sırası">
+<!ENTITY label.converter-queue.status "Durum">
+<!ENTITY label.converter-queue.status.done "Oldu">
+<!ENTITY label.converter-queue.input "Girdi">
+<!ENTITY label.converter-queue.output "Çıktı">
+<!ENTITY label.converter-queue.status.inprogress "Sürmekte">
+<!ENTITY label.converter-queue.status.waiting "Bekliyor">
+<!ENTITY label.converter-queue.status.error "Hata">
+<!ENTITY button.converter-queue.close "Kapat">
+<!ENTITY label.conversion.converter "Dönüştürücü">
+<!ENTITY label.conversion.no-such-converter "Dönüştürücü program bulunamadı">
+<!ENTITY description.conversion.no-win-conv "Videoları dönüştürmek için harici bir uygulama yüklemeniz gerekiyor">
+<!ENTITY description.conversion.bad-version "ConvertHelper&apos;ın güncellenmesi gerekmekte">
+<!ENTITY button.conversion.win-conv "Dönüştürücü kur/güncelle">
+<!ENTITY button.conversion.check-win-conv "Dönüştürücüyü yeniden denetle">
+<!ENTITY description.conversion.win-conv "Dönüştürücü uygulama sisteminizde bulundu">
+<!ENTITY title.convert-options "Dönüştürücü Seçenekleri">
+<!ENTITY caption.convlicense "Lisans Bilgisi">
+<!ENTITY label.convlicense.license "Anahtar">
+<!ENTITY label.convlicense.name "Sahip ismi">
+<!ENTITY label.convlicense.email "Sahip e-postası">
+<!ENTITY label.convlicense.unregistered "Tescil edilmemiş dönüştürücü">
+<!ENTITY title.video-format.general "Genel">
+<!ENTITY title.video-format.advanced "Gelişmiş">
+<!ENTITY button.video-format.show-details "Ayrıntılar ...">
+<!ENTITY title.output-video-format "Video Hedef Biçimi">
+<!ENTITY label.video-format.two-passes "2 Geçiş">
+<!ENTITY label.video-format.first-pass "Geçiş 1">
+<!ENTITY label.video-format.second-pass "Geçiş 2">
+<!ENTITY label.conversion.log "Dönüşüm günlüğü tut">
+<!ENTITY button.conversion.show-log "Günlüğü göster">
+<!ENTITY title.conversion-log "Dönüştürme günlüğü">
+<!ENTITY button.convert-log.clear "Günlüğü temizle">
+<!ENTITY button.convert-log.close "Kapat">
+<!ENTITY button.convert-log.refresh "Yenile">
+<!ENTITY menu.video-format.copy "Video biçimini kopyala">
+<!ENTITY menu.video-format.paste "Video biçimini yapıştır">
+<!ENTITY button.conversion.help "Yardım">
+<!ENTITY label.converter-queue.started-on "Başlama:">
+<!ENTITY label.converter-queue.ended-on "Bitiş:">
+<!ENTITY label.conversion-notification "Dönüştürme bitince bildir">
+<!ENTITY label.show-in-statusbar "Durum çubuğunda göster">
+<!ENTITY label.trigger-min-size "En küçük tetikleme boyutu (KB)">
+<!ENTITY label.quick-download-key "Hızlı indirme tuşu">
+<!ENTITY label.open-folder-key "Klasör açma tuşu">
+<!ENTITY button.video-format.default "Öntanımlı yapılandırmalar">
+<!ENTITY button.video-format.name "Yapılandırmayı adlandır">
+<!ENTITY button.video-format.rename "Yapılandırmayı yeniden adlandır">
+<!ENTITY button.video-format.forget "Yapılandırmayı unut">
+<!ENTITY label.conversion-config-share "Yapılandırmaları paylaş">
+<!ENTITY label.yt-check-hq "YouTube&apos;da yüksek kalite olduğunda algıla">
+<!ENTITY label.yt-prefer-hq "YouTube&apos;da yüksek kaliteyi tercih et">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Dosya adlarının başına indeks sayısı koy">
+<!ENTITY title.pick-processor "Hizmet seçiniz">
+<!ENTITY title.media-dump "Ortam dökümü">
+<!ENTITY label.dump-media.prop-name "Özellik">
+<!ENTITY label.dump-media.prop-value "Değer">
+<!ENTITY label.quickkeys.change "Hızlı tuşları değiştir">
+<!ENTITY title.config-processor-keys "İşleyicilerin hızlı tuşlarını yapılandır">
+<!ENTITY proc-keymap.revert "Öntanımlıyı geri getir">
+<!ENTITY proc-keymap.provider "Sağlayan">
+<!ENTITY proc-keymap.description "Açıklama">
+<!ENTITY proc-keymap.current-key "Şu anki hızlı tuş">
+<!ENTITY proc-keymap.hold-assign "Tuş(lar)ı basılı tutun ve atamak için tıklayın">
+<!ENTITY proc-keymap.unmap "Tuşu kaldır">
+<!ENTITY title.quick-keys "Hızlı tuşlar">
+<!ENTITY label.tools-menu "Araçlar menüsünde görüntüle">
+<!ENTITY pref.title.capture "Yakala">
+<!ENTITY pref.title.services "Hizmetler">
+<!ENTITY pref.title.miscellaneous "Çeşitli">
+<!ENTITY pref.title.download "İndirme">
+<!ENTITY pref.title.appearance "Görünüm">
+<!ENTITY pref.title.behavior "Davranış">
+<!ENTITY pref.title.accelerators "Hızlandırıcılar">
+<!ENTITY label.menu-expiration "Menü girişi süre dolma zamanı (saniye)">
+<!ENTITY pref.title.http "Ağ">
+<!ENTITY pref.title.galleries "Galeriler">
+<!ENTITY pref.description.galleries "Bu yöntem, dosyaları bir sayfadan HTML linklerine bakarak indirir.">
+<!ENTITY pref.label.enable-medialink-method "Galeri yöntemi açık">
+<!ENTITY pref.description.http "Bu yöntem, tarayıcınızla sunucu arasındaki HTTP veri alışverişini izleyerek ortam dosyasının varlığını tespit eder.">
+<!ENTITY pref.description.youtube "Bu yöntem YouTube sayfalarını tahlil ederek videoları tanır.">
+<!ENTITY pref.label.enable-http-method "Ağ yöntemi açık">
+<!ENTITY label.mediareq-file-extensions "İstemlerdeki dosya uzantıları">
+<!ENTITY label.ignore-below-size "Şu boyut (KB) altındaki ortamları yoksay:">
+<!ENTITY label.detect-above-size "Şu boyut (KB) üzerindekileri algılamaya zorla:">
+<!ENTITY pref.button.configure-conv-rules "Dönüştürme kurallarını yapılandır ...">
+<!ENTITY title.conversion-rules "Dönüştürme kuralları">
+<!ENTITY pref.button.register-converter "Dönüştürücüyü tescil ettir">
+<!ENTITY pref.caption.troubleshooting "Sorun Giderme">
+<!ENTITY pref.button.check-again "Yeniden denetle">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "Eposta adresi">
+<!ENTITY mp3tunes.pref.password "Parola">
+<!ENTITY mp3tunes.pref.phonenumber "Telefon numarası">
+<!ENTITY mp3tunes.pref.phonenumber.description "Seçime bağlı fakat cep telefonuna ses dosyası alabilmek için gerekli">
+<!ENTITY mp3tunes.pref.description "MP3Tunes hizmeti cep telefonunuza ya da her yerden ulaşılabilen özel bir dolaba doğrudan müzik göndermenizi sağlar">
+<!ENTITY mp3tunes.pref.create-account "Hesap oluştur">
+<!ENTITY mp3tunes.pref.password-repeat "Parolayı tekrarlayın">
+<!ENTITY mp3tunes.pref.firstname "Ad">
+<!ENTITY mp3tunes.pref.lastname "Soyadı">
+<!ENTITY mp3tunes.title.create-account "MP3Tunes hesabı oluştur">
+<!ENTITY mp3tunes.pref.upgrade-account "Hesabı yükselt">
+<!ENTITY mp3tunes.pref.check-account "Hesabı denetle">
+<!ENTITY mp3tunes.pref.last-check "Son denetleme">
+<!ENTITY mp3tunes.title.title "MP3Tunes&apos;a gönder">
+<!ENTITY mp3tunes.title.artist-name "Sanatçı adı">
+<!ENTITY mp3tunes.title.album-title "Albüm başlığı">
+<!ENTITY mp3tunes.title.track-title "Şarkı başlığı">
+<!ENTITY mp3tunes.title.track-number "Şarkı numarası">
+<!ENTITY mp3tunes.title.year "Yıl">
+<!ENTITY label.highlight-media-from-current-page "Şu anki sayfadaki ortamları vurgula">
+<!ENTITY label.system-menu-icons "Sistem menüsünde simgeler görüntüle">
+<!ENTITY mp3tunes.label.enabled "MP3Tunes hizmetleri etkinleştirildi">
+<!ENTITY mp3tunes.title.no-converter "Dönüştürücü bulunmamakta">
+<!ENTITY mp3tunes.button.no-converter.continue "Devam et">
+<!ENTITY mp3tunes.button.no-converter.configure "Dönüştürme yapılandır">
+<!ENTITY mp3tunes.text.no-converter.1 "MP3Tunes&apos;a şarkı göndermek istiyorsun ancak bütünleşik DownloadHelper dönüştürücüsü kurulmamış.">
+<!ENTITY mp3tunes.text.no-converter.2 "Öyle yapabilirsiniz ancak haberiniz olsun ki dönüştürme özelliğini yapılandırmak yerine bunu yapmanız sizin daha çok zamanınızı alacaktır.">
+<!ENTITY mp3tunes.label.no-converter.not-again "Bu uyarıyı bir daha gösterme">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "YouTube sayfalarının içinden hizmetlere erişebilmek için kulakçık göster">
+<!ENTITY label.yt-inpage.default-processor "Öntanımlı hizmet">
+<!ENTITY label.privacy-policy "Gizlilik bildirimi">
+<!ENTITY mp3tunes.label.open-locker "Dolabı aç">
+<!ENTITY mp3tunes.pref.on-send-mobile "Mobil cihaza gönderirken">
+<!ENTITY mp3tunes.pref.on-send-locker "Dolaba gönderirken">
+<!ENTITY mp3tunes.pref.on-send.video "Video yükle (sesle birlikte)">
+<!ENTITY mp3tunes.pref.on-send.audio "Sadece ses yükle">
+<!ENTITY mp3tunes.pref.on-send.ask "Kullanıcıya sor">
+<!ENTITY mp3tunes.title.conversion-choice "MP3Tunes Yükleme Türü">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Tercihimi anımsa ve bir daha sorma">
+<!ENTITY mp3tunes.pref.phonenumber-sample "ülke koduyla birlikte, örn. +90 999 999 9999">
+<!ENTITY ythq.label.enable "Etkinleştir">
+<!ENTITY ythq.label.disable "Etkisizleştir">
+<!ENTITY ythq.label.up "Yukarı">
+<!ENTITY ythq.label.down "Aşağı">
+<!ENTITY ythq.column.type "Tür">
+<!ENTITY ythq.column.format "Biçim">
+<!ENTITY ythq.column.video "Video">
+<!ENTITY ythq.column.audio "Ses">
+<!ENTITY pref.title.blacklist "Kara liste">
+<!ENTITY pref.description.blacklist "Bu özellik, kimi sitelerdeki reklam videoları gibi ortam dosyalarını yoksaymaya yarar.">
+<!ENTITY add2bl.label.add-domain-choice "Şu alanlardaki ortam dosyaları için uyarıları yoksay:">
+<!ENTITY pref.label.share-blacklist "Kara listeyi paylaş">
+<!ENTITY pref.description.share-blacklist "Kara listenizi paylaştığınız takdirde, ürünün sonraki sürümlerinde size daha iyi bir varsayılan kara liste sunulması sağlanacaktır.">
+<!ENTITY label.add2bl.configure-blacklist "Kara listeyi yapılandır">
+<!ENTITY label.extended-download-menu "Extended download menu">
+<!ENTITY smartname.menu-name "Akıllı adlandırma">
+<!ENTITY smartname.menu-set-name "Ortam verisi başlık konumunu tanımla">
+<!ENTITY smartname.menu-set-descr "Ortam verisi açıklama konumunu tanımla">
+<!ENTITY smartname.menu-share-now "Şimdi paylaş">
+<!ENTITY smartname.menu-import "İçeri Al">
+<!ENTITY smartname.define.value-for-page "Bu sayfa için değer:">
+<!ENTITY smartname.define.domain "Alan">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "RegEx ifadesi">
+<!ENTITY smartname.define.previous-value "Önceki değerler">
+<!ENTITY pref.title.smartname "Akıllı Adlandırma">
+<!ENTITY pref.description.smartname "Akıllı Adlandırma özelliği, indirilen ortam dosyalarına anlamlı isimler vermenizi sağlar">
+<!ENTITY pref.label.enable-smartname "Akıllı Adlandırmayı Etkinleştir">
+<!ENTITY smartname.column.domain "Alan">
+<!ENTITY smartname.column.mode "Mod">
+<!ENTITY smartname.list.button.delete "Kaldır">
+<!ENTITY smartname.list.button.edit "Düzenle">
+<!ENTITY smartname.list.button.import "İçeri Al">
+<!ENTITY smartname.list.label.type "Tür">
+<!ENTITY smartname.list.type.name "Ortam dosyası">
+<!ENTITY smartname.list.type.descr "Ortam açıklaması">
+<!ENTITY smartname.overlap.select "Seç">
+<!ENTITY smartname.overlap.selectall "Tümü">
+<!ENTITY smartname.overlap.selectnone "Hiçbiri">
+<!ENTITY smartname.overlap.description "Seçili girişlerin üzerine yazılacak">
+<!ENTITY smartname.overlap.title "Üstüste binen">
+<!ENTITY pref.label.smartname.keep-spaces "Dosya adlarındaki boşlukları koru">
+<!ENTITY pref.label.smartname.keep-nonascii "Dosya adlarındaki Ascii olmayan karakterleri koru">
+<!ENTITY pref.label.smartname.auto-share "Akıllı adlandırma istatistiklerini anonim olarak paylaş">
+<!ENTITY pref.label.smartname.auto-share.notice "Bu, otomatik olarak veritabanının herkesin yararına olmasını sağlar.">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Username">
+<!ENTITY twitter.pref.password "Password">
+<!ENTITY twitter.pref.description "The Twitter service allows to easily send tweets about a media">
+<!ENTITY twitter.pref.create-account "Create free Twitter account">
+<!ENTITY twitter.pref.check-account "Check user/password">
+<!ENTITY twitter.pref.last-check "Last check">
+<!ENTITY twitter.label.enabled "Twitter services enabled">
+<!ENTITY twitter.title.send-message "Send Twitter message">
+<!ENTITY twitter.message.smartnaming "You should consider using the SmartNaming feature to prefill the Twitter message with the video title, and if available its description.">
+<!ENTITY twitter.label.go-to-smartnaming "More on SmartNaming">
+<!ENTITY twitter.label.tag-message "Prefill message with tag #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Max number of hits">
+<!ENTITY pref.label.icon-click "Upon clicking on the icon">
+<!ENTITY pref.label.icon-click.sites "Display supported sites">
+<!ENTITY pref.label.icon-click.quick-download "Perform a quick download">

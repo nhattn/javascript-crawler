@@ -1,0 +1,170 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-pick-processor"
+		title="&title.pick-processor;"
+        flex="1"
+        onload="onLoad()"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttonlabelextra2="&label.quickkeys.change;"
+        ondialogextra2="configureQuickKeys()"
+        buttons="cancel,extra2">
+        
+    <html:style>
+#vbox {
+	overflow: auto;
+	height: 300px;
+	width: 460px;
+}
+groupbox {
+  margin: 5px;
+  border: 1px solid ThreeDShadow;
+  -moz-border-radius: 5px;
+  padding: 5px;
+}
+caption {
+  margin: 0px 6px 2px 6px;
+  padding: 0px 3px;
+  background-color: -moz-Dialog;
+}
+description {
+  width: 200px;
+}
+button.action {
+  width: 200px;
+}
+.quickkey {
+	font-style: italic;
+}
+.processor {
+	margin-bottom: 8px;
+}
+    </html:style>
+
+	<script><![CDATA[
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+
+function onLoad() {
+	var processors=window.arguments[0].processors;
+	buildContent(processors);
+}
+
+function buildContent(processors) {
+	var keymap={};
+	var prefService=Components.classes["@mozilla.org/preferences-service;1"]
+	                                   .getService(Components.interfaces.nsIPrefService);
+	this.pref=prefService.getBranch("dwhelper.");
+	var keymapStr="0:download,2:convert-choice,3:quick-download";
+	try {
+		keymapStr=this.pref.getCharPref("processor-keymap");
+	} catch(e) {}
+	var p1=keymapStr.split(",");
+	for(var i in p1) {
+		var p2=p1[i].split(":");
+		if(p2.length==2)
+			keymap[parseInt(p2[0])]=p2[1];
+	}
+	
+	var vbox=document.getElementById("vbox");
+	while(vbox.firstChild)
+		vbox.removeChild(vbox.firstChild);
+	var providers=[];
+	for(var i in processors) {
+		var processor=processors[i].processor;
+		if(providers.indexOf(processor.provider)<0)
+			providers.push(processor.provider);
+	}
+	for(var j in providers) {
+		var provider=providers[j];
+		var groupbox=document.createElement("groupbox");
+		vbox.appendChild(groupbox);
+		var caption=document.createElement("caption");
+		caption.setAttribute("label",Util.getFText("caption.provider-services",[provider],1));
+		groupbox.appendChild(caption);
+		for(var i in processors) {
+			var processor=processors[i].processor;
+			if(processor.provider==provider) {
+				var box=document.createElement("hbox");
+				box.setAttribute("class","processor");
+				groupbox.appendChild(box);
+				var vbox1=document.createElement("vbox");
+				box.appendChild(vbox1);
+				var button=document.createElement("button");
+				vbox1.appendChild(button);
+				button.setAttribute("label",processor.title);
+				button.setAttribute("class","action");
+				button.setAttribute("oncommand","select('"+processor.name+"')");
+				if(processors[i].canHandle==false)
+					button.setAttribute("disabled","true");
+				var spacer=document.createElement("spacer");
+				spacer.setAttribute("flex","1");
+				vbox1.appendChild(spacer);
+
+				var vbox2=document.createElement("vbox");
+				box.appendChild(vbox2);
+				
+				var key=-1;
+				for(var k in keymap) {
+					if(keymap[k]==processor.name) {
+						key=k;
+						break;
+					}
+				}
+				
+				var keyStr=Util.getText("processor.quickkey.nokey");
+				if(key!=-1) {
+					var kp=[];
+					for(var k=0; k<4; k++) {
+						if((1<<k)&key)
+							kp.push(Util.getText("processor.quickkey.key"+k));
+					}
+					kp.push(Util.getText("processor.quickkey.click"));
+					keyStr=kp.join("+");
+				}
+				
+				var description1=document.createElement("description");
+				vbox2.appendChild(description1);
+				description1.setAttribute("value",keyStr);
+				description1.setAttribute("class","quickkey");
+				
+				
+				var description=document.createElement("description");
+				vbox2.appendChild(description);
+				var descText=document.createTextNode(processor.description);
+				description.appendChild(descText);						
+			}
+		}
+	}
+}
+
+function select(procName) {
+	window.arguments[0].processor=procName;
+	window.close();
+}
+
+function configureQuickKeys() {
+	var params = {};       
+	window.openDialog("chrome://dwhelper/content/config-processor-keys.xul", "",
+    	"chrome, dialog, modal, resizable=no", params).focus();
+    if(params.ok) {
+		var processors=window.arguments[0].processors;
+		buildContent(processors);
+	}	
+}
+
+]]>
+	</script>
+
+
+	<vbox id="vbox" flex="1">
+			
+	</vbox>
+
+</dialog>

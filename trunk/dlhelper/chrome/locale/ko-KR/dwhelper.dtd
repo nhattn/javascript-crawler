@@ -1,0 +1,349 @@
+<!ENTITY menu.help "도움말">
+<!ENTITY menu.manual-check "URL 검사">
+<!ENTITY menu.preferences "설정...">
+<!ENTITY menu.about "정보...">
+<!ENTITY label.download-one-by-one "하나씩 다운로드">
+<!ENTITY label.storagedir "저장 폴더">
+<!ENTITY button.changedir "폴더 변경">
+<!ENTITY error.nohome "홈 디렉토리가 존재하지 않습니다.">
+<!ENTITY error.notadirectory "은(는) 디렉토리가 아닙니다.">
+<!ENTITY title.preferences "설정">
+<!ENTITY title.about "DownloadHelper 정보">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "메뉴 항목 사라짐 (밀리초)">
+<!ENTITY label.icon-animation "아이콘 애니메이션">
+<!ENTITY menu.ytlinks "YouTube 링크로부터 비디오 다운로드">
+<!ENTITY label.download-mode "다운로드 모드">
+<!ENTITY label.download-mode.normal "표준">
+<!ENTITY label.download-mode.onebyone "하나씩">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "공헌">
+<!ENTITY title.general "일반">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "MediaLink 방식이 HTML 링크 후킹에 의한 페이지로부터 파일 다운로드를 허용합니다.">
+<!ENTITY button.add "추가">
+<!ENTITY button.default "기본값">
+<!ENTITY button.remove "제거">
+<!ENTITY label.file-extensions "파일 확장자">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "MediaReq 방식이 미디어 파일 여부를 결정하기 위해 HTTP 요청 내보내기를 시험합니다.">
+<!ENTITY title.support-dev "DownloadHelper 개발 지원">
+<!ENTITY label.donate-not-again "다시 표시하지 않음">
+<!ENTITY label.donate "기부하기">
+<!ENTITY label.cancel "취소">
+<!ENTITY label.congratulations "축하합니다 !">
+<!ENTITY label.keep-spaces "파일명에 공백 유지하기">
+<!ENTITY title.sites "DownloadHelper 미디어 사이트">
+<!ENTITY button.sites.close "닫기">
+<!ENTITY button.sites.open "열기">
+<!ENTITY button.sites.report "작업 사이트 보고하기">
+<!ENTITY column.sites.name "이름">
+<!ENTITY column.sites.rating "평가">
+<!ENTITY column.sites.count "주석">
+<!ENTITY column.sites.date "추가된 날짜">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "닫기">
+<!ENTITY label.site.name "이름">
+<!ENTITY caption.site.site "미디어 사이트">
+<!ENTITY title.site "미디어 사이트">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "추가됨">
+<!ENTITY label.site.rating "평가">
+<!ENTITY label.site.no-rating "아직 없음">
+<!ENTITY button.site.check "사이트 검사">
+<!ENTITY button.site.comment "주석 추가">
+<!ENTITY label.comment.site "사이트">
+<!ENTITY title.comment "주석">
+<!ENTITY caption.comment.comment "주석 추가">
+<!ENTITY label.comment.author "별명">
+<!ENTITY help.comment.author "이름 또는 별명">
+<!ENTITY label.comment.title "제목">
+<!ENTITY help.comment.title "주석 제목">
+<!ENTITY label.comment.comment "주석">
+<!ENTITY help.comment.comment "단락 분리는 공백 라인">
+<!ENTITY label.comment.tags "태그">
+<!ENTITY help.comment.tags "공백으로 분리된 태그 (예: &apos;뉴스 인디언&apos; 또는 &apos;성인&apos;)">
+<!ENTITY label.comment.rating "평가">
+<!ENTITY help.comment.rating "0 = 흥미없음, 5 = 훌륭함">
+<!ENTITY button.comment.close "닫기">
+<!ENTITY button.comment.submit "주석 내보내기">
+<!ENTITY label.comment.wait "주석을 내보내고 있습니다. 잠시만 기다려 주십시오...">
+<!ENTITY title.report "작업 사이트 보고하기">
+<!ENTITY caption.report.report "새 작업 사이트 보고하기">
+<!ENTITY message.report.check-new "이 사이트가 사이트 목록에 없음을 확인해 주십시오.">
+<!ENTITY label.report.name "사이트명">
+<!ENTITY help.report.name "일반 사이트명, 예: YouTube">
+<!ENTITY label.report.url "사이트 URL">
+<!ENTITY help.report.url "사이트 주소, 예: http://www.youtube.com">
+<!ENTITY label.report.author "사용자 이름">
+<!ENTITY help.report.author "보고자 이름. 비워 놓아도 됩니다.">
+<!ENTITY label.report.description "설명">
+<!ENTITY help.report.description "이 사이트에 대한 짧은 설명">
+<!ENTITY button.report.submit "사이트 내보내기">
+<!ENTITY button.report.close "닫기">
+<!ENTITY label.report.wait "사이트를 내보내고 있습니다. 잠시만 기다려 주십시오...">
+<!ENTITY menu.sites "지원되는 사이트">
+<!ENTITY label.sites.list-adult "직접 접근 가능한 성인 컨텐트 보이기">
+<!ENTITY label.report.adult "직접 접근 가능한 성인 컨텐트">
+<!ENTITY label.context-menu "컨텍스트 메뉴 보이기">
+<!ENTITY menu.to-sumo "SUMO.tv에 비디오 추가">
+<!ENTITY label.enable-plugin-method "플러그인 서명 방식 사용">
+<!ENTITY label.yt-unmodified-filename "YouTube 파일명 유지 (CJK)">
+<!ENTITY label.disable-dwcount-cookie "다운로드 카운트 쿠키 사용 안 함">
+<!ENTITY column.sites.duration "흥미있음">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight 선택됨">
+<!ENTITY label.mediaweight-threshold "미디어 크기 제한">
+<!ENTITY label.enable-medialink-method "MediaLink 선택됨">
+<!ENTITY mediaweight.description "MediaWeight 방식이 문서 크기에 기초한 미디어 파일인지 결정하기 위해 HTTP 응답을 시험합니다.">
+<!ENTITY title.history "히스토리">
+<!ENTITY title.download-queue "다운로드 큐">
+<!ENTITY column.media-url "미디어 URL">
+<!ENTITY column.source-url "소스 URL">
+<!ENTITY column.view-date "보기 일자">
+<!ENTITY column.file-name "파일명">
+<!ENTITY title.histlist "히스토리">
+<!ENTITY label.histlist-enabled "히스토리 사용 (베타)">
+<!ENTITY label.histlist-clearonexit "종료시 히스토리 비우기">
+<!ENTITY button.medialist.watch "감시">
+<!ENTITY button.medialist.download "다운로드">
+<!ENTITY button.medialist.more "자세히">
+<!ENTITY button.medialist.go-source "소스 페이지 방문하기">
+<!ENTITY button.medialist.remove "제거">
+<!ENTITY button.remove-downloads "선택 항목 제거">
+<!ENTITY history.description "이 기능은 일정한 환경에서 시청된 비디오를 기억하여, 일괄모드에서 쉽게 다시 찾아보거나 선택 항목을 다운로드할 수 있도록 합니다.">
+<!ENTITY about.for-free "이 Firefox 확장 기능은 무료로 제공되고 있습니다.">
+<!ENTITY about.know-more "더 자세한 정보는">
+<!ENTITY about.link "여기">
+<!ENTITY about.know-more2 "를 누르십시오">
+<!ENTITY about.locale-credit "about.locale-credit">
+<!ENTITY title.conversion "변환">
+<!ENTITY conversion.description "이 기능은 비디오를 다운로드하면 바로 자동으로 변환하게 합니다.">
+<!ENTITY conversion.rules-description "변환 규칙이 처음부터 끝까지 계산되었습니다.">
+<!ENTITY label.conversion-enabled "변환 사용 중">
+<!ENTITY title.conversion-rule "변환 규칙">
+<!ENTITY column.conversion.rules "변환 규칙">
+<!ENTITY button.conv-rule-list.edit "규칙 편집">
+<!ENTITY button.conv-rule-list.up "위로">
+<!ENTITY button.conv-rule-list.down "아래로">
+<!ENTITY button.conv-rule-list.remove "규칙 제거">
+<!ENTITY button.conv-rule-list.default "기본값으로">
+<!ENTITY button.conv-rule-list.new "새 규칙">
+<!ENTITY button.conv-rule.change-directory "변경...">
+<!ENTITY label.conv-rule.convert "변환">
+<!ENTITY label.conv-rule.do-not-convert "변환 안 함">
+<!ENTITY label.conv-rule.files-with-ext "파일 (확장자 포함)">
+<!ENTITY label.conv-rule.from-site "사이트로부터">
+<!ENTITY label.conv-rule.all-sites "모두">
+<!ENTITY label.conv-rule.all-files "모두">
+<!ENTITY label.conv-rule.kbps "Kbps">
+<!ENTITY label.conv-rule.bitrate "비트율">
+<!ENTITY label.conv-rule.output-directory "디렉토리">
+<!ENTITY label.conv-rule.default-directory "기본값">
+<!ENTITY caption.conv-rule.input "입력">
+<!ENTITY caption.conv-rule.output "출력">
+<!ENTITY title.convert-register "변환기 등록">
+<!ENTITY text.convert-register.benefits "변환기를 등록하면 다음과 같은 이점이 있습니다:">
+<!ENTITY text.convert-register.item.nologo "변환된 비디오에 DownloadHelper 로고를 표시하지 않음">
+<!ENTITY text.convert-register.item.mp3 "mp3 오디오 파일로 변환 가능">
+<!ENTITY text.convert-register.item.faster "변환이 좀 더 빠름">
+<!ENTITY text.convert-register.item.support "지원 가능">
+<!ENTITY label.convert-register.code "등록 코드">
+<!ENTITY button.convert-register.cancel "취소">
+<!ENTITY button.convert-register.get-code "등록 코드 가져오기">
+<!ENTITY button.convert-register.ok "확인">
+<!ENTITY title.converter-queue "변환기 큐">
+<!ENTITY label.converter-queue.status "상태">
+<!ENTITY label.converter-queue.status.done "완료">
+<!ENTITY label.converter-queue.input "입력">
+<!ENTITY label.converter-queue.output "출력">
+<!ENTITY label.converter-queue.status.inprogress "진행 중">
+<!ENTITY label.converter-queue.status.waiting "대기 중">
+<!ENTITY label.converter-queue.status.error "오류">
+<!ENTITY button.converter-queue.close "닫기">
+<!ENTITY label.conversion.converter "변환기">
+<!ENTITY label.conversion.no-such-converter "변환기를 찾을 수 없음">
+<!ENTITY description.conversion.no-win-conv "비디오를 변환하려면 외부 변환기를 설치해야 합니다.">
+<!ENTITY description.conversion.bad-version "ConvertHelper 업데이트 필요함">
+<!ENTITY button.conversion.win-conv "변환기 설치/업데이트">
+<!ENTITY button.conversion.check-win-conv "변환기 재 확인">
+<!ENTITY description.conversion.win-conv "시스템에서 변환기 응용 프로그램을 찾았습니다.">
+<!ENTITY title.convert-options "변환기 설정">
+<!ENTITY caption.convlicense "라이센스 정보">
+<!ENTITY label.convlicense.license "키">
+<!ENTITY label.convlicense.name "사용자명">
+<!ENTITY label.convlicense.email "사용자 이메일">
+<!ENTITY label.convlicense.unregistered "등록되지 않은 변환기">
+<!ENTITY title.video-format.general "일반">
+<!ENTITY title.video-format.advanced "고급">
+<!ENTITY button.video-format.show-details "자세히 ...">
+<!ENTITY title.output-video-format "비디오 출력 형식">
+<!ENTITY label.video-format.two-passes "2 패스">
+<!ENTITY label.video-format.first-pass "패스 1">
+<!ENTITY label.video-format.second-pass "패스 2">
+<!ENTITY label.conversion.log "로그 변환">
+<!ENTITY button.conversion.show-log "로그 보기">
+<!ENTITY title.conversion-log "변환 로그">
+<!ENTITY button.convert-log.clear "로그 비우기">
+<!ENTITY button.convert-log.close "닫기">
+<!ENTITY button.convert-log.refresh "새로 고침">
+<!ENTITY menu.video-format.copy "비디오 형식 복사">
+<!ENTITY menu.video-format.paste "비디오 형식 붙여넣기">
+<!ENTITY button.conversion.help "도움말">
+<!ENTITY label.converter-queue.started-on "시작">
+<!ENTITY label.converter-queue.ended-on "종료">
+<!ENTITY label.conversion-notification "변환 완료 시 알림">
+<!ENTITY label.show-in-statusbar "상태 표시줄에 표시">
+<!ENTITY label.trigger-min-size "트리거 최소 크기 (KB)">
+<!ENTITY label.quick-download-key "빠른 다운로드 키">
+<!ENTITY label.open-folder-key "폴더 키 열기">
+<!ENTITY button.video-format.default "기본 설정">
+<!ENTITY button.video-format.name "설정명 부여">
+<!ENTITY button.video-format.rename "설정명 바꾸기">
+<!ENTITY button.video-format.forget "설정 무시">
+<!ENTITY label.conversion-config-share "설정 공유">
+<!ENTITY label.yt-check-hq "YouTube 고화질 감지">
+<!ENTITY label.yt-prefer-hq "YouTube 고화질 우선">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "인덱스로 파일명 접두어 설정">
+<!ENTITY title.pick-processor "서비스 선택">
+<!ENTITY title.media-dump "미디어 덤프">
+<!ENTITY label.dump-media.prop-name "속성">
+<!ENTITY label.dump-media.prop-value "값">
+<!ENTITY label.quickkeys.change "빠른 키 변경">
+<!ENTITY title.config-processor-keys "프로세서 빠른 키 설정">
+<!ENTITY proc-keymap.revert "기본값으로 변경">
+<!ENTITY proc-keymap.provider "공급자">
+<!ENTITY proc-keymap.description "설명">
+<!ENTITY proc-keymap.current-key "현재 빠른 키">
+<!ENTITY proc-keymap.hold-assign "할당하려면 키를 누른 채로 클릭하십시오">
+<!ENTITY proc-keymap.unmap "키맵 해제">
+<!ENTITY title.quick-keys "빠른 키">
+<!ENTITY label.tools-menu "도구 메뉴에 표시">
+<!ENTITY pref.title.capture "캡처">
+<!ENTITY pref.title.services "서비스">
+<!ENTITY pref.title.miscellaneous "기타">
+<!ENTITY pref.title.download "다운로드">
+<!ENTITY pref.title.appearance "모양">
+<!ENTITY pref.title.behavior "동작">
+<!ENTITY pref.title.accelerators "가속기">
+<!ENTITY label.menu-expiration "메뉴 사라짐(초)">
+<!ENTITY pref.title.http "네트워크">
+<!ENTITY pref.title.galleries "갤러리">
+<!ENTITY pref.description.galleries "This method allows to download files from a page by looking at HTML links">
+<!ENTITY pref.label.enable-medialink-method "갤러리 방식 사용">
+<!ENTITY pref.description.http "This method detects media by monitoring HTTP data exchange between the browser and the server">
+<!ENTITY pref.description.youtube "This method recognizes videos by analyzing YouTube pages">
+<!ENTITY pref.label.enable-http-method "네트워크 방식 사용">
+<!ENTITY label.mediareq-file-extensions "요구상의 파일 확장자">
+<!ENTITY label.ignore-below-size "아래 크기의 미디어는 무시 (KB)">
+<!ENTITY label.detect-above-size "위 크기의 미디어는 강제 (KB)">
+<!ENTITY pref.button.configure-conv-rules "변환 규칙 설정...">
+<!ENTITY title.conversion-rules "변환 규칙">
+<!ENTITY pref.button.register-converter "변환기 등록기">
+<!ENTITY pref.caption.troubleshooting "문제 해결">
+<!ENTITY pref.button.check-again "다시 확인">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "이메일 주소">
+<!ENTITY mp3tunes.pref.password "비밀번호">
+<!ENTITY mp3tunes.pref.phonenumber "전화번호">
+<!ENTITY mp3tunes.pref.phonenumber.description "선택사항이나 이동전화로 오디오를 받을 때 필요함">
+<!ENTITY mp3tunes.pref.description "The MP3Tunes service allows to send music directly to you mobile phone or to a private locker accessible from everywhere">
+<!ENTITY mp3tunes.pref.create-account "계정 만들기">
+<!ENTITY mp3tunes.pref.password-repeat "비밀번호 재입력">
+<!ENTITY mp3tunes.pref.firstname "이름">
+<!ENTITY mp3tunes.pref.lastname "성">
+<!ENTITY mp3tunes.title.create-account "MP3Tunes 계정 만들기">
+<!ENTITY mp3tunes.pref.upgrade-account "계정 업그레이드">
+<!ENTITY mp3tunes.pref.check-account "계정 확인">
+<!ENTITY mp3tunes.pref.last-check "마지막 확인">
+<!ENTITY mp3tunes.title.title "MP3Tunes로 보내기">
+<!ENTITY mp3tunes.title.artist-name "아티스트명">
+<!ENTITY mp3tunes.title.album-title "앨범명">
+<!ENTITY mp3tunes.title.track-title "트랙명">
+<!ENTITY mp3tunes.title.track-number "트랙번호">
+<!ENTITY mp3tunes.title.year "연도">
+<!ENTITY label.highlight-media-from-current-page "현재 페이지에서 미디어 강조">
+<!ENTITY label.system-menu-icons "시스템 메뉴에 아이콘 표시">
+<!ENTITY mp3tunes.label.enabled "MP3Tunes 서비스 이용">
+<!ENTITY mp3tunes.title.no-converter "변환기 오류">
+<!ENTITY mp3tunes.button.no-converter.continue "계속">
+<!ENTITY mp3tunes.button.no-converter.configure "변환 설정">
+<!ENTITY mp3tunes.text.no-converter.1 "MP3Tunes로 오디오 트랙을 보내려고 합니다. 그러나 내장된 DownloadHelper 변환기가 아직 설치되지 않았습니다.">
+<!ENTITY mp3tunes.text.no-converter.2 "사용 가능하지만 변환 기능을 설정했을 때보다 더 많은 시간이 걸릴 수 있습니다.">
+<!ENTITY mp3tunes.label.no-converter.not-again "이 경고를 다시 표시하지 않음">
+<!ENTITY label.beta-parenthesis "(베타)">
+<!ENTITY label.yt-inpage "YouTube 페이지 내의 서비스에 접근하기 위해 위젯 표시함">
+<!ENTITY label.yt-inpage.default-processor "기본 서비스">
+<!ENTITY label.privacy-policy "개인정보 정책">
+<!ENTITY mp3tunes.label.open-locker "사물함 열기">
+<!ENTITY mp3tunes.pref.on-send-mobile "이동기기로 보낼 때">
+<!ENTITY mp3tunes.pref.on-send-locker "사물함으로 보낼 때">
+<!ENTITY mp3tunes.pref.on-send.video "비디오 업로드 (오디오 포함)">
+<!ENTITY mp3tunes.pref.on-send.audio "오디오만 업로드">
+<!ENTITY mp3tunes.pref.on-send.ask "사용자에게 물어보기">
+<!ENTITY mp3tunes.title.conversion-choice "MP3tunes 업로드 형식">
+<!ENTITY mp3tunes.label.conversion-choice.remember "설정 기억하기">
+<!ENTITY mp3tunes.pref.phonenumber-sample "국가 코드 포함, 예: +1 555 555 5555">
+<!ENTITY ythq.label.enable "사용 가능">
+<!ENTITY ythq.label.disable "사용 해제">
+<!ENTITY ythq.label.up "위로">
+<!ENTITY ythq.label.down "아래로">
+<!ENTITY ythq.column.type "형식">
+<!ENTITY ythq.column.format "내용">
+<!ENTITY ythq.column.video "비디오">
+<!ENTITY ythq.column.audio "오디오">
+<!ENTITY pref.title.blacklist "차단 목록">
+<!ENTITY pref.description.blacklist "이것은 비디오 광고와 같은 일부 사이트로부터의 미디어를 차단하기 위한 기능입니다.">
+<!ENTITY add2bl.label.add-domain-choice "다음 도메인으로부터의 미디어 알림 무시:">
+<!ENTITY pref.label.share-blacklist "차단 목록 공유">
+<!ENTITY pref.description.share-blacklist "차단 목록을 공유하면 다음 버전부터 기본 차단 목록으로 등록되어 제품에 포함됩니다.">
+<!ENTITY label.add2bl.configure-blacklist "차단 목록 설정">
+<!ENTITY label.extended-download-menu "고급 다운로드 메뉴">
+<!ENTITY smartname.menu-name "스마트 명명">
+<!ENTITY smartname.menu-set-name "미디어 제목 위치 정의">
+<!ENTITY smartname.menu-set-descr "미디어 제목 설명 정의">
+<!ENTITY smartname.menu-share-now "지금 공유">
+<!ENTITY smartname.menu-import "가져오기">
+<!ENTITY smartname.define.value-for-page "이 페이지에 대한 값:">
+<!ENTITY smartname.define.domain "도메인">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "정규식">
+<!ENTITY smartname.define.previous-value "이전 값">
+<!ENTITY pref.title.smartname "스마트 명명">
+<!ENTITY pref.description.smartname "스마트 명명은 다운로드 된 미디어에 의미있는 이름을 부여해 줍니다.">
+<!ENTITY pref.label.enable-smartname "스마트 명명 사용">
+<!ENTITY smartname.column.domain "도메인">
+<!ENTITY smartname.column.mode "모드">
+<!ENTITY smartname.list.button.delete "제거">
+<!ENTITY smartname.list.button.edit "편집">
+<!ENTITY smartname.list.button.import "가져오기">
+<!ENTITY smartname.list.label.type "형식">
+<!ENTITY smartname.list.type.name "미디어명">
+<!ENTITY smartname.list.type.descr "미디어 설명">
+<!ENTITY smartname.overlap.select "선택">
+<!ENTITY smartname.overlap.selectall "모두">
+<!ENTITY smartname.overlap.selectnone "안 함">
+<!ENTITY smartname.overlap.description "선택된 항목이 우선됨">
+<!ENTITY smartname.overlap.title "겹치기">
+<!ENTITY pref.label.smartname.keep-spaces "파일명에 스페이스 유지">
+<!ENTITY pref.label.smartname.keep-nonascii "파일명에 비-아스키 문자 유지">
+<!ENTITY pref.label.smartname.auto-share "스마트 명명 공유">
+<!ENTITY pref.label.smartname.auto-share.notice "이것은 모두의 이익을 위해 자동으로 데이터베이스를 유지 보수합니다.">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "사용자명">
+<!ENTITY twitter.pref.password "비밀번호">
+<!ENTITY twitter.pref.description "Twitter 서비스를 쉽게 이용할 수 있습니다.">
+<!ENTITY twitter.pref.create-account "무료 Twitter 계정 만들기">
+<!ENTITY twitter.pref.check-account "사용자/비밀번호 확인">
+<!ENTITY twitter.pref.last-check "마지막 확인">
+<!ENTITY twitter.label.enabled "Twitter 서비스 사용">
+<!ENTITY twitter.title.send-message "Twitter 메시지 보내기">
+<!ENTITY twitter.message.smartnaming "SmartNaming을 이용하여 비디오 제목, 설명 등의 Twitter 메시지를 만드는 것에 유의해야 합니다.">
+<!ENTITY twitter.label.go-to-smartnaming "SmartNaming 상세 정보">
+<!ENTITY twitter.label.tag-message "#vidohe 태그 메시지">
+<!ENTITY pref.label.medialink.max-hit-count "최대 히트 수">
+<!ENTITY pref.label.icon-click "아이콘 위에서 클릭">
+<!ENTITY pref.label.icon-click.sites "지원되는 사이트 표시">
+<!ENTITY pref.label.icon-click.quick-download "빠른 다운로드 실행">

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+	*            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+	****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="MediaListMenu" extends="widgets.xml#widget">
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<menulist anonid="xMenu" datasources="rdf:null"
+				ref="urn:root" flex="1" hidden="true">
+				<template>
+					<rule>
+						<conditions>
+							<content uri="?root" />
+							<member container="?root" child="?list" />
+							<triple subject="?list"
+								predicate="http://downloadhelper.net/1.0#name"
+								object="?listname" />
+						</conditions>
+						<action>
+							<menupopup>
+								<menuitem uri="?list" label="?listname"
+									value="?list" />
+							</menupopup>
+						</action>
+					</rule>
+				</template>
+			</menulist>
+			<children style="display: none;" />
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.util.setDatasource(this.xMenu,this.mediaListMgr.getDataSource());
+this.fireEvent("MediaListChange");
+				]]>
+			</constructor>
+
+			<method name="getList">
+				<body>
+				<![CDATA[
+return this.xMenu.value;
+				]]>
+				</body>
+			</method>
+			
+		</implementation>
+
+		<handlers>
+
+			<handler event="command">
+				<![CDATA[
+this.fireEvent("MediaListChange");
+                ]]>
+			</handler>
+
+		</handlers>
+
+
+
+	</binding>
+
+</bindings>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/content/bindings.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-mp3tunes-warn-no-converter"
+		title="&mp3tunes.title.no-converter;"
+        flex="1"
+        onload="onLoad()"
+        ondialogaccept="return onDialogEnd(1);"
+        ondialogcancel="return onDialogEnd(0);"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        buttonlabelaccept="&mp3tunes.button.no-converter.continue;"
+        buttonlabelextra2="&mp3tunes.button.no-converter.configure;"
+        ondialogextra2="onDialogEnd(2); window.close();"
+        buttons="cancel,accept,extra2">
+        
+    <html:style>
+#content {
+	width: 400px;
+	padding: 8px 8px 16px 8px;
+}
+    </html:style>
+
+	<script><![CDATA[
+var Util=Components.classes["@downloadhelper.net/util-service;1"]
+	.getService(Components.interfaces.dhIUtilService);
+var prefService=Components.classes["@mozilla.org/preferences-service;1"]
+	                                   .getService(Components.interfaces.nsIPrefService);
+var pref=prefService.getBranch("dwhelper.mp3tunes.");
+
+function onLoad() {
+}
+
+function onDialogEnd(result) {
+	window.arguments[0].result=result;
+	var notAgain=document.getElementById("not-again");
+	if(result==1 && notAgain.checked) 
+		pref.setBoolPref("show-no-converter-warning",false);
+	return true;
+}
+
+]]>
+	</script>
+
+	<vbox id="content">
+		<description>&mp3tunes.text.no-converter.1;</description>
+		<description>&mp3tunes.text.no-converter.2;</description>
+		<checkbox id="not-again" label="&mp3tunes.label.no-converter.not-again;"/>
+	</vbox>
+
+</dialog>

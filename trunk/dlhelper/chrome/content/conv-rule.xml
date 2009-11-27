@@ -1,0 +1,641 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="ConvRule" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		
+			<vbox>
+				<ConvRuleActionWidget anonid="xAction"/>
+				<groupbox>
+					<caption label="&caption.conv-rule.input;"/>
+					<hbox align="center">
+						<label value="&label.conv-rule.files-with-ext;"/>
+						<ConvRuleInFileWidget anonid="xInfile"/>
+					</hbox>
+					<hbox align="center">
+						<label value="&label.conv-rule.from-site;"/>
+						<ConvRuleInSiteWidget anonid="xInsite"/>
+					</hbox>
+				</groupbox>
+				<groupbox anonid="xOutputBox">
+					<caption label="&caption.conv-rule.output;"/>
+					<VideoFormatPanel anonid="xOutformat"/>					
+					<!-- ConvRuleOutputDirWidget anonid="xOutdir"/ -->
+				</groupbox>
+			</vbox>
+			
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+				]]>
+			</constructor>
+
+			<method name="updateAction">
+				<parameter name="action"/>
+				<body>
+				<![CDATA[
+if(action=="0") {
+	this.xOutputBox.setAttribute("hidden","true");
+} else {
+	this.xOutputBox.setAttribute("hidden","false");
+}
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+			<method name="setData">
+				<parameter name="datasource"/>
+				<parameter name="ref"/>
+				<body>
+				<![CDATA[
+this.datasource=datasource;
+this.ref=ref;
+var action=this.util.getPropertyValueSS(datasource,ref,"http://downloadhelper.net/1.0#action");
+this.updateAction(action);
+this.xAction.setAttribute("value",action);
+var insite=this.util.getPropertyValueSS(datasource,ref,"http://downloadhelper.net/1.0#insite");
+this.xInsite.setAttribute("value",insite);
+var infile=this.util.getPropertyValueSS(datasource,ref,"http://downloadhelper.net/1.0#infile");
+this.xInfile.setAttribute("value",infile);
+var outformat=this.util.getPropertyValueSS(datasource,ref,"http://downloadhelper.net/1.0#outformat");
+this.xOutformat.value=outformat;
+/*
+var outdir=this.util.getPropertyValueSS(datasource,ref,"http://downloadhelper.net/1.0#outdir");
+this.xOutdir.setAttribute("value",outdir);
+*/
+				]]>
+				</body>
+			</method>
+						
+			<method name="saveData">
+				<body>
+				<![CDATA[
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#action",this.xAction.getAttribute("value"));
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#insite",this.xInsite.getAttribute("value"));
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#infile",this.xInfile.getAttribute("value"));
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#outformat",this.xOutformat.value);
+/*
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#outdir",this.xOutdir.getAttribute("value"));
+*/
+
+var label=this.convertMgr.makeLabel(this.datasource,this.ref);
+
+this.util.setPropertyValueSS(this.datasource,this.ref,
+	"http://downloadhelper.net/1.0#label",label);
+
+//this.util.dumpDatasource(this.datasource);
+				]]>
+				</body>
+			</method>
+			
+			<method name="isValid">
+				<body>
+				<![CDATA[
+return this.xOutformat.isValid();
+				]]>
+				</body>
+			</method>
+
+						
+		</implementation>
+		<handlers>
+			<handler event="ConvRuleActionChange">
+				<![CDATA[
+this.updateAction(this.xAction.getAttribute("value"));
+				]]>
+			</handler>
+
+		</handlers>
+				
+	</binding>
+
+	<binding id="ConvRuleActionWidget" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<menulist xbl:inherits="value" flex="1" anonid="xMenuList">
+				<menupopup>
+					<menuitem value="1" label="&label.conv-rule.convert;"/>
+					<menuitem value="0" label="&label.conv-rule.do-not-convert;"/>
+				</menupopup>
+			</menulist>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+		</implementation>
+		<handlers>
+			<handler event="DOMAttrModified">
+				<![CDATA[
+if(event.originalTarget==this.xMenuList && event.attrName=="value") {
+	this.setAttribute("value",event.newValue);
+	this.fireEvent("ConvRuleActionChange");
+}
+
+if(event.originalTarget==this && event.attrName=="value") {
+	this.xMenuList.value=event.newValue;
+}
+				]]>
+			</handler>
+		</handlers>
+
+	</binding>
+
+	<binding id="ConvRuleInFileWidget" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<menulist xbl:inherits="value" editable="true" anonid="xMenuList">
+				<menupopup>
+					<menuitem value="flv" label="flv"/>
+					<menuitem value="avi" label="avi"/>
+					<menuitem value="wmv" label="wmv"/>
+					<menuitem value="mpeg" label="mpeg"/>
+					<menuitem value="mpg" label="mpg"/>
+					<menuitem value="rm" label="rm"/>
+					<menuitem value="mov" label="mov"/>
+					<menuitem value="mp4" label="mp4"/>
+					<menuitem value="" label="&label.conv-rule.all-files;"/>
+				</menupopup>
+			</menulist>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>			
+		</implementation>
+		<handlers>
+			<handler event="DOMAttrModified">
+				<![CDATA[
+
+if(event.originalTarget==this.xMenuList && event.attrName=="value") {
+	if(event.newValue==this.util.getText("label.conv-rule.all-files")) {
+		this.setAttribute("value","");
+	} else {
+		this.setAttribute("value",event.newValue);
+	}
+}
+
+if(event.originalTarget==this && event.attrName=="value") {
+	if(event.newValue=="") {
+		this.xMenuList.value=event.newValue;
+		this.xMenuList.label=this.util.getText("label.conv-rule.all-files");
+	} else {
+		this.xMenuList.value=event.newValue;
+	}
+}
+				]]>
+			</handler>
+
+			<handler event="change">
+				<![CDATA[
+if(1 || event.originalTarget==this.xMenuList) {
+	if(this.xMenuList.value==this.util.getText("label.conv-rule.all-files")) {
+		this.setAttribute("value","");
+	} else {
+		this.setAttribute("value",this.xMenuList.value);
+	}
+}
+				]]>
+			</handler>
+
+		</handlers>
+
+	</binding>
+
+	<binding id="ConvRuleInSiteWidget" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<menulist xbl:inherits="value" editable="true" flex="1" anonid="xMenuList">
+				<menupopup>
+					<menuitem value="" label="&label.conv-rule.all-sites;"/>
+				</menupopup>
+			</menulist>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>			
+		</implementation>
+		<handlers>
+			<handler event="DOMAttrModified">
+				<![CDATA[
+
+if(event.originalTarget==this.xMenuList && event.attrName=="value") {
+	if(event.newValue==this.util.getText("label.conv-rule.all-sites")) {
+		this.setAttribute("value","");
+	} else {
+		this.setAttribute("value",event.newValue);
+	}
+}
+
+if(event.originalTarget==this && event.attrName=="value") {
+	if(event.newValue=="") {
+		this.xMenuList.value=event.newValue;
+		this.xMenuList.label=this.util.getText("label.conv-rule.all-files");
+	} else {
+		this.xMenuList.value=event.newValue;
+	}
+}
+				]]>
+			</handler>
+
+			<handler event="change">
+				<![CDATA[
+if(this.xMenuList.value==this.util.getText("label.conv-rule.all-sites")) {
+	this.setAttribute("value","");
+} else {
+	this.setAttribute("value",this.xMenuList.value);
+}
+				]]>
+			</handler>
+		</handlers>
+
+	</binding>
+
+	<binding id="ConvRuleOutputFormatWidget" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1">
+				<radiogroup anonid="xFormat">
+					<hbox flex="1">
+						<vbox flex="1">
+							<radio value="avi" label="AVI"/>
+							<radio value="mpeg" label="MPEG"/>
+							<!-- radio value="psp" label="PSP" /-->
+						</vbox>
+						<spacer flex="1"/>
+						<vbox flex="1">
+							<!-- 
+							<radio value="3gp" label="3GP"/>
+							<radio value="ipod" label="IPOD"/>
+							<radio value="iphone" label="IPHONE"/>
+							 -->
+							<radio value="wmv" label="WMV"/>
+							<radio value="mp3" label="MP3"/>
+						</vbox>
+					</hbox>
+				</radiogroup>
+				<hbox align="center" anonid="xBitratePanel">
+					<label value="&label.conv-rule.bitrate;"/>
+					<menulist 
+						editable="true"
+						flex="1" 
+						anonid="xBitrate">
+						<menupopup anonid="xBitrateChoices">
+						</menupopup>
+					</menulist>
+					<label value="&label.conv-rule.kbps;"/>
+				</hbox>
+			</vbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>		
+			<constructor>
+				<![CDATA[
+
+this.re=/^([^\/]*)\/([^\/]*)$/i;
+
+this.formats={
+	avi: {
+		defaultValue: "sameq",
+		suggestedValues: [/*"copy",*/"sameq","100","250","500","800"]
+	},
+	mpeg: {
+		defaultValue: "sameq",
+		suggestedValues: ["sameq","100","250","500","800"]
+	},
+	wmv: {
+		defaultValue: "sameq",
+		suggestedValues: ["sameq","100","250","500","800"]
+	},
+	psp: {
+		defaultValue: "500",
+		suggestedValues: ["sameq","100","250","500","800"]
+	},
+	"3gp": {
+		defaultValue: "100",
+		suggestedValues: null
+	},
+	ipod: {
+		defaultValue: "500",
+		suggestedValues: ["sameq","100","250","500","800"]
+	},
+	iphone: {
+		defaultValue: "500",
+		suggestedValues: ["sameq","100","250","500","800"]
+	},
+	mp3: {
+		defaultValue: "128",
+		suggestedValues: ["64","96","128","256"],
+		needRegistration: true
+	},
+};
+
+this.bitrateStrings={};
+this.bitrateStrings[this.util.getText("label.bitrate.copy")]="copy";
+this.bitrateStrings[this.util.getText("label.bitrate.sameq")]="sameq";
+
+this.bitrateValues={};
+this.bitrateValues["copy"]=this.util.getText("label.bitrate.copy");
+this.bitrateValues["sameq"]=this.util.getText("label.bitrate.sameq");
+
+				]]>
+			</constructor>
+
+			<method name="updateBitrates">
+				<parameter name="format"/>
+				<body>
+				<![CDATA[
+while(this.xBitrateChoices.firstChild) {
+	this.xBitrateChoices.removeChild(this.xBitrateChoices.firstChild);
+}
+if(this.formats[format].suggestedValues==null) {
+	this.xBitratePanel.setAttribute("hidden","true");
+} else {
+	this.xBitratePanel.setAttribute("hidden","false");
+	for(var i=0;i<this.formats[format].suggestedValues.length;i++) {
+		var menuitem=document.createElement("menuitem");
+		this.xBitrateChoices.appendChild(menuitem);
+		var sv=this.formats[format].suggestedValues[i];
+		var svLabel=this.bitrateValues[sv];
+		if(svLabel==null)
+			svLabel=sv;
+		menuitem.setAttribute("value",sv);
+		menuitem.setAttribute("label",svLabel);
+	}
+}
+window.sizeToContent();
+				]]>
+				</body>
+			</method>
+
+			<method name="updateBitrate">
+				<body>
+				<![CDATA[
+var sv=this.xBitrate.value;
+var svLabel=this.bitrateValues[sv];
+if(svLabel==null)
+	svLabel=sv;
+this.xBitrate.value=svLabel;
+				]]>
+				</body>
+			</method>
+
+			<method name="getValue">
+				<body>
+				<![CDATA[
+var br=this.xBitrate.value;
+var tx=this.bitrateStrings[br];
+if(tx!=null)
+	br=tx;
+var value=this.xFormat.value+"/"+br;
+return value;
+				]]>
+				</body>
+			</method>
+
+
+		</implementation>
+
+		<handlers>
+			<handler event="DOMAttrModified">
+				<![CDATA[
+
+	//dump("attr "+event.originalTarget.tagName+"\n");
+
+try {
+
+if(event.originalTarget==this && event.attrName=="value") {
+
+	var value=event.newValue;
+	if(!this.re.test(value))
+		value="avi/sameq";
+	var values=this.re.exec(value);
+	var format=values[1];
+	var bitrate=values[2];
+	//dump("value="+value+" format="+format+" bitrate="+bitrate+"\n");
+	if(this.formats[format]==null) {
+		format="avi";
+		bitrate="sameq";
+	}
+	this.updateBitrates(format);
+	this.xFormat.value=format;
+
+	var tbr=this.bitrateValues[bitrate];
+	if(tbr==null)
+		tbr=bitrate;
+
+	this.xBitrate.value=tbr;
+	this.updateBitrate();
+}
+
+if(event.attrName=="value" && event.originalTarget==this.xFormat) {
+	if(event.newValue!=event.prevValue) {
+		var format=event.newValue;
+		//dump("format="+format+"\n");
+		if(this.formats[format].needRegistration) {
+			var props=this.convertMgr.getInfo();
+			var unregistered=props.get("unregistered",Components.interfaces.nsISupportsPRBool).data;
+			if(unregistered) {
+				this.util.alertWarning(this.util.getText("message.converter.need-registration"));
+				setTimeout(function(f,v0,b,v1) { f.value=v0; b.value=v1; },0,
+					this.xFormat,event.prevValue,
+					this.xBitrate,this.xBitrate.value);
+				return;
+			}
+		}
+		this.updateBitrates(format);
+		this.xBitrate.value=this.formats[format].defaultValue;
+		this.updateBitrate();
+	}
+}
+
+} catch(e) { }
+				]]>
+			</handler>
+ 
+			<handler event="command">
+				<![CDATA[
+try {
+
+	if(event.originalTarget.parentNode.parentNode==this.xBitrate) {
+		var v=this.xBitrate.value;
+		//dump("1 value="+this.xBitrate.value+" label="+this.xBitrate.label+"\n");
+		var t=this.bitrateStrings[v];
+		if(t!=null) {
+			this.xBitrate.value=t;
+			//dump("2 value="+this.xBitrate.value+" label="+this.xBitrate.label+"\n");
+			this.xBitrate.label=v;
+			//dump("3 value="+this.xBitrate.value+" label="+this.xBitrate.label+"\n");
+		}
+	}
+
+} catch(e) { }
+				]]>
+			</handler>
+
+		</handlers>
+ 
+	</binding>
+
+	<binding id="ConvRuleOutputDirWidget" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+			<hbox align="center">
+				<label value="&label.conv-rule.output-directory;"/>
+				<menulist 
+					xbl:inherits="value" editable="true" 
+					flex="1" 
+					anonid="xMenuList">
+					<menupopup>
+						<menuitem value="" label="&label.conv-rule.default-directory;"/>
+					</menupopup>
+				</menulist>
+				<button label="&button.conv-rule.change-directory;" oncommand="this.parentNode.parentNode.changeDirectory()"/>
+			</hbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+				]]>
+			</constructor>
+
+			<method name="changeDirectory">
+				<body>
+				<![CDATA[
+try {
+	var nsIFilePicker = Components.interfaces.nsIFilePicker;
+	var fp = Components.classes["@mozilla.org/filepicker;1"]
+	        .createInstance(nsIFilePicker);
+	        
+	var downloadMgr=Components.classes["@downloadhelper.net/download-manager;1"]
+		.getService(Components.interfaces.dhIDownloadMgr);
+
+	var defaultDir=downloadMgr.getMainDir();
+
+	var dir=this.xMenuList.getAttribute("value");
+	if(dir=="" || dir==this.util.getText("label.conv-rule.default-directory")) {
+    	dir=defaultDir.path;
+	}
+	
+	var localDir = Components.classes["@mozilla.org/file/local;1"]
+	                     .createInstance(Components.interfaces.nsILocalFile);
+
+	//dump("dir="+dir+"\n");
+
+	localDir.initWithPath(dir);
+	if(localDir.exists()==false || localDir.isDirectory()==false)
+		localDir=downloadMgr.getMainDir();
+		
+	//fp.displayDirectory=localDir.parent;
+	//fp.defaultString=localDir.leafName;	
+	fp.displayDirectory=localDir;
+	fp.defaultString=".";	
+	
+	//dump("displayDirectory="+localDir.parent.path+"\n");
+	//dump("defaultString="+localDir.leafName+"\n");	
+	        
+	fp.init(window, DWHUtil.getText("prompt.select-conversion-dir"), nsIFilePicker.modeGetFolder);
+	var res = fp.show();
+	if (res == nsIFilePicker.returnOK){
+	  	var thefile = fp.file;
+	  	
+	  	var stDir=thefile.path;
+	  	
+	  	//dump("selected: "+stDir+"\n");
+	  	
+	 	var stDirFile=Components.classes["@mozilla.org/file/local;1"].
+			createInstance(Components.interfaces.nsILocalFile);
+		try {
+			stDirFile.initWithPath(stDir);
+		} catch(e) {
+			this.util.alertError(DWHUtil.getFText("error.cannot-create-directory",[stDir]));
+			return;
+		}
+		if(stDirFile.exists()) {
+			if(!stDirFile.isDirectory()) {
+				this.util.alertError(DWHUtil.getFText("error.is-not-directory",[stDir]));
+				return;
+			}
+		} else {
+			var r=confirm(DWHUtil.getFText("confirm.create-directory",[stDir]));
+			if(r==false)
+				return;
+			try {
+				stDirFile.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0775)
+			} catch(e) {
+				this.util.alertError(DWHUtil.getFText("error.cannot-create-directory",[stDir]));
+				return;
+			}
+		}
+  		this.xMenuList.value=thefile.path;
+
+	}
+} catch(e) {
+}
+				]]>
+				</body>
+			</method>
+
+
+		</implementation>
+		
+		<handlers>
+			<handler event="DOMAttrModified">
+				<![CDATA[
+
+if(event.originalTarget==this.xMenuList && event.attrName=="value") {
+	if(event.newValue==this.util.getText("label.conv-rule.default-directory")) {
+		this.setAttribute("value","");
+	} else {
+		this.setAttribute("value",event.newValue);
+	}
+}
+
+if(event.originalTarget==this && event.attrName=="value") {
+	if(event.newValue=="") {
+		this.xMenuList.value=event.newValue;
+		this.xMenuList.label=this.util.getText("label.conv-rule.default-directory");
+	} else {
+		this.xMenuList.value=event.newValue;
+	}
+}
+				]]>
+			</handler>
+
+			<handler event="change">
+				<![CDATA[
+if(this.xMenuList.value==this.util.getText("label.conv-rule.default-directory)) {
+	this.setAttribute("value","");
+} else {
+	this.setAttribute("value",this.xMenuList.value);
+}
+				]]>
+			</handler>
+		</handlers>
+
+	</binding>
+ 
+
+</bindings>

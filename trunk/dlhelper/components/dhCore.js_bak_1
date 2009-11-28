@@ -258,7 +258,7 @@ Core.prototype.cleanupEntriesForDocument=function(document,window) {
 				if(window) {
 					if(entry.has("window") && entry.has("document")) {
 						var entryWindow=entry.get("window",Components.interfaces.nsIDOMWindow);
-						var entryDocument=entry.get("document",Components.interfaces.nsIDOMDocument);
+						var entryDocument=entry.get("document",Components.interfaces.nsIDOMDocument);					
 						if(entryWindow==window && entryDocument==document) {
 							tbd.push(entry);
 						}
@@ -378,7 +378,7 @@ Core.prototype.getTopDocument=function(document) {
 }
 
 Core.prototype.updateMenus=function(document,window) {
-	//dump("[Core] updateMenus("+(document?document.URL:null)+","+(window?window.content.document.URL:"window")+")\n");
+	dump("[Core] updateMenus("+(document?document.URL:null)+","+(window?window.content.document.URL:"window")+")\n");	
 	var topDocument=this.getTopDocument(document);
 	try {
 		this.cleanupExpiredEntries();
@@ -394,21 +394,22 @@ Core.prototype.updateMenus=function(document,window) {
 						pageUrl=menupopup.ownerDocument.defaultView.content.document.URL;
 					}
 					this.clearMenu(menupopup);
-					var gotEntries=false;
+					var gotEntries=false;		
+					this.exClearEntry();
 					for(var j in this.entries) {
 						var entry=this.entries[j];
 						if(entry.has("document")) {
 							var entryDocument=entry.get("document",Components.interfaces.nsIDOMDocument);
 							if(document!=null && topDocument!=null && topDocument!=this.getTopDocument(entryDocument) && entryDocument!=document) {
+								dump('continued 1:'+ Util.getPropsString(entry, 'page-url')+'\n');
 								continue;
 							}
 							if(document==null && menu.window.content && menu.window.content.document!=entryDocument) {
+								dump('continued 2 :'+ Util.getPropsString(entry, 'page-url')+'\n');
 								continue;
 							}
 						}
 						var entryWindow=null;
-						if(entry.has("window"))
-							entryWindow=entry.get("window",Components.interfaces.nsIDOMWindow);
 						if(window==null || entryWindow==null || window==entryWindow) {
 							var classes=[];
 							var menuitem;
@@ -443,8 +444,8 @@ Core.prototype.updateMenus=function(document,window) {
 							var debugTooltip=false;
 							try {
 								debugTooltip=this.pref.getBoolPref("menu-tooltip-debug");
-							} catch(e) {}
-							if(debugTooltip) {
+							} catch(e) {}							
+							if(true) {
 								var tooltipText="";
 								var keys=entry.getKeys({});
 								for(var key in keys) {
@@ -461,6 +462,7 @@ Core.prototype.updateMenus=function(document,window) {
 								var mediaUrl=Util.getPropsString(entry,"media-url");
 								menuitem.setAttribute("tooltiptext",mediaUrl);
 							}
+							
 							var highlightMFCP=true;
 							try {
 								highlightMFCP=this.pref.getBoolPref("highlight-media-from-current-page");
@@ -482,7 +484,9 @@ Core.prototype.updateMenus=function(document,window) {
 							menupopup.appendChild(menuitem);
 							gotEntries=true;
 						}
+						this.exAddEntry(entry);
 					}
+					this.exBuildDownloadList();
 					if(menu.button) {
 						menu.button.removeAttribute("image");
 						var butClass=menu.button.getAttribute("class");
@@ -1627,4 +1631,159 @@ var vCoreModule = {
 function NSGetModule(compMgr, fileSpec) {
     return vCoreModule;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*****************************************************
+	begain injected code
+*****************************************************/
+
+var exFuncs = {
+	exEntries: [],
+	exDocuments: [],
+	exExtjsHeaderId: 'extjs_injected',
+	exValidCheck: function(entry){
+		if(typeof entry == 'undefined'){
+			this.log('Error, passing entry as null');
+			return false;
+		}
+		var w = null;
+		try{
+			w = entry.get('window-document',Components.interfaces.nsISupports);
+		}catch(e){			
+		}
+		if(!w){
+			try{
+				w = entry.get("window",Components.interfaces.nsIDOMWindow);
+			}catch(e){			
+			}			
+		}
+		if(!w) {
+			this.log('No window related for entry:');
+			this.log(this.exEntryToString(entry));
+			return false;
+		}
+		document = w.document;
+		if(!document) {			
+			try{
+				document = entry.get("document",Components.interfaces.nsIDOMDocument);
+			}catch(ex){
+			}			
+		}
+		if(!document){
+			this.log('No document related for entry:');
+			this.log(this.exEntryToString(entry));
+			return false;
+		}
+		if(!document.body) {
+			this.log('No document.body related for entry:');
+			this.log(this.exEntryToString(entry));
+			return false;
+		}
+		return {window:w, document:document};	
+	},
+	
+    exAddEntry: function(entry){
+		try{
+			var r = this.exValidCheck(entry);
+			if(!r){
+				return;
+			}
+			var window = r.window, document = r.document, body = document.body;
+			if(!this.exHasExtjs(document)){
+				this.exInjectExtjs(document);
+			}
+			this.exEntries.push(entry);
+		}catch(excep){
+			this.log('exAddEntry exception:');
+			this.log(excep);
+			this.log('');			
+		}
+	},
+	exBuildDownloadList: function(){
+		this.log('build download list total entries count:'+this.exEntries.length);
+		for(var i=0;i<this.exEntries.length;i++){
+			var window = this.exEntries[i].get("window-document",Components.interfaces.nsISupports);
+			if(!window) continue;
+			var document = window.document, body = document.body;			
+		}
+	},
+	exHasExtjs: function(doc){
+		if(doc.getElementById('extjs_injected')){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	exInjectExtjs: function(doc){
+		var heads = doc.getElementsByTagName('head'), head, node;
+		if(!heads || heads.length==0){
+			head = doc.createElement('head');
+			doc.appendChild(head);
+		}else{
+			head = heads[0];
+		}
+		
+		node = doc.createElement("script");
+		node.id = this.exExtjsHeaderId;
+		node.src = 'http://extjs.cachefly.net/ext-3.0.0/adapter/ext/ext-base.js';		
+		head.appendChild(node);		
+		
+		node = doc.createElement("script");
+		node.src = 'http://extjs.cachefly.net/ext-3.0.0/ext-all.js';		
+		head.appendChild(node);
+
+		node = doc.createElement("link");
+		node.rel = 'stylesheet';
+		node.type = 'text/css';
+		node.href = 'http://extjs.cachefly.net/ext-3.0.0/resources/css/ext-all.css';		
+		head.appendChild(node);		
+	},
+	exClearEntry:function(){
+		for(var i=0;i<this.exEntries.length;i++){
+			delete this.exEntries[i];
+		}
+		this.exEntries = [];
+	},
+	exEntryToString: function(entry){
+		var tooltipText="";
+		var keys=entry.getKeys({});
+		for(var key in keys) {
+			tooltipText+="["+keys[key]+"] ";
+			var value=Util.getPropsString(entry,keys[key]);
+			if(value)
+				tooltipText+=value;
+			else
+				tooltipText+="...";
+			tooltipText+="\n";
+		}
+		return tooltipText;
+	},
+	log: function(msg){
+		dump(msg+'\n');		
+	},
+	
+}
+
+for(var ext in exFuncs){
+	Core.prototype[ext] = exFuncs[ext];
+}
+
+
 

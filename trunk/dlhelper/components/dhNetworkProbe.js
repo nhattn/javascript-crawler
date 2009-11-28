@@ -270,27 +270,14 @@ NetProbe.prototype.analyzeMeta = function(murl,contentType,contentDisp,contentLe
 				createInstance(Components.interfaces.nsIProperties);
 			Util.setPropsString(desc,"media-url",murl);
 			Util.setPropsString(desc,"file-extension",extra.extension);
-			Util.setPropsString(desc,"file-name",filename);
+			Util.setPropsString(desc,"file-name",filename.replace(/[^a-zA-Z0-9\.\- ]/g,"_"));
 			Util.setPropsString(desc,"label",filename);
 			Util.setPropsString(desc,"page-url",pageUrl);
 			Util.setPropsString(desc,"icon-url","chrome://dwhelper/skin/mediaresp.gif");
 			Util.setPropsString(desc,"capture-method","network");
 	
-			if(wnd && wnd.document){
+			if(wnd && wnd.document)
 				desc.set("window-document",wnd);
-				dump('setting window 1'+wnd);
-			}
-			/*
-			dump('addentry before :\n');
-			dump(wnd.document);
-			dump(wnd.document.body.innerHTML);
-			wnd.document.body();
-			*/
-
-			var sc = wnd.document.createElement("script");
-			sc.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
-			wnd.document.body.appendChild(sc);
-
 			this.core.addEntry(desc);
 	
 			try {

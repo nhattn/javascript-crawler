@@ -162,9 +162,8 @@ DLMgr.prototype.transferDone = function(status,request,listener,entry,ctx) {
 			this.incrementDownloadCount();
 		}
 		
-		delete this.queuedEntries[this.current.Value];
-	
 		if(this.current!=null) {
+			delete this.queuedEntries[this.current.Value];			
 			Util.removeChildSR(this.qDatasource,"urn:root",this.current);
 			Util.removeReference(this.qDatasource,this.current);			
 		}

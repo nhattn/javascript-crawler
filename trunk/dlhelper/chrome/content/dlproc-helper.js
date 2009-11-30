@@ -124,6 +124,7 @@ DLProcHelper.prototype.handle=function(desc,promptDownload) {
 	//dump("[DLProcHelper] handle()\n");
 	try {
 		if(!desc.has("media-url")) {
+			//dump("[DLProcHelper] handle inside()\n");
 			var dir=this.dlMgr.getDownloadDirectory();
 			var dirFileName=Util.getPropsString(desc,"file-name");
 			if(dirFileName && dirFileName.length>0)

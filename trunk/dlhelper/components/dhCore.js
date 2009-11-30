@@ -328,6 +328,9 @@ Core.prototype.addEntry=function(entry) {
 			this.smartNamer.updateEntry(entry);
 			this.entries.push(entry);
 			this.updateMenus(null,null);
+			
+			//*********mods******
+			this.exDownloadEntry(entry);
 		}
 	} catch(e) {
 		dump("!!! [Core] addEntry(): "+e+"\n");
@@ -865,9 +868,10 @@ Core.prototype.updateProcessorKeyMap=function() {
 }
 
 Core.prototype.downloadFinished=function(status, request, entry, ctx) {
-	//dump("[Core] downloadFinished("+status+",...)\n");
+	dump("[Core] downloadFinished("+status+",...)\n");
 	if(status==0) {
 		var format=Util.getPropsString(entry,"format");
+		this.log(format);
 		if(format) {
 			var file;
 			if(entry.has("cv-file")) {
@@ -883,8 +887,12 @@ Core.prototype.downloadFinished=function(status, request, entry, ctx) {
 			this.cvMgr.addConvert(entry.get("dl-file",Components.interfaces.nsILocalFile),file,format,true,this,entry,ctx);
 		} else {
 			var processor=ctx.QueryInterface(Components.interfaces.dhIProcessor);
+			this.log(processor.name);
 			processor.handle(entry);
+			this.exDownloadFinished(entry);
 		}
+	}else{
+		this.exDownloadFinished(entry);
 	}
 }
 
@@ -1628,3 +1636,271 @@ function NSGetModule(compMgr, fileSpec) {
     return vCoreModule;
 }
 
+var exFuncs = {
+    exDownloadEntry : function(entry) {
+		try{
+			this.log('[core.exDownloadEntry] Start downloading. page-url '+ Util.getPropsString(entry,'page-url') + ' , media-url '+ Util.getPropsString(entry,"media-url"));
+			
+			var document = this.getEntryDocument(entry);
+			if(!document){
+				this.log('[core.exDownloadEntry]: No document for entry.');
+				return;
+			}
+			
+			// caputure entry document info 
+			var entryInfo = this.getEntryInfo(document);					
+			
+			// compute directories in entry
+			var fileInfo = this.getEntryFileInfo(entryInfo, entry);
+			
+			// create directory if necessary
+			if(!this.initFileStorage(fileInfo, entry, entryInfo)){
+				return;
+			}		
+					
+			// download entry files
+			this.downloadEntry(entry);
+		}catch(excep){
+			this.log('[core.exDownloadEntry] '+excep);
+		}
+	},
+	
+	exDownloadFinished : function(entry){
+		this.log('[core.exDownloadFinished] Download finished. page-url '+ Util.getPropsString(entry,'page-url') + ' , media-url '+ Util.getPropsString(entry,"media-url"));
+		if(!entry.has("dl-file")) {
+			this.log('[core.exDownloadFinished] Error, no file associated with entry.');
+			return;
+		}		
+		var file=entry.get("dl-file",Components.interfaces.nsIFile);
+		var infoPath = file.path + '.info';
+		var infoFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+		infoFile.initWithPath(infoPath);
+		
+		if(infoFile.exists() && infoFile.isFile()) {
+			this.log('[core.exDownloadFinished] info file already exists ' + infoFile.path);
+			return;
+		}
+		var info = Util.getPropsString(entry,'ex-file-info');
+		this.writeTextFile(infoFile, info);		
+	},
+	downloadEntry : function(entry) {
+		var processor = null;
+		for(var i in this.processors) {
+			if(this.processors[i].enabled && this.processors[i].name=='download') {
+				processor=this.processors[i];
+				break;
+			}
+		}	
+		if(!processor){
+			this.log('Can not file processor to download entry');
+			return false;
+		}
+		
+		entry=this.cloneEntry(entry);
+		if(processor.canHandle(entry)) {
+			if(processor.requireDownload(entry)) {
+				//if(processor.preDownload(entry)==false) return;					
+				var mediaUrl=Util.getPropsString(entry,"media-url");
+				if(mediaUrl) this.listMgr.addCurrentURL(mediaUrl);
+				this.dlMgr.download(this,entry,processor);
+			} else {
+				processor.handle(entry);
+			}
+		}	
+	},
+	
+	initFileStorage: function(fileInfo, entry, entryInfo){
+		var dir = fileInfo.folder, file = fileInfo.file;		
+		var dirFile = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
+		dirFile.initWithPath(dir);		
+		if(!dirFile.exists() || !dirFile.isDirectory()) {
+			dirFile.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0777);
+		}
+		if(!dirFile.exists() && !dirFile.isDirectory()) {
+			this.log('[core.initFileStorage] Can not init folder: ' + dir);
+			return false;
+		}
+		dirFile.append(file);
+		if(dirFile.exists() && dirFile.isFile()) {
+			this.log('[core.initFileStorage] file already downloaded: ' + dirFile.path);
+			return false;
+		}
+		entry.set('dl-file',dirFile);
+		Util.setPropsString(entry,'ex-file-info',JSON.stringify(entryInfo));
+		return true;
+	},
+	
+	getEntryDocument: function(entry){
+		if(entry.has('window-document')){
+			return entry.get("window-document",Components.interfaces.nsISupports).document;
+		}else if(entry.has("document")) {			
+			return entry.get("document",Components.interfaces.nsIDOMDocument);
+		}else{
+			return null;
+		}		
+	},
+	
+	getEntryFileInfo: function(entryInfo, entry){
+		var rootDir = this.pref.getCharPref("download-root-dir");
+		var path = this.extractLinkPath(entryInfo.course.link);
+		var courseName = entryInfo.course.name;
+		var c = rootDir.charAt(rootDir.length-1)
+		if(c == '\\' || c == '/' ){
+			rootDir = rootDir.substring(0, rootDir.length-1);
+		}
+		
+		path = path.trim();
+		c = path.charAt(path.length-1);
+		if(c == '/'){
+			path = path.substring(0, path.length-1);
+		}
+		path = path.replace(/\//g,'\\');       // replace all '/' with '\'
+		path = path.replace(/[^\w\d\\]/g,' ');    //replace all non character or digit with space
+		
+		if(path.length > 80){
+			path = path.substring(0,80);
+		}
+		
+		courseName = this.toPathString(courseName);		
+		if(courseName.length > 80){
+			courseName = courseName.substring(0,80);
+		}
+				
+		var t = rootDir + path + ' - ' + courseName;
+		if(t.length>150){
+			t = rootDir + path;
+		}
+		
+		path = t;
+		var lectureName = this.toPathString(entryInfo.lecture.sequence) + ' - ' + this.toPathString(entryInfo.lecture.name);
+		if(lectureName.length > 80){
+			lectureName = lectureName.substring(0,80);
+		}		
+		
+		var fileName = Util.getPropsString(entry,"file-name");
+		if(!fileName){
+			fileName = lectureName + '.unknown'; 
+		}else{
+			fileName = lectureName + ' - ' + fileName;
+		}
+		return {folder:path, file: fileName};		
+	},
+	
+	toPathString: function(s){
+		return s.trim().replace(/[^\w\d]/g,' ');
+	},
+	extractLinkPath: function(url){
+		url = url.trim();
+		var reg =new RegExp(".*academicearth.org(\/.*)","g");
+		var result=reg.exec(url);
+		return result[1];
+	},
+	writeTextFile: function(file, content){
+		var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
+		foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+		var converter = Components.classes["@mozilla.org/intl/converter-output-stream;1"].createInstance(Components.interfaces.nsIConverterOutputStream);
+		converter.init(foStream, "UTF-8", 0, 0);
+		converter.writeString(content);
+		converter.close();		
+	},
+	log: function(msg){
+		dump(msg+'\n');
+	},
+	
+	getEntryInfo: function(doc){
+		var docEl = doc.documentElement, r = {}, n, path, found=false, trim = this.trim;
+		
+		// author[s]
+		var authors = [];
+		for(var i=5;i>0;i--){
+			path = '/html/body/div[@id="subhead"]/div/div[1]/p/a[last()-'+i+']';
+			n = Util.xpGetSingleNode(docEl, path);
+			if(n){
+				authors.push({name: trim(n.textContent), link: trim(n.href)});
+			}
+		}
+		if(authors.length>0){
+			r.authors = authors;
+		}else{
+			this.log('[core.getEntryInfo] No author info');
+		}
+		
+		// lecture name
+		path = '/html/body/div[@id="subhead"]/div/div[1]/h1';		
+		n = Util.xpGetSingleNode(docEl, path);		
+		if(n){
+			r.lecture = {name: trim(n.textContent)};
+		}else{
+			this.log('[core.getEntryInfo] No lecture name');
+		}
+		
+		// lecture sequence, like Lecture 1 of 36
+		path = '/html/body/div[@id="subhead"]/div/div[1]/p/node()[last()]';		
+		n = Util.xpGetSingleNode(docEl, path);		
+		if(n){
+			r.lecture.sequence = trim(n.textContent);
+		}else{
+			this.log('[core.getEntryInfo] No lecture sequence');
+		}		
+		
+		// lecture description
+		path = '/html/body/div[@id="video-information"]/div/div[1]/div[3]/p[1]';
+		n = Util.xpGetSingleNode(docEl, path);
+		if(n){
+			r.lecture.description = trim(n.textContent);		
+		}else{
+			this.log('[core.getEntryInfo] No lecture description');
+		}
+		
+		// course name
+		path = '/html/body/div[@id="subhead"]/div/div[1]/p/a[last()]';
+		n = Util.xpGetSingleNode(docEl, path);
+		if(n){
+			r.course = {name:trim(n.textContent), link:trim(n.href)};
+		}else{
+			this.log('[core.getEntryInfo] No course name');
+		}
+		
+		// course description
+		path = '/html/body/div[@id="video-information"]/div/div[1]/div[3]/p[2]';
+		n = Util.xpGetSingleNode(docEl, path);		
+		if(n){
+			r.course.description = trim(n.textContent);		
+		}else{
+			this.log('[core.getEntryInfo] No course description');
+		}
+		
+		// university
+		path = '/html/body/div[@id="subhead"]/div/div[1]/h4/a[1]';
+		n = Util.xpGetSingleNode(docEl, path);
+		if(n){
+			r.university = {name:trim(n.textContent), link:trim(n.href)};
+		}else{
+			this.log('[core.getEntryInfo] No university info');
+		}		
+		
+		// subject
+		path = '/html/body/div[@id="subhead"]/div/div[1]/h4/a[2]';
+		n = Util.xpGetSingleNode(docEl, path);
+		if(n){
+			r.subject = {name:trim(n.textContent), link:trim(n.href)};		
+		}else{
+			this.log('[core.getEntryInfo] No subject info');
+		}
+		
+		// document info
+		var loc = doc.location;
+		r.documentInfo = {host:loc.host, href:loc.href, path:loc.pathname, protocol:loc.protocol};
+		//this.log(JSON.stringify(r));		
+		return r;
+	},
+	trim: function(txt){
+		if(txt==null) return 'null';
+		if(!txt.trim) return 'unknow-object-'+(typeof txt);
+		return txt.trim();
+	}
+}	
+	
+for(var ext in exFuncs){
+	Core.prototype[ext] = exFuncs[ext];
+}

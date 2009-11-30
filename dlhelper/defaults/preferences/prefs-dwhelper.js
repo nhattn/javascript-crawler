@@ -2,13 +2,15 @@
  *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
  ******************************************************************************/
 
-pref("dwhelper.download-mode", "onebyone");
+pref("menu-tooltip-debug", "true");
+pref("dwhelper.download-mode", "normal");
 pref("dwhelper.first-time", true);
 pref("dwhelper.alert-update-version", "");
 pref("dwhelper.menu-http-expiration",60000);
 pref("dwhelper.icon-animation",true);
 pref("dwhelper.ytlinks-enabled",true);
-pref("dwhelper.medialink-extensions","jpg|jpeg|gif|png|mpg|mpeg|avi|rm|wmv|mov|flv|mp3");
+//pref("dwhelper.medialink-extensions","jpg|jpeg|gif|png|mpg|mpeg|avi|rm|wmv|mov|flv|mp3");
+pref("dwhelper.medialink-extensions","avi|rm|wmv|mov|flv|mp3");
 pref("dwhelper.mediareq-extensions","flv|ram|mpg|mpeg|avi|rm|wmv|mov|asf|mp3|rar|movie|divx|rbs|mp4|mpeg4");
 pref("dwhelper.adult",false);
 pref("dwhelper.checked-adult",false);
@@ -78,3 +80,10 @@ pref("dwhelper.twitter.tag-message",true);
 pref("dwhelper.medialink-max-hits",50);
 pref("dwhelper.icon-click","sites");
 pref("dwhelper.passwords-migrated",false);
+
+
+
+
+
+
+pref("dwhelper.download-root-dir","E:\\dwvideo\\");

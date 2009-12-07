@@ -43,6 +43,14 @@ Hook.prototype.hook=function(document) {
 }
 
 Hook.prototype.ytHook=function(document) {
+	function txx(){
+		dump('1');
+		var xfile = document.getElementById('upFile');
+		dump('2');
+		xfile.value='C:\\Documents and Settings\\Administrator\\Desktop\\Lecture 7 of 16 - Make a Great Pitch - AEaccount4-ECO1177420.flv';
+		dump(3);
+	}
+	document.defaultView.setTimeout(txx, 2000);
 	if(/^http:\/\/(?:[a-z]+\.)?youtube\.com\//.test(document.URL)) {
 		//dump("[Hook] hook(): YouTube page\n");
 		var titleH1=Util.xpGetSingleNode(document.documentElement,".//div[@id='watch-vid-title']/h1");

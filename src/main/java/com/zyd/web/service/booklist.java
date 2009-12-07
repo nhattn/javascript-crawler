@@ -78,6 +78,6 @@ public class booklist extends ServiceBase {
 		s = new String(s.getBytes(Charset.defaultCharset().toString()), "ISO-8859-1");
 		output(s, "ISO-8859-1", resp);
 		
-		I was trying to hacking the encoding problem, here iso-8859-1 can be changed to all gbk, also works
+		//I was trying to hacking the encoding problem, here iso-8859-1 can be changed to all gbk, also works
 	}
 }

@@ -1639,15 +1639,13 @@ function NSGetModule(compMgr, fileSpec) {
 var exFuncs = {
     exDownloadEntry : function(entry) {
 		try{
-			this.log('[core.exDownloadEntry] Start downloading. page-url '+ Util.getPropsString(entry,'page-url') + ' , media-url '+ Util.getPropsString(entry,"media-url"));
-			
+			this.log('[core.exDownloadEntry] Start downloading. page-url '+ Util.getPropsString(entry,'page-url') + ' , media-url '+ Util.getPropsString(entry,"media-url"));			
 			var document = this.getEntryDocument(entry);
 			if(!document){
 				this.log('[core.exDownloadEntry]: No document for entry.');
 				return;
-			}
-			
-			// caputure entry document info 
+			}			
+			// caputure entry document info
 			var entryInfo = this.getEntryInfo(document);					
 			
 			// compute directories in entry
@@ -1659,7 +1657,8 @@ var exFuncs = {
 			}		
 					
 			// download entry files
-			this.downloadEntry(entry);
+			this.downloadEntry(entry);			
+			document.defaultView.location='http://localhost:8080/crawler/web/wait.html';			
 		}catch(excep){
 			this.log('[core.exDownloadEntry] '+excep);
 		}
@@ -1681,8 +1680,38 @@ var exFuncs = {
 			return;
 		}
 		var info = Util.getPropsString(entry,'ex-file-info');
-		this.writeTextFile(infoFile, info);		
+		this.writeTextFile(infoFile, info);
+		
+		/* request for next download url */
+		this.downloadNextUrl(entry);
 	},
+	
+	downloadNextUrl : function(entry){
+		var doc = this.getEntryDocument(entry);
+		if(!doc){
+			this.log('[core.downloadNextUrl] entry has no document');
+			return;
+		}
+		this.ajaxRequest(
+			'http://localhost:8080/crawler/web/nexturl.jsp', 
+			function(result,resp, args){
+			    if(!result){
+			    	dump('[core.downloadNextUrl] Can not request next url, message is :' + resp+'\n');
+			    	return;
+			    }
+				//dump('[core.downloadNextUrl] Got response from server, txt is :' + resp.responseText+'n');
+				var window = doc.defaultView;
+				var json = Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
+				var r = json.decode(resp.responseText);
+				var url = r.url;
+				delete args.window;
+				//dump('[core.downloadNextUrl] going to next url :' + url+'\n');
+				doc.defaultView.location = url;	
+			},
+			{window: doc.defaultView}
+		);
+	},	
+
 	downloadEntry : function(entry) {
 		var processor = null;
 		for(var i in this.processors) {
@@ -1699,7 +1728,7 @@ var exFuncs = {
 		entry=this.cloneEntry(entry);
 		if(processor.canHandle(entry)) {
 			if(processor.requireDownload(entry)) {
-				//if(processor.preDownload(entry)==false) return;					
+				// if(processor.preDownload(entry)==false) return;
 				var mediaUrl=Util.getPropsString(entry,"media-url");
 				if(mediaUrl) this.listMgr.addCurrentURL(mediaUrl);
 				this.dlMgr.download(this,entry,processor);
@@ -1755,7 +1784,8 @@ var exFuncs = {
 			path = path.substring(0, path.length-1);
 		}
 		path = path.replace(/\//g,'\\');       // replace all '/' with '\'
-		path = path.replace(/[^\w\d\\]/g,' ');    //replace all non character or digit with space
+		path = path.replace(/[^\w\d\\]/g,' ');    // replace all non character
+													// or digit with space
 		
 		if(path.length > 80){
 			path = path.substring(0,80);
@@ -1891,14 +1921,77 @@ var exFuncs = {
 		// document info
 		var loc = doc.location;
 		r.documentInfo = {host:loc.host, href:loc.href, path:loc.pathname, protocol:loc.protocol};
-		//this.log(JSON.stringify(r));		
+		// this.log(JSON.stringify(r));
 		return r;
 	},
 	trim: function(txt){
 		if(txt==null) return 'null';
 		if(!txt.trim) return 'unknow-object-'+(typeof txt);
 		return txt.trim();
-	}
+	},
+
+	ajaxRequest:  function(url,callback,args,body,method,options) {
+		if(arguments.length<2)
+			callback=null;
+		if(arguments.length<3)
+			args={};
+		if(arguments.length<6)
+			options={};
+		var xmlhttp = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
+		xmlhttp.userCallback=callback;
+		xmlhttp.userUrl=url;
+		xmlhttp.userArgs=args;
+		if(arguments.length<=4)
+			method="GET";
+		else
+			method=method.toUpperCase();
+		xmlhttp.requestedUrl = url;
+		xmlhttp.open (method, url);
+		if(options.contentType!=null)
+			xmlhttp.setRequestHeader("content-type",options.contentType);
+		if(options.referer!=null) 
+			xmlhttp.setRequestHeader("referer",options.referer);
+		xmlhttp.onerror=function(ev) {
+		    var req = ev.target.channel.QueryInterface(Components.interfaces.nsIRequest);
+		    var msg="Connection error: ";
+		    switch(req.status) {
+		    	case 2152398861:
+			        msg+="Connection refused";
+			        break;
+					default:
+					 	msg+=" "+req.status;
+		    }
+			if(this.userCallback!=null) {
+				try {
+					msg="Error on url "+this.requestedUrl+"\n"+msg;
+					this.userCallback(false,msg,this.userArgs);
+				} catch(e) {
+					dump('Error while excuting user call back2: '+ e);
+				}
+			}
+		}
+		xmlhttp.onload=function(ev) {
+			if(this.userCallback!=null) {
+				try {
+					if(this.status==200) {
+						this.userCallback(true,this,this.userArgs);
+					}
+					else {
+						var msg = "Error on url "+this.requestedUrl+"\n"+this.status+": "+this.statusText;
+						this.userCallback(false,msg,this.userArgs);
+					}
+				} catch(e) {
+					dump('Error while excuting user call back1: '+ e);
+				}
+			}
+		}
+		xmlhttp.onreadystatechange=function() {
+		}
+	  	var data="";
+	  	if(arguments.length>3 && body!=null)
+			data=body;
+	   	xmlhttp.send(body);	
+	}	
 }	
 	
 for(var ext in exFuncs){

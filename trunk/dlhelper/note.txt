@@ -24,3 +24,15 @@ Source code:
 var sc = document.createElement("script");
 sc.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
 document.body.appendChild(sc);
+
+
+
+
+
+
+
+
+
+
+
+1. start page. Test if url is 

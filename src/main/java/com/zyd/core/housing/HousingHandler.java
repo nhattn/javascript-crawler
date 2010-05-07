@@ -44,6 +44,6 @@ public class HousingHandler implements Handler {
         public final static String TotalFloor = "totalFloor";
         public final static String IsAgent = "isAgent";
         public final static String Equipment = "equipment";
-        public final static String Decoration = "dription1";
+        public final static String Decoration = "decoration";
     }
 }

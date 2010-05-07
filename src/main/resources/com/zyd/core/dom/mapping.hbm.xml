@@ -47,6 +47,4 @@
 		<property name="domainName" />
 		<property name="url" />
 	</class>
-
-
 </hibernate-mapping>

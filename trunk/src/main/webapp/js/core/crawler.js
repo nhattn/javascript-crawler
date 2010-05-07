@@ -14,7 +14,7 @@ Crawler = {
 	},
 	error: function(txt){
 	    Crawler.clog('Error: '+txt);	    	    
-	    alert(txt);
+	    //alert(txt);
 	},
 	
 	objToString : function(obj){
@@ -28,18 +28,17 @@ Crawler = {
 	    return r.join('');
 	},
 	
-	postData : function(params, url, callback){
-	    if(!callback) callback = Crawler.callback
-	    var encoding = document.characterSet;
-	    params.encoding = encoding;
-	    Ext.Ajax.request({
-	        url: url,
-	        success: function(r){try{callback(r,true);}catch(e){Crawler.error('crawler_loader.postdata:'+e);} },
-	        failure: function(r){try{callback(r,false);}catch(e){Crawler.error('crawler_loader.postdata:'+e);} },
-	        method: 'POST',
-	        params: params        
-	     });        
-	},	
+	/**
+	 * perform an action based on specificed command and parameters.
+	 * obj is the command object like such:
+	 * {
+	 *     action: specify the action to do
+	 *     param1: first parameter if the action needs to take any parameters
+	 *     param2: seocond..
+	 *     param3: ... etc
+	 *     
+	 * }
+	 */
 	action : function(obj){
 	    if(!Crawler.doAction) return;
 	    var processed = false;

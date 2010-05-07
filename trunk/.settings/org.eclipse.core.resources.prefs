@@ -1,7 +1,7 @@
-#Thu May 06 18:33:50 CST 2010
+#Thu May 06 20:43:39 CST 2010
 eclipse.preferences.version=1
 encoding//doc/data.txt=gbk
 encoding//doc/news.txt=gbk
 encoding//src/main/webapp/js/core/crawler.js=GBK
 encoding//src/test/resources/data.prop=GBK
-encoding/<project>=ISO-8859-1
+encoding/<project>=GBK

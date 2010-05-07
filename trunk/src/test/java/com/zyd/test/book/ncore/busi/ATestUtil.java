@@ -1,4 +1,4 @@
-package com.zyd.ncore.busi;
+package com.zyd.test.book.ncore.busi;
 
 import java.io.InputStream;
 import java.net.URLEncoder;

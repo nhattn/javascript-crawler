@@ -1,4 +1,4 @@
-package com.zyd.web.service;
+package com.zyd.test.book.web.service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,8 +14,8 @@ import com.zyd.core.busi.JsonMapper;
 import com.zyd.core.dom.Book;
 import com.zyd.core.dom.Chapter;
 import com.zyd.core.util.SpringContext;
-import com.zyd.ncore.busi.ATestData;
-import com.zyd.ncore.busi.ATestUtil;
+import com.zyd.test.book.ncore.busi.ATestData;
+import com.zyd.test.book.ncore.busi.ATestUtil;
 
 public class TestChapter extends TestCase {
 	JsonMapper jm;

@@ -1,11 +1,11 @@
-package com.zyd.web.service;
+package com.zyd.test.book.web.service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
-import com.zyd.ncore.busi.ATestUtil;
+import com.zyd.test.book.ncore.busi.ATestUtil;
 
 public class TestTestUtil extends TestCase {
 

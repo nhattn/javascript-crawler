@@ -1,4 +1,4 @@
-package com.zyd.ncore.busi;
+package com.zyd.test.book.ncore.busi;
 
 import java.util.ArrayList;
 import java.util.HashSet;

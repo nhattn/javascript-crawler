@@ -1,4 +1,4 @@
-package com.zyd.ncore.dao;
+package com.zyd.test.book.dao;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.Book;
 import com.zyd.core.dom.BookFilter;
 import com.zyd.core.dom.Chapter;
-import com.zyd.ncore.busi.ATestUtil;
+import com.zyd.test.book.ncore.busi.ATestUtil;
 
 public class TestBookDao extends TestCase {
 	BookDao dao;

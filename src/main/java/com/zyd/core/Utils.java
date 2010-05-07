@@ -1,6 +1,8 @@
 package com.zyd.core;
 
+import java.awt.image.BufferedImage;
 import java.beans.XMLEncoder;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,11 +16,15 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.asprise.util.ocr.OCR;
 import com.zyd.Config;
 import com.zyd.core.dom.Book;
 
@@ -215,7 +221,8 @@ public class Utils {
     }
 
     public static <T> T toDBEncoding(T obj) {
-        if(true) return obj;
+        if (true)
+            return obj;
         try {
             Map maps = BeanUtils.describe(obj);
             Set set = maps.keySet();
@@ -241,7 +248,8 @@ public class Utils {
     }
 
     public static <T> T fromDBEncoding(T obj) {
-        if(true) return obj;
+        if (true)
+            return obj;
         try {
             Map maps = BeanUtils.describe(obj);
             Set set = maps.keySet();
@@ -264,6 +272,18 @@ public class Utils {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public static String ocrImageNumber(String byteString) {
+        try {
+            Base64 b = new Base64();
+            ByteArrayInputStream ins = new ByteArrayInputStream(b.decode(byteString.getBytes()));
+            BufferedImage image = ImageIO.read(ins);
+            return new OCR().recognizeEverything(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void main(String[] args) {

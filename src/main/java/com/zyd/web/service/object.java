@@ -12,10 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Config;
 import com.zyd.core.HandlerManager;
-import com.zyd.core.Utils;
+import com.zyd.core.busi.LinkManager;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class object extends ServiceBase {
+    private LinkManager linkManager;
+
+    public object() {
+        linkManager = (LinkManager) SpringContext.getContext().getBean("linkManager");
+    }
+
     /**
      * method: post
      * description: create a new object 
@@ -30,6 +37,12 @@ public class object extends ServiceBase {
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String referer = req.getHeader("Referer");
+        if (referer != null && linkManager.isLinkProcessed(referer)==true) {
+            setResponseType("js", resp);
+            output(RESULT_NO_CHANGE, resp);
+            return;
+        }
         setResponseType("js", resp);
         HashMap<String, Object> values = new HashMap<String, Object>();
         Enumeration<String> names = req.getParameterNames();
@@ -48,8 +61,11 @@ public class object extends ServiceBase {
         }
 
         boolean result = (Boolean) HandlerManager.getInstance().getHandler((String) values.get(Config.NAME_APP_PARAMETER)).process(values);
-        String s = Utils.stringArrayToJsonString(new String[] { "result", Boolean.toString(result) });
-        output(s, resp);
+        if (result) {
+            linkManager.linkProcessed(referer);
+        }
+        setResponseType("js", resp);
+        output(RESULT_CHANGE, resp);
     }
 
     @Override
@@ -101,7 +117,7 @@ public class object extends ServiceBase {
                 buf.append(k);
                 buf.append('>');
             }
-            buf.append("</object>\n");                
+            buf.append("</object>\n");
         }
         buf.append("</objects>");
         return buf.toString();

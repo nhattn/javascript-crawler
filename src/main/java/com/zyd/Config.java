@@ -21,5 +21,6 @@ public class Config {
      * the encoding all outgoing content will be using, including xml/js/html 
      */
     public final static String ENCODING_OUT_GOING_CONTENT = "GBK";
+    public static String IdlePageUrl = ServerUrl + "/html/wait.html";
 
 }

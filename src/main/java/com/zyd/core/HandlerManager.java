@@ -2,7 +2,7 @@ package com.zyd.core;
 
 import java.util.HashMap;
 
-import com.zyd.core.housing.HousingHandler;
+import com.zyd.core.housing.HouseHandler;
 
 public class HandlerManager {
 
@@ -11,7 +11,7 @@ public class HandlerManager {
 
     private HandlerManager() {
         mapping = new HashMap<String, Handler>();
-        mapping.put("housing", new HousingHandler());
+        mapping.put("housing", new HouseHandler());
     }
 
     public static HandlerManager getInstance() {

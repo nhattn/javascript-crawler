@@ -286,6 +286,25 @@ public class Utils {
         }
     }
 
+    public static void castValues(Map<String, Object> map, String key, Class clazz) {
+        String s = (String) map.get(key);
+        if (s == null || s.trim().length() == 0)
+            return;
+        if (clazz.equals(Integer.class)) {
+            map.put(key, Integer.parseInt(s));
+        } else if (clazz.equals(Long.class)) {
+            map.put(key, Long.parseLong(s));
+        } else if (clazz.equals(Float.class)) {
+            map.put(key, Float.parseFloat(s));
+        } else if (clazz.equals(Double.class)) {
+            map.put(key, Double.parseDouble(s));
+        } else if (clazz.equals(Date.class)) {
+            map.put(key, Long.parseLong(s));
+        } else {
+            throw new UnsupportedOperationException("not supported class " + clazz);
+        }
+    }
+
     public static void main(String[] args) {
         Book b = new Book();
         b.setName("ÎÒµÄÃû×Ö");
@@ -300,4 +319,6 @@ public class Utils {
 
         System.out.println(parseDate("09-10-13 13:57"));
     }
+    
+    
 }

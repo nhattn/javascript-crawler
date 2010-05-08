@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 
 import com.zyd.Config;
 
-public class JavascriptFilter implements Filter {
+public class ServiceEncodingFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         res.setCharacterEncoding(Config.ENCODING_OUT_GOING_CONTENT);

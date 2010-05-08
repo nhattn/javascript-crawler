@@ -1,20 +1,20 @@
 
 use crawler;
 
-drop table housing;
+drop table house;
 
-create table housing(
-	id					bigint,
-	lo					float,	
-	la					float,
+create table house(
+	id					 bigint NOT NULL AUTO_INCREMENT,
+	lo					double,
+	la					double,
 	rentalType 			tinyint,
-	subRentalType       varchar(10),
+	subRentalType        varchar(10),
 	price		        float,
 	paymentType	        varchar(10),
 	priceUit            varchar(10),
-	size                varchar(10);
-	houseType           varchar(30)
-    createTime			datetime,
+	size                varchar(10),
+	houseType           varchar(30),
+ 	createTime          datetime,
 	address             varchar(200),
 	district1           varchar(20),
 	district3           varchar(20),
@@ -28,5 +28,6 @@ create table housing(
 	totalFloor			tinyint,
 	isAgent				tinyint,
 	equipment			varchar(100),
-	decoration			varchar(20)
-)
+	decoration			varchar(20),
+ PRIMARY KEY (id)
+);

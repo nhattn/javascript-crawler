@@ -74,8 +74,11 @@ Crawler = {
             }    	    
     	    case 'Goto.Next.Link': {
     	        // request a new link then go to that link
-    	        var url = Crawler.serverUrl + '/service/link?action=redirect';    	        
-    	        window.location = url;
+    	        var url = Crawler.serverUrl + '/service/link?action=redirect';
+    	        setTimeout(function(){
+    	        	window.location = url;
+    	        }, CrGlobal.NextLinkWaitTime);
+    	        
     	        // must return here, or there will be loops.
     	        return;
     	    }

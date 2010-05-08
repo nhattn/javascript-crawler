@@ -11,9 +11,10 @@ HandlerHelper = {
 	 * do after server returned response code.
 	 * 
 	 */
-	storeLinks : function(linkArray, nextAction) {
+	storeLinks : function(linkArray, nextAction) {	
 		if (!linkArray || linkArray.length == 0) {
-			Crawler.nextLink();
+			Crawler.error('HandlerHelper.storeLinks-no link to store, will go to next page.');
+//			Crawler.nextLink();
 			return;
 		}
 
@@ -26,7 +27,6 @@ HandlerHelper = {
 				var obj = Ext.util.JSON.decode(r.responseText);
 				if (obj.result == 0) {
 					Crawler.nextLink();
-					Crawler.action(nextAction);
 				} else {
 					Crawler.action(nextAction);
 				}
@@ -34,8 +34,7 @@ HandlerHelper = {
 				Crawler.error('HandlerHelper:' + e + ':' + r.responseText);
 				Crawler.nextLink();
 			}
-		};
-
+		};		
 		CrUtil.postData(data, CrGlobal.StoreLinkUrl, function(r, suc) {
 			callback(r, suc);
 		});

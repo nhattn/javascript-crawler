@@ -5,10 +5,10 @@ CrGlobal = {
 
 	/* this is relative to the current context */
 	handlerPath : '/js/handler',
-	doAction : true,
-	 doAction : false,
+//	doAction : true,
+	doAction : false,
 
-	NextLinkWaitTime : 5 * 1000,
+	NextLinkWaitTime : 3 * 1000,
 	ParameterName_AppId : 'appid',
 	HousingAppId : 'housing',
 

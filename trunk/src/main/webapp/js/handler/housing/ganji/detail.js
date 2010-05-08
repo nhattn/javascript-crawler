@@ -1,16 +1,19 @@
 function handlerProcess(){
-	//CrUtil.removeFrames(document);     
+	CrUtil.removeFrames(document);     
     var obj = {}, xpath, s , reg = HandlerHelper.getRegGroupFirstValue, t;	
 	s = XPath.single(document,"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent.toString().replace(/:\s*\n\s*/g,':');
 	var s2 = s;		
-	obj.size = reg(s, /面积:\s*(\S*)/); 	 
+	obj.size = reg(s, /面积:\s*(\S*)/);
+	if(!parseInt(obj.size)){
+		delete obj.size;
+	}
 	obj.district5 = reg(s, /小区:\s*(.*)/);
 	obj.address =  reg(s, /地址:\s*(.*)/);	
 	obj.equipment =  reg(s, /配置:\s*(.*)/);
 		
 	t = reg(s, /楼层:\s*(.*)/);
 	obj.floor = reg(t, /([0-9]+)/);
-	obj.totalFloor = reg(t, /[0-9]+.+([0-9]+)/);
+	obj.totalFloor = reg(t, /总([0-9]+)层/);
 	
 	t = reg(s, /区域:\s*(.*\n.*)/);
 	t = t.split('-');
@@ -32,18 +35,18 @@ function handlerProcess(){
 	if(!obj.paymentType){		
 		obj.paymentType = reg(t, /（(.*)）/);		
 	}
-	
-	
-console.log(obj);
+		
 	t = reg(s2, /房型:\s*(.+)\s*/);
 	if(!t)
-		t = reg(s2, /户型:\s*(.+)\s*/);	
-	t = t.split('-');	
-	if(t.length!=2){
-		alert('error 1200120');
+		t = reg(s2, /户型:\s*(.+)\s*/);
+	if(t){			
+		t = t.split('-');	
+		if(t.length!=2){
+			alert('error 1200120');
+		}
+		obj.subRentalType = t[0].trim();
+		obj.houseType = t[1].trim();
 	}
-	obj.subRentalType = t[0].trim();
-	obj.houseType = t[1].trim();
 	
 	//详细描述
 	xpath = "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//p";
@@ -87,7 +90,7 @@ console.log(obj);
 		}
 	}
 	
-	obj[CrGlobal.ParameterName_AppId] = CrGlobal.HousingAppId;	
-    console.log(obj);   
-    HandlerHelper.postObject(obj);
+	obj[CrGlobal.ParameterName_AppId] = CrGlobal.HousingAppId;
+	console.log(obj);	    
+    HandlerHelper.postObject(obj, {action:'Goto.Next.Link'});
 }

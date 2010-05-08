@@ -13,8 +13,9 @@ Crawler = {
 	    Crawler.clog(txt);
 	},
 	error: function(txt){
-	    Crawler.clog('Error: '+txt);	    	    
-	    //alert(txt);
+	    Crawler.clog('Error: '+txt);
+	    CrGlobal.doAction = false;
+	    alert(txt);
 	},
 	
 	objToString : function(obj){
@@ -47,12 +48,14 @@ Crawler = {
 	    }	    	    
 	    switch(obj.action){
     	    case 'Eval.XPath.Link.Href' :{
+    	    	alert(111);
     	        // xpath should point to the A node, will take out the href
     	        var link = XPath.single(null, obj.param1);
-    	        if(!link){
+    	        if(!link || !link.href){
     	            Crawler.error("Error, can not locate link for XPath: "+obj.param1);    	            
     	        }else{  
-    	           try{
+    	           try{    	        	
+    	        	   alert(link.href);
     	               eval(link.href);
     	               processed = true;
     	           }catch(e){
@@ -84,7 +87,7 @@ Crawler = {
     	    }
     	    case 'No.Action' : {    	        
     	        break;
-    	    }    	   
+    	    }    	    
 	    }//end switch
 	    if(!processed){
 	        Crawler.log("Crawler.action: Goto next link by default.");

@@ -5,14 +5,13 @@ CrGlobal = {
 
 	/* this is relative to the current context */
 	handlerPath : '/js/handler',
-	// doAction : true,
-	doAction : false,
-	
-	
+	doAction : true,
+	 doAction : false,
+
+	NextLinkWaitTime : 5 * 1000,
 	ParameterName_AppId : 'appid',
 	HousingAppId : 'housing',
-	
-	
+
 	setup : function() {
 		CrGlobal.StoreLinkUrl = CrGlobal.serverUrl + '/service/link';
 		CrGlobal.ObjectCreationUrl = CrGlobal.serverUrl + '/service/object';

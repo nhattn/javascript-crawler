@@ -1,74 +1,53 @@
-function handlerProcess(){   
-	CrUtil.removeFrames(document);  
-    var info={
-        nextLinkPath: "/html/body/div[4]/div[1]/div[@id='infoBox2']/div[@id='box4']/div/div/span[@id='bt_1']/a",
-        mapping : [        
-    		{name:'subRentalType', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[4]/dl[1]/dd",
-                param2: /(\S+) -/i
-            },        
-            {name:'price', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[1]/dl/dd/span"
-            },
-            {name:'priceUnit', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[1]/dl/dd/text()",
-                param2: /(\S+)\//i
-            },   
-            {name:'size', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[1]/dl/dd/span"
-            },
-            {name:'houseType', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[4]/dl[1]/dd",
-                param2: /- (\S+)/i
-            },
-            {name:'address', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[3]/dl[2]/dd"
-            },
-            {name:'district1', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[3]/dl[1]/dd/a[1]"
-            },
-	 		{name:'district3', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[3]/dl[1]/dd/a[2]"
-            },
-            {name:'district5', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[2]/dl[2]/dd"
-            },
-            {name:'contact', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[3]//span[1]"                        
-            },
-			{name:'description1', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/div[1]/h1"
-            },			       
-            {name:'equipment', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[6]/dl/dd"
-            },
-            {name:'decoration', op:'xpath.textcontent.regex',                         
-                param1:"/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[4]/dl[2]/dd"
-            },                                   
-            {name:'url', op:'assign.value',  param1:window.location.toString()}
-            /*,
-            {name:'time', op:'xpath.textcontent.regex',                         
-                param1:""
-            },
-            {name:'photo', op:'xpath.textcontent.regex',                         
-                param1:""
-            },         
-			{name:'floor', op:'xpath.textcontent.regex',                         
-                param1:""
-            },   
-            {name:'isAgent', op:'xpath.textcontent.regex',                         
-                param1:""
-            },*/            
-        ]
-    };
-    var obj = HandlerHelper.parseObject(info.mapping);
-    
-    var paymentTypePath = "/html/body/div[@id='wrapper2']/div[1]/div[1]/ul[1]/li[1]/dl/dd";    			           
-    var s = HandlerHelper.extractFromXpathNodeText(paymentTypePath);
-    obj.paymentType = HandlerHelper.getRegGroupFirstValue(s, /[\(|（](\S+)[\)|）]/);
-
-	var desc2Path = "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//p";
-	var arr = XPath.array(document, desc2Path), buf=[];	
+function handlerProcess(){
+	//CrUtil.removeFrames(document);     
+    var obj = {}, xpath, s , reg = HandlerHelper.getRegGroupFirstValue, t;	
+	s = XPath.single(document,"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent.toString().replace(/:\s*\n\s*/g,':');
+	var s2 = s;		
+	obj.size = reg(s, /面积:\s*(\S*)/); 	 
+	obj.district5 = reg(s, /小区:\s*(.*)/);
+	obj.address =  reg(s, /地址:\s*(.*)/);	
+	obj.equipment =  reg(s, /配置:\s*(.*)/);
+		
+	t = reg(s, /楼层:\s*(.*)/);
+	obj.floor = reg(t, /([0-9]+)/);
+	obj.totalFloor = reg(t, /[0-9]+.+([0-9]+)/);
+	
+	t = reg(s, /区域:\s*(.*\n.*)/);
+	t = t.split('-');
+	if(t.length==1){
+		obj.district1 = t[0].trim();
+	}else if(t.length==2){	
+		obj.district1 = t[0].trim(); 
+		obj.district3 = t[1].trim();
+	}else{
+		alert('error 1200111');
+	}
+	
+	
+	t = reg(s,/租金:\s*(.*)/).trim();	
+	obj.price = reg(t, /(\S+)/);
+//	obj.priceUnit = reg(t, /[\S+]\s+(\S+)[（|\(]?/);
+	obj.priceUnit = '元/月';
+	obj.paymentType = reg(t, /\((.*)\)/);	
+	if(!obj.paymentType){		
+		obj.paymentType = reg(t, /（(.*)）/);		
+	}
+	
+	
+console.log(obj);
+	t = reg(s2, /房型:\s*(.+)\s*/);
+	if(!t)
+		t = reg(s2, /户型:\s*(.+)\s*/);	
+	t = t.split('-');	
+	if(t.length!=2){
+		alert('error 1200120');
+	}
+	obj.subRentalType = t[0].trim();
+	obj.houseType = t[1].trim();
+	
+	//详细描述
+	xpath = "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//p";
+	var arr = XPath.array(document, xpath), buf=[];	
 	for(var i=0;i<arr.length;i++){
 		var p = arr[i];				
 		if(!p.className || p.className.indexOf('text')>=0){			
@@ -76,17 +55,39 @@ function handlerProcess(){
 		} 		
 	}
 	obj.description2 = buf.join(' ');
-	
-	var telPath = "/html/body/div[@id='wrapper2']/div[1]/div[2]/ul/li[2]";
-	var node = XPath.single(document, telPath), tel='';
+			
+	// 电话			
+	xpath = "/html/body/div[@id='wrapper2']/div[1]/div[2]/ul/li[2]";
+	var node = XPath.single(document, xpath), tel='';
 	if(node.children && node.children.length !=0){
 		tel = CrUtil.encodeImage(node.children[0]);
 	}else{	
 		tel = node.textContent;
 	}
 	obj.tel = tel;		
-	obj[CrGlobal.ParameterName_AppId] = CrGlobal.HousingAppId;
-    console.log(obj);
-    
+	
+	// GPS
+	var lonlatUrl = null;
+	if(window.write_frame){
+		lonlatUrl = window.write_frame.toString();
+		window.write_frame = function(){};
+	}else{
+		lonlatUrl = document.getElementById('traffic_iframe');
+		if(lonlatUrl){
+			lonlatUrl = lonlatUrl.src;
+		}		
+	}	
+	if(lonlatUrl){
+		var i = lonlatUrl.indexOf('latlng=');	
+		if(i!=-1){
+			var j = lonlatUrl.indexOf('&',i);
+			lonlatUrl = lonlatUrl.substring(i+7, j).split(',');
+			obj.lo=lonlatUrl[0];
+			obj.la=lonlatUrl[1];
+		}
+	}
+	
+	obj[CrGlobal.ParameterName_AppId] = CrGlobal.HousingAppId;	
+    console.log(obj);   
     HandlerHelper.postObject(obj);
 }

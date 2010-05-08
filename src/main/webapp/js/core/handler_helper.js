@@ -36,7 +36,7 @@ HandlerHelper = {
 			}
 		};
 
-		Crawler.postData(data, CrGlobal.StoreLinkUrl, function(r, suc) {
+		CrUtil.postData(data, CrGlobal.StoreLinkUrl, function(r, suc) {
 			callback(r, suc);
 		});
 	},
@@ -48,7 +48,7 @@ HandlerHelper = {
     postObject: function(params, nextAction) {
         var callback = function(r, suc) {        
             if (!suc) {
-                Crawler.error("HandlerHelp:postObject:" + r.responseText);
+                Crawler.error("HandlerHelper:postObject:" + r.responseText);
                 Crawler.nextLink();
                 return;
             }
@@ -171,6 +171,5 @@ HandlerHelper = {
             // return 'Can not match:'+s+':'+r;
             return '';
         }
-    },	
-	
+    }	
 }

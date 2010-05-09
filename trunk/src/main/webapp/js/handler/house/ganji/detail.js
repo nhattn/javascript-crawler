@@ -23,7 +23,7 @@ function handlerProcess(){
 		obj.district1 = t[0].trim(); 
 		obj.district3 = t[1].trim();
 	}else{
-		alert('error 1200111');
+		Crawler.error('house.detail - wrong number of parameter for 区域, raw text is : '+ t);
 	}
 	
 	
@@ -41,11 +41,12 @@ function handlerProcess(){
 		t = reg(s2, /户型:\s*(.+)\s*/);
 	if(t){			
 		t = t.split('-');	
-		if(t.length!=2){
-			alert('error 1200120');
+		if(t.length<2){
+			Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : '+ t);
+		}else{
+			obj.subRentalType = t[0].trim();
+			obj.houseType = t[1].trim();
 		}
-		obj.subRentalType = t[0].trim();
-		obj.houseType = t[1].trim();
 	}
 	
 	//详细描述
@@ -90,7 +91,7 @@ function handlerProcess(){
 		}
 	}
 	
-	obj[CrGlobal.ParameterName_AppId] = CrGlobal.HousingAppId;
+	obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 	console.log(obj);	    
     HandlerHelper.postObject(obj, {action:'Goto.Next.Link'});
 }

@@ -1,22 +1,24 @@
-package com.zyd.core.housing;
+package com.zyd.core.objecthandler;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
-import com.zyd.core.Handler;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
 
-public class HouseHandler implements Handler {
+public class House extends Handler {
 
     public String getName() {
-        return "housing";
+        return "House";
     }
 
-    public Object process(HashMap<String, Object> values) {
+    @SuppressWarnings("unchecked")
+    public Object process(HashMap values) {
         String tel = (String) values.get(Columns.Tel);
         if (tel != null && tel.length() > 100) {
             values.put(Columns.Tel, Utils.ocrImageNumber(tel).trim());
@@ -30,17 +32,59 @@ public class HouseHandler implements Handler {
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.save("House", values);
+        session.save(getName(), values);
         session.getTransaction().commit();
         return true;
     }
 
-    public List load(HashMap<String, String> params) {
+    public List load(HashMap params) {
+        Object[] defaults = new Object[] { null, null };
+
+        Object[] los = defaults;
+        String s = (String) params.get("lo");
+        if (s != null && s.trim().length() != 0) {
+            los = Utils.parseRangeObject(s, Double.class);
+        }
+        Object[] las = defaults;
+        s = (String) params.get("la");
+        if (s != null && s.trim().length() != 0) {
+            las = Utils.parseRangeObject(s, Double.class);
+        }
+        List result = queryHouse((los[0] == null ? -1d : (Double) los[0]), (los[1] == null ? -1d : (Double) los[1]), (las[0] == null ? -1d : (Double) las[0]),
+                (las[1] == null ? -1d : (Double) las[1]), -1d, -1d, null, null, -1, -1, null, null);
+        return result;
+    }
+
+    private List queryHouse(double loFrom, double loTo, double laFrom, double laTo, double priceFrom, double priceTo, Date createTimeFrom, Date createTimeTo, int limitFrom, int limitTo,
+            String orderBy, String orderDirection) {
+        /**
+         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from " + getName()).list();
+        session.getTransaction().commit();
+        
+         */
+        List r = null;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        List result = session.createQuery("from House").list();
+        Criteria c = session.createCriteria(getName());
+        if (loFrom != -1) {
+            c.add(Restrictions.ge(Columns.Long, loFrom));
+        }
+        if (loTo != -1) {
+            c.add(Restrictions.le(Columns.Long, loTo));
+        }
+
+        if (laFrom != -1) {
+            c.add(Restrictions.ge(Columns.Lat, laFrom));
+        }
+        if (laTo != -1) {
+            c.add(Restrictions.le(Columns.Lat, laTo));
+        }
+
+        r = c.list();
         session.getTransaction().commit();
-        return result;
+        return r;
     }
 
     final static class Columns {
@@ -68,6 +112,16 @@ public class HouseHandler implements Handler {
         public final static String IsAgent = "isAgent";
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
+    }
+
+    @Override
+    public int deleteAll() {
+        final String deleteAll = "delete from " + getName();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        int r = session.createQuery(deleteAll).executeUpdate();
+        session.getTransaction().commit();
+        return r;
     }
 
 }

@@ -33,6 +33,8 @@
 	</bean>
 	<bean id="jsonMapper" class="com.zyd.core.busi.JsonMapper">
 	</bean>
+	<bean id="objectManager" class="com.zyd.core.objecthandler.ObjectManager">
+	</bean>
 
 	<bean id="bookManager" class="com.zyd.core.busi.BookManager">
 		<property name="bookDao" ref="bookDao" />
@@ -53,6 +55,7 @@
 		<property name="jsonMapper" ref="jsonMapper" />
 		<property name="siteManager" ref="siteManager" />
 		<property name="linkManager" ref="linkManager" />
+		<property name="objectManager" ref="objectManager" />
 	</bean>
 
 </beans>

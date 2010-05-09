@@ -3,6 +3,7 @@ package com.zyd.web;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,20 +46,8 @@ public class ServiceBase {
         resp.getWriter().write(msg);
     }
 
-    private static Map<String, String> ResponseTypes;
-    static {
-        ResponseTypes = new HashMap<String, String>();
-        ResponseTypes.put("html", "text/html; charset=GBK");
-        ResponseTypes.put("xml", "application/xhtml+xml; charset=GBK");
-        ResponseTypes.put("js", "application/javascript; charset=GBK");
-        ResponseTypes.put("text", "text/plain; charset=GBK");
-    }
-
     /**
-     * 
-     * @param type
-     *            one of "html", "xml", "js", "text"
-     * @param resp
+     * @param type one of "html", "xml", "js", "text"     
      */
     protected void setResponseType(String type, HttpServletResponse resp) {
         String types = ResponseTypes.get(type);
@@ -90,5 +79,33 @@ public class ServiceBase {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static HashMap<String, String> requestParameterToMap(HttpServletRequest req) {        
+        HashMap<String, String> values = new HashMap<String, String>();
+        Enumeration<String> names = req.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = req.getParameter(name);
+            if (value == null) {
+                continue;
+            }
+            value = value.trim();
+            if (value.length() == 0) {
+                continue;
+            }
+            values.put(name, value);
+        }
+        return values;
+    }
+
+    private static Map<String, String> ResponseTypes;
+    static {
+        ResponseTypes = new HashMap<String, String>();
+        ResponseTypes.put("html", "text/html; charset=GBK");
+        ResponseTypes.put("xml", "application/xhtml+xml; charset=GBK");
+        ResponseTypes.put("js", "application/javascript; charset=GBK");
+        ResponseTypes.put("text", "text/plain; charset=GBK");
     }
 }

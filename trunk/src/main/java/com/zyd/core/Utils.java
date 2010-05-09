@@ -286,7 +286,8 @@ public class Utils {
         }
     }
 
-    public static void castValues(Map<String, Object> map, String key, Class clazz) {
+    @SuppressWarnings("unchecked")
+    public static void castValues(Map map, String key, Class clazz) {
         String s = (String) map.get(key);
         if (s == null || s.trim().length() == 0)
             return;
@@ -305,6 +306,72 @@ public class Utils {
         }
     }
 
+    /**
+     * s is an '-' separated string , like "12.33-31.22" or "-12.00" or "21.0-"
+     * clazz is what type of class to try to parse s to.
+     * 
+     * @param s
+     * @param clazz
+     * @return an array of objects that has two elements, if neither is missing, will be null, or -1 for
+     * primitive types. or null if there s is invalid or blank.
+     */
+    public static Object[] parseRangeObject(String s, Class clazz) {
+        if (s == null || s.indexOf('-') == -1) {
+            System.err.println("Invalid range:" + s);
+            return null;
+
+        }
+        int i = s.indexOf('-');
+        String s1 = null, s2 = null;
+        if (i == 0) {
+            s2 = s.substring(1);
+        } else if (i == s.length() - 1) {
+            s1 = s.substring(0, s.length() - 1);
+        } else {
+            s1 = s.substring(0, i);
+            s2 = s.substring(i + 1);
+        }
+
+        if (clazz.equals(Integer.class)) {
+            Integer[] r = new Integer[] { -1, -1 };
+            if (s1 != null) {
+                r[0] = Integer.parseInt(s1);
+            }
+            if (s2 != null) {
+                r[1] = Integer.parseInt(s2);
+            }
+            return r;
+        }
+
+        if (clazz.equals(Double.class)) {
+            Double[] r = new Double[] { -1d, -1d };
+            if (s1 != null) {
+                r[0] = Double.parseDouble(s1);
+            }
+            if (s2 != null) {
+                r[1] = Double.parseDouble(s2);
+            }
+            return r;
+        }
+
+        if (clazz.equals(Date.class)) {
+            Date[] r = new Date[] { null, null };
+            try {
+                if (s1 != null) {
+                    r[0] = Config.DATEFORMAT_DEFAULT.parse(s1);
+                }
+                if (s2 != null) {
+                    r[1] = Config.DATEFORMAT_DEFAULT.parse(s2);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return r;
+        }
+
+        return null;
+    }
+
     public static void main(String[] args) {
         Book b = new Book();
         b.setName("ÎÒµÄÃû×Ö");
@@ -319,6 +386,5 @@ public class Utils {
 
         System.out.println(parseDate("09-10-13 13:57"));
     }
-    
-    
+
 }

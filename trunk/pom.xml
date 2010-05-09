@@ -101,5 +101,21 @@
 			<artifactId>ocr</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tj.common</groupId>
+			<artifactId>common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xerces</artifactId>
+			<version>2.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -1,6 +1,7 @@
 package com.zyd;
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 
 public class Config {
     public final static String Host = "localhost:8080";
@@ -10,17 +11,17 @@ public class Config {
 
     public final static String Encoding = Charset.defaultCharset().toString();
     public final static String Encoding_DB = "ISO-8859-1";
-    public final static String NAME_APP_PARAMETER = "appid";
-
-    /**
-     * the encoding default request will be using if it doesn't specify a encoding.
-     */
-    public final static String ENCODING_DEFAULT_INCOMING_REQUEST = "ISO-8859-1";
+    public final static String PARAMETER_NAME_OBJECT_ID = "objectid";
 
     /**
      * the encoding all outgoing content will be using, including xml/js/html 
      */
     public final static String ENCODING_OUT_GOING_CONTENT = "GBK";
+    /**
+     * if incoming request doesn't specify an encoding.
+     */
+    public final static String ENCODING_INCOMING_CONTENT = "GBK";
     public static String IdlePageUrl = ServerUrl + "/html/wait.html";
 
+    public final static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
 }

@@ -1,7 +1,6 @@
 package com.zyd.web.service;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -10,17 +9,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.Config;
-import com.zyd.core.HandlerManager;
 import com.zyd.core.busi.LinkManager;
+import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
+@SuppressWarnings("unchecked")
 public class object extends ServiceBase {
     private LinkManager linkManager;
+    private ObjectManager objectManager;
 
     public object() {
         linkManager = (LinkManager) SpringContext.getContext().getBean("linkManager");
+        objectManager = (ObjectManager) SpringContext.getContext().getBean("objectManager");
     }
 
     /**
@@ -32,63 +33,32 @@ public class object extends ServiceBase {
      * {
      *  result: 'true'/'false'
      * }
-     * 
-     * 
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        setResponseType("js", resp);
         String referer = req.getHeader("Referer");
-        if (referer != null && linkManager.isLinkProcessed(referer)==true) {
-            setResponseType("js", resp);
+        if (referer != null && linkManager.isLinkProcessed(referer) == true) {
             output(RESULT_NO_CHANGE, resp);
-            return;
-        }
-        setResponseType("js", resp);
-        HashMap<String, Object> values = new HashMap<String, Object>();
-        Enumeration<String> names = req.getParameterNames();
-
-        while (names.hasMoreElements()) {
-            String name = names.nextElement();
-            String value = req.getParameter(name);
-            if (value == null) {
-                continue;
+        } else {
+            HashMap values = requestParameterToMap(req);
+            boolean result = (Boolean) objectManager.create(values);
+            if (result == false) {
+                //TODO: what to do if it's not added
             }
-            value = value.trim();
-            if (value.length() == 0) {
-                continue;
-            }
-            values.put(name, value);
-        }
-
-        boolean result = (Boolean) HandlerManager.getInstance().getHandler((String) values.get(Config.NAME_APP_PARAMETER)).process(values);
-        if (result) {
             linkManager.linkProcessed(referer);
+            output(RESULT_CHANGE, resp);
         }
-        setResponseType("js", resp);
-        output(RESULT_CHANGE, resp);
     }
 
+    /**
+     * TODO if there is no result how to notify
+     */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String app = req.getParameter(Config.NAME_APP_PARAMETER);
-        HashMap<String, String> params = new HashMap<String, String>();
-        Enumeration<String> names = req.getParameterNames();
-
-        while (names.hasMoreElements()) {
-            String name = names.nextElement();
-            String value = req.getParameter(name);
-            if (value == null) {
-                continue;
-            }
-            value = value.trim();
-            if (value.length() == 0) {
-                continue;
-            }
-            params.put(name, value);
-        }
-        List objects = HandlerManager.getInstance().getHandler(app).load(params);
-        //        resp.getWriter().write(toXmlString(objects));
         resp.setContentType("text/xml");
+        HashMap params = requestParameterToMap(req);
+        List objects = objectManager.query(params);
         resp.getWriter().write(toXmlString(objects));
     }
 

@@ -54,6 +54,16 @@ CrUtil = {
 			method : 'POST',
 			params : params
 		});
+	},
+	getAjaxReponseErrorString: function(r){
+		if(r.responseText){
+			return 'Server raw reponse : \n'+r.responseText;
+		}else{
+			var s = ['Ajax state :'];
+			for(var i in r){
+				s.push(i+' = '+r[i]);
+			}
+			return s.join('\n');
+		}
 	}
-	
 }

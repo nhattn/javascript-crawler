@@ -3,14 +3,12 @@ CrGlobal = {
 	serverUrl : 'http://localhost:8080/crawler',
 	extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
 
-	/* this is relative to the current context */
 	handlerPath : '/js/handler',
 //	doAction : true,
 	doAction : false,
-
 	NextLinkWaitTime : 3 * 1000,
-	ParameterName_AppId : 'appid',
-	HousingAppId : 'housing',
+	ParameterName_ObjectId : 'objectid',	
+	HouseObjectId : 'House',
 
 	setup : function() {
 		CrGlobal.StoreLinkUrl = CrGlobal.serverUrl + '/service/link';
@@ -51,7 +49,7 @@ var jsToLoad = [ CrGlobal.extFile, CrGlobal.serverUrl + '/js/core/crawler.js',
 		CrGlobal.serverUrl + '/js/core/handler_helper.js',
 		CrGlobal.serverUrl + '/js/core/xpath.js',
 		CrGlobal.serverUrl + '/js/core/util.js',
-		CrGlobal.serverUrl + '/js/mapping/housing.js',
+		CrGlobal.serverUrl + '/js/mapping/house.js',
 		CrGlobal.serverUrl + '/js/core/kickoff.js' ];
 
 CrGlobal.chainLoad(jsToLoad);

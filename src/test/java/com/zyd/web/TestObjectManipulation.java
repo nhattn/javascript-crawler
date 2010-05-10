@@ -63,7 +63,8 @@ public class TestObjectManipulation extends TestCase {
                 if (changableValues.contains(k) == true) {
                     nv.put(s, i + " -- " + value);
                 } else if ("lo".equals(s) || "la".equals(s)) {
-                    nv.put(s, Double.toString(Double.parseDouble(value) + CommonTestUtil.nextInt(10) + CommonTestUtil.randomDouble()));
+                    //nv.put(s, Double.toString(Double.parseDouble(value) + CommonTestUtil.nextInt(10) + CommonTestUtil.randomDouble()));
+                    nv.put(s, (double) i);
                 } else {
                     nv.put(k, value);
                 }

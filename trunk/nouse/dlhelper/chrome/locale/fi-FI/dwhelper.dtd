@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Ohje">
+<!ENTITY menu.manual-check "Tarkista URL">
+<!ENTITY menu.preferences "Asetukset...">
+<!ENTITY menu.about "Tietoja...">
+<!ENTITY label.download-one-by-one "Lataa yksitellen">
+<!ENTITY label.storagedir "Tallennushakemisto">
+<!ENTITY button.changedir "Vaihda hakemistoa">
+<!ENTITY error.nohome "Kotihakemistoa ei ole olemassa">
+<!ENTITY error.notadirectory "ei ole hakemisto">
+<!ENTITY title.preferences "Asetukset">
+<!ENTITY title.about "Tietoja DownloadHelperista">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "Valikkomerkinnän vanhentuminen (ms)">
+<!ENTITY label.icon-animation "Kuvakkeen animointi">
+<!ENTITY menu.ytlinks "Lataa videoita YouTuben link(e)istä">
+<!ENTITY label.download-mode "Lataustapa">
+<!ENTITY label.download-mode.normal "Normaali">
+<!ENTITY label.download-mode.onebyone "Yksitellen">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Tekijät">
+<!ENTITY title.general "Yleiset">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "MediaLink -toiminto sallii ladata tiedostoja HTML-sivuilta">
+<!ENTITY button.add "Lisää">
+<!ENTITY button.default "Oletus">
+<!ENTITY button.remove "Poista">
+<!ENTITY label.file-extensions "Tiedostomuodot">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "MediaReq -toiminto tutkii lähtevän HTTP-pyynnön tarkistaakseen, onko se mediatiedosto">
+<!ENTITY title.support-dev "Avusta DownloadHelperin työryhmää">
+<!ENTITY label.donate-not-again "Älä häiritse minua tällä enää">
+<!ENTITY label.donate "Lahjoita">
+<!ENTITY label.cancel "Peruuta">
+<!ENTITY label.congratulations "Onnittelut!">
+<!ENTITY label.keep-spaces "Jätä välilyönnit tiedostojen nimiin">
+<!ENTITY title.sites "DownloadHelperin mediasivustot">
+<!ENTITY button.sites.close "Sulje">
+<!ENTITY button.sites.open "Avaa">
+<!ENTITY button.sites.report "Ilmoita uudesta sivusta">
+<!ENTITY column.sites.name "Nimi">
+<!ENTITY column.sites.rating "Arvosana">
+<!ENTITY column.sites.count "Kommentteja">
+<!ENTITY column.sites.date "Lisätty">
+<!ENTITY column.sites.url "Osoite">
+<!ENTITY button.site.close "Sulje">
+<!ENTITY label.site.name "Nimi">
+<!ENTITY caption.site.site "Mediasivusto">
+<!ENTITY title.site "Mediasivusto">
+<!ENTITY label.site.url "Osoite">
+<!ENTITY label.site.date "Lisätty">
+<!ENTITY label.site.rating "Arvosana">
+<!ENTITY label.site.no-rating "Ei vielä">
+<!ENTITY button.site.check "Tarkista sivu">
+<!ENTITY button.site.comment "Lisää kommentti">
+<!ENTITY label.comment.site "Sivu">
+<!ENTITY title.comment "Kommentti">
+<!ENTITY caption.comment.comment "Lisää kommentti">
+<!ENTITY label.comment.author "Nimimerkki">
+<!ENTITY help.comment.author "Nimesi tai nimimerkkisi">
+<!ENTITY label.comment.title "Otsikko">
+<!ENTITY help.comment.title "Kommentin otsikko">
+<!ENTITY label.comment.comment "Kommentti">
+<!ENTITY help.comment.comment "Tyhjät rivit erottavat kappaleet toisistaan">
+<!ENTITY label.comment.tags "Avainsanat">
+<!ENTITY help.comment.tags "Välilyönnillä erotettuja asiaankuuluvia avainsanoja (esim. 'uutiset afrikka', tai 'aikuiset')">
+<!ENTITY label.comment.rating "Arvosana">
+<!ENTITY help.comment.rating "0 = ei kiinnostusta, 5 = mahtava sivu">
+<!ENTITY button.comment.close "Sulje">
+<!ENTITY button.comment.submit "Lähetä kommentti">
+<!ENTITY label.comment.wait "Kommenttisi lähetetään pian. Odota hetki...">
+<!ENTITY title.report "Ilmoita uudesta sivusta">
+<!ENTITY caption.report.report "Ilmoita uudesta toimivasta sivusta">
+<!ENTITY message.report.check-new "Muista, että sivu ei saa esiintyä &quot;Tuetut sivut&quot; -listalla">
+<!ENTITY label.report.name "Sivun nimi">
+<!ENTITY help.report.name "Yleisessä käytössä oleva nimi sivulle, esim. YouTube">
+<!ENTITY label.report.url "Sivun osoite">
+<!ENTITY help.report.url "Sivun osoite, esim. http://www.youtube.com">
+<!ENTITY label.report.author "Nimesi">
+<!ENTITY help.report.author "Henkilön nimi, joka lähetti ilmoituksen. Voit jättää tyhjäksi.">
+<!ENTITY label.report.description "Kuvaus">
+<!ENTITY help.report.description "Lyhyt kuvaus, mitä tältä sivulta on löydettävissä">
+<!ENTITY button.report.submit "Lähetä ilmoitus">
+<!ENTITY button.report.close "Sulje">
+<!ENTITY label.report.wait "Sivuilmoitusta lähetetään. Odota hetki...">
+<!ENTITY menu.sites "Tuetut sivut">
+<!ENTITY label.sites.list-adult "Näytä sivut, joissa on aikuisille suunnattua sisältöä">
+<!ENTITY label.report.adult "Sivu sisältää aikuisille suunnattua sisältöä">
+<!ENTITY label.context-menu "Näytä kontekstivalikossa">
+<!ENTITY menu.to-sumo "Lähetä video SUMO.tv:n">
+<!ENTITY label.enable-plugin-method "Käytä 'plugin signature' -toimintoa">
+<!ENTITY label.yt-unmodified-filename "Säilytä YouTuben tiedostonimet (CJK)">
+<!ENTITY label.disable-dwcount-cookie "Poista latauslaskurin evästeet käytöstä">
+<!ENTITY column.sites.duration "Kiinnostavuus">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight käytössä">
+<!ENTITY label.mediaweight-threshold "Mediakoon vähimmäisarvo">
+<!ENTITY label.enable-medialink-method "MediaLink käytössä">
+<!ENTITY mediaweight.description "The MediaWeight method examines HTTP responses to decide if it is a media file based on the document size">
+<!ENTITY title.history "Historia">
+<!ENTITY title.download-queue "Latausjono">
+<!ENTITY column.media-url "Median URL">
+<!ENTITY column.source-url "Lähteen URL">
+<!ENTITY column.view-date "Näytä päivämäärä">
+<!ENTITY column.file-name "Tiedostonimi">
+<!ENTITY title.histlist "Historia">
+<!ENTITY label.histlist-enabled "Historia käytössä (beta)">
+<!ENTITY label.histlist-clearonexit "Tyhjennä historia poistuttaessa">
+<!ENTITY button.medialist.watch "Katso">
+<!ENTITY button.medialist.download "Lataa">
+<!ENTITY button.medialist.more "Lisää">
+<!ENTITY button.medialist.go-source "Vieraile lähdesivulla">
+<!ENTITY button.medialist.remove "Poista">
+<!ENTITY button.remove-downloads "Poista valitut">
+<!ENTITY history.description "Tämä toiminto muistaa videot, joita olet viimeksi katsellut.">
+<!ENTITY about.for-free "Tämä Firefox-lisäosa on annettu sinulle ilmaiseksi.">
+<!ENTITY about.know-more "Lisätietoja saat klikkaamalla tätä">
+<!ENTITY about.link "linkkiä.">
+<!ENTITY about.know-more2 "">
+<!ENTITY about.locale-credit "Suomeksi kääntänyt AtteL (www.noobit.us) BabelZillasta">
+<!ENTITY title.conversion "Muuntaminen">
+<!ENTITY conversion.description "Tämä toiminto antaa käyttäjän muuntaa videoita heti lataamisen jälkeen">
+<!ENTITY conversion.rules-description "Muuntamissääntöjä arvioidaan kauttaaltaan">
+<!ENTITY label.conversion-enabled "Muuntaminen käytössä">
+<!ENTITY title.conversion-rule "Muuntamissääntö">
+<!ENTITY column.conversion.rules "Muuntamissäännöt">
+<!ENTITY button.conv-rule-list.edit "Muokkaa sääntöä">
+<!ENTITY button.conv-rule-list.up "Siirrä ylös">
+<!ENTITY button.conv-rule-list.down "Siirrä alas">
+<!ENTITY button.conv-rule-list.remove "Poista sääntö">
+<!ENTITY button.conv-rule-list.default "Palauta oletukseksi">
+<!ENTITY button.conv-rule-list.new "Uusi sääntö">
+<!ENTITY button.conv-rule.change-directory "Vaihda...">
+<!ENTITY label.conv-rule.convert "Muunna">
+<!ENTITY label.conv-rule.do-not-convert "Älä muunna">
+<!ENTITY label.conv-rule.files-with-ext "Tiedostot tiedostopäätteellä">
+<!ENTITY label.conv-rule.from-site "Sivustolta">
+<!ENTITY label.conv-rule.all-sites "KAIKKI">
+<!ENTITY label.conv-rule.all-files "KAIKKI">
+<!ENTITY label.conv-rule.kbps "kbit/s">
+<!ENTITY label.conv-rule.bitrate "Bittinopeus">
+<!ENTITY label.conv-rule.output-directory "Hakemisto">
+<!ENTITY label.conv-rule.default-directory "OLETUS">
+<!ENTITY caption.conv-rule.input "Sisäänmeno">
+<!ENTITY caption.conv-rule.output "Ulostulo">
+<!ENTITY title.convert-register "Rekisteröinti">
+<!ENTITY text.convert-register.benefits "Rekisteröinti tarjoaa seuraavat edut:">
+<!ENTITY text.convert-register.item.nologo "Muunnetuissa videoissa ei näytetä DownloadHelperin logoa">
+<!ENTITY text.convert-register.item.mp3 "Mahdollisuus muuntaa mp3-äänitiedostoiksi">
+<!ENTITY text.convert-register.item.faster "Muuntaminen on nopeampaa">
+<!ENTITY text.convert-register.item.support "Tukea saatavilla">
+<!ENTITY label.convert-register.code "Rekisteröintikoodi">
+<!ENTITY button.convert-register.cancel "Peruuta">
+<!ENTITY button.convert-register.get-code "Hae rekisteröintikoodi">
+<!ENTITY button.convert-register.ok "OK">
+<!ENTITY title.converter-queue "Muuntamisjono">
+<!ENTITY label.converter-queue.status "Tila">
+<!ENTITY label.converter-queue.status.done "Valmis">
+<!ENTITY label.converter-queue.input "Sisäänmeno">
+<!ENTITY label.converter-queue.output "Ulostulo">
+<!ENTITY label.converter-queue.status.inprogress "Käynnissä">
+<!ENTITY label.converter-queue.status.waiting "Odottaa">
+<!ENTITY label.converter-queue.status.error "Virhe">
+<!ENTITY button.converter-queue.close "Sulje">
+<!ENTITY label.conversion.converter "Muunnin">
+<!ENTITY label.conversion.no-such-converter "Muuntamisohjelmaa ei löydy">
+<!ENTITY description.conversion.no-win-conv "Sinun pitää asentaa erillinen ohjelma videoiden muuntamiseksi">
+<!ENTITY description.conversion.bad-version "ConvertHelper-päivitys vaaditaan">
+<!ENTITY button.conversion.win-conv "Asenna/päivitä muunnin">
+<!ENTITY button.conversion.check-win-conv "Tarkista muunnin">
+<!ENTITY description.conversion.win-conv "Muuntamisohjelma löytyi koneeltasi">
+<!ENTITY title.convert-options "Muuntamisasetukset">
+<!ENTITY caption.convlicense "Lisenssitiedot">
+<!ENTITY label.convlicense.license "Avain">
+<!ENTITY label.convlicense.name "Omistaja">
+<!ENTITY label.convlicense.email "Omistajan sähköposti">
+<!ENTITY label.convlicense.unregistered "Rekisteröimätön muunnin">
+<!ENTITY title.video-format.general "Yleiset">
+<!ENTITY title.video-format.advanced "Kehittyneet">
+<!ENTITY button.video-format.show-details "Tiedot...">
+<!ENTITY title.output-video-format "Videon ulostuloformaatti">
+<!ENTITY label.video-format.two-passes "2 vaihetta">
+<!ENTITY label.video-format.first-pass "Vaihe 1">
+<!ENTITY label.video-format.second-pass "Vaihe 2">
+<!ENTITY label.conversion.log "Lisää muunnokset lokiin">
+<!ENTITY button.conversion.show-log "Näytä loki">
+<!ENTITY title.conversion-log "Muunnosloki">
+<!ENTITY button.convert-log.clear "Tyhjennä loki">
+<!ENTITY button.convert-log.close "Sulje">
+<!ENTITY button.convert-log.refresh "Päivitä">
+<!ENTITY menu.video-format.copy "Kopioi videoformaatti">
+<!ENTITY menu.video-format.paste "Liitä videoformaatti">
+<!ENTITY button.conversion.help "Ohje">
+<!ENTITY label.converter-queue.started-on "Aloitettu">
+<!ENTITY label.converter-queue.ended-on "Lopetettu">
+<!ENTITY label.conversion-notification "Ilmoita muuntamisen loppumisesta">
+<!ENTITY label.show-in-statusbar "Näytä tilapalkissa">
+<!ENTITY label.trigger-min-size "Liipaisimen vähimmäiskoko (KB)">
+<!ENTITY label.quick-download-key "Pikalatausnäppäin">
+<!ENTITY label.open-folder-key "Avaa kansio -näppäin">
+<!ENTITY button.video-format.default "Oletusasetukset">
+<!ENTITY button.video-format.name "Nimeä asetus">
+<!ENTITY button.video-format.rename "Uudelleennimeä asetus">
+<!ENTITY button.video-format.forget "Unohda asetus">
+<!ENTITY label.conversion-config-share "Jaa asetuksia">
+<!ENTITY label.yt-check-hq "Tunnista YouTuben korkealaatuiset videot">
+<!ENTITY label.yt-prefer-hq "Käytä YouTuben korkeaa laatua, jos mahdollista">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Lisää tiedostonimien alkuun index">
+<!ENTITY title.pick-processor "Valitse palvelu">
+<!ENTITY title.media-dump "Mediavedos">
+<!ENTITY label.dump-media.prop-name "Asetus">
+<!ENTITY label.dump-media.prop-value "Arvo">
+<!ENTITY label.quickkeys.change "Vaihda pikanäppäimiä">
+<!ENTITY title.config-processor-keys "Mukauta käsittelijän pikanäppäimiä">
+<!ENTITY proc-keymap.revert "Palauta oletuksiin">
+<!ENTITY proc-keymap.provider "Tarjoaja">
+<!ENTITY proc-keymap.description "Kuvaus">
+<!ENTITY proc-keymap.current-key "Nykyinen pikanäppäin">
+<!ENTITY proc-keymap.hold-assign "Paina näppäimiä ja napsauta asettaaksesi">
+<!ENTITY proc-keymap.unmap "Poista liitos">
+<!ENTITY title.quick-keys "Pikanäppäimet">
+<!ENTITY label.tools-menu "Näytä Työkalut-valikossa">
+<!ENTITY pref.title.capture "Kaappaus">
+<!ENTITY pref.title.services "Palvelut">
+<!ENTITY pref.title.miscellaneous "Sekalaiset">
+<!ENTITY pref.title.download "Lataaminen">
+<!ENTITY pref.title.appearance "Näkyvyys">
+<!ENTITY pref.title.behavior "Toiminta">
+<!ENTITY pref.title.accelerators "Näppäinoikotiet">
+<!ENTITY label.menu-expiration "Valikkokohteen vanheneminen (sec)">
+<!ENTITY pref.title.http "Verkko">
+<!ENTITY pref.title.galleries "Galleriat">
+<!ENTITY pref.description.galleries "Tämä toiminto antaa käyttäjän ladata tiedostoja HTML-sivujen linkeistä">
+<!ENTITY pref.label.enable-medialink-method "Galleria käytössä">
+<!ENTITY pref.description.http "Tämä toiminto tunnistaa median seuraamalla HTTP-tietojen vaihtoa selaimen ja palvelimen välillä">
+<!ENTITY pref.description.youtube "Tämä toiminto tunnistaa videot tutkimalla YouTube-sivuja">
+<!ENTITY pref.label.enable-http-method "Verkkotoiminto käytössä">
+<!ENTITY label.mediareq-file-extensions "Tiedostopäätteet pyynnöissä">
+<!ENTITY label.ignore-below-size "Ohita mediat, joiden koko on alle (KB)">
+<!ENTITY label.detect-above-size "Pakota tunnistaminen, jos koko on yli (KB)">
+<!ENTITY pref.button.configure-conv-rules "Mukauta muunnossääntöjä...">
+<!ENTITY title.conversion-rules "Muunnossäännöt">
+<!ENTITY pref.button.register-converter "Rekisteröi muunnin">
+<!ENTITY pref.caption.troubleshooting "Vianetsintä">
+<!ENTITY pref.button.check-again "Tarkista uudestaan">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "Sähköpostiosoite">
+<!ENTITY mp3tunes.pref.password "Salasana">
+<!ENTITY mp3tunes.pref.phonenumber "Puhelinnumero">
+<!ENTITY mp3tunes.pref.phonenumber.description "Valinnainen, mutta vaaditaan audion vastaanottamiseksi puhelimeen">
+<!ENTITY mp3tunes.pref.description "MP3Tunes-palvelu antaa käyttäjän lähettää musiikkia suoraan matkapuhelimeen tai yksityiseen säilytykseen, johon pääsee kaikkialta">
+<!ENTITY mp3tunes.pref.create-account "Luo ilmainen tili">
+<!ENTITY mp3tunes.pref.password-repeat "Toista salasana">
+<!ENTITY mp3tunes.pref.firstname "Etunimi">
+<!ENTITY mp3tunes.pref.lastname "Sukunimi">
+<!ENTITY mp3tunes.title.create-account "Luo ilmainen MP3Tunes-tili">
+<!ENTITY mp3tunes.pref.upgrade-account "Päivitä tili">
+<!ENTITY mp3tunes.pref.check-account "Tarkista tili">
+<!ENTITY mp3tunes.pref.last-check "Edellinen tarkistus">
+<!ENTITY mp3tunes.title.title "Lähetä MP3Tunesiin">
+<!ENTITY mp3tunes.title.artist-name "Artisti/Esiintyjä">
+<!ENTITY mp3tunes.title.album-title "Albumi/Lähde">
+<!ENTITY mp3tunes.title.track-title "Kappala/Otsikko">
+<!ENTITY mp3tunes.title.track-number "Kappaleen numero">
+<!ENTITY mp3tunes.title.year "Vuosi">
+<!ENTITY label.highlight-media-from-current-page "Korosta mediat avoimelta sivulta">
+<!ENTITY label.system-menu-icons "Näytä kuvakkeet kontekstivalikossa">
+<!ENTITY mp3tunes.label.enabled "MP3tunes-palvelut käytössä">
+<!ENTITY mp3tunes.title.no-converter "Muunnin puuttuu">
+<!ENTITY mp3tunes.button.no-converter.continue "Jatka">
+<!ENTITY mp3tunes.button.no-converter.configure "Mukauta muunnosta">
+<!ENTITY mp3tunes.text.no-converter.1 "Haluat lähettää äänitiedoston MP3tunesiin, mutta DownloadHelperin muunninta ei ole asetettu käyttövalmiiksi.">
+<!ENTITY mp3tunes.text.no-converter.2 "Voit jatkaa tiedoston lähettämistä säilytykseen tai voit asettaa muunnostoiminnon luomaan ensin äänitiedoston.">
+<!ENTITY mp3tunes.label.no-converter.not-again "Älä näytä tätä varoitusta enää">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "Näytä YouTube-sivuilla vimpain, josta pääsee palveluihin">
+<!ENTITY label.yt-inpage.default-processor "Oletuspalvelu">
+<!ENTITY label.privacy-policy "Yksityisyydensuoja">
+<!ENTITY mp3tunes.label.open-locker "Avaa säilytys">
+<!ENTITY mp3tunes.pref.on-send-mobile "Kun lähetetään puhelimeen">
+<!ENTITY mp3tunes.pref.on-send-locker "Kun lähetetään säilytykseen">
+<!ENTITY mp3tunes.pref.on-send.video "Siirrä video (äänellä)">
+<!ENTITY mp3tunes.pref.on-send.audio "Siirrä vain ääni">
+<!ENTITY mp3tunes.pref.on-send.ask "Kysy käyttäjältä">
+<!ENTITY mp3tunes.title.conversion-choice "MP3tunesin siirtotyyppi">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Muista valinta">
+<!ENTITY mp3tunes.pref.phonenumber-sample "maakoodilla, esim. +358 40 123456">
+<!ENTITY ythq.label.enable "Ota käyttöön">
+<!ENTITY ythq.label.disable "Poista käytöstä">
+<!ENTITY ythq.label.up "Ylös">
+<!ENTITY ythq.label.down "Alas">
+<!ENTITY ythq.column.type "Tyyppi">
+<!ENTITY ythq.column.format "Formaati">
+<!ENTITY ythq.column.video "Video">
+<!ENTITY ythq.column.audio "Ääni">
+<!ENTITY pref.title.blacklist "Estolista">
+<!ENTITY pref.description.blacklist "Tämä toiminto antaa käyttäjän ohittaa joidenkin sivujen mediat, kuten mainosvideot.">
+<!ENTITY add2bl.label.add-domain-choice "Ohita mediailmoitukset verkkoalueelta:">
+<!ENTITY pref.label.share-blacklist "Jaa estolista">
+<!ENTITY pref.description.share-blacklist "Estolistan jakaminen antaa hyvän oletuslistan tuotteen seuraavissa versioissa">
+<!ENTITY label.add2bl.configure-blacklist "Muokkaa estolistaa">
+<!ENTITY label.extended-download-menu "Laajennettu latausvalikko">
+<!ENTITY smartname.menu-name "Älykäs nimeäminen">
+<!ENTITY smartname.menu-set-name "Määritä mediaotsikon sijainti">
+<!ENTITY smartname.menu-set-descr "Määritä mediakuvauksen sijainti">
+<!ENTITY smartname.menu-share-now "Jaa nyt">
+<!ENTITY smartname.menu-import "Tuo">
+<!ENTITY smartname.define.value-for-page "Tämän sivun arvo:">
+<!ENTITY smartname.define.domain "Verkkoalue">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "Säännöllinen lauseke">
+<!ENTITY smartname.define.previous-value "Edelliset arvot">
+<!ENTITY pref.title.smartname "Älykäs nimeäminen">
+<!ENTITY pref.description.smartname "Älykäs nimeäminen luo järkeviä nimiä ladatulle medialle">
+<!ENTITY pref.label.enable-smartname "Ota älykäs nimeäminen käyttöön">
+<!ENTITY smartname.column.domain "Verkkoalue">
+<!ENTITY smartname.column.mode "Tila">
+<!ENTITY smartname.list.button.delete "Poista">
+<!ENTITY smartname.list.button.edit "Muokkaa">
+<!ENTITY smartname.list.button.import "Tuo">
+<!ENTITY smartname.list.label.type "Tyyppi">
+<!ENTITY smartname.list.type.name "Median nimi">
+<!ENTITY smartname.list.type.descr "Median kuvaus">
+<!ENTITY smartname.overlap.select "Valitse">
+<!ENTITY smartname.overlap.selectall "Kaikki">
+<!ENTITY smartname.overlap.selectnone "Ei mitään">
+<!ENTITY smartname.overlap.description "Valitut kohteet ylikirjoitetaan">
+<!ENTITY smartname.overlap.title "Päällekkäisyys">
+<!ENTITY pref.label.smartname.keep-spaces "Jätä välilyönnit tiedostojen nimiin">
+<!ENTITY pref.label.smartname.keep-nonascii "Jätä ei-ASCII-merkit tiedostojen nimiin">
+<!ENTITY pref.label.smartname.auto-share "Jaa älykkään nimeämisen tilastot anonyymisti">
+<!ENTITY pref.label.smartname.auto-share.notice "Tämä auttaa ylläpitämään tietokantaa automaattisesti kaikkien hyväksi">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Käyttäjätunnus">
+<!ENTITY twitter.pref.password "Salasana">
+<!ENTITY twitter.pref.description "Twitter-palvelu antaa käyttäjän lähettää tilapäivityksiä mediasta helposti">
+<!ENTITY twitter.pref.create-account "Luo ilmainen Twitter-tili">
+<!ENTITY twitter.pref.check-account "Tarkista tunnus/salasana">
+<!ENTITY twitter.pref.last-check "Edellinen tarkistus">
+<!ENTITY twitter.label.enabled "Twitter-palvelu käytössä">
+<!ENTITY twitter.title.send-message "Lähetä Twitter-viesti">
+<!ENTITY twitter.message.smartnaming "Sinun kannattaisi harkita älykäs nimeäminen -toimintoa lisätäksesi Twitter-viestiin automaattisesti videon otsikon ja, jos mahdollista, myös kuvauksen.">
+<!ENTITY twitter.label.go-to-smartnaming "Lisätietoa älykkäästä nimeämisestä">
+<!ENTITY twitter.label.tag-message "Lisää viestiin automaattisesti avainsana #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Osumien enimmäismäärä">
+<!ENTITY pref.label.icon-click "Kuvaketta napsauttaessa">
+<!ENTITY pref.label.icon-click.sites "Näytä tuetut sivut">
+<!ENTITY pref.label.icon-click.quick-download "Tee nopea lataus">

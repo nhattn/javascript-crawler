@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="ConvertRegister" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox class="dwhelper-convert-register" flex="1"
+				onkeyup="this.parentNode.keyPressed(event.keyCode)"
+				>
+		
+				<description class="dwhelper-convert-register-benefits">&text.convert-register.benefits;</description>
+				
+				<description class="dwhelper-convert-register-item">&text.convert-register.item.nologo;</description>
+				<description class="dwhelper-convert-register-item">&text.convert-register.item.mp3;</description>
+				<description class="dwhelper-convert-register-item">&text.convert-register.item.support;</description>
+				
+				<hbox align="center" class="dwhelper-convert-register-code-prompt">
+					<label value="&label.convert-register.code;"/>
+					<textbox anonid="xRegCode"
+						oninput="this.parentNode.parentNode.parentNode.updateButtons()"
+						/>
+				</hbox>
+		
+				<hbox align="right" class="dwhelper-convert-register-buttons" flex="1">
+					<button label="&button.convert-register.cancel;" 
+						oncommand="this.parentNode.parentNode.parentNode.leaveWindow(0)"/>
+					<button	anonid="xGetCode" label="&button.convert-register.get-code;" 
+						oncommand="this.parentNode.parentNode.parentNode.leaveWindow(2)"/>
+					<button anonid="xOk" label="&button.convert-register.ok;" 
+						oncommand="this.parentNode.parentNode.parentNode.leaveWindow(1)"/>
+				</hbox>
+			</vbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.updateButtons();
+setTimeout(function(_this) { _this.xRegCode.focus(); },0,this);
+				]]>
+			</constructor>
+
+			<destructor>
+				<![CDATA[
+				]]>
+			</destructor>
+
+			<method name="updateButtons">
+				<body>
+				<![CDATA[
+if(this.xRegCode.value.length==0) {
+	this.xOk.setAttribute("hidden","true");
+	this.xGetCode.setAttribute("hidden","false");
+} else {
+	this.xOk.setAttribute("hidden","false");
+	this.xGetCode.setAttribute("hidden","true");
+}
+				]]>
+				</body>
+			</method>
+			
+			<method name="leaveWindow">
+				<parameter name="code"/>
+				<body>
+				<![CDATA[
+if(code==1) {
+	// do registering stuff
+	//this.pref.setBoolPref("convert-free",false);
+	
+	var code=this.xRegCode.value;
+	try {
+		code=/^[ \t]*(.*?)[ \t]*$/.exec(code)[1];
+	} catch(e) {}
+	this.convertMgr.register(code);
+	
+} else if(code==2) {
+	if(this.getAttribute("autovisit")=="true") {
+        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                                    .getService(Components.interfaces.nsIWindowMediator);
+		var w = wm.getMostRecentWindow("navigator:browser");
+		w.open("http://convert.downloadhelper.net/");
+	} else {
+		if(window.arguments)
+			window.arguments[0].getConvertCode=true;
+	}
+}
+window.close();
+				]]>
+				</body>
+			</method>
+
+			<method name="keyPressed">
+				<parameter name="code"/>
+				<body>
+				<![CDATA[
+if(code==13 && this.xRegCode.value.length>0)
+	this.leaveWindow(1);
+else if(code==27)
+	this.leaveWindow(0);
+				]]>
+				</body>
+			</method>
+
+		</implementation>
+		
+		<handlers>
+			
+			<!-- 
+			<handler event="DOMAttrModified">
+				<![CDATA[
+				]]>
+			</handler>
+			 -->
+	
+		</handlers>
+
+	</binding>
+ 
+</bindings>

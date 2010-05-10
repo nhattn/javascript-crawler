@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="Menu" extends="chrome://global/content/bindings/popup.xml#popup">
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core=Components.classes["@downloadhelper.net/core;1"].
+	        getService(Components.interfaces.dhICore);
+				]]>
+			</constructor>
+			<destructor>
+				<![CDATA[
+this.core.unregisterMenu(this);
+				]]>
+			</destructor>
+
+		</implementation>
+		
+		<handlers>
+			<handler event="DOMNodeRemoved">
+				<![CDATA[
+if(event.target==this) {
+	this.core.unregisterMenu(this);
+}
+				]]>
+			</handler>
+		</handlers>
+		
+	</binding>
+
+	<binding id="DownloadMenu" extends="#Menu">
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core.registerMenu(this,Components.interfaces.dhICore.MENU_TYPE_DOWNLOAD);
+				]]>
+			</constructor>
+
+		</implementation>
+		
+	</binding>
+
+	<binding id="SystemMenu" extends="#Menu">
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core.registerMenu(this,Components.interfaces.dhICore.MENU_TYPE_SYSTEM);
+				]]>
+			</constructor>
+
+		</implementation>
+		
+	</binding>
+
+	<binding id="ContextMenuitem" extends="chrome://global/content/bindings/menu.xml#menuitem">
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core=Components.classes["@downloadhelper.net/core;1"].
+	        getService(Components.interfaces.dhICore);
+this.core.registerContextItem(this);
+				]]>
+			</constructor>
+			<destructor>
+				<![CDATA[
+this.core.unregisterContextItem(this);
+				]]>
+			</destructor>
+
+		</implementation>
+ 	
+	</binding>
+
+	<binding id="ContextMenuIconic" extends="chrome://global/content/bindings/menu.xml#menu-iconic">
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core=Components.classes["@downloadhelper.net/core;1"].
+	        getService(Components.interfaces.dhICore);
+this.core.registerContextItem(this);
+				]]>
+			</constructor>
+			<destructor>
+				<![CDATA[
+this.core.unregisterContextItem(this);
+				]]>
+			</destructor>
+
+		</implementation>
+ 	
+	</binding>
+
+</bindings>

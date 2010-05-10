@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="ProcessorKeyMap" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		
+			<vbox flex="1">
+				<hbox>
+ 					<ProcessorMenulist anonid="xProcessors" oncommand="this.parentNode.parentNode.parentNode.update()"/>
+					<spacer flex="1"/>
+					<button label="&proc-keymap.revert;" oncommand="this.parentNode.parentNode.parentNode.revertToDefault()"/>
+				</hbox>
+				<spacer flex="1"/>
+				<grid flex="1">
+					<columns>
+						<column flex="0"/>
+						<column flex="1"/>
+					</columns>
+					<rows>
+						<row>
+							<label value="&proc-keymap.provider;"/>
+							<description anonid="xProvider" style="font-style: italic;"/>
+						</row>
+						<row>
+							<label value="&proc-keymap.description;"/>
+							<description anonid="xDescription" style="font-style: italic;"/>
+						</row>
+						<row>
+							<label value="&proc-keymap.current-key;"/>
+							<description anonid="xKeystr" style="font-style: italic;"/>
+						</row>
+					</rows>
+				</grid>
+				<spacer flex="1"/>
+				<hrow>
+					<spacer flex="1"/>
+					<button label="&proc-keymap.hold-assign;" oncommand="this.parentNode.parentNode.parentNode.assign(event)"/>
+					<button label="&proc-keymap.unmap;" oncommand="this.parentNode.parentNode.parentNode.unmap()"/>
+				</hrow>
+			</vbox>
+
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.core=Components.classes["@downloadhelper.net/core;1"].
+	getService(Components.interfaces.dhICore);
+this.processors={};
+var processors=this.core.getProcessors();
+var i=processors.enumerate();
+while(i.hasMoreElements()) {
+	var processor=i.getNext().QueryInterface(Components.interfaces.dhIProcessor);
+	this.processors[processor.name]=processor;
+}
+this.value=this.getAttribute("value");
+				]]>
+			</constructor>
+			
+			<method name="revertToDefault">
+				<body>
+				<![CDATA[
+this.value="0:download,2:convert-choice,3:quick-download";
+				]]>
+				</body>
+			</method>
+			
+			<method name="assign">
+				<parameter name="event"/>
+				<body>
+				<![CDATA[
+var processor=this.processors[this.xProcessors.value];
+if(!processor)
+	return;
+var key=(event.ctrlKey?1:0) |
+	(event.shiftKey?2:0) |
+	(event.altKey?4:0) |
+	(event.metaKey?8:0);
+if(this.keymap[key]==processor.name)
+	return;
+if(this.keymap[key]) {
+	var keyStr=this.getKeyString(key);
+	var message=Util.getFText("message.processor.overwrite-key",[keyStr,this.processors[this.keymap[key]].title,keyStr],3);
+	var r=confirm(message);
+	if(r==false)
+		return;
+}
+this.unmap();
+this.keymap[key]=processor.name;
+this.update();
+				]]>
+				</body>
+			</method>
+
+			<method name="unmap">
+				<body>
+				<![CDATA[
+var processor=this.processors[this.xProcessors.value];
+if(!processor)
+	return;
+for(var i in this.keymap) {
+	if(this.keymap[i]==processor.name) {
+		delete this.keymap[i];
+		this.update();
+		return;
+	}
+}
+				]]>
+				</body>
+			</method>
+
+			<method name="update">
+				<body>
+				<![CDATA[
+var processor=this.processors[this.xProcessors.value];
+if(!processor)
+	return;
+this.xProvider.setAttribute("value",processor.provider);
+while(this.xDescription.firstChild)
+	this.xDescription.removeChild(this.xDescription.firstChild);
+var description=document.createTextNode(processor.description);
+this.xDescription.appendChild(description);
+
+var key=-1;
+for(var k in this.keymap) {
+	if(this.keymap[k]==processor.name) {
+		key=k;
+		break;
+	}
+}
+var keyStr=this.getKeyString(key);
+this.xKeystr.setAttribute("value",keyStr);
+				]]>
+				</body>
+			</method>
+			
+			<method name="getKeyString">
+				<parameter name="key"/>
+				<body>
+				<![CDATA[
+var keyStr=Util.getText("processor.quickkey.nokey");
+if(key!=-1) {
+	var kp=[];
+	for(var k=0; k<4; k++) {
+		if((1<<k)&key)
+			kp.push(Util.getText("processor.quickkey.key"+k));
+	}
+	kp.push(Util.getText("processor.quickkey.click"));
+	keyStr=kp.join("+");
+}
+return keyStr;
+				]]>
+				</body>
+			</method>
+
+
+			<property name="value">
+				<getter>
+				<![CDATA[
+var p=[];
+for(var i in this.keymap) {
+	p.push(i+":"+this.keymap[i]);
+}
+return p.join(",");
+				]]>
+				</getter>
+				<setter>
+				<![CDATA[
+this.keymap={};
+if(val==null)
+	return;
+var p1=val.split(",");
+for(var i in p1) {
+	var p2=p1[i].split(":");
+	if(p2.length==2 && this.processors[p2[1]])
+		this.keymap[parseInt(p2[0])]=p2[1];
+}
+setTimeout(function(_this) { _this.update(); },0,this);
+				]]>
+				</setter>
+			</property>
+ 
+ 		</implementation>
+				
+	</binding>
+
+</bindings>

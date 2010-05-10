@@ -1,0 +1,29 @@
+overlay chrome://browser/content/browser.xul chrome://dwhelper/content/dwhelper.xul
+content dwhelper    chrome/content/
+skin    dwhelper classic/1.0 chrome/skin/classic/
+locale  dwhelper en-US chrome/locale/en-US/
+locale  dwhelper fr-FR chrome/locale/fr-FR/
+locale  dwhelper nl-NL chrome/locale/nl-NL/
+locale  dwhelper de-DE chrome/locale/de-DE/
+locale  dwhelper es-ES chrome/locale/es-ES/
+locale  dwhelper it-IT chrome/locale/it-IT/
+locale  dwhelper sk-SK chrome/locale/sk-SK/
+locale  dwhelper zh-CN chrome/locale/zh-CN/
+locale  dwhelper pl-PL chrome/locale/pl-PL/
+locale  dwhelper pt-PT chrome/locale/pt-PT/
+locale  dwhelper tr-TR chrome/locale/tr-TR/
+locale  dwhelper ja-JP chrome/locale/ja-JP/
+locale  dwhelper fi-FI chrome/locale/fi-FI/
+locale  dwhelper zh-TW chrome/locale/zh-TW/
+locale  dwhelper ko-KR chrome/locale/ko-KR/
+locale  dwhelper vi-VN chrome/locale/vi-VN/
+locale  dwhelper bg-BG chrome/locale/bg-BG/
+locale  dwhelper pt-BR chrome/locale/pt-BR/
+locale  dwhelper ru-RU chrome/locale/ru-RU/
+locale  dwhelper cs-CZ chrome/locale/cs-CZ/
+locale  dwhelper da-DK chrome/locale/da-DK/
+locale  dwhelper sl-SI chrome/locale/sl-SI/
+locale  dwhelper ar chrome/locale/ar/
+style   chrome://global/content/customizeToolbar.xul    chrome://dwhelper/skin/classic/dwhelper.css
+overlay chrome://songbird/content/xul/layoutWithBrowserOverlay.xul chrome://dwhelper/content/dwhelper.xul
+style   chrome://songbird/content/xul/layoutWithBrowserOverlay.xul    chrome://dwhelper/skin/classic/dwhelper.css

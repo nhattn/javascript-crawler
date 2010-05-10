@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Pomocník">
+<!ENTITY menu.manual-check "Skontrolovať adresu">
+<!ENTITY menu.preferences "Predvoľby...">
+<!ENTITY menu.about "Čo je...">
+<!ENTITY label.download-one-by-one "Prevziať po jednom">
+<!ENTITY label.storagedir "Priečinok na ukladanie">
+<!ENTITY button.changedir "Zmeniť priečinok">
+<!ENTITY error.nohome "Domovský priečinok neexistuje">
+<!ENTITY error.notadirectory "nie je priečinok">
+<!ENTITY title.preferences "Predvoľby">
+<!ENTITY title.about "O rozšírení DownloadHelper">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "Čas. limit položky ponuky (ms)">
+<!ENTITY label.icon-animation "Animácia ikony">
+<!ENTITY menu.ytlinks "Prevziať videá z adries YouTube">
+<!ENTITY label.download-mode "Režim preberania">
+<!ENTITY label.download-mode.normal "Normálne">
+<!ENTITY label.download-mode.onebyone "Po jednom">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Tvorcovia">
+<!ENTITY title.general "Všeobecné">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "Metóda MediaLink umožňuje preberať súbory zo stránky prezeraním prepojení HTML.">
+<!ENTITY button.add "Pridať">
+<!ENTITY button.default "Predvolené">
+<!ENTITY button.remove "Odstrániť">
+<!ENTITY label.file-extensions "Prípony súborov">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "Metóda MediaReq kontroluje odchádzajúce požiadavky HTTP a určí, či ide o mediálny súbor.">
+<!ENTITY title.support-dev "Podpora vývoja rozšírenia DownloadHelper">
+<!ENTITY label.donate-not-again "Nabudúce nezobrazovať">
+<!ENTITY label.donate "Darovať">
+<!ENTITY label.cancel "Zrušiť">
+<!ENTITY label.congratulations "Blahoželáme!">
+<!ENTITY label.keep-spaces "Ponechať v názvoch súborov medzery">
+<!ENTITY title.sites "DownloadHelper – Stránky s médiami">
+<!ENTITY button.sites.close "Zavrieť">
+<!ENTITY button.sites.open "Otvoriť">
+<!ENTITY button.sites.report "Ohlásiť fungujúcu stránku">
+<!ENTITY column.sites.name "Názov">
+<!ENTITY column.sites.rating "Hodnotenie">
+<!ENTITY column.sites.count "Komentáre">
+<!ENTITY column.sites.date "Dátum pridania">
+<!ENTITY column.sites.url "Adresa">
+<!ENTITY button.site.close "Zavrieť">
+<!ENTITY label.site.name "Názov">
+<!ENTITY caption.site.site "Stránka s médiami">
+<!ENTITY title.site "Stránka s médiami">
+<!ENTITY label.site.url "Adresa">
+<!ENTITY label.site.date "Pridané">
+<!ENTITY label.site.rating "Hodnotenie">
+<!ENTITY label.site.no-rating "Zatiaľ žiadne">
+<!ENTITY button.site.check "Skontrolovať stránku">
+<!ENTITY button.site.comment "Pridať komentár">
+<!ENTITY label.comment.site "Stránka">
+<!ENTITY title.comment "Komentár">
+<!ENTITY caption.comment.comment "Pridať komentár">
+<!ENTITY label.comment.author "Prezývka">
+<!ENTITY help.comment.author "Vaše meno alebo prezývka">
+<!ENTITY label.comment.title "Názov">
+<!ENTITY help.comment.title "Názov komentára">
+<!ENTITY label.comment.comment "Komentár">
+<!ENTITY help.comment.comment "Odseky oddeľte prázdnymi riadkami">
+<!ENTITY label.comment.tags "Značky">
+<!ENTITY help.comment.tags "Medzerami oddelené príslušné značky (napr. &apos;news indian&apos; alebo &apos;adult&apos;)">
+<!ENTITY label.comment.rating "Hodnotenie">
+<!ENTITY help.comment.rating "0 = nezaujímavé, 5 = výborná stránka">
+<!ENTITY button.comment.close "Zavrieť">
+<!ENTITY button.comment.submit "Odoslať komentár">
+<!ENTITY label.comment.wait "Komentár sa odosiela. Čakajte prosím...">
+<!ENTITY title.report "Ohlásiť fungujúcu stránku">
+<!ENTITY caption.report.report "Ohlásiť novú fungujúcu stránku">
+<!ENTITY message.report.check-new "Skontrolujte, či už nie je táto stránka v zozname">
+<!ENTITY label.report.name "Názov stránky">
+<!ENTITY help.report.name "Všeobecný názov stránky, napr. YouTube">
+<!ENTITY label.report.url "Adresa stránky">
+<!ENTITY help.report.url "Adresa stránky, napr. http://www.youtube.com">
+<!ENTITY label.report.author "Vaše meno">
+<!ENTITY help.report.author "Meno autora tohto hlásenia. Môžete nechať aj prázdne.">
+<!ENTITY label.report.description "Popis">
+<!ENTITY help.report.description "Krátky popis toho, čo možno na tejto stránke nájsť">
+<!ENTITY button.report.submit "Odoslať stránku">
+<!ENTITY button.report.close "Zavrieť">
+<!ENTITY label.report.wait "Stránka sa odosiela. Čakajte prosím...">
+<!ENTITY menu.sites "Podporované stránky">
+<!ENTITY label.sites.list-adult "Zobraziť stránky s priamo prístupným obsahom pre dospelých">
+<!ENTITY label.report.adult "Priamo prístupný obsah pre dospelých">
+<!ENTITY label.context-menu "Zobraziť v kontextovej ponuke">
+<!ENTITY menu.to-sumo "Odoslať video na SUMO.tv">
+<!ENTITY label.enable-plugin-method "Povoliť spôsob podpisu zásuvného modulu">
+<!ENTITY label.yt-unmodified-filename "Ponechať názvy súborov podľa YouTube (CJK)">
+<!ENTITY label.disable-dwcount-cookie "Zakázať súbor cookie s počítadlom prevzatí">
+<!ENTITY column.sites.duration "Záujem">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight povolené">
+<!ENTITY label.mediaweight-threshold "Limitná veľkosť média">
+<!ENTITY label.enable-medialink-method "MediaLink povolené">
+<!ENTITY mediaweight.description "Metóda MediaWeight skúša odozvy HTTP a rozhoduje na základe veľkosti, či ide o mediálny súbor.">
+<!ENTITY title.history "História">
+<!ENTITY title.download-queue "Front preberania">
+<!ENTITY column.media-url "Adresa média">
+<!ENTITY column.source-url "Adresa zdroja">
+<!ENTITY column.view-date "Dátum zobrazenia">
+<!ENTITY column.file-name "Názov súboru">
+<!ENTITY title.histlist "História">
+<!ENTITY label.histlist-enabled "História povolená (beta)">
+<!ENTITY label.histlist-clearonexit "Pri ukončení vymazať históriu">
+<!ENTITY button.medialist.watch "Pozerať">
+<!ENTITY button.medialist.download "Prevziať">
+<!ENTITY button.medialist.more "Viac">
+<!ENTITY button.medialist.go-source "Navštíviť stránku zdroja">
+<!ENTITY button.medialist.remove "Odstrániť">
+<!ENTITY button.remove-downloads "Odstrániť vybrané">
+<!ENTITY history.description "Táto funkcia umožňuje za určitých okolností zapamätať si pozreté videá, takže ich možno znova rýchlo nájsť a prevziať v dávkovom režime ako vybranú skupinu.">
+<!ENTITY about.for-free "Toto rozšírenie do Firefoxu je k dispozícii zadarmo.">
+<!ENTITY about.know-more "Ak chcete vedieť viac, pozrite">
+<!ENTITY about.link "túto stránku">
+<!ENTITY about.know-more2 ".">
+<!ENTITY about.locale-credit "Slovenský preklad: SlovakSoft (www.slovaksoft.com) a wladow prostredníctvom babelzilla.org">
+<!ENTITY title.conversion "Konverzia">
+<!ENTITY conversion.description "Táto funkcia umožňuje automaticky konvertovať videá po ich prevzatí">
+<!ENTITY conversion.rules-description "Pravidlá konverzie sú spracované v poradí zhora nadol">
+<!ENTITY label.conversion-enabled "Konvertor zapnutý">
+<!ENTITY title.conversion-rule "Pravidlo konverzie">
+<!ENTITY column.conversion.rules "Pravidlá konverzie">
+<!ENTITY button.conv-rule-list.edit "Upraviť pravidlo">
+<!ENTITY button.conv-rule-list.up "Posunúť nahor">
+<!ENTITY button.conv-rule-list.down "Posunúť nadol">
+<!ENTITY button.conv-rule-list.remove "Odstrániť pravidlo">
+<!ENTITY button.conv-rule-list.default "Nastaviť na predvolené">
+<!ENTITY button.conv-rule-list.new "Nové pravidlo">
+<!ENTITY button.conv-rule.change-directory "Zmeniť...">
+<!ENTITY label.conv-rule.convert "Konvertovať">
+<!ENTITY label.conv-rule.do-not-convert "Nekonvertovať">
+<!ENTITY label.conv-rule.files-with-ext "Súbory s príponou">
+<!ENTITY label.conv-rule.from-site "Zo stránky">
+<!ENTITY label.conv-rule.all-sites "VŠETKO">
+<!ENTITY label.conv-rule.all-files "VŠETKO">
+<!ENTITY label.conv-rule.kbps "Kbps">
+<!ENTITY label.conv-rule.bitrate "Bitrate">
+<!ENTITY label.conv-rule.output-directory "Priečinok">
+<!ENTITY label.conv-rule.default-directory "PREDVOLENÉ">
+<!ENTITY caption.conv-rule.input "Vstup">
+<!ENTITY caption.conv-rule.output "Výstup">
+<!ENTITY title.convert-register "Registrácia konvertora">
+<!ENTITY text.convert-register.benefits "Zaregistrovaním konvertora získate nasledujúce výhody">
+<!ENTITY text.convert-register.item.nologo "konvertované videá nezobrazujú logo DownloadHelper">
+<!ENTITY text.convert-register.item.mp3 "možnosť konvertovať zvukové súbory do formátu mp3">
+<!ENTITY text.convert-register.item.faster "rýchlejšia konverzia">
+<!ENTITY text.convert-register.item.support "dostupná podpora">
+<!ENTITY label.convert-register.code "Registračný kód">
+<!ENTITY button.convert-register.cancel "Zrušiť">
+<!ENTITY button.convert-register.get-code "Získať registračný kód">
+<!ENTITY button.convert-register.ok "OK">
+<!ENTITY title.converter-queue "Fronta konvertera">
+<!ENTITY label.converter-queue.status "Stav">
+<!ENTITY label.converter-queue.status.done "Hotovo">
+<!ENTITY label.converter-queue.input "Vstup">
+<!ENTITY label.converter-queue.output "Výstup">
+<!ENTITY label.converter-queue.status.inprogress "Prebieha">
+<!ENTITY label.converter-queue.status.waiting "Čaká sa">
+<!ENTITY label.converter-queue.status.error "Chyba">
+<!ENTITY button.converter-queue.close "Zavrieť">
+<!ENTITY label.conversion.converter "Konvertor">
+<!ENTITY label.conversion.no-such-converter "Program konvertora nebol nájdený.">
+<!ENTITY description.conversion.no-win-conv "Na konvertovanie videí musíte nainštalovať externý konvertor">
+<!ENTITY description.conversion.bad-version "Vyžadovaná aktualizácia konvertora">
+<!ENTITY button.conversion.win-conv "Inštalovať/aktualizovať konvertor">
+<!ENTITY button.conversion.check-win-conv "Skontrolovať konvertor">
+<!ENTITY description.conversion.win-conv "Program konvertora bol v systéme úspešne nájdený.">
+<!ENTITY title.convert-options "Možnosti konvertora">
+<!ENTITY caption.convlicense "Informácie o licencii">
+<!ENTITY label.convlicense.license "Kľúč">
+<!ENTITY label.convlicense.name "Meno vlastníka">
+<!ENTITY label.convlicense.email "E-mail vlastníka">
+<!ENTITY label.convlicense.unregistered "Neregistrovaný konvertor">
+<!ENTITY title.video-format.general "Všeobecné">
+<!ENTITY title.video-format.advanced "Rozšírené">
+<!ENTITY button.video-format.show-details "Podrobnosti...">
+<!ENTITY title.output-video-format "Formát výstupného videa">
+<!ENTITY label.video-format.two-passes "2 Passes">
+<!ENTITY label.video-format.first-pass "Pass 1">
+<!ENTITY label.video-format.second-pass "Pass 2">
+<!ENTITY label.conversion.log "Zaznamenávať konverzie">
+<!ENTITY button.conversion.show-log "Zobraziť záznam">
+<!ENTITY title.conversion-log "Záznam konverzií">
+<!ENTITY button.convert-log.clear "Vymazať záznam">
+<!ENTITY button.convert-log.close "Zavrieť">
+<!ENTITY button.convert-log.refresh "Obnoviť">
+<!ENTITY menu.video-format.copy "Kopírovať formát videa">
+<!ENTITY menu.video-format.paste "Vložiť formát videa">
+<!ENTITY button.conversion.help "Pomocník">
+<!ENTITY label.converter-queue.started-on "Začala">
+<!ENTITY label.converter-queue.ended-on "Skončila">
+<!ENTITY label.conversion-notification "Upozorniť na koniec konverzie">
+<!ENTITY label.show-in-statusbar "Zobraziť v stavovom riadku">
+<!ENTITY label.trigger-min-size "Minimálna veľkosť triggra (kB)">
+<!ENTITY label.quick-download-key "Skratka pre rýchle prevzatie">
+<!ENTITY label.open-folder-key "Skratka pre otvorenie priečinka">
+<!ENTITY button.video-format.default "Predvolená konfigurácia">
+<!ENTITY button.video-format.name "Názov konfigurácie">
+<!ENTITY button.video-format.rename "Premenovať konfiguráciu">
+<!ENTITY button.video-format.forget "Zrušiť konfiguráciu">
+<!ENTITY label.conversion-config-share "Zdieľať konfiguráciu">
+<!ENTITY label.yt-check-hq "Detekovať videá YouTube vo vysokej kvalite">
+<!ENTITY label.yt-prefer-hq "Preferovať videá YouTube vo vysokej kvalite">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Pridať k názvu súborov predponu s indexom">
+<!ENTITY title.pick-processor "Vybrať službu">
+<!ENTITY title.media-dump "Výpis médií">
+<!ENTITY label.dump-media.prop-name "Vlastnosť">
+<!ENTITY label.dump-media.prop-value "Hodnota">
+<!ENTITY label.quickkeys.change "Zmeniť rýchle klávesy">
+<!ENTITY title.config-processor-keys "Konfigurovať rýchle klávesy procesorov">
+<!ENTITY proc-keymap.revert "Nastaviť na predvolené">
+<!ENTITY proc-keymap.provider "Poskytovateľ">
+<!ENTITY proc-keymap.description "Popis">
+<!ENTITY proc-keymap.current-key "Aktuálny rýchly kláves">
+<!ENTITY proc-keymap.hold-assign "Podržte klávesy a kliknite na priradenie">
+<!ENTITY proc-keymap.unmap "Zrušiť priradenie klávesu">
+<!ENTITY title.quick-keys "Rýchle klávesy">
+<!ENTITY label.tools-menu "Zobraziť v ponuke Nástroje">
+<!ENTITY pref.title.capture "Zachytiť">
+<!ENTITY pref.title.services "Služby">
+<!ENTITY pref.title.miscellaneous "Rôzne">
+<!ENTITY pref.title.download "Prevziať">
+<!ENTITY pref.title.appearance "Vzhľad">
+<!ENTITY pref.title.behavior "Správanie">
+<!ENTITY pref.title.accelerators "Akcelerátory">
+<!ENTITY label.menu-expiration "Expirácia položky ponuky (sek.)">
+<!ENTITY pref.title.http "Sieť">
+<!ENTITY pref.title.galleries "Galérie">
+<!ENTITY pref.description.galleries "Táto metóda umožňuje prevziať súbory zo stránky prezeraním odkazkov HTML">
+<!ENTITY pref.label.enable-medialink-method "Metóda Galéria povolená">
+<!ENTITY pref.description.http "Táto metóda vyhľadáva médiá monitorovaním výmeny údajov medzi serverom a prehliadačom">
+<!ENTITY pref.description.youtube "Táto metóda rozpoznáva videá analyzovaním stránok YouTube">
+<!ENTITY pref.label.enable-http-method "Metóda Sieť povolená">
+<!ENTITY label.mediareq-file-extensions "Prípony súborov pre žiadosti">
+<!ENTITY label.ignore-below-size "Ignorovať médiá menšie ako (kB)">
+<!ENTITY label.detect-above-size "Vynútiť detekciu médií väčších ako (kB)">
+<!ENTITY pref.button.configure-conv-rules "Nastaviť pravidlá konverzie...">
+<!ENTITY title.conversion-rules "Pravidlá konverzie">
+<!ENTITY pref.button.register-converter "Registrovať konverter">
+<!ENTITY pref.caption.troubleshooting "Riešenie problémov">
+<!ENTITY pref.button.check-again "Znova skontrolovať">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "E-mailová adresa">
+<!ENTITY mp3tunes.pref.password "Heslo">
+<!ENTITY mp3tunes.pref.phonenumber "Telefónne číslo">
+<!ENTITY mp3tunes.pref.phonenumber.description "Voliteľné, ale požadované, ak chcete prijímať audio na mobilný telefón">
+<!ENTITY mp3tunes.pref.description "Služba MP3Tunes umožňuje odosielať hudbu priamo do vášho mobilného telefónu alebo na súkromné konto dostupné odvšadiaľ">
+<!ENTITY mp3tunes.pref.create-account "Vytvoriť konto">
+<!ENTITY mp3tunes.pref.password-repeat "Opakovať heslo">
+<!ENTITY mp3tunes.pref.firstname "Meno">
+<!ENTITY mp3tunes.pref.lastname "Priezvisko">
+<!ENTITY mp3tunes.title.create-account "Vytvoriť konto na MP3Tunes">
+<!ENTITY mp3tunes.pref.upgrade-account "Aktualizovať konto">
+<!ENTITY mp3tunes.pref.check-account "Skontrolovať konto">
+<!ENTITY mp3tunes.pref.last-check "Posledná kontrola">
+<!ENTITY mp3tunes.title.title "Odoslať do MP3Tunes">
+<!ENTITY mp3tunes.title.artist-name "Názov interpreta">
+<!ENTITY mp3tunes.title.album-title "Názov albumu">
+<!ENTITY mp3tunes.title.track-title "Názov skladby">
+<!ENTITY mp3tunes.title.track-number "Číslo skladby">
+<!ENTITY mp3tunes.title.year "Rok">
+<!ENTITY label.highlight-media-from-current-page "Zvýrazniť médiá aktuálnej stránky">
+<!ENTITY label.system-menu-icons "Zobraziť ikony v systémovej ponuke">
+<!ENTITY mp3tunes.label.enabled "Služba MP3Tunes povolená">
+<!ENTITY mp3tunes.title.no-converter "Chýbajúci konvertorť konverziu">
+<!ENTITY mp3tunes.button.no-converter.continue "Pokračovať">
+<!ENTITY mp3tunes.button.no-converter.configure "Nastaviť konverziu">
+<!ENTITY mp3tunes.text.no-converter.1 "Chcete odoslať hudobnú skladbu do MP3Tunes, ale zabudovaný konvertor zatiaľ nebol nakonfigurovaný.">
+<!ENTITY mp3tunes.text.no-converter.2 "Môžete tak urobiť, ale musíte mať na pamäti, že to bude trvať oveľa dlhšie s nastavenou funkciou konverzie.">
+<!ENTITY mp3tunes.label.no-converter.not-again "Toto upozornenie viac nezobrazovať">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "Zobraziť miniaplikcáiu s prístupom k službám zo stránok YouTube.">
+<!ENTITY label.yt-inpage.default-processor "Predvolená služba">
+<!ENTITY label.privacy-policy "Zásady ochrany súkromia">
+<!ENTITY mp3tunes.label.open-locker "Otvoriť locker">
+<!ENTITY mp3tunes.pref.on-send-mobile "Pri odosielaní do mobilu">
+<!ENTITY mp3tunes.pref.on-send-locker "Pri odosielaní do lockera">
+<!ENTITY mp3tunes.pref.on-send.video "Odoslať video (so zvukom)">
+<!ENTITY mp3tunes.pref.on-send.audio "Odoslať len zvuk">
+<!ENTITY mp3tunes.pref.on-send.ask "Opýtať sa používateľa">
+<!ENTITY mp3tunes.title.conversion-choice "Typ odoslania na MP3tunes">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Pamätať si moju voľbu a viac sa nepýtať">
+<!ENTITY mp3tunes.pref.phonenumber-sample "s kódom krajiny, napr. +1 555 555 5555">
+<!ENTITY ythq.label.enable "Povoliť">
+<!ENTITY ythq.label.disable "Zakázať">
+<!ENTITY ythq.label.up "Hore">
+<!ENTITY ythq.label.down "Dole">
+<!ENTITY ythq.column.type "Typ">
+<!ENTITY ythq.column.format "Formát">
+<!ENTITY ythq.column.video "Video">
+<!ENTITY ythq.column.audio "Zvuk">
+<!ENTITY pref.title.blacklist "Čierna listina">
+<!ENTITY pref.description.blacklist "Táto funkcia umožňuje ignorovať médiá z niektorých stránok, napr. reklamné videá.">
+<!ENTITY add2bl.label.add-domain-choice "Ignorovať notifikácie na médiá z domén:">
+<!ENTITY pref.label.share-blacklist "Zdieľať čiernu listinu">
+<!ENTITY pref.description.share-blacklist "Zdieľaním vašej čiernej listiny umožníte vylepšiť čiernu listinu v nasledujúcej verzii produktu.">
+<!ENTITY label.add2bl.configure-blacklist "Nastaviť čiernu listinu">
+<!ENTITY label.extended-download-menu "Rozšírená ponuka prevzatia">
+<!ENTITY smartname.menu-name "Inteligentné pomenovanie">
+<!ENTITY smartname.menu-set-name "Zadajte umiestnenie názvu média">
+<!ENTITY smartname.menu-set-descr "Zadajte umiestnenie popisu média">
+<!ENTITY smartname.menu-share-now "Zdieľať">
+<!ENTITY smartname.menu-import "Import">
+<!ENTITY smartname.define.value-for-page "Hodnota pre túto stránku:">
+<!ENTITY smartname.define.domain "Doména">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "Regulárny výraz">
+<!ENTITY smartname.define.previous-value "Predchádzajúce hodnoty">
+<!ENTITY pref.title.smartname "Inteligentné pomenovanie">
+<!ENTITY pref.description.smartname "Funkcia Inteligentné pomenovanie umožňuje nastaviť zmysluplné názvy prevzatým médiám.">
+<!ENTITY pref.label.enable-smartname "Povoliť inteligentné pomenovanie">
+<!ENTITY smartname.column.domain "Doména">
+<!ENTITY smartname.column.mode "Režim">
+<!ENTITY smartname.list.button.delete "Odstrániť">
+<!ENTITY smartname.list.button.edit "Upraviť">
+<!ENTITY smartname.list.button.import "Import">
+<!ENTITY smartname.list.label.type "Typ">
+<!ENTITY smartname.list.type.name "Názov média">
+<!ENTITY smartname.list.type.descr "Popis média">
+<!ENTITY smartname.overlap.select "Vybrať">
+<!ENTITY smartname.overlap.selectall "Všetko">
+<!ENTITY smartname.overlap.selectnone "Nič">
+<!ENTITY smartname.overlap.description "Kontrolované položky budú prepísané">
+<!ENTITY smartname.overlap.title "Presah">
+<!ENTITY pref.label.smartname.keep-spaces "Zachovať medzery v názvoch súborov">
+<!ENTITY pref.label.smartname.keep-nonascii "Zachovať non-ascii znaky v názvoch súborov">
+<!ENTITY pref.label.smartname.auto-share "Anonymne zdieľať štatistiky inteligentného pomenovania">
+<!ENTITY pref.label.smartname.auto-share.notice "Týmto pomôžete automaticky spravovať databázu názvov, pomôžete tým všetkým.">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Meno">
+<!ENTITY twitter.pref.password "Heslo">
+<!ENTITY twitter.pref.description "Služba Twitter umožňuje jednoducho odosielať správy o médiách">
+<!ENTITY twitter.pref.create-account "Vytvoriť zadarmo konto na Twitteri">
+<!ENTITY twitter.pref.check-account "Skontrolovať meno/heslo">
+<!ENTITY twitter.pref.last-check "Posledná kontrola">
+<!ENTITY twitter.label.enabled "Služba Twitter povolená">
+<!ENTITY twitter.title.send-message "Odoslať správu na Twitter">
+<!ENTITY twitter.message.smartnaming "Mali by ste zvážiť použiť funkcie Inteligentné pomenovanie, pomocou ktorej môžete predvyplniť správu názvom videa a jeho popisom, ak je dostupný.">
+<!ENTITY twitter.label.go-to-smartnaming "Viac o funkcii Inteligentné pomenovanie">
+<!ENTITY twitter.label.tag-message "Predvyplniť správu značkou #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Maximálny počet hitov">
+<!ENTITY pref.label.icon-click "Po kliknutí na ikonu">
+<!ENTITY pref.label.icon-click.sites "Zobraziť podporované stránky">
+<!ENTITY pref.label.icon-click.quick-download "Vykonať rýchle prevzatie">

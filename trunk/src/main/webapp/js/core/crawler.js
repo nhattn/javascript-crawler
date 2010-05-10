@@ -9,25 +9,16 @@ Crawler = {
 	clog : function(txt){
 	    if(window.console) window.console.log(txt);
 	},
+	
 	log : function(txt){
 	    Crawler.clog(txt);
 	},
+	
 	error: function(txt){
 	    Crawler.clog('Error: '+txt);
 	    CrGlobal.doAction = false;
 	    alert(txt);
-	},
-	
-	objToString : function(obj){
-	    var r = [];
-	    for(var i in obj){
-	        r.push(i);
-	        r.push('=');
-	        r.push(obj[i]);
-	        r.push(', ');
-	    }
-	    return r.join('');
-	},
+	},	
 	
 	/**
 	 * perform an action based on specificed command and parameters.
@@ -37,7 +28,6 @@ Crawler = {
 	 *     param1: first parameter if the action needs to take any parameters
 	 *     param2: seocond..
 	 *     param3: ... etc
-	 *     
 	 * }
 	 */
 	action : function(obj){
@@ -94,9 +84,11 @@ Crawler = {
 	        Crawler.nextLink();
 	    }
 	},
+	
 	nextLink : function(){
 	   Crawler.action({action:'Goto.Next.Link'});
 	},
+	
 	callback : function(r, suc){
 	    if(!suc){
 	        Crawler.clog("failed");            
@@ -115,46 +107,8 @@ Crawler = {
 	            Crawler.nextLink();
 	        }
 	    }        
-	},	
-		
-	killSpace : function(s){
-	    return s.replace(/\s+/g, ' ');
-	},
+	},		
 	
-	/**
-	 *  s is something like "小说类别：虚拟网游 总点击：4736 总推荐：419 总字数：228132 更新：2009年10月10日".
-	 *  extract the value for keys like "小说类别" or "总点击".
-	 */
-	extract : function(s, key, defaultValue){
-	    var start, end;
-	    if(typeof defaultValue == 'undefined'){
-	        defaultValue = '';
-	    }
-	    s = Crawler.killSpace(s);
-	    start = s.indexOf(key);
-	    if(start<0){
-	        return defaultValue;
-	    }
-	    
-	    start = start + key.length;
-	    var space =  /^\s$/;
-	    while(start<s.length && space.test(s.charAt(start++))){
-	        // skip all the spaces
-	    }	    
-	    start--;
-	    end = start+1;
-        var nspace =  /^\S$/;
-        while(end<s.length && nspace.test(s.charAt(end++))){
-            // skip all the none spaces
-        }   	    
-        var r = '';
-        try{
-            r = s.substring(start,end);
-        }catch(e){
-            Crawler.error("crawler_loader.extract:"+e+":"+e);
-        }        
-        return r.trim();
-	},			
     locateHandler : function(){
         var url = window.location.toString(), m = CrGlobal.handlerMapping;
         for(var i=0;i<m.length;i++){
@@ -164,7 +118,8 @@ Crawler = {
             }
         }
         return 'nomatch';
-    }, 
+    },
+    
     loadHandler: function(){
         // find out which web site, based on mapping file, locate the js files.
         Ext.lib.Ajax.useDefaultXhrHeader=false;

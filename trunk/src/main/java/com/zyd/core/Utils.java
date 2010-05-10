@@ -31,6 +31,30 @@ import com.zyd.core.dom.Book;
 public class Utils {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
+    private final static HashMap<Character, Character> CHARMAP = new HashMap<Character, Character>();
+
+    static {
+        CHARMAP.put('一', '1');
+        CHARMAP.put('二', '2');
+        CHARMAP.put('三', '3');
+        CHARMAP.put('四', '4');
+        CHARMAP.put('五', '5');
+        CHARMAP.put('六', '6');
+        CHARMAP.put('七', '7');
+        CHARMAP.put('零', '0');
+        CHARMAP.put('八', '8');
+        CHARMAP.put('九', '9');
+        CHARMAP.put('1', '1');
+        CHARMAP.put('7', '7');
+        CHARMAP.put('2', '2');
+        CHARMAP.put('8', '8');
+        CHARMAP.put('3', '3');
+        CHARMAP.put('9', '9');
+        CHARMAP.put('4', '4');
+        CHARMAP.put('0', '0');
+        CHARMAP.put('5', '5');
+        CHARMAP.put('6', '6');
+    }
 
     public static String getUniqueBookId() {
         Date d = new Date();
@@ -372,6 +396,40 @@ public class Utils {
         return null;
     }
 
+    public static int parseInit(String s, int defaultValue) {
+        try {
+            defaultValue = Integer.parseInt(s);
+        } catch (Exception e) {
+            //TODO:
+            e.printStackTrace();
+        }
+        return defaultValue;
+
+    }
+
+    public static int gpsDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return (int) (6371 * 1000 * c);
+    }
+
+    public static int gpsDistance2(double lat1, double lon1, double lat2, double lon2) {
+        double EARTH_CIRC_METERS = 40030218;
+        double radLat1 = lat1;//  Math.toRadians(lat1);
+        double radLon1 = lon1; //Math.toRadians(lon1);
+        double radLat2 = lat2; //Math.toRadians(lat2);
+        double radLon2 = lon2; //Math.toRadians(lon2);        
+        double d = Math.acos((Math.cos(radLat1) * Math.cos(radLat2)) + (Math.sin(radLat1) * Math.sin(radLat2)) * (Math.cos(radLon1 - radLon2)));
+        return (int) (d * EARTH_CIRC_METERS);
+    }
+
+    public static void main1(String[] args) {
+        System.out.println(gpsDistance(-86.670048, 36.120197, 33.941722, -118.400517));
+        System.out.println(gpsDistance2(-86.670048, 36.120197, 33.941722, -118.400517));
+    }
+
     public static void main(String[] args) {
         Book b = new Book();
         b.setName("我的名字");
@@ -383,8 +441,26 @@ public class Utils {
         System.out.println(getDomain("cc.bbb.com"));
         System.out.println(getDomain("bbb.com"));
         System.out.println(getDomain("http://bbb.com"));
-
         System.out.println(parseDate("09-10-13 13:57"));
+        System.out.println(extractNumbers("上海市陆家嘴路七号八单元2  02"));
     }
 
+    /**
+     * Given a string contains some numbers/characters/chinese numbers, extract the number part.
+     * e.g. 上海市陆家嘴路七号八单元202, will return 78202
+     * @param s
+     * @return
+     */
+    public static String extractNumbers(String s) {
+        if (s == null)
+            return "";
+        StringBuffer buf = new StringBuffer();
+        HashMap map = CHARMAP;
+        for (int i = 0, len = s.length(); i < len; i++) {
+            if (map.get(s.charAt(i)) != null) {
+                buf.append(map.get(s.charAt(i)));
+            }
+        }
+        return buf.toString();
+    }
 }

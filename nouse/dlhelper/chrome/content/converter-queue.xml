@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="ConverterQueue" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox
+				anonid="xList"
+				datasources="rdf:null" 
+				ref="urn:root"
+				context="_child"
+				class="dwhelper-converter-queue-container"
+				flex="1"
+				>
+				<template>
+					<rule>
+						<conditions>
+							<content uri="?root"/>
+							<member container="?root" child="?conversion"/>  
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#Status"
+							        object="2"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePath"
+							        object="?InputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePathShort"
+							        object="?InputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePath"
+							        object="?OutputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePathShort"
+							        object="?OutputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#CreationDate"
+							        object="?CreationDate"/>
+						</conditions>
+						<action>
+							<vbox uri="?conversion" class="dwhelper-converter-queue-entry">
+								<grid flex="1">
+									<columns>
+										<column/>
+										<column flex="1"/>
+									</columns>
+									<rows>
+										<row>
+											<label value="&label.converter-queue.status;"/>
+											<label value="&label.converter-queue.status.waiting;"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.started-on;"/>
+											<label value="?CreationDate"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.input;"/>
+											<label value="?InputFilePathShort" tooltiptext="?InputFilePath"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.output;"/>
+											<label value="?OutputFilePathShort" tooltiptext="?OutputFilePath"/>
+										</row>
+									</rows>
+								</grid>
+							</vbox>
+						</action>
+					</rule>
+
+					<rule>
+						<conditions>
+							<content uri="?root"/>
+							<member container="?root" child="?conversion"/>  
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#Status"
+							        object="5"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePath"
+							        object="?InputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePathShort"
+							        object="?InputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePath"
+							        object="?OutputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePathShort"
+							        object="?OutputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#EndDate"
+							        object="?EndDate"/>
+						</conditions>
+						<bindings>
+							<binding subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#ErrorMessage"
+							        object="?ErrorMessage"/>
+						</bindings>
+						<action>
+							<vbox uri="?conversion" class="dwhelper-converter-queue-entry">
+								<grid flex="1">
+									<columns>
+										<column/>
+										<column flex="1"/>
+									</columns>
+									<rows>
+										<row>
+											<label value="&label.converter-queue.status.error;"/>
+											 <description value="?ErrorMessage"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.ended-on;"/>
+											<label value="?EndDate"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.input;"/>
+											<label value="?InputFilePathShort" tooltiptext="?InputFilePath"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.output;"/>
+											<label value="?OutputFilePathShort" tooltiptext="?OutputFilePath"/>
+										</row>
+									</rows>
+								</grid>
+							</vbox>
+						</action>
+					</rule>
+
+					<rule>
+						<conditions>
+							<content uri="?root"/>
+							<member container="?root" child="?conversion"/>  
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#Status"
+							        object="4"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePath"
+							        object="?InputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePathShort"
+							        object="?InputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePath"
+							        object="?OutputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePathShort"
+							        object="?OutputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#EndDate"
+							        object="?EndDate"/>
+						</conditions>
+						<action>
+							<vbox uri="?conversion" class="dwhelper-converter-queue-entry">
+								<grid flex="1">
+									<columns>
+										<column/>
+										<column flex="1"/>
+									</columns>
+									<rows>
+										<row>
+											<label value="&label.converter-queue.status;"/>
+											<label value="&label.converter-queue.status.done;"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.ended-on;"/>
+											<label value="?EndDate"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.input;"/>
+											<label value="?InputFilePathShort" tooltiptext="?InputFilePath"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.output;"/>
+											<label value="?OutputFilePathShort" tooltiptext="?OutputFilePath"/>
+										</row>
+									</rows>
+								</grid>
+							</vbox>
+						</action>
+					</rule>
+
+					<rule>
+						<conditions>
+							<content uri="?root"/>
+							<member container="?root" child="?conversion"/>  
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#Status"
+							        object="3"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePath"
+							        object="?InputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#InputFilePathShort"
+							        object="?InputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePath"
+							        object="?OutputFilePath"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#OutputFilePathShort"
+							        object="?OutputFilePathShort"/>
+							<triple subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#CreationDate"
+							        object="?CreationDate"/>
+						</conditions>
+						<bindings>
+							<binding subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#Progress"
+							        object="?Progress"/>
+							<binding subject="?conversion"
+							        predicate="http://downloadhelper.net/1.0#ProgressMode"
+							        object="?ProgressMode"/>
+						</bindings>
+						<action>
+							<vbox uri="?conversion" class="dwhelper-converter-queue-entry">
+								<grid flex="1">
+									<columns>
+										<column/>
+										<column flex="1"/>
+									</columns>
+									<rows>
+										<row>
+											<label value="&label.converter-queue.status;"/>
+											<label value="&label.converter-queue.status.inprogress;"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.started-on;"/>
+											<label value="?CreationDate"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.input;"/>
+											<label value="?InputFilePathShort" tooltiptext="?InputFilePath"/>
+										</row>
+										<row>
+											<label value="&label.converter-queue.output;"/>
+											<label value="?OutputFilePathShort" tooltiptext="?OutputFilePath"/>
+										</row>
+										<row>
+											<spacer/>
+											<progressmeter
+											    mode="?ProgressMode"
+    											value="?Progress"/>
+										</row>
+									</rows>
+								</grid>
+							</vbox>
+						</action>
+					</rule>
+
+				</template>
+				
+			</vbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+var props=this.convertMgr.getInfo();
+var method=props.get("method",Components.interfaces.nsISupportsPRInt32).data;
+
+this.datasource=this.convertMgr.getQueueDataSource();	
+this.util.setDatasource(this.xList,this.datasource);
+				]]>
+			</constructor>
+
+			<destructor>
+				<![CDATA[
+if(this.pollTimer) {
+	window.clearTimeout(this.pollTimer);
+	this.convKey.close();
+}
+				]]>
+			</destructor>
+
+			<method name="updateQueue">
+				<body>
+				<![CDATA[
+
+
+this.datasource.beginUpdateBatch();
+var keys={};
+var file=Components.classes["@mozilla.org/file/local;1"].
+        createInstance(Components.interfaces.nsILocalFile);
+for(var i=0;i<this.convKey.childCount;i++) {
+	var keyName=this.convKey.getChildName(i);
+	var resKeyName=this.NS+"converter-queue-"+keyName;
+	keys[resKeyName]="";
+	var key=this.convKey.openChild(keyName,this.convKey.ACCESS_READ);
+	this.util.createNodeSS(this.datasource,"urn:root",resKeyName);
+	var path=key.readStringValue("InputFilePath");
+	file.initWithPath(path);
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"InputFilePath",
+		path);
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"InputFilePathShort",
+		file.leafName);
+	path=key.readStringValue("OutputFilePath");
+	file.initWithPath(path);
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"OutputFilePath",
+		path);
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"OutputFilePathShort",
+		file.leafName);
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"Status",
+		""+key.readIntValue("Status"));
+	this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"Progress",
+		""+key.readIntValue("Progress"));
+	try {
+		this.util.setPropertyValueSS(this.datasource,resKeyName,this.NS+"ErrorMessage",
+			key.readStringValue("ErrorMessage"));
+	} catch(e) {}
+	key.close();
+}
+
+var keys0=this.util.getChildResourcesS(this.datasource,"urn:root",{});
+for(var i=0;i<keys0.length;i++) {
+	if(keys[keys0[i].Value]==null) {
+		this.util.removeReference(this.datasource,keys0[i]);
+	}
+}
+this.datasource.endUpdateBatch();
+
+
+				]]>
+				</body>
+			</method>
+			
+		</implementation>
+		
+		<handlers>
+			
+			<!-- 
+			<handler event="DOMAttrModified">
+				<![CDATA[
+				]]>
+			</handler>
+			 -->
+	
+		</handlers>
+
+	</binding>
+ 
+</bindings>

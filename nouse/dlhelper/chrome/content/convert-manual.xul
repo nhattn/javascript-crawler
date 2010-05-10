@@ -1,0 +1,64 @@
+<?xml version="1.0"?> 
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://dwhelper/skin/dwhelper.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/content/bindings.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<dialog id="dwhelper-convert-options-window"
+		title="&title.convert-options;"
+        flex="1"
+		onload="onLoad()"
+        ondialogaccept="return doOk();"
+		buttons="help,accept,cancel"
+        ondialoghelp="return doHelp();"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        >
+
+	<script type="application/x-javascript"
+		src="chrome://dwhelper/content/dwhutil.js" />
+
+	<script><![CDATA[
+var pref=Components.classes["@mozilla.org/preferences-service;1"]
+	.getService(Components.interfaces.nsIPrefService)
+	.getBranch("dwhelper.");
+
+function onLoad() {
+	var of=document.getElementById("xOutFormat");
+	var format=window.arguments[0].format;
+	if(format==null) {
+		format="wmv/-acodec wmav1 -b 1000kbps -f asf -vcodec wmv1";
+		try {
+			format=pref.getCharPref("manual-convert-output-format");
+		} catch(e) {}
+	}
+	window.arguments[0].format=null;
+	of.value=format;
+}
+
+function doOk() {
+	var of=document.getElementById("xOutFormat");
+	
+	if(!of.isValid())
+		return false;
+	
+	var format=of.value;
+	pref.setCharPref("manual-convert-output-format",format);
+	window.arguments[0].format=format;
+	return true;
+}
+
+function doHelp() {
+	window.opener.open("http://www.downloadhelper.net/conversion-manual.php#use-manual");
+	return false;
+}
+	
+	]]></script>
+
+ 	<VideoFormatPanel id="xOutFormat"/>
+
+</dialog>

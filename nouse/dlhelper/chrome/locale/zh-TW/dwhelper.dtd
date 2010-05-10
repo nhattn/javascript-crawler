@@ -1,0 +1,349 @@
+<!ENTITY menu.help "說明">
+<!ENTITY menu.manual-check "檢查 URL">
+<!ENTITY menu.preferences "偏好設定 ...">
+<!ENTITY menu.about "關於 ...">
+<!ENTITY label.download-one-by-one "一個接一個下載">
+<!ENTITY label.storagedir "儲存目錄">
+<!ENTITY button.changedir "更改目錄">
+<!ENTITY error.nohome "根目錄不存在">
+<!ENTITY error.notadirectory "不是一個目錄">
+<!ENTITY title.preferences "偏好設定">
+<!ENTITY title.about "關於 DownloadHelper">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "選單項目顯示時間 (毫秒)">
+<!ENTITY label.icon-animation "圖示動畫">
+<!ENTITY menu.ytlinks "下載所選區域鏈結的 YouTube 視訊">
+<!ENTITY label.download-mode "下載模式">
+<!ENTITY label.download-mode.normal "同時下載">
+<!ENTITY label.download-mode.onebyone "一個接一個下載">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "貢獻者">
+<!ENTITY title.general "一般">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "MediaLink 方式是藉由從網頁的 HTML 原始碼中尋找可用的下載鏈結來下載檔案">
+<!ENTITY button.add "新增">
+<!ENTITY button.default "預設值">
+<!ENTITY button.remove "移除">
+<!ENTITY label.file-extensions "檔案副檔名">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "MediaReq 方式是藉由檢查網頁所發出的 HTTP 請求來偵測是否為媒體檔案">
+<!ENTITY title.support-dev "支持 DownloadHelper 開發">
+<!ENTITY label.donate-not-again "不再提醒">
+<!ENTITY label.donate "捐助">
+<!ENTITY label.cancel "取消">
+<!ENTITY label.congratulations "恭喜！">
+<!ENTITY label.keep-spaces "保留檔案名稱中的空格">
+<!ENTITY title.sites "DownloadHelper 支援的影音網站">
+<!ENTITY button.sites.close "關閉">
+<!ENTITY button.sites.open "開啟">
+<!ENTITY button.sites.report "回報新的支援網站">
+<!ENTITY column.sites.name "名稱">
+<!ENTITY column.sites.rating "評分">
+<!ENTITY column.sites.count "評論">
+<!ENTITY column.sites.date "加入日期">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "關閉">
+<!ENTITY label.site.name "名稱">
+<!ENTITY caption.site.site "影音網站">
+<!ENTITY title.site "影音網站">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "已新增">
+<!ENTITY label.site.rating "評分">
+<!ENTITY label.site.no-rating "還沒有">
+<!ENTITY button.site.check "檢查網站">
+<!ENTITY button.site.comment "新增評論">
+<!ENTITY label.comment.site "網站">
+<!ENTITY title.comment "評論">
+<!ENTITY caption.comment.comment "新增評論">
+<!ENTITY label.comment.author "暱稱">
+<!ENTITY help.comment.author "您的姓名或暱稱">
+<!ENTITY label.comment.title "標題">
+<!ENTITY help.comment.title "評論的標題">
+<!ENTITY label.comment.comment "評論">
+<!ENTITY help.comment.comment "用空行來分段">
+<!ENTITY label.comment.tags "標籤">
+<!ENTITY help.comment.tags "用空格分開相關的標籤 (例如「新聞 台灣」或「成人」)">
+<!ENTITY label.comment.rating "評分">
+<!ENTITY help.comment.rating "0 = 真沒趣，5 = 真棒">
+<!ENTITY button.comment.close "關閉">
+<!ENTITY button.comment.submit "提交評論">
+<!ENTITY label.comment.wait "您的評論已被提交。請稍候 ...">
+<!ENTITY title.report "回報新的支援的影音網站">
+<!ENTITY caption.report.report "回報一個新的支援影音網站">
+<!ENTITY message.report.check-new "請確定這個網站不在現有的網站清單裡">
+<!ENTITY label.report.name "網站名稱">
+<!ENTITY help.report.name "網站的通用名稱，例如 YouTube">
+<!ENTITY label.report.url "網站 URL">
+<!ENTITY help.report.url "網站位址，例如 http://www.youtube.com">
+<!ENTITY label.report.author "您的姓名">
+<!ENTITY help.report.author "回報者 (貢獻者) 的名字。可以保留空白">
+<!ENTITY label.report.description "描述">
+<!ENTITY help.report.description "關於此網站的簡短描述">
+<!ENTITY button.report.submit "提交網站">
+<!ENTITY button.report.close "關閉">
+<!ENTITY label.report.wait "您的網站已被提交。請稍候 ...">
+<!ENTITY menu.sites "支援的影音網站">
+<!ENTITY label.sites.list-adult "顯示包含明顯成人色情內容的網站">
+<!ENTITY label.report.adult "成人內容">
+<!ENTITY label.context-menu "在右鍵選單中顯示">
+<!ENTITY menu.to-sumo "發表視訊到 SUMO.tv">
+<!ENTITY label.enable-plugin-method "啟用外掛簽名方式">
+<!ENTITY label.yt-unmodified-filename "保留 YouTube 檔案名稱 (中日韓)">
+<!ENTITY label.disable-dwcount-cookie "停用下載計次 cookie">
+<!ENTITY column.sites.duration "興趣">
+<!ENTITY title.mediaweight "媒體大小限制">
+<!ENTITY label.mediaweight-enabled "啟用媒體大小限制">
+<!ENTITY label.mediaweight-threshold "媒體大小限制">
+<!ENTITY label.enable-medialink-method "啟用 MediaLink">
+<!ENTITY mediaweight.description "「媒體大小限制」方式是藉由檢查 HTTP 回應來偵測是否跟網頁上的媒體檔案大小一致">
+<!ENTITY title.history "歷史記錄">
+<!ENTITY title.download-queue "下載佇列">
+<!ENTITY column.media-url "媒體 URL">
+<!ENTITY column.source-url "來源 URL">
+<!ENTITY column.view-date "觀看日期">
+<!ENTITY column.file-name "檔案名稱">
+<!ENTITY title.histlist "歷史記錄">
+<!ENTITY label.histlist-enabled "啟用歷史記錄 (beta)">
+<!ENTITY label.histlist-clearonexit "結束時清除歷史記錄">
+<!ENTITY button.medialist.watch "觀看">
+<!ENTITY button.medialist.download "下載">
+<!ENTITY button.medialist.more "更多">
+<!ENTITY button.medialist.go-source "瀏覽來源網頁">
+<!ENTITY button.medialist.remove "移除">
+<!ENTITY button.remove-downloads "移除所選">
+<!ENTITY history.description "此功能允許記住您曾經瀏覽過的視訊及媒體，讓您可以很容易地找回它們並以批次的模式下載一個所選的集合。">
+<!ENTITY about.for-free "本 Firefox 擴充套件是免費提供的。">
+<!ENTITY about.know-more "要了解更多細節，請按此">
+<!ENTITY about.link "鏈結">
+<!ENTITY about.know-more2 "。">
+<!ENTITY about.locale-credit "正體中文翻譯: Jackbin (jackbin.blogspot.com) from BabelZilla.org">
+<!ENTITY title.conversion "轉換">
+<!ENTITY conversion.description "此功能可幫您自動轉換已下載的視訊">
+<!ENTITY conversion.rules-description "轉換規則的優先順序是由上到下">
+<!ENTITY label.conversion-enabled "啟用轉換">
+<!ENTITY title.conversion-rule "轉換規則">
+<!ENTITY column.conversion.rules "轉換規則">
+<!ENTITY button.conv-rule-list.edit "編輯規則">
+<!ENTITY button.conv-rule-list.up "上移">
+<!ENTITY button.conv-rule-list.down "下移">
+<!ENTITY button.conv-rule-list.remove "移除規則">
+<!ENTITY button.conv-rule-list.default "還原回預設值">
+<!ENTITY button.conv-rule-list.new "新規則">
+<!ENTITY button.conv-rule.change-directory "更改...">
+<!ENTITY label.conv-rule.convert "轉換">
+<!ENTITY label.conv-rule.do-not-convert "不轉換">
+<!ENTITY label.conv-rule.files-with-ext "檔案包含副檔名">
+<!ENTITY label.conv-rule.from-site "從網站">
+<!ENTITY label.conv-rule.all-sites "全部">
+<!ENTITY label.conv-rule.all-files "全部">
+<!ENTITY label.conv-rule.kbps "Kbps">
+<!ENTITY label.conv-rule.bitrate "位元率">
+<!ENTITY label.conv-rule.output-directory "目錄">
+<!ENTITY label.conv-rule.default-directory "預設值">
+<!ENTITY caption.conv-rule.input "輸入">
+<!ENTITY caption.conv-rule.output "輸出">
+<!ENTITY title.convert-register "轉換程式註冊">
+<!ENTITY text.convert-register.benefits "註冊轉換程式可以享受以下好處:">
+<!ENTITY text.convert-register.item.nologo "在已轉換的視訊上不會顯示 DownloadHelper logo">
+<!ENTITY text.convert-register.item.mp3 "可以轉換成 mp3 音訊檔案">
+<!ENTITY text.convert-register.item.faster "轉換速度較快">
+<!ENTITY text.convert-register.item.support "獲得技術支援">
+<!ENTITY label.convert-register.code "註冊碼">
+<!ENTITY button.convert-register.cancel "取消">
+<!ENTITY button.convert-register.get-code "取得註冊碼">
+<!ENTITY button.convert-register.ok "確定">
+<!ENTITY title.converter-queue "轉換程式佇列">
+<!ENTITY label.converter-queue.status "狀態">
+<!ENTITY label.converter-queue.status.done "完成">
+<!ENTITY label.converter-queue.input "輸入">
+<!ENTITY label.converter-queue.output "輸出">
+<!ENTITY label.converter-queue.status.inprogress "處理中">
+<!ENTITY label.converter-queue.status.waiting "等候中">
+<!ENTITY label.converter-queue.status.error "錯誤">
+<!ENTITY button.converter-queue.close "關閉">
+<!ENTITY label.conversion.converter "轉換程式">
+<!ENTITY label.conversion.no-such-converter "未找到轉換程式">
+<!ENTITY description.conversion.no-win-conv "您需要安裝外部應用程式來轉換視訊">
+<!ENTITY description.conversion.bad-version "ConvertHelper 需要更新">
+<!ENTITY button.conversion.win-conv "安裝/更新轉換程式">
+<!ENTITY button.conversion.check-win-conv "重新檢查轉換程式">
+<!ENTITY description.conversion.win-conv "已在您系統中發現轉換程式">
+<!ENTITY title.convert-options "轉換程式選項">
+<!ENTITY caption.convlicense "授權資訊">
+<!ENTITY label.convlicense.license "註冊碼">
+<!ENTITY label.convlicense.name "授權者名稱">
+<!ENTITY label.convlicense.email "授權者 email">
+<!ENTITY label.convlicense.unregistered "未註冊的轉換程式">
+<!ENTITY title.video-format.general "一般">
+<!ENTITY title.video-format.advanced "進階">
+<!ENTITY button.video-format.show-details "詳細資料 ...">
+<!ENTITY title.output-video-format "視訊輸出格式">
+<!ENTITY label.video-format.two-passes "2 通道">
+<!ENTITY label.video-format.first-pass "通道 1">
+<!ENTITY label.video-format.second-pass "通道 2">
+<!ENTITY label.conversion.log "記錄轉換">
+<!ENTITY button.conversion.show-log "顯示記錄">
+<!ENTITY title.conversion-log "轉換記錄">
+<!ENTITY button.convert-log.clear "清除記錄">
+<!ENTITY button.convert-log.close "關閉">
+<!ENTITY button.convert-log.refresh "重新整理">
+<!ENTITY menu.video-format.copy "複製視訊格式">
+<!ENTITY menu.video-format.paste "貼上視訊格式">
+<!ENTITY button.conversion.help "說明">
+<!ENTITY label.converter-queue.started-on "開始於">
+<!ENTITY label.converter-queue.ended-on "結束於">
+<!ENTITY label.conversion-notification "提示轉換結束">
+<!ENTITY label.show-in-statusbar "顯示於狀態列">
+<!ENTITY label.trigger-min-size "觸發的最小大小 (KB)">
+<!ENTITY label.quick-download-key "「快速下載」快捷鍵">
+<!ENTITY label.open-folder-key "「開啟資料夾」快捷鍵">
+<!ENTITY button.video-format.default "預設組態">
+<!ENTITY button.video-format.name "命名組態">
+<!ENTITY button.video-format.rename "重新命名組態">
+<!ENTITY button.video-format.forget "忘記組態">
+<!ENTITY label.conversion-config-share "分享組態">
+<!ENTITY label.yt-check-hq "自動偵測 YouTube 高品質影片">
+<!ENTITY label.yt-prefer-hq "優先下載 YouTube 高品質影片">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "依編號自動命名檔名">
+<!ENTITY title.pick-processor "選擇服務">
+<!ENTITY title.media-dump "媒體備份">
+<!ENTITY label.dump-media.prop-name "屬性">
+<!ENTITY label.dump-media.prop-value "值">
+<!ENTITY label.quickkeys.change "更改快捷鍵">
+<!ENTITY title.config-processor-keys "配置處理快捷鍵">
+<!ENTITY proc-keymap.revert "還原回預設值">
+<!ENTITY proc-keymap.provider "提供者">
+<!ENTITY proc-keymap.description "描述">
+<!ENTITY proc-keymap.current-key "目前的快捷鍵">
+<!ENTITY proc-keymap.hold-assign "按住鍵盤按鍵然後按此按鈕">
+<!ENTITY proc-keymap.unmap "移除快捷鍵">
+<!ENTITY title.quick-keys "快捷鍵">
+<!ENTITY label.tools-menu "在工具選單顯示">
+<!ENTITY pref.title.capture "擷取">
+<!ENTITY pref.title.services "服務">
+<!ENTITY pref.title.miscellaneous "其他">
+<!ENTITY pref.title.download "下載">
+<!ENTITY pref.title.appearance "外觀">
+<!ENTITY pref.title.behavior "行為">
+<!ENTITY pref.title.accelerators "加速器">
+<!ENTITY label.menu-expiration "選單項目顯示時間 (秒)">
+<!ENTITY pref.title.http "網路">
+<!ENTITY pref.title.galleries "Galleries">
+<!ENTITY pref.description.galleries "此方式是藉由檢查網頁鏈結來從網頁中下載檔案">
+<!ENTITY pref.label.enable-medialink-method "啟用 Gallery 方式">
+<!ENTITY pref.description.http "此方式是藉由監視瀏覽器與伺服器間的 HTTP 資料交換來偵測是否為媒體檔案">
+<!ENTITY pref.description.youtube "此方式是藉由分析 YouTube 頁面來識別是否為視訊檔案">
+<!ENTITY pref.label.enable-http-method "啟用網路方式">
+<!ENTITY label.mediareq-file-extensions "請求的檔案副檔名">
+<!ENTITY label.ignore-below-size "忽略小於 (KB) 的媒體">
+<!ENTITY label.detect-above-size "強制偵測大於 (KB) 的媒體">
+<!ENTITY pref.button.configure-conv-rules "配置轉換規則 ...">
+<!ENTITY title.conversion-rules "轉換規則">
+<!ENTITY pref.button.register-converter "註冊轉換器">
+<!ENTITY pref.caption.troubleshooting "修正問題">
+<!ENTITY pref.button.check-again "再次檢查">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "Email 地址">
+<!ENTITY mp3tunes.pref.password "密碼">
+<!ENTITY mp3tunes.pref.phonenumber "電話號碼">
+<!ENTITY mp3tunes.pref.phonenumber.description "可選項，但當您要從手機接收音樂檔案時需要填寫">
+<!ENTITY mp3tunes.pref.description "MP3Tunes 服務允許您從任何地方將音樂目錄傳送到您的手機或私人 locker (音樂收納箱)">
+<!ENTITY mp3tunes.pref.create-account "建立帳號">
+<!ENTITY mp3tunes.pref.password-repeat "再輸入一次密碼做確認">
+<!ENTITY mp3tunes.pref.firstname "姓氏">
+<!ENTITY mp3tunes.pref.lastname "名字">
+<!ENTITY mp3tunes.title.create-account "建立 MP3Tunes 帳號">
+<!ENTITY mp3tunes.pref.upgrade-account "升級帳號">
+<!ENTITY mp3tunes.pref.check-account "檢查帳號">
+<!ENTITY mp3tunes.pref.last-check "上次檢查">
+<!ENTITY mp3tunes.title.title "傳送到 MP3Tunes">
+<!ENTITY mp3tunes.title.artist-name "演出者">
+<!ENTITY mp3tunes.title.album-title "專輯標題">
+<!ENTITY mp3tunes.title.track-title "曲目標題">
+<!ENTITY mp3tunes.title.track-number "曲目編號">
+<!ENTITY mp3tunes.title.year "年代">
+<!ENTITY label.highlight-media-from-current-page "高亮度標示目前頁面中的媒體檔案">
+<!ENTITY label.system-menu-icons "在系統選單顯示圖示">
+<!ENTITY mp3tunes.label.enabled "啟用 MP3Tunes 服務">
+<!ENTITY mp3tunes.title.no-converter "轉換失敗">
+<!ENTITY mp3tunes.button.no-converter.continue "繼續">
+<!ENTITY mp3tunes.button.no-converter.configure "配置轉換">
+<!ENTITY mp3tunes.text.no-converter.1 "您想要傳送一個音訊音軌到 MP3Tunes，但內嵌的 DownloadHelper 轉換器尚未啟動。">
+<!ENTITY mp3tunes.text.no-converter.2 "您可以這麼做，但是您必須知道這將會比您配置好轉換功能花費較長的時間來上傳檔案。">
+<!ENTITY mp3tunes.label.no-converter.not-again "不再顯示此警告">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "在 YouTube 頁面顯示 widget 小工具來存取服務">
+<!ENTITY label.yt-inpage.default-processor "預設服務">
+<!ENTITY label.privacy-policy "隱私政策">
+<!ENTITY mp3tunes.label.open-locker "開啟 locker (音樂收納箱)">
+<!ENTITY mp3tunes.pref.on-send-mobile "當傳送到手機">
+<!ENTITY mp3tunes.pref.on-send-locker "當傳送到 locker (音樂收納箱)">
+<!ENTITY mp3tunes.pref.on-send.video "上傳視訊 (包含音訊)">
+<!ENTITY mp3tunes.pref.on-send.audio "僅上傳音訊">
+<!ENTITY mp3tunes.pref.on-send.ask "詢問使用者">
+<!ENTITY mp3tunes.title.conversion-choice "MP3tunes 上傳類型">
+<!ENTITY mp3tunes.label.conversion-choice.remember "記住我的選擇不再詢問">
+<!ENTITY mp3tunes.pref.phonenumber-sample "附國碼，例如 +1 555 555 5555">
+<!ENTITY ythq.label.enable "啟用">
+<!ENTITY ythq.label.disable "停用">
+<!ENTITY ythq.label.up "上移">
+<!ENTITY ythq.label.down "下移">
+<!ENTITY ythq.column.type "類型">
+<!ENTITY ythq.column.format "格式">
+<!ENTITY ythq.column.video "視訊">
+<!ENTITY ythq.column.audio "音訊">
+<!ENTITY pref.title.blacklist "黑名單">
+<!ENTITY pref.description.blacklist "此功能允許忽略來自部分網站的媒體，像是 advertizing videos。">
+<!ENTITY add2bl.label.add-domain-choice "對下列域名忽略媒體通知:">
+<!ENTITY pref.label.share-blacklist "分享黑名單">
+<!ENTITY pref.description.share-blacklist "分享您的黑名單，將會替下一版的產品提供一個好的預設黑名單">
+<!ENTITY label.add2bl.configure-blacklist "配置黑名單">
+<!ENTITY label.extended-download-menu "延伸下載選單">
+<!ENTITY smartname.menu-name "智慧命名">
+<!ENTITY smartname.menu-set-name "定義媒體標題位置">
+<!ENTITY smartname.menu-set-descr "定義媒體描述位置">
+<!ENTITY smartname.menu-share-now "立即分享">
+<!ENTITY smartname.menu-import "匯入">
+<!ENTITY smartname.define.value-for-page "此頁的值:">
+<!ENTITY smartname.define.domain "域名">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "正規表達式">
+<!ENTITY smartname.define.previous-value "上一個值">
+<!ENTITY pref.title.smartname "智慧命名">
+<!ENTITY pref.description.smartname "智慧命名功能允許替下載的媒體提供有意義的名稱">
+<!ENTITY pref.label.enable-smartname "啟用智慧命名">
+<!ENTITY smartname.column.domain "域名">
+<!ENTITY smartname.column.mode "模式">
+<!ENTITY smartname.list.button.delete "移除">
+<!ENTITY smartname.list.button.edit "編輯">
+<!ENTITY smartname.list.button.import "匯入">
+<!ENTITY smartname.list.label.type "類型">
+<!ENTITY smartname.list.type.name "媒體名稱">
+<!ENTITY smartname.list.type.descr "媒體描述">
+<!ENTITY smartname.overlap.select "選擇">
+<!ENTITY smartname.overlap.selectall "全部">
+<!ENTITY smartname.overlap.selectnone "無">
+<!ENTITY smartname.overlap.description "勾選的項目將會被取消">
+<!ENTITY smartname.overlap.title "重疊">
+<!ENTITY pref.label.smartname.keep-spaces "保留檔名中的空格">
+<!ENTITY pref.label.smartname.keep-nonascii "保留檔名中的非 ascii 字元">
+<!ENTITY pref.label.smartname.auto-share "匿名分享智慧命名統計">
+<!ENTITY pref.label.smartname.auto-share.notice "這會幫助自動維護資料庫讓大家都得到好處">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "帳號">
+<!ENTITY twitter.pref.password "密碼">
+<!ENTITY twitter.pref.description "Twitter 服務可讓您容易地傳送多媒體的 tweet">
+<!ENTITY twitter.pref.create-account "建立免費的 Twitter 帳號">
+<!ENTITY twitter.pref.check-account "檢查帳號/密碼">
+<!ENTITY twitter.pref.last-check "上次檢查">
+<!ENTITY twitter.label.enabled "Twitter 服務啟用">
+<!ENTITY twitter.title.send-message "傳送 Twitter 訊息">
+<!ENTITY twitter.message.smartnaming "您應該考慮使用「智慧命名」功能將視訊標題做為 Twitter 訊息的預設訊息，並且加上描述。">
+<!ENTITY twitter.label.go-to-smartnaming "更多關於「智慧命名」">
+<!ENTITY twitter.label.tag-message "預設訊息附上標籤 #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "最大點擊數">
+<!ENTITY pref.label.icon-click "點擊此圖示">
+<!ENTITY pref.label.icon-click.sites "顯示支援的網站">
+<!ENTITY pref.label.icon-click.quick-download "執行快速下載">

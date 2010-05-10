@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Trợ giúp">
+<!ENTITY menu.manual-check "Kiểm tra URL">
+<!ENTITY menu.preferences "Tùy chỉnh...">
+<!ENTITY menu.about "Giới thiệu...">
+<!ENTITY label.download-one-by-one "Tải xuống lần lượt">
+<!ENTITY label.storagedir "Thư mục chứa">
+<!ENTITY button.changedir "Thay đổi thư mục">
+<!ENTITY error.nohome "Thư mục nhà không tồn tại">
+<!ENTITY error.notadirectory "không phải là một thư mục">
+<!ENTITY title.preferences "Tùy chỉnh">
+<!ENTITY title.about "Giới thiệu DownloadHelper">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "Thời gian hết hạn của danh mục trình đơn (miligiây)">
+<!ENTITY label.icon-animation "Chuyển động hoạt hình cho biểu tượng">
+<!ENTITY menu.ytlinks "Tải xuống phim từ liên kết YouTube">
+<!ENTITY label.download-mode "Chế độ tải xuống">
+<!ENTITY label.download-mode.normal "Bình thường">
+<!ENTITY label.download-mode.onebyone "Lần lượt">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Công trạng">
+<!ENTITY title.general "Tổng quát">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "Phương thức MediaLink cho phép bạn tải xuống tập tin của một trang bằng cách tìm các liên kết HTML">
+<!ENTITY button.add "Thêm">
+<!ENTITY button.default "Mặc định">
+<!ENTITY button.remove "Xóa">
+<!ENTITY label.file-extensions "Đuôi mở rộng tập tin">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "Phương thức MediaReq kiểm tra các yêu cầu HTTP đi ra ngoài để xác định liệu đó có phải là tập tin đa phương tiện hay không">
+<!ENTITY title.support-dev "Hỗ trợ phát triển DownloadHelper">
+<!ENTITY label.donate-not-again "Đừng làm phiền tôi nữa">
+<!ENTITY label.donate "Quyên góp">
+<!ENTITY label.cancel "Hủy bỏ">
+<!ENTITY label.congratulations "Chúc mừng!">
+<!ENTITY label.keep-spaces "Giữ khoảng trống trong tên tập tin">
+<!ENTITY title.sites "Trang đa phương tiện của DownloadHelper">
+<!ENTITY button.sites.close "Đóng">
+<!ENTITY button.sites.open "Mở">
+<!ENTITY button.sites.report "Báo cáo trang đang hoạt động">
+<!ENTITY column.sites.name "Tên">
+<!ENTITY column.sites.rating "Xếp hạng">
+<!ENTITY column.sites.count "Bình luận">
+<!ENTITY column.sites.date "Ngày thêm">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "Đóng">
+<!ENTITY label.site.name "Tên">
+<!ENTITY caption.site.site "Trang đa phương tiện">
+<!ENTITY title.site "Trang đa phương tiện">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "Được thêm">
+<!ENTITY label.site.rating "Xếp hạng">
+<!ENTITY label.site.no-rating "Chưa có">
+<!ENTITY button.site.check "Kiểm tra trang">
+<!ENTITY button.site.comment "Thêm bình luận">
+<!ENTITY label.comment.site "Trang">
+<!ENTITY title.comment "Bình luận">
+<!ENTITY caption.comment.comment "Thêm một bình luận">
+<!ENTITY label.comment.author "Tên nick">
+<!ENTITY help.comment.author "Tên của bạn hoặc bí danh">
+<!ENTITY label.comment.title "Tiêu đề">
+<!ENTITY help.comment.title "Tiêu đề của bình luận">
+<!ENTITY label.comment.comment "Bình luận">
+<!ENTITY help.comment.comment "Dòng trống để tách các đoạn">
+<!ENTITY label.comment.tags "Tag">
+<!ENTITY help.comment.tags "Các tag liên quan phân cách bằng khoảng trắng (vd. &apos;tintức phimảnh&apos;, hoặc &apos;ngườilớn&apos;)">
+<!ENTITY label.comment.rating "Xếp hạng">
+<!ENTITY help.comment.rating "0 = hoàn toàn không hứng thú, 5 = trang tuyệt vời">
+<!ENTITY button.comment.close "Đóng">
+<!ENTITY button.comment.submit "Gửi bình luận">
+<!ENTITY label.comment.wait "Bình luận của bạn đã được gửi. Vui lòng đợi...">
+<!ENTITY title.report "Báo cáo trang đang hoạt động">
+<!ENTITY caption.report.report "Báo cáo trang đang hoạt động mới">
+<!ENTITY message.report.check-new "Vui lòng chắc chắn rằng trang này không tồn tại trong danh sách các trang">
+<!ENTITY label.report.name "Tên trang">
+<!ENTITY help.report.name "Tên thường dùng cho trang, vd. YouTube">
+<!ENTITY label.report.url "URL Trang">
+<!ENTITY help.report.url "Địa chỉ của trang, vd. http://www.youtube.com">
+<!ENTITY label.report.author "Tên của bạn">
+<!ENTITY help.report.author "Tên cho phần công trạng của báo cáo. Bạn có thể để trống">
+<!ENTITY label.report.description "Mô tả">
+<!ENTITY help.report.description "Một mô tả ngắn về những gì có thể tìm thấy trên trang này">
+<!ENTITY button.report.submit "Gửi trang">
+<!ENTITY button.report.close "Đóng">
+<!ENTITY label.report.wait "Trang của bạn đã được gửi. Vui lòng đợi...">
+<!ENTITY menu.sites "Trang được hỗ trợ">
+<!ENTITY label.sites.list-adult "Hiện các trang nội dung người lớn có thể truy cập trực tiếp">
+<!ENTITY label.report.adult "Nội dung người lớn có thể truy cập trực tiếp">
+<!ENTITY label.context-menu "Hiện trong trình đơn ngữ cảnh">
+<!ENTITY menu.to-sumo "Đăng phim lên SUMO.tv">
+<!ENTITY label.enable-plugin-method "Bật phương thức chữ kí phần bổ trợ">
+<!ENTITY label.yt-unmodified-filename "Giữ nguyên tên tập tin YouTube (CJK)">
+<!ENTITY label.disable-dwcount-cookie "Tắt cookie đếm số lần tải xuống">
+<!ENTITY column.sites.duration "Sở thích">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight được bật">
+<!ENTITY label.mediaweight-threshold "Ngưỡng dung lượng tập tin đa phương tiện">
+<!ENTITY label.enable-medialink-method "MediaLink được bật">
+<!ENTITY mediaweight.description "Phương thức MediaWeight kiểm tra các phản hồi HTTP để quyết định liệu đó có phải là tập tin đa phương tiện hay không dựa trên dung lượng tài liệu">
+<!ENTITY title.history "Lược sử">
+<!ENTITY title.download-queue "Danh sách chờ tải">
+<!ENTITY column.media-url "URL Đa phương tiện">
+<!ENTITY column.source-url "URL nguồn">
+<!ENTITY column.view-date "Ngày xem">
+<!ENTITY column.file-name "Tên tập tin">
+<!ENTITY title.histlist "Lược sử">
+<!ENTITY label.histlist-enabled "Lược sử được bật (beta)">
+<!ENTITY label.histlist-clearonexit "Xóa lược sử khi thoát">
+<!ENTITY button.medialist.watch "Theo dõi">
+<!ENTITY button.medialist.download "Tải xuống">
+<!ENTITY button.medialist.more "Thêm nữa">
+<!ENTITY button.medialist.go-source "Vào trang nguồn">
+<!ENTITY button.medialist.remove "Xóa">
+<!ENTITY button.remove-downloads "Xóa các mục được chọn">
+<!ENTITY history.description "Chức năng này cho phép ghi nhớ, trong một số trường hợp nào đó, các phim bạn đã xem để bạn có thể tìm lại chúng dễ dàng và tải xuống hàng loạt một nhóm đã chọn.">
+<!ENTITY about.for-free "Phần mở rộng Firefox này được cung cấp miễn phí tới bạn.">
+<!ENTITY about.know-more "Để biết thêm, hãy xem liên kết">
+<!ENTITY about.link "này">
+<!ENTITY about.know-more2 "http://vi.mozdev.org">
+<!ENTITY about.locale-credit "NGUYỄN Mạnh Hùng &lt;loveleeyoungae@yahoo.com&gt;">
+<!ENTITY title.conversion "Chuyển đổi">
+<!ENTITY conversion.description "Tính năng này cho phép bạn chuyển đổi phim tự động ngay khi chúng được tải xuống">
+<!ENTITY conversion.rules-description "Quy tắc chuyển đổi được ước tính từ trên xuống dưới">
+<!ENTITY label.conversion-enabled "Chuyển đổi được bật">
+<!ENTITY title.conversion-rule "Quy tắc Chuyển đổi">
+<!ENTITY column.conversion.rules "Quy tắc chuyển đổi">
+<!ENTITY button.conv-rule-list.edit "Sửa quy tắc">
+<!ENTITY button.conv-rule-list.up "Đi lên">
+<!ENTITY button.conv-rule-list.down "Đi xuống">
+<!ENTITY button.conv-rule-list.remove "Xóa quy tắc">
+<!ENTITY button.conv-rule-list.default "Đưa về mặc định">
+<!ENTITY button.conv-rule-list.new "Quy tắc Mới">
+<!ENTITY button.conv-rule.change-directory "Thay đổi...">
+<!ENTITY label.conv-rule.convert "Chuyển đổi">
+<!ENTITY label.conv-rule.do-not-convert "Không chuyển đổi">
+<!ENTITY label.conv-rule.files-with-ext "Tập tin với đuôi mở rộng">
+<!ENTITY label.conv-rule.from-site "Từ trang">
+<!ENTITY label.conv-rule.all-sites "TẤT CẢ">
+<!ENTITY label.conv-rule.all-files "TẤT CẢ">
+<!ENTITY label.conv-rule.kbps "Kb/giây">
+<!ENTITY label.conv-rule.bitrate "Bitrate">
+<!ENTITY label.conv-rule.output-directory "Thư mục">
+<!ENTITY label.conv-rule.default-directory "MẶC ĐỊNH">
+<!ENTITY caption.conv-rule.input "Đầu vào">
+<!ENTITY caption.conv-rule.output "Đầu ra">
+<!ENTITY title.convert-register "Đăng kí Trình chuyển đổi">
+<!ENTITY text.convert-register.benefits "Đăng kí trình chuyển đổi cung cấp những lợi ích sau:">
+<!ENTITY text.convert-register.item.nologo "Phim được chuyển đổi không hiện biểu trưng của DownloadHelper">
+<!ENTITY text.convert-register.item.mp3 "Khả năng chuyển đổi sang tập tin mp3">
+<!ENTITY text.convert-register.item.faster "Chuyển đổi nhanh hơn">
+<!ENTITY text.convert-register.item.support "Được hỗ trợ">
+<!ENTITY label.convert-register.code "Mã đăng kí">
+<!ENTITY button.convert-register.cancel "Hủy bỏ">
+<!ENTITY button.convert-register.get-code "Lấy mã đăng kí">
+<!ENTITY button.convert-register.ok "OK">
+<!ENTITY title.converter-queue "Danh sách chờ Chuyển đổi">
+<!ENTITY label.converter-queue.status "Trạng thái">
+<!ENTITY label.converter-queue.status.done "Xong">
+<!ENTITY label.converter-queue.input "Đầu vào">
+<!ENTITY label.converter-queue.output "Đầu ra">
+<!ENTITY label.converter-queue.status.inprogress "Đang tiến hành">
+<!ENTITY label.converter-queue.status.waiting "Đang đợi">
+<!ENTITY label.converter-queue.status.error "Lỗi">
+<!ENTITY button.converter-queue.close "Đóng">
+<!ENTITY label.conversion.converter "Trình chuyển đổi">
+<!ENTITY label.conversion.no-such-converter "Không tìm thấy trình chuyển đổi">
+<!ENTITY description.conversion.no-win-conv "Bạn cần cài một chương trình bên ngoài để chuyển đổi phim">
+<!ENTITY description.conversion.bad-version "Cần phải cập nhật ConvertHelper">
+<!ENTITY button.conversion.win-conv "Cài đặt/Cập nhật trình chuyển đổi">
+<!ENTITY button.conversion.check-win-conv "Kiểm tra lại trình chuyển đổi">
+<!ENTITY description.conversion.win-conv "Trình chuyển đổi đã được tìm thấy trên hệ thống của bạn">
+<!ENTITY title.convert-options "Tùy chọn Chuyển đổi">
+<!ENTITY caption.convlicense "Thông tin giấy phép">
+<!ENTITY label.convlicense.license "Khóa">
+<!ENTITY label.convlicense.name "Tên người sở hữu">
+<!ENTITY label.convlicense.email "Email người sở hữu">
+<!ENTITY label.convlicense.unregistered "Trình chuyển đổi chưa được đăng kí">
+<!ENTITY title.video-format.general "Tổng quát">
+<!ENTITY title.video-format.advanced "Nâng cao">
+<!ENTITY button.video-format.show-details "Chi tiết...">
+<!ENTITY title.output-video-format "Định dạng Đầu ra của Phim">
+<!ENTITY label.video-format.two-passes "2 Lần cán">
+<!ENTITY label.video-format.first-pass "Mức cán 1">
+<!ENTITY label.video-format.second-pass "Mức cán 2">
+<!ENTITY label.conversion.log "Lưu kí chuyển đổi">
+<!ENTITY button.conversion.show-log "Hiện lưu kí">
+<!ENTITY title.conversion-log "Lưu kí chuyển đổi">
+<!ENTITY button.convert-log.clear "Xóa lưu kí">
+<!ENTITY button.convert-log.close "Đóng">
+<!ENTITY button.convert-log.refresh "Làm tươi">
+<!ENTITY menu.video-format.copy "Chép định dạng phim">
+<!ENTITY menu.video-format.paste "Dán định dạng phim">
+<!ENTITY button.conversion.help "Trợ giúp">
+<!ENTITY label.converter-queue.started-on "Bắt đầu lúc">
+<!ENTITY label.converter-queue.ended-on "Kết thúc lúc">
+<!ENTITY label.conversion-notification "Thông báo khi kết thúc chuyển đổi">
+<!ENTITY label.show-in-statusbar "Hiện trong thanh trạng thái">
+<!ENTITY label.trigger-min-size "Chọn dung lượng nhỏ nhất (KB)">
+<!ENTITY label.quick-download-key "Phím tắt tải nhanh">
+<!ENTITY label.open-folder-key "Phím tắt để mở thư mục">
+<!ENTITY button.video-format.default "Cấu hình mặc định">
+<!ENTITY button.video-format.name "Đặt tên cấu hình">
+<!ENTITY button.video-format.rename "Đổi tên cấu hình">
+<!ENTITY button.video-format.forget "Quên luôn cấu hình">
+<!ENTITY label.conversion-config-share "Chia sẻ cấu hình">
+<!ENTITY label.yt-check-hq "Dò YouTube chất lượng cao">
+<!ENTITY label.yt-prefer-hq "Ưu tiên YouTube chất lượng cao">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Thêm tiền tố chỉ mục vào tên tập tin">
+<!ENTITY title.pick-processor "Chọn dịch vụ">
+<!ENTITY title.media-dump "Dump đa phương tiện">
+<!ENTITY label.dump-media.prop-name "Thuộc tính">
+<!ENTITY label.dump-media.prop-value "Giá trị">
+<!ENTITY label.quickkeys.change "Thay đổi phím tắt">
+<!ENTITY title.config-processor-keys "Cấu hình phím tắt xử lí">
+<!ENTITY proc-keymap.revert "Đưa về mặc định">
+<!ENTITY proc-keymap.provider "Nhà cung cấp">
+<!ENTITY proc-keymap.description "Mô tả">
+<!ENTITY proc-keymap.current-key "Phím tắt hiện tại">
+<!ENTITY proc-keymap.hold-assign "Giữ phím và nhấn để gán">
+<!ENTITY proc-keymap.unmap "Không gán phím">
+<!ENTITY title.quick-keys "Phím tắt">
+<!ENTITY label.tools-menu "Hiển thị trong trình đơn công cụ">
+<!ENTITY pref.title.capture "Ghi hình">
+<!ENTITY pref.title.services "Dịch vụ">
+<!ENTITY pref.title.miscellaneous "Linh tinh">
+<!ENTITY pref.title.download "Tải xuống">
+<!ENTITY pref.title.appearance "Diện mạo">
+<!ENTITY pref.title.behavior "Hành vi">
+<!ENTITY pref.title.accelerators "Tăng tốc">
+<!ENTITY label.menu-expiration "Thời gian hết hạn của danh mục trình đơn (giây)">
+<!ENTITY pref.title.http "Mạng">
+<!ENTITY pref.title.galleries "Phòng trưng bày">
+<!ENTITY pref.description.galleries "Phương thức này cho phép tải tập tin từ một trang bằng cách dò các liên kết HTML">
+<!ENTITY pref.label.enable-medialink-method "Phương thức phòng trưng bày được bật">
+<!ENTITY pref.description.http "Phương thức này dò tập tin đa phương tiện bằng cách theo dõi trao đổi dữ liệu HTTP giữa trình duyệt và máy chủ">
+<!ENTITY pref.description.youtube "Phương thức này nhận diện các đoạn phim bằng cách phân tích các trang YouTube">
+<!ENTITY pref.label.enable-http-method "Phương thức mạng được bật">
+<!ENTITY label.mediareq-file-extensions "Đuôi mở rộng tập tin khi yêu cầu">
+<!ENTITY label.ignore-below-size "Bỏ qua tập tin đa phương tiện nhỏ hơn dung lượng (KB)">
+<!ENTITY label.detect-above-size "Bắt buộc dò tìm lớn hơn dung lượng (KB)">
+<!ENTITY pref.button.configure-conv-rules "Cấu hình quy tắc chuyển đổi...">
+<!ENTITY title.conversion-rules "Quy tắc chuyển đổi">
+<!ENTITY pref.button.register-converter "Đăng kí trình chuyển đổi">
+<!ENTITY pref.caption.troubleshooting "Gỡ rối vấn đề">
+<!ENTITY pref.button.check-again "Kiểm tra lại">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "Địa chỉ email">
+<!ENTITY mp3tunes.pref.password "Mật khẩu">
+<!ENTITY mp3tunes.pref.phonenumber "Số điện thoại">
+<!ENTITY mp3tunes.pref.phonenumber.description "Chỉ là phụ nhưng cần phải có để được âm thanh trên di động">
+<!ENTITY mp3tunes.pref.description "Dịch vụ MP3tunes cho phép gửi nhạc trực tiếp tới di động của bạn hoặc tới một bộ khóa cá nhân có thể truy cập được từ mọi nơi">
+<!ENTITY mp3tunes.pref.create-account "Tạo tài khoản">
+<!ENTITY mp3tunes.pref.password-repeat "Lặp lại mật khẩu">
+<!ENTITY mp3tunes.pref.firstname "Tên">
+<!ENTITY mp3tunes.pref.lastname "Họ">
+<!ENTITY mp3tunes.title.create-account "Tạo tài khoản miễn phí MP3tunes">
+<!ENTITY mp3tunes.pref.upgrade-account "Nâng cấp tài khoản">
+<!ENTITY mp3tunes.pref.check-account "Kiểm tra tài khoản">
+<!ENTITY mp3tunes.pref.last-check "Kiểm tra lần cuối">
+<!ENTITY mp3tunes.title.title "Gửi tới MP3Tunes">
+<!ENTITY mp3tunes.title.artist-name "Nghệ sĩ/Người trình diễn">
+<!ENTITY mp3tunes.title.album-title "Album/Nguồn">
+<!ENTITY mp3tunes.title.track-title "Tên bài hát/Tiêu đề">
+<!ENTITY mp3tunes.title.track-number "Thứ tự bài hát">
+<!ENTITY mp3tunes.title.year "Năm">
+<!ENTITY label.highlight-media-from-current-page "Tô sáng tập tin đa phương tiện trên trang hiện tại">
+<!ENTITY label.system-menu-icons "Hiển thị biểu tượng trong trình đơn hệ thống">
+<!ENTITY mp3tunes.label.enabled "Dịch vụ MP3Tunese được bật">
+<!ENTITY mp3tunes.title.no-converter "Không thấy trình chuyển đổi">
+<!ENTITY mp3tunes.button.no-converter.continue "Tiếp tục">
+<!ENTITY mp3tunes.button.no-converter.configure "Cấu hình trình chuyển đổi">
+<!ENTITY mp3tunes.text.no-converter.1 "Bạn muốn gửi một bản nhạc đến MP3Tunes nhưng trình chuyển đổi DownloadHelper chưa được cài đặt.">
+<!ENTITY mp3tunes.text.no-converter.2 "Bạn có thể tiếp tục gửi trực tiếp tới bộ khóa hoặc, bạn có thể cấu hình tính năng chuyển đổi để tạo bản nhạc trước.">
+<!ENTITY mp3tunes.label.no-converter.not-again "Đừng hiện thông báo này nữa">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "Hiện widget truy cập dịch vụ từ những trang YouTube">
+<!ENTITY label.yt-inpage.default-processor "Dịch vụ mặc định">
+<!ENTITY label.privacy-policy "Chính sách riêng tư">
+<!ENTITY mp3tunes.label.open-locker "Mở bộ khóa">
+<!ENTITY mp3tunes.pref.on-send-mobile "Khi gửi tới di động">
+<!ENTITY mp3tunes.pref.on-send-locker "Khi gửi tới bộ khóa">
+<!ENTITY mp3tunes.pref.on-send.video "Tải phim lên (có tiếng)">
+<!ENTITY mp3tunes.pref.on-send.audio "Chỉ tải tiếng">
+<!ENTITY mp3tunes.pref.on-send.ask "Hỏi người dùng">
+<!ENTITY mp3tunes.title.conversion-choice "Kiểu tải lên MP3tunes">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Ghi nhớ lựa chọn của tôi và đừng hỏi nữa">
+<!ENTITY mp3tunes.pref.phonenumber-sample "với mã quốc gia, vd. +1 555 555 5555">
+<!ENTITY ythq.label.enable "Bật">
+<!ENTITY ythq.label.disable "Tắt">
+<!ENTITY ythq.label.up "Lên">
+<!ENTITY ythq.label.down "Xuống">
+<!ENTITY ythq.column.type "Kiểu">
+<!ENTITY ythq.column.format "Định dạng">
+<!ENTITY ythq.column.video "Phim">
+<!ENTITY ythq.column.audio "Tiếng">
+<!ENTITY pref.title.blacklist "Sổ đen">
+<!ENTITY pref.description.blacklist "Tính năng này cho phép bỏ qua các tập tin đa phương tiện trên một số trang, ví dụ như các đoạn phim quảng cáo.">
+<!ENTITY add2bl.label.add-domain-choice "Bỏ qua thông báo cho tập tin đa phương tiện trên miền:">
+<!ENTITY pref.label.share-blacklist "Chia sẻ sổ đen">
+<!ENTITY pref.description.share-blacklist "Chia sẻ sổ đen của bạn cho phép cung cấp một sổ đen mặc định trong các phiên bản sau của tiện ích này">
+<!ENTITY label.add2bl.configure-blacklist "Cấu hình sổ đen">
+<!ENTITY label.extended-download-menu "Trình đơn tải xuống được mở rộng">
+<!ENTITY smartname.menu-name "Đặt tên thông minh">
+<!ENTITY smartname.menu-set-name "Xác định địa chỉ tiêu đề tập tin đa phương tiện">
+<!ENTITY smartname.menu-set-descr "Xác định địa chỉ mô tả tập tin đa phương tiện">
+<!ENTITY smartname.menu-share-now "Chia sẻ ngay">
+<!ENTITY smartname.menu-import "Nhập">
+<!ENTITY smartname.define.value-for-page "Giá trị cho trang này:">
+<!ENTITY smartname.define.domain "Tên miền">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "Biểu thức quy tắc">
+<!ENTITY smartname.define.previous-value "Giá trị trước">
+<!ENTITY pref.title.smartname "Đặt tên Thông minh">
+<!ENTITY pref.description.smartname "Tính năng &apos;Đặt tên Thông minh&apos; cho phép cung cấp các tên có nghĩa cho các tập tin được tải xuống">
+<!ENTITY pref.label.enable-smartname "Kích hoạt Đặt tên Thông minh">
+<!ENTITY smartname.column.domain "Tên miền">
+<!ENTITY smartname.column.mode "Chế độ">
+<!ENTITY smartname.list.button.delete "Xóa">
+<!ENTITY smartname.list.button.edit "Chỉnh sửa">
+<!ENTITY smartname.list.button.import "Nhập">
+<!ENTITY smartname.list.label.type "Kiểu">
+<!ENTITY smartname.list.type.name "Tên tập tin đa phương tiện">
+<!ENTITY smartname.list.type.descr "Mô tả tập tin đa phương tiện">
+<!ENTITY smartname.overlap.select "Chọn">
+<!ENTITY smartname.overlap.selectall "Tất cả">
+<!ENTITY smartname.overlap.selectnone "Không">
+<!ENTITY smartname.overlap.description "Các mục nhập đã chọn sẽ bị ghi đè">
+<!ENTITY smartname.overlap.title "Ghi đè">
+<!ENTITY pref.label.smartname.keep-spaces "Giữ khoảng trắng trong tên tập tin">
+<!ENTITY pref.label.smartname.keep-nonascii "Giữ các kí tự không phải ascii trong tên tập tin">
+<!ENTITY pref.label.smartname.auto-share "Chia sẻ ẩn danh thống kê đặt tên thông minh">
+<!ENTITY pref.label.smartname.auto-share.notice "Việc này giúp tự động duy trì dữ liệu vì lợi ích của mọi người">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Username">
+<!ENTITY twitter.pref.password "Password">
+<!ENTITY twitter.pref.description "The Twitter service allows to easily send tweets about a media">
+<!ENTITY twitter.pref.create-account "Create free Twitter account">
+<!ENTITY twitter.pref.check-account "Check user/password">
+<!ENTITY twitter.pref.last-check "Last check">
+<!ENTITY twitter.label.enabled "Twitter services enabled">
+<!ENTITY twitter.title.send-message "Send Twitter message">
+<!ENTITY twitter.message.smartnaming "You should consider using the SmartNaming feature to prefill the Twitter message with the video title, and if available its description.">
+<!ENTITY twitter.label.go-to-smartnaming "More on SmartNaming">
+<!ENTITY twitter.label.tag-message "Prefill message with tag #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Max number of hits">
+<!ENTITY pref.label.icon-click "Upon clicking on the icon">
+<!ENTITY pref.label.icon-click.sites "Display supported sites">
+<!ENTITY pref.label.icon-click.quick-download "Perform a quick download">

@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Help">
+<!ENTITY menu.manual-check "URL controleren">
+<!ENTITY menu.preferences "Voorkeuren…">
+<!ENTITY menu.about "Over…">
+<!ENTITY label.download-one-by-one "Eén voor één downloaden">
+<!ENTITY label.storagedir "Opslagmap">
+<!ENTITY button.changedir "Map wijzigen">
+<!ENTITY error.nohome "Home map bestaat niet">
+<!ENTITY error.notadirectory "is geen map">
+<!ENTITY title.preferences "Voorkeuren">
+<!ENTITY title.about "Over DownloadHelper">
+<!ENTITY version.name "DownloadHelper">
+<!ENTITY label.menu-http-expiration "Menu-ingave verlooptijd (ms)">
+<!ENTITY label.icon-animation "Pictogramanimatie">
+<!ENTITY menu.ytlinks "Video’s van YouTube koppeling(en) downloaden">
+<!ENTITY label.download-mode "Downloadmodus">
+<!ENTITY label.download-mode.normal "Normaal">
+<!ENTITY label.download-mode.onebyone "Eén voor één">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Credits">
+<!ENTITY title.general "Algemeen">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "De MediaLink methode maakt het downloaden van bestanden van een pagina mogelijk door te kijken naar HTML-koppelingen">
+<!ENTITY button.add "Toevoegen">
+<!ENTITY button.default "Standaard">
+<!ENTITY button.remove "Verwijderen">
+<!ENTITY label.file-extensions "Bestandsextensies">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "De MediaReq methode onderzoekt uitgaande HTTP-verzoeken om te bekijken of het een mediabestand is">
+<!ENTITY title.support-dev "Ondersteun de ontwikkeling van DownloadHelper">
+<!ENTITY label.donate-not-again "Val me daar niet meer mee lastig">
+<!ENTITY label.donate "Doneren">
+<!ENTITY label.cancel "Annuleren">
+<!ENTITY label.congratulations "Gefeliciteerd!">
+<!ENTITY label.keep-spaces "Spaties in bestandsnamen behouden">
+<!ENTITY title.sites "DownloadHelper Media sites">
+<!ENTITY button.sites.close "Sluiten">
+<!ENTITY button.sites.open "Openen">
+<!ENTITY button.sites.report "Werkende site rapporteren">
+<!ENTITY column.sites.name "Naam">
+<!ENTITY column.sites.rating "Beoordeling">
+<!ENTITY column.sites.count "Commentaar">
+<!ENTITY column.sites.date "Datum toegevoegd">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "Sluiten">
+<!ENTITY label.site.name "Naam">
+<!ENTITY caption.site.site "Mediasite">
+<!ENTITY title.site "Mediasite">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "Toegevoegd">
+<!ENTITY label.site.rating "Beoordeling">
+<!ENTITY label.site.no-rating "Nog geen">
+<!ENTITY button.site.check "Site controleren">
+<!ENTITY button.site.comment "Commentaar toevoegen">
+<!ENTITY label.comment.site "Site">
+<!ENTITY title.comment "Commentaar">
+<!ENTITY caption.comment.comment "Commentaar toevoegen">
+<!ENTITY label.comment.author "Nickname">
+<!ENTITY help.comment.author "Uw naam of nick">
+<!ENTITY label.comment.title "Titel">
+<!ENTITY help.comment.title "De titel van het commentaar">
+<!ENTITY label.comment.comment "Commentaar">
+<!ENTITY help.comment.comment "Blanco regels om paragrafen te scheiden">
+<!ENTITY label.comment.tags "Labels">
+<!ENTITY help.comment.tags "Door spaties gescheiden relevante labels (b.v. ‘news indian’, of ‘adult’)">
+<!ENTITY label.comment.rating "Beoordeling">
+<!ENTITY help.comment.rating "0 = beslist niet interessant, 5 = geweldige site">
+<!ENTITY button.comment.close "Sluiten">
+<!ENTITY button.comment.submit "Commentaar indienen">
+<!ENTITY label.comment.wait "Uw commentaar wordt ingediend. Wachten a.u.b.…">
+<!ENTITY title.report "Werkende site rapporteren">
+<!ENTITY caption.report.report "Een nieuwe werkende site rapporteren">
+<!ENTITY message.report.check-new "Controleer a.u.b. of deze site niet al op de lijst met sites voorkomt">
+<!ENTITY label.report.name "Sitenaam">
+<!ENTITY help.report.name "Gebruikelijke naam voor de site, b.v. YouTube">
+<!ENTITY label.report.url "Site-URL">
+<!ENTITY help.report.url "Het adres van de site, b.v. http://www.youtube.com">
+<!ENTITY label.report.author "Uw naam">
+<!ENTITY help.report.author "De naam voor de credits van het rapport. Mag leeg blijven">
+<!ENTITY label.report.description "Beschrijving">
+<!ENTITY help.report.description "Een korte beschrijving van wat kan worden gevonden op deze site">
+<!ENTITY button.report.submit "Site indienen">
+<!ENTITY button.report.close "Sluiten">
+<!ENTITY label.report.wait "Uw site wordt ingediend. Wachten a.u.b.…">
+<!ENTITY menu.sites "Ondersteunde sites">
+<!ENTITY label.sites.list-adult "Sites met rechtstreeks toegankelijke inhoud voor volwassenen weergeven">
+<!ENTITY label.report.adult "Inhoud voor volwassenen rechtstreeks toegankelijk">
+<!ENTITY label.context-menu "In contextmenu weergeven">
+<!ENTITY menu.to-sumo "Video op SUMO.tv posten">
+<!ENTITY label.enable-plugin-method "Plugin signature-methode inschakelen">
+<!ENTITY label.yt-unmodified-filename "YouTube-bestandsnamen (CJK) behouden">
+<!ENTITY label.disable-dwcount-cookie "Cookie met aantal downloads uitschakelen">
+<!ENTITY column.sites.duration "Interesse">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight ingeschakeld">
+<!ENTITY label.mediaweight-threshold "Drempel mediagrootte">
+<!ENTITY label.enable-medialink-method "MediaLink ingeschakeld">
+<!ENTITY mediaweight.description "De MediaWeight methode onderzoekt HTTP-antwoorden om te bepalen of het een mediabestand is gebaseerd op de documentgrootte">
+<!ENTITY title.history "Geschiedenis">
+<!ENTITY title.download-queue "Downloadrij">
+<!ENTITY column.media-url "Media-URL">
+<!ENTITY column.source-url "Bron-URL">
+<!ENTITY column.view-date "Kijkdatum">
+<!ENTITY column.file-name "Bestandsnaam">
+<!ENTITY title.histlist "Geschiedenis">
+<!ENTITY label.histlist-enabled "Geschiedenis ingeschakeld (beta)">
+<!ENTITY label.histlist-clearonexit "Geschiedenis wissen bij afsluiten">
+<!ENTITY button.medialist.watch "Bekijken">
+<!ENTITY button.medialist.download "Downloaden">
+<!ENTITY button.medialist.more "Meer">
+<!ENTITY button.medialist.go-source "Bronpagina bezoeken">
+<!ENTITY button.medialist.remove "Verwijderen">
+<!ENTITY button.remove-downloads "Selectie verwijderen">
+<!ENTITY history.description "Met deze functie kunt u, onder bepaalde omstandigheden, de door u bekeken video’s onthouden, zodat u ze eenvoudig terug kunt vinden en een selectie in de batchmodus kunt downloaden.">
+<!ENTITY about.for-free "Deze Firefoxextensie wordt u gratis aangeboden.">
+<!ENTITY about.know-more "Klik voor meer informatie op deze">
+<!ENTITY about.link "koppeling">
+<!ENTITY about.know-more2 ".">
+<!ENTITY about.locale-credit "Nederlandse vertaling door markh van BabelZilla.org">
+<!ENTITY title.conversion "Conversie">
+<!ENTITY conversion.description "Met deze functie kunt u video’s automatisch converteren als ze zijn gedownload">
+<!ENTITY conversion.rules-description "Conversieregels worden gevolgd van boven naar beneden">
+<!ENTITY label.conversion-enabled "Conversie ingeschakeld">
+<!ENTITY title.conversion-rule "Conversieregel">
+<!ENTITY column.conversion.rules "Conversieregels">
+<!ENTITY button.conv-rule-list.edit "Regel bewerken">
+<!ENTITY button.conv-rule-list.up "Omhoog">
+<!ENTITY button.conv-rule-list.down "Omlaag">
+<!ENTITY button.conv-rule-list.remove "Regel verwijderen">
+<!ENTITY button.conv-rule-list.default "Standaard terugzetten">
+<!ENTITY button.conv-rule-list.new "Nieuwe regel">
+<!ENTITY button.conv-rule.change-directory "Wijzigen…">
+<!ENTITY label.conv-rule.convert "Converteren">
+<!ENTITY label.conv-rule.do-not-convert "Niet converteren">
+<!ENTITY label.conv-rule.files-with-ext "Bestanden met extensie">
+<!ENTITY label.conv-rule.from-site "Van site">
+<!ENTITY label.conv-rule.all-sites "ALLES">
+<!ENTITY label.conv-rule.all-files "ALLES">
+<!ENTITY label.conv-rule.kbps "Kbps">
+<!ENTITY label.conv-rule.bitrate "Bitrate">
+<!ENTITY label.conv-rule.output-directory "Map">
+<!ENTITY label.conv-rule.default-directory "STANDAARD">
+<!ENTITY caption.conv-rule.input "Invoer">
+<!ENTITY caption.conv-rule.output "Uitvoer">
+<!ENTITY title.convert-register "Conversiefunctieregistratie">
+<!ENTITY text.convert-register.benefits "Registreren van de conversiefunctie biedt u de volgende voordelen:">
+<!ENTITY text.convert-register.item.nologo "Geconverteerde video&apos;s geven niet het DownloadHelper-logo te zien">
+<!ENTITY text.convert-register.item.mp3 "U kunt naar mp3-audiobestanden converteren">
+<!ENTITY text.convert-register.item.faster "Conversies zijn veel sneller">
+<!ENTITY text.convert-register.item.support "Ondersteuning beschikbaar">
+<!ENTITY label.convert-register.code "Registratiecode">
+<!ENTITY button.convert-register.cancel "Annuleren">
+<!ENTITY button.convert-register.get-code "Registratiecode aanvragen">
+<!ENTITY button.convert-register.ok "OK">
+<!ENTITY title.converter-queue "Conversiewachtrij">
+<!ENTITY label.converter-queue.status "Status">
+<!ENTITY label.converter-queue.status.done "Klaar">
+<!ENTITY label.converter-queue.input "Invoer">
+<!ENTITY label.converter-queue.output "Uitvoer">
+<!ENTITY label.converter-queue.status.inprogress "In bewerking">
+<!ENTITY label.converter-queue.status.waiting "Wachten">
+<!ENTITY label.converter-queue.status.error "Fout">
+<!ENTITY button.converter-queue.close "Sluiten">
+<!ENTITY label.conversion.converter "Conversie">
+<!ENTITY label.conversion.no-such-converter "Het conversieprogramma kan niet worden gevonden">
+<!ENTITY description.conversion.no-win-conv "U dient een externe toepassing te installeren om de video’s te converteren">
+<!ENTITY description.conversion.bad-version "Bijwerken ConvertHelper nodig">
+<!ENTITY button.conversion.win-conv "Conversieprogramma installeren/bijwerken">
+<!ENTITY button.conversion.check-win-conv "Conversieprogramma opnieuw controleren">
+<!ENTITY description.conversion.win-conv "Het conversieprogramma is op uw systeem aangetroffen">
+<!ENTITY title.convert-options "Conversie-opties">
+<!ENTITY caption.convlicense "Licentie-informatie">
+<!ENTITY label.convlicense.license "Sleutel">
+<!ENTITY label.convlicense.name "Eigenaar">
+<!ENTITY label.convlicense.email "E-mailadres">
+<!ENTITY label.convlicense.unregistered "Niet-geregistreerd conversieprogramma">
+<!ENTITY title.video-format.general "Algemeen">
+<!ENTITY title.video-format.advanced "Geavanceerd">
+<!ENTITY button.video-format.show-details "Details…">
+<!ENTITY title.output-video-format "Opmaak video-uitvoer">
+<!ENTITY label.video-format.two-passes "2 doorgangen">
+<!ENTITY label.video-format.first-pass "Doorgang 1">
+<!ENTITY label.video-format.second-pass "Doorgang 2">
+<!ENTITY label.conversion.log "Conversies loggen">
+<!ENTITY button.conversion.show-log "Logbestand weergeven">
+<!ENTITY title.conversion-log "Conversielogbestand">
+<!ENTITY button.convert-log.clear "Logbestand wissen">
+<!ENTITY button.convert-log.close "Sluiten">
+<!ENTITY button.convert-log.refresh "Vernieuwen">
+<!ENTITY menu.video-format.copy "Video-opmaak kopiëren">
+<!ENTITY menu.video-format.paste "Video-opmaak plakken">
+<!ENTITY button.conversion.help "Help">
+<!ENTITY label.converter-queue.started-on "Gestart op">
+<!ENTITY label.converter-queue.ended-on "Beëindigd op">
+<!ENTITY label.conversion-notification "Bericht geven bij afronden conversie">
+<!ENTITY label.show-in-statusbar "In statusbalk weergeven">
+<!ENTITY label.trigger-min-size "Minimale grootte om te starten (KB)">
+<!ENTITY label.quick-download-key "Toets voor snel downloaden">
+<!ENTITY label.open-folder-key "Toets voor map openen">
+<!ENTITY button.video-format.default "Standaardconfiguraties">
+<!ENTITY button.video-format.name "Configuratie benoemen">
+<!ENTITY button.video-format.rename "Configuratie hernoemen">
+<!ENTITY button.video-format.forget "Configuratie vergeten">
+<!ENTITY label.conversion-config-share "Configuraties delen">
+<!ENTITY label.yt-check-hq "YouTube hoge kwaliteit detecteren">
+<!ENTITY label.yt-prefer-hq "Voorkeur geven aan YouTube hoge kwaliteit">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Bestandsnamen vooraf laten gaan door index">
+<!ENTITY title.pick-processor "Kies dienst">
+<!ENTITY title.media-dump "Mediadump">
+<!ENTITY label.dump-media.prop-name "Eigenschap">
+<!ENTITY label.dump-media.prop-value "Waarde">
+<!ENTITY label.quickkeys.change "Sneltoetsen wijzigen">
+<!ENTITY title.config-processor-keys "Sneltoetsen processors instellen">
+<!ENTITY proc-keymap.revert "Standaardwaarden terugzetten">
+<!ENTITY proc-keymap.provider "Aanbieder">
+<!ENTITY proc-keymap.description "Beschrijving">
+<!ENTITY proc-keymap.current-key "Huidige sneltoets">
+<!ENTITY proc-keymap.hold-assign "Houd toets(en) ingedrukt en klik om ze toe te wijzen">
+<!ENTITY proc-keymap.unmap "Toetsmapping verwijderen">
+<!ENTITY title.quick-keys "Sneltoetsen">
+<!ENTITY label.tools-menu "Weergeven in menu Extra">
+<!ENTITY pref.title.capture "Capturen">
+<!ENTITY pref.title.services "Diensten">
+<!ENTITY pref.title.miscellaneous "Diversen">
+<!ENTITY pref.title.download "Downloaden">
+<!ENTITY pref.title.appearance "Weergave">
+<!ENTITY pref.title.behavior "Gedrag">
+<!ENTITY pref.title.accelerators "Versnellers">
+<!ENTITY label.menu-expiration "Vervaltijd menu-ingave (sec)">
+<!ENTITY pref.title.http "Netwerk">
+<!ENTITY pref.title.galleries "Galerijen">
+<!ENTITY pref.description.galleries "Met deze methode kunt u bestanden downloaden door te kijken naar HTML-koppelingen">
+<!ENTITY pref.label.enable-medialink-method "Galerijmethode ingeschakeld">
+<!ENTITY pref.description.http "Deze methode detecteert media door HTTP-gegevensuitwisseling tussen de browser en de server te volgen">
+<!ENTITY pref.description.youtube "Deze methode herkent video’s door YouTube-pagina’s te analyseren">
+<!ENTITY pref.label.enable-http-method "Netwerkmethode ingeschakeld">
+<!ENTITY label.mediareq-file-extensions "Bestandsextensies op verzoek">
+<!ENTITY label.ignore-below-size "Media onder omvang (KB) negeren">
+<!ENTITY label.detect-above-size "Detectie afdwingen boven omvang (KB)">
+<!ENTITY pref.button.configure-conv-rules "Conversieregels instellen…">
+<!ENTITY title.conversion-rules "Conversieregels">
+<!ENTITY pref.button.register-converter "Conversieprogramma registreren">
+<!ENTITY pref.caption.troubleshooting "Probleemoplossing">
+<!ENTITY pref.button.check-again "Opnieuw controleren">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "E-mailadres">
+<!ENTITY mp3tunes.pref.password "Wachtwoord">
+<!ENTITY mp3tunes.pref.phonenumber "Telefoonnummer">
+<!ENTITY mp3tunes.pref.phonenumber.description "Optioneel maar nodig indien u audio op uw mobiele telefoon wilt ontvangen">
+<!ENTITY mp3tunes.pref.description "Met de MP3Tunes-dienst kunt u muziek rechtstreeks naar uw mobiele telefoon sturen of naar een privékastje dat u overal kunt benaderen">
+<!ENTITY mp3tunes.pref.create-account "Account aanmaken">
+<!ENTITY mp3tunes.pref.password-repeat "Herhaal wachtwoord">
+<!ENTITY mp3tunes.pref.firstname "Voornaam">
+<!ENTITY mp3tunes.pref.lastname "Achternaam">
+<!ENTITY mp3tunes.title.create-account "MP3Tunes-account aanmaken">
+<!ENTITY mp3tunes.pref.upgrade-account "Accoutn upgraden">
+<!ENTITY mp3tunes.pref.check-account "Account controleren">
+<!ENTITY mp3tunes.pref.last-check "Laatste controle">
+<!ENTITY mp3tunes.title.title "Naar MP3Tunes versturen">
+<!ENTITY mp3tunes.title.artist-name "Artiest/Uitvoerder">
+<!ENTITY mp3tunes.title.album-title "Album/Bron">
+<!ENTITY mp3tunes.title.track-title "Naam/Titel">
+<!ENTITY mp3tunes.title.track-number "Titel nummer">
+<!ENTITY mp3tunes.title.year "Jaar">
+<!ENTITY label.highlight-media-from-current-page "Media van huidige pagina accentueren">
+<!ENTITY label.system-menu-icons "Pictogrammen in systeemmenu weergeven">
+<!ENTITY mp3tunes.label.enabled "MP3Tunes-dienst ingeschakeld">
+<!ENTITY mp3tunes.title.no-converter "Conversieprogramma ontbreekt">
+<!ENTITY mp3tunes.button.no-converter.continue "Doorgaan">
+<!ENTITY mp3tunes.button.no-converter.configure "Conversie instellen">
+<!ENTITY mp3tunes.text.no-converter.1 "U wilt een audiobestand naar MP3Tunes verzenden maar het ingebouwde conversieprogramma van DownloadHelper is niet ingesteld.">
+<!ENTITY mp3tunes.text.no-converter.2 "U kunt klikken om door te gaan met verzenden van het mediabestand naar uw kastje of u kunt eerst de conversiefunctie instellen om een audiobestand te maken.">
+<!ENTITY mp3tunes.label.no-converter.not-again "Deze waarschuwing niet meer weergeven">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "Widget weergeven om toegang te krijgen tot diensten vanuit YouTube-pagina’s">
+<!ENTITY label.yt-inpage.default-processor "Standaarddienst">
+<!ENTITY label.privacy-policy "Privacybeleid">
+<!ENTITY mp3tunes.label.open-locker "Kastje openen">
+<!ENTITY mp3tunes.pref.on-send-mobile "Bij verzenden naar mobiele telefoon">
+<!ENTITY mp3tunes.pref.on-send-locker "Bij verzenden naar kastje">
+<!ENTITY mp3tunes.pref.on-send.video "Video uploaden (met audio)">
+<!ENTITY mp3tunes.pref.on-send.audio "Alleen audio uploaden">
+<!ENTITY mp3tunes.pref.on-send.ask "Gebruiker vragen">
+<!ENTITY mp3tunes.title.conversion-choice "MP3Tunes uploadtype">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Mijn keuze onthouden en niet opnieuw vragen">
+<!ENTITY mp3tunes.pref.phonenumber-sample "met landcode, b.v. +31 55 555 5555">
+<!ENTITY ythq.label.enable "Inschakelen">
+<!ENTITY ythq.label.disable "Uitschakelen">
+<!ENTITY ythq.label.up "Omhoog">
+<!ENTITY ythq.label.down "Omlaag">
+<!ENTITY ythq.column.type "Type">
+<!ENTITY ythq.column.format "Opmaak">
+<!ENTITY ythq.column.video "Video">
+<!ENTITY ythq.column.audio "Audio">
+<!ENTITY pref.title.blacklist "Zwarte lijst">
+<!ENTITY pref.description.blacklist "Met deze functie kunt u mediabestanden van sommige sites negeren, zoals advertentievideo’s">
+<!ENTITY add2bl.label.add-domain-choice "Berichten negeren voor media van domein:">
+<!ENTITY pref.label.share-blacklist "Zwarte lijst delen">
+<!ENTITY pref.description.share-blacklist "Door delen van uw zwarte lijst kan een goede standaard zwarte lijst worden geboden in toekomstige versies van het product">
+<!ENTITY label.add2bl.configure-blacklist "Zwarte lijst instellen">
+<!ENTITY label.extended-download-menu "Uitgebreid downloadmenu">
+<!ENTITY smartname.menu-name "Slim benamen">
+<!ENTITY smartname.menu-set-name "Mediatitellocatie definiëren">
+<!ENTITY smartname.menu-set-descr "Mediabeschrijvingslocatie definiëren">
+<!ENTITY smartname.menu-share-now "Nu delen">
+<!ENTITY smartname.menu-import "Importeren">
+<!ENTITY smartname.define.value-for-page "Waarde voor deze pagina:">
+<!ENTITY smartname.define.domain "Domein">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "Reguliere expressie">
+<!ENTITY smartname.define.previous-value "Voorgaande waarden">
+<!ENTITY pref.title.smartname "Slim benamen">
+<!ENTITY pref.description.smartname "Met de functie Slim benamen kunt u betekenisvolle namen aan gedownloade mediabestanden geven">
+<!ENTITY pref.label.enable-smartname "Slim benamen inschakelen">
+<!ENTITY smartname.column.domain "Domein">
+<!ENTITY smartname.column.mode "Modus">
+<!ENTITY smartname.list.button.delete "Verwijderen">
+<!ENTITY smartname.list.button.edit "Bewerken">
+<!ENTITY smartname.list.button.import "Importeren">
+<!ENTITY smartname.list.label.type "Type">
+<!ENTITY smartname.list.type.name "Medianaam">
+<!ENTITY smartname.list.type.descr "Mediabeschrijving">
+<!ENTITY smartname.overlap.select "Selecteren">
+<!ENTITY smartname.overlap.selectall "Alles">
+<!ENTITY smartname.overlap.selectnone "Geen">
+<!ENTITY smartname.overlap.description "Aangevinkte ingaves worden overschreven">
+<!ENTITY smartname.overlap.title "Overlappend">
+<!ENTITY pref.label.smartname.keep-spaces "Spaties in bestandsnamen houden">
+<!ENTITY pref.label.smartname.keep-nonascii "Niet-ASCII-tekens in bestandsnamen houden">
+<!ENTITY pref.label.smartname.auto-share "Slim benamen-statistieken anoniem delen">
+<!ENTITY pref.label.smartname.auto-share.notice "Hiermee wordt automatisch de database onderhouden in het belang van iedereen">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Gebruikersnaam">
+<!ENTITY twitter.pref.password "Wachtwoord">
+<!ENTITY twitter.pref.description "Met de Twitterdienst kunt u eenvoudig tweets versturen over een mediabestand">
+<!ENTITY twitter.pref.create-account "Gratis Twitteraccount aanmaken">
+<!ENTITY twitter.pref.check-account "Gebruikersnaam/wachtwoord controleren">
+<!ENTITY twitter.pref.last-check "Laatste controle">
+<!ENTITY twitter.label.enabled "Twitterdiensten ingeschakeld">
+<!ENTITY twitter.title.send-message "Twitterbericht versturen">
+<!ENTITY twitter.message.smartnaming "U zou de functie Slim benamen moeten overwegen om het Twitterbericht automatisch te vullen met de titel van de video, en indien beschikbaar de beschrijving.">
+<!ENTITY twitter.label.go-to-smartnaming "Meer over Slim benamen">
+<!ENTITY twitter.label.tag-message "Bericht automatisch vullen met label #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Maximaal aantal hits">
+<!ENTITY pref.label.icon-click "Bij klikken op pictogram">
+<!ENTITY pref.label.icon-click.sites "Ondersteunde sites weergeven">
+<!ENTITY pref.label.icon-click.quick-download "Een snelle download uitvoeren">

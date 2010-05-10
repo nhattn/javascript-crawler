@@ -1,0 +1,349 @@
+<!ENTITY menu.help "Ayuda">
+<!ENTITY menu.manual-check "Comprobar URL">
+<!ENTITY menu.preferences "Opciones...">
+<!ENTITY menu.about "Acerca de...">
+<!ENTITY label.download-one-by-one "Descargar de uno en uno">
+<!ENTITY label.storagedir "Carpeta de almacenamiento">
+<!ENTITY button.changedir "Cambiar carpeta">
+<!ENTITY error.nohome "La carpeta principal no existe">
+<!ENTITY error.notadirectory "no es una carpeta">
+<!ENTITY title.preferences "Opciones">
+<!ENTITY title.about "Acerca de Download Helper">
+<!ENTITY version.name "Download Helper">
+<!ENTITY label.menu-http-expiration "Duración de la entrada del menú (ms)">
+<!ENTITY label.icon-animation "Animación del icono">
+<!ENTITY menu.ytlinks "Descargar videos de enlaces de YouTube">
+<!ENTITY label.download-mode "Modo de descarga">
+<!ENTITY label.download-mode.normal "Normal">
+<!ENTITY label.download-mode.onebyone "Uno a uno">
+<!ENTITY label.download-mode.flashgot "FlashGot">
+<!ENTITY title.credits "Créditos">
+<!ENTITY title.general "General">
+<!ENTITY title.medialink "MediaLink">
+<!ENTITY title.youtube "YouTube">
+<!ENTITY medialink.description "El método MediaLink le permite descargar archivos desde una página con solo consultar los enlaces HTML">
+<!ENTITY button.add "Añadir">
+<!ENTITY button.default "Por defecto">
+<!ENTITY button.remove "Borrar">
+<!ENTITY label.file-extensions "Extensiones de archivo">
+<!ENTITY title.mediareq "MediaReq">
+<!ENTITY mediareq.description "El método MediaReq examina las solicitudes de salida HTTP para decidir si se trata de un archivo multimedia">
+<!ENTITY title.support-dev "Contribuya con el desarrollo de DownloadHelper">
+<!ENTITY label.donate-not-again "No molestarme con esto nuevamente">
+<!ENTITY label.donate "Donar">
+<!ENTITY label.cancel "Cancelar">
+<!ENTITY label.congratulations "¡Felicidades!">
+<!ENTITY label.keep-spaces "Mantener espacios en los nombres de archivo">
+<!ENTITY title.sites "Sitios multimedia de DownloadHelper">
+<!ENTITY button.sites.close "Cerrar">
+<!ENTITY button.sites.open "Abrir">
+<!ENTITY button.sites.report "Informar de sitio funcional">
+<!ENTITY column.sites.name "Nombre">
+<!ENTITY column.sites.rating "Calificación">
+<!ENTITY column.sites.count "Comentarios">
+<!ENTITY column.sites.date "Fecha de alta">
+<!ENTITY column.sites.url "URL">
+<!ENTITY button.site.close "Cerrar">
+<!ENTITY label.site.name "Nombre">
+<!ENTITY caption.site.site "Sitio multimedia">
+<!ENTITY title.site "Sitio multimedia">
+<!ENTITY label.site.url "URL">
+<!ENTITY label.site.date "Añadido">
+<!ENTITY label.site.rating "Calificación">
+<!ENTITY label.site.no-rating "Ninguno aún">
+<!ENTITY button.site.check "Comprobar sitio">
+<!ENTITY button.site.comment "Añadir comentario">
+<!ENTITY label.comment.site "Sitio">
+<!ENTITY title.comment "Comentario">
+<!ENTITY caption.comment.comment "Añadir un comentario">
+<!ENTITY label.comment.author "Nick">
+<!ENTITY help.comment.author "Su nombre o nick">
+<!ENTITY label.comment.title "Título">
+<!ENTITY help.comment.title "El título del comentario">
+<!ENTITY label.comment.comment "Comentario">
+<!ENTITY help.comment.comment "Use líneas en blanco para separar párrafos">
+<!ENTITY label.comment.tags "Etiquetas">
+<!ENTITY help.comment.tags "Etiquetas importantes separadas por espacios (ejem: &apos;news indian&apos;, o &apos;Adultos&apos;)">
+<!ENTITY label.comment.rating "Calificación">
+<!ENTITY help.comment.rating "0 = nada interesante, 5 = magnífico sitio">
+<!ENTITY button.comment.close "Cerrar">
+<!ENTITY button.comment.submit "Enviar comentario">
+<!ENTITY label.comment.wait "Su comentario está siendo enviado. Por favor espere...">
+<!ENTITY title.report "Informar de sitio funcional">
+<!ENTITY caption.report.report "Informar de un nuevo sitio funcional">
+<!ENTITY message.report.check-new "Por favor, asegúrese de que este sitio no existe ya en la lista de sitios">
+<!ENTITY label.report.name "Nombre del sitio">
+<!ENTITY help.report.name "Nombre común para el sitio, ej: YouTube">
+<!ENTITY label.report.url "URL del sitio">
+<!ENTITY help.report.url "La dirección del sitio, ejem: http://www.youtube.com">
+<!ENTITY label.report.author "Su nombre">
+<!ENTITY help.report.author "El nombre para los créditos del informe. Puede dejarlo en blanco">
+<!ENTITY label.report.description "Descripción">
+<!ENTITY help.report.description "Una breve descripción de lo que se puede encontrar en este sitio">
+<!ENTITY button.report.submit "Enviar sitio">
+<!ENTITY button.report.close "Cerrar">
+<!ENTITY label.report.wait "Su sitio está siendo enviado. Por favor espere...">
+<!ENTITY menu.sites "Sitios soportados">
+<!ENTITY label.sites.list-adult "Mostrar sitios con acceso directo a contenido para adultos">
+<!ENTITY label.report.adult "Contenido para adultos accesible directamente">
+<!ENTITY label.context-menu "Mostrar en el menú contextual">
+<!ENTITY menu.to-sumo "Publicar video en SUMO.tv">
+<!ENTITY label.enable-plugin-method "Habilitar método de firma del plugin">
+<!ENTITY label.yt-unmodified-filename "Mantener nombres de archivo de YouTube (CJK)">
+<!ENTITY label.disable-dwcount-cookie "Deshabilitar la cookie de contador de descargas">
+<!ENTITY column.sites.duration "Interés">
+<!ENTITY title.mediaweight "MediaWeight">
+<!ENTITY label.mediaweight-enabled "MediaWeight habilitado">
+<!ENTITY label.mediaweight-threshold "Umbral de tamaño medio">
+<!ENTITY label.enable-medialink-method "MediaLink habilitado">
+<!ENTITY mediaweight.description "El método MediaWeight examina la respuesta HTTP para determinar si es un archivo multimedia en función del tamaño del documento">
+<!ENTITY title.history "Historial">
+<!ENTITY title.download-queue "Descargar cola">
+<!ENTITY column.media-url "URL multimedia">
+<!ENTITY column.source-url "Fuente URL">
+<!ENTITY column.view-date "Ver fecha">
+<!ENTITY column.file-name "Nombre de archivo">
+<!ENTITY title.histlist "Historial">
+<!ENTITY label.histlist-enabled "Habilitar historial (beta)">
+<!ENTITY label.histlist-clearonexit "Borrar el historial al salir">
+<!ENTITY button.medialist.watch "Reproducir">
+<!ENTITY button.medialist.download "Descargar">
+<!ENTITY button.medialist.more "Más">
+<!ENTITY button.medialist.go-source "Visiar la página fuente">
+<!ENTITY button.medialist.remove "Borrar">
+<!ENTITY button.remove-downloads "Borrar la selección">
+<!ENTITY history.description "Esta opción le permite, en determinadas circunstancias, recordar los vídeos que ha visto por lo que puede volver fácilmente a ellos y descargarlos en modo de proceso por lotes.">
+<!ENTITY about.for-free "Esta extensión de Firefox se le proveé a usted de forma gratuita.">
+<!ENTITY about.know-more "Para saber más, siga éste">
+<!ENTITY about.link "enlace">
+<!ENTITY about.know-more2 "">
+<!ENTITY about.locale-credit "Traducción al Español realizada por ZuGro de BabelZilla.org y Chuzo (www.proyectonave.es)">
+<!ENTITY title.conversion "Conversión">
+<!ENTITY conversion.description "Esta opción le permitirá convertir vídeos automáticamente una vez que estén descargados">
+<!ENTITY conversion.rules-description "Las reglas de conversión se evaluarán de arriba a abajo">
+<!ENTITY label.conversion-enabled "Conversión habilitada">
+<!ENTITY title.conversion-rule "Reglas de conversión">
+<!ENTITY column.conversion.rules "Reglas de conversión">
+<!ENTITY button.conv-rule-list.edit "Editar regla">
+<!ENTITY button.conv-rule-list.up "Subir">
+<!ENTITY button.conv-rule-list.down "Bajar">
+<!ENTITY button.conv-rule-list.remove "Borrar regla">
+<!ENTITY button.conv-rule-list.default "Recuperar los valores por defecto">
+<!ENTITY button.conv-rule-list.new "Nueva regla">
+<!ENTITY button.conv-rule.change-directory "Cambiar...">
+<!ENTITY label.conv-rule.convert "Convertir">
+<!ENTITY label.conv-rule.do-not-convert "No convertir">
+<!ENTITY label.conv-rule.files-with-ext "Archivos con extensión">
+<!ENTITY label.conv-rule.from-site "Del sitio">
+<!ENTITY label.conv-rule.all-sites "TODOS">
+<!ENTITY label.conv-rule.all-files "TODOS">
+<!ENTITY label.conv-rule.kbps "Kbps">
+<!ENTITY label.conv-rule.bitrate "Bitrate">
+<!ENTITY label.conv-rule.output-directory "Carpeta">
+<!ENTITY label.conv-rule.default-directory "POR DEFECTO">
+<!ENTITY caption.conv-rule.input "Entrada">
+<!ENTITY caption.conv-rule.output "Salida">
+<!ENTITY title.convert-register "Registro del conversor">
+<!ENTITY text.convert-register.benefits "Si registra el conversor, tendrá las siguientes ventajas:">
+<!ENTITY text.convert-register.item.nologo "Los vídeos convertidos no mostrarán el logo de DownloadHelper">
+<!ENTITY text.convert-register.item.mp3 "Posibilidad de convertir los archivos de audio a mp3">
+<!ENTITY text.convert-register.item.faster "Conversiones más rápidas">
+<!ENTITY text.convert-register.item.support "Soporte disponible">
+<!ENTITY label.convert-register.code "Código de registro">
+<!ENTITY button.convert-register.cancel "Cancelar">
+<!ENTITY button.convert-register.get-code "Obtener código de registro">
+<!ENTITY button.convert-register.ok "OK">
+<!ENTITY title.converter-queue "Cola de conversión">
+<!ENTITY label.converter-queue.status "Estado">
+<!ENTITY label.converter-queue.status.done "Completado">
+<!ENTITY label.converter-queue.input "Entrada">
+<!ENTITY label.converter-queue.output "Salida">
+<!ENTITY label.converter-queue.status.inprogress "En progreso">
+<!ENTITY label.converter-queue.status.waiting "En espera">
+<!ENTITY label.converter-queue.status.error "Error">
+<!ENTITY button.converter-queue.close "Cerrar">
+<!ENTITY label.conversion.converter "Conversor">
+<!ENTITY label.conversion.no-such-converter "No se ha podido encontrar el programa conversor">
+<!ENTITY description.conversion.no-win-conv "Necesita instalar una aplicación externa para convertir los vídeos">
+<!ENTITY description.conversion.bad-version "Actualización de ConvertHelper requerida">
+<!ENTITY button.conversion.win-conv "Instalar/Actualizar conversor">
+<!ENTITY button.conversion.check-win-conv "Volver a comprobar el conversor">
+<!ENTITY description.conversion.win-conv "La aplicación conversora se ha encontrado en el sistema">
+<!ENTITY title.convert-options "Opciones del conversor">
+<!ENTITY caption.convlicense "Información de licencia">
+<!ENTITY label.convlicense.license "Clave">
+<!ENTITY label.convlicense.name "Nombre de registro">
+<!ENTITY label.convlicense.email "Correo del propietario">
+<!ENTITY label.convlicense.unregistered "Conversor no registrado">
+<!ENTITY title.video-format.general "General">
+<!ENTITY title.video-format.advanced "Avanzado">
+<!ENTITY button.video-format.show-details "Detalles ...">
+<!ENTITY title.output-video-format "Formato de salida de vídeo">
+<!ENTITY label.video-format.two-passes "2 pasadas">
+<!ENTITY label.video-format.first-pass "Pasada 1">
+<!ENTITY label.video-format.second-pass "Pasada 2">
+<!ENTITY label.conversion.log "Registro de conversiones">
+<!ENTITY button.conversion.show-log "Mostrar registro">
+<!ENTITY title.conversion-log "Registro de conversión">
+<!ENTITY button.convert-log.clear "Borrar registro">
+<!ENTITY button.convert-log.close "Cerrar">
+<!ENTITY button.convert-log.refresh "Actualizar">
+<!ENTITY menu.video-format.copy "Copiar formato de vídeo">
+<!ENTITY menu.video-format.paste "Pegar formato de vídeo">
+<!ENTITY button.conversion.help "Ayuda">
+<!ENTITY label.converter-queue.started-on "Iniciado en">
+<!ENTITY label.converter-queue.ended-on "Terminado en">
+<!ENTITY label.conversion-notification "Notificación de la finalización de la conversión">
+<!ENTITY label.show-in-statusbar "Mostrar en la barra de estado">
+<!ENTITY label.trigger-min-size "Tamaño mínimo del archivo (KB)">
+<!ENTITY label.quick-download-key "Tecla para la descarga rápida">
+<!ENTITY label.open-folder-key "Tecla para abrir la carpeta">
+<!ENTITY button.video-format.default "Configuraciones por defecto">
+<!ENTITY button.video-format.name "Nombre">
+<!ENTITY button.video-format.rename "Renombrar la configuración">
+<!ENTITY button.video-format.forget "Ignorar configuración">
+<!ENTITY label.conversion-config-share "Compartir configuraciones">
+<!ENTITY label.yt-check-hq "Detectar alta calidad de YouTube">
+<!ENTITY label.yt-prefer-hq "Preferir alta calidad de YouTube">
+<!ENTITY title.pref-tab.youtube "YouTube">
+<!ENTITY label.medialink-index-prefix "Usar un índice para los prefijos de los nombres de archivo">
+<!ENTITY title.pick-processor "Elegir servicio">
+<!ENTITY title.media-dump "Volcado de medios">
+<!ENTITY label.dump-media.prop-name "Propiedad">
+<!ENTITY label.dump-media.prop-value "Valor">
+<!ENTITY label.quickkeys.change "Cambiar teclas rápidas">
+<!ENTITY title.config-processor-keys "Configurar las teclas rápidas">
+<!ENTITY proc-keymap.revert "Cambiar a los valores por defecto">
+<!ENTITY proc-keymap.provider "Proveedor">
+<!ENTITY proc-keymap.description "Descripción">
+<!ENTITY proc-keymap.current-key "Tecla rápida actual">
+<!ENTITY proc-keymap.hold-assign "Presione la tecla(s) y pulse para asignar">
+<!ENTITY proc-keymap.unmap "Tecla sin asignación">
+<!ENTITY title.quick-keys "Teclas rápidas">
+<!ENTITY label.tools-menu "Mostrar en el menú herramientas">
+<!ENTITY pref.title.capture "Capturar">
+<!ENTITY pref.title.services "Servicios">
+<!ENTITY pref.title.miscellaneous "Varios">
+<!ENTITY pref.title.download "Descarga">
+<!ENTITY pref.title.appearance "Apariencia">
+<!ENTITY pref.title.behavior "Comportamiento">
+<!ENTITY pref.title.accelerators "Aceleradores">
+<!ENTITY label.menu-expiration "Expiración de la entrada de menú (seg)">
+<!ENTITY pref.title.http "Red">
+<!ENTITY pref.title.galleries "Galerías">
+<!ENTITY pref.description.galleries "Este método le permite descargar archivos de una página consultando los enlaces HTML">
+<!ENTITY pref.label.enable-medialink-method "Método de galerías habilitado">
+<!ENTITY pref.description.http "Este método detecta los archivos consultando el intercambio de datos HTTP entre el navegador y el servidor">
+<!ENTITY pref.description.youtube "Este método reconoce los vídeos analizando las páginas de YouTube">
+<!ENTITY pref.label.enable-http-method "Método Red habilitado">
+<!ENTITY label.mediareq-file-extensions "Extensiones de archivos a petición">
+<!ENTITY label.ignore-below-size "Ignorar archivos con tamaño menor (KB)">
+<!ENTITY label.detect-above-size "Forzar la detección con tamaño mayor (KB)">
+<!ENTITY pref.button.configure-conv-rules "Configurar las reglas de conversión ...">
+<!ENTITY title.conversion-rules "Reglas de conversión">
+<!ENTITY pref.button.register-converter "Registrar conversor">
+<!ENTITY pref.caption.troubleshooting "Resolución de problemas">
+<!ENTITY pref.button.check-again "Volver a comprobar">
+<!ENTITY mp3tunes.pref.title "MP3Tunes">
+<!ENTITY mp3tunes.pref.username "Dirección de correo">
+<!ENTITY mp3tunes.pref.password "Contraseña">
+<!ENTITY mp3tunes.pref.phonenumber "Número de teléfono">
+<!ENTITY mp3tunes.pref.phonenumber.description "Opcional, pero necesario para recibir audio en su móvil">
+<!ENTITY mp3tunes.pref.description "El servicio MP3Tunes le permite enviar música directamente a su móvil o a una ubicación privada accesible desde cualquier sitio">
+<!ENTITY mp3tunes.pref.create-account "Crear cuenta">
+<!ENTITY mp3tunes.pref.password-repeat "Repetir contraseña">
+<!ENTITY mp3tunes.pref.firstname "Nombre">
+<!ENTITY mp3tunes.pref.lastname "Apellidos">
+<!ENTITY mp3tunes.title.create-account "Crear cuenta de MP3Tunes">
+<!ENTITY mp3tunes.pref.upgrade-account "Actualizar cuenta">
+<!ENTITY mp3tunes.pref.check-account "Comprobar cuenta">
+<!ENTITY mp3tunes.pref.last-check "Última comprobación">
+<!ENTITY mp3tunes.title.title "Enviar a MP3Tunes">
+<!ENTITY mp3tunes.title.artist-name "Nombre del artista">
+<!ENTITY mp3tunes.title.album-title "Título del album">
+<!ENTITY mp3tunes.title.track-title "Título de la pista">
+<!ENTITY mp3tunes.title.track-number "Número de la pista">
+<!ENTITY mp3tunes.title.year "Año">
+<!ENTITY label.highlight-media-from-current-page "Resaltar archivos multimedia de la página actual">
+<!ENTITY label.system-menu-icons "Mostrar iconos en el menú del sistema">
+<!ENTITY mp3tunes.label.enabled "Servicio MP3Tunes habilitado">
+<!ENTITY mp3tunes.title.no-converter "Conversor ausente">
+<!ENTITY mp3tunes.button.no-converter.continue "Continuar">
+<!ENTITY mp3tunes.button.no-converter.configure "Configurar conversión">
+<!ENTITY mp3tunes.text.no-converter.1 "Necesita enviar una pista de audio a MP3Tunes, pero el conversor interno de DownloadHelper no se ha configurado.">
+<!ENTITY mp3tunes.text.no-converter.2 "Puede pulsar continuar para enviar el archivo directamente a su carpeta, o puede configurar la opción de conversión para crear un archivo de sonido primero.">
+<!ENTITY mp3tunes.label.no-converter.not-again "No volver a mostrar este aviso">
+<!ENTITY label.beta-parenthesis "(beta)">
+<!ENTITY label.yt-inpage "Mostrar widget para acceder a los servicios desde la página de YouTube">
+<!ENTITY label.yt-inpage.default-processor "Servicio por defecto">
+<!ENTITY label.privacy-policy "Política de privacidad">
+<!ENTITY mp3tunes.label.open-locker "Abrir el espacio privado">
+<!ENTITY mp3tunes.pref.on-send-mobile "Al enviar a un móvil">
+<!ENTITY mp3tunes.pref.on-send-locker "Al enviar a la carpeta">
+<!ENTITY mp3tunes.pref.on-send.video "Enviar vídeo (con sonido)">
+<!ENTITY mp3tunes.pref.on-send.audio "Enviar sólo el sonido">
+<!ENTITY mp3tunes.pref.on-send.ask "Preguntar al usuario">
+<!ENTITY mp3tunes.title.conversion-choice "Tipo de envío MP3tunes">
+<!ENTITY mp3tunes.label.conversion-choice.remember "Recordar mi elección y no volver a preguntar">
+<!ENTITY mp3tunes.pref.phonenumber-sample "con el código de país, p.ej: +34 555 555 5555">
+<!ENTITY ythq.label.enable "Habilitar">
+<!ENTITY ythq.label.disable "Deshabilitar">
+<!ENTITY ythq.label.up "Arriba">
+<!ENTITY ythq.label.down "Abajo">
+<!ENTITY ythq.column.type "Tipo">
+<!ENTITY ythq.column.format "Formato">
+<!ENTITY ythq.column.video "Vídeo">
+<!ENTITY ythq.column.audio "Sonido">
+<!ENTITY pref.title.blacklist "Lista negra">
+<!ENTITY pref.description.blacklist "Esta opción le permite ignorar los archivos multimedia de algunos sitios, como de publicidad.">
+<!ENTITY add2bl.label.add-domain-choice "Ignorar las notificaciones multimedia del dominio:">
+<!ENTITY pref.label.share-blacklist "Compartir la lista negra">
+<!ENTITY pref.description.share-blacklist "Comparta su lista negra para proporcionar una buena lista negra en las próximas versiones de este complemento">
+<!ENTITY label.add2bl.configure-blacklist "Configurar lista negra">
+<!ENTITY label.extended-download-menu "Menú de descargas extendido">
+<!ENTITY smartname.menu-name "Nombre inteligente">
+<!ENTITY smartname.menu-set-name "Definir la ubicación del título del medio">
+<!ENTITY smartname.menu-set-descr "Definir la ubicación de la descripción del medio">
+<!ENTITY smartname.menu-share-now "Compartir ahora">
+<!ENTITY smartname.menu-import "Importar">
+<!ENTITY smartname.define.value-for-page "Valor para esta página:">
+<!ENTITY smartname.define.domain "Dominio">
+<!ENTITY smartname.define.xpath "XPath">
+<!ENTITY smartname.define.regexp "Expresión regular">
+<!ENTITY smartname.define.previous-value "Valores anteriores">
+<!ENTITY pref.title.smartname "Nombre inteligente">
+<!ENTITY pref.description.smartname "Los nombres inteligentes permiten dar un nombre con sentido a los archivos descargados">
+<!ENTITY pref.label.enable-smartname "Habilitar nombres inteligentes">
+<!ENTITY smartname.column.domain "Dominio">
+<!ENTITY smartname.column.mode "Modo">
+<!ENTITY smartname.list.button.delete "Borrar">
+<!ENTITY smartname.list.button.edit "Editar">
+<!ENTITY smartname.list.button.import "Importar">
+<!ENTITY smartname.list.label.type "Tipo">
+<!ENTITY smartname.list.type.name "Nombre de medio">
+<!ENTITY smartname.list.type.descr "Descripción del medio">
+<!ENTITY smartname.overlap.select "Seleccionar">
+<!ENTITY smartname.overlap.selectall "Todo">
+<!ENTITY smartname.overlap.selectnone "Ninguno">
+<!ENTITY smartname.overlap.description "Las entradas marcadas serán sobreescritas">
+<!ENTITY smartname.overlap.title "Sobreescritura">
+<!ENTITY pref.label.smartname.keep-spaces "Mantener espacios en los nombres de archivos">
+<!ENTITY pref.label.smartname.keep-nonascii "Mantener los caracteres extraños en los nombres de archivos">
+<!ENTITY pref.label.smartname.auto-share "Compartir las estadísticas de modo anónimo">
+<!ENTITY pref.label.smartname.auto-share.notice "Esto ayuda a mantener la base de datos automáticamente para beneficio de todos">
+<!ENTITY twitter.pref.title "Twitter">
+<!ENTITY twitter.pref.username "Nombre de usuario">
+<!ENTITY twitter.pref.password "Contraseña">
+<!ENTITY twitter.pref.description "El servicio Twitter permite enviar fácilmente tweets sobre un medio">
+<!ENTITY twitter.pref.create-account "Crear una cuenta Twitter gratis">
+<!ENTITY twitter.pref.check-account "Comprobar usuario/contraseña">
+<!ENTITY twitter.pref.last-check "Última comprobación">
+<!ENTITY twitter.label.enabled "Servicio Twitter habilitado">
+<!ENTITY twitter.title.send-message "Enviar mensaje en Twitter">
+<!ENTITY twitter.message.smartnaming "Puede considerar usar la opción de nombre inteligente para rellenar los mensajes Twitter con el título del vídeo, y la descripción, si está disponible.">
+<!ENTITY twitter.label.go-to-smartnaming "Más sobre el nombre inteligente">
+<!ENTITY twitter.label.tag-message "Completar el mensaje con la etiqueta #vidohe">
+<!ENTITY pref.label.medialink.max-hit-count "Número máximo de pulsaciones">
+<!ENTITY pref.label.icon-click "Después de pulsar en el icono">
+<!ENTITY pref.label.icon-click.sites "Mostrar sitios soportados">
+<!ENTITY pref.label.icon-click.quick-download "Realizar una descarga rápida">

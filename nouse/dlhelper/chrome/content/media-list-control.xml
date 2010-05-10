@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<!DOCTYPE bindings SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="MediaListControl" extends="widgets.xml#widget">
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1">
+				<spacer flex="1"/>
+				<button anonid="xWatchBut" 
+					oncommand="this.parentNode.parentNode.watch()"
+					label="&button.medialist.watch;"/>
+				<button anonid="xDownloadBut"
+					oncommand="this.parentNode.parentNode.download()"
+					label="&button.medialist.download;"/>
+				<PopupButton anonid="xMoreBut" label="&button.medialist.more;">
+					<menuitem anonid="xSourceBut" 
+						label="&button.medialist.go-source;" 
+						oncommand="this.parentNode.parentNode.parentNode.goSource()"/>
+					<menuitem anonid="xRemoveBut" 
+						label="&button.medialist.remove;" 
+						oncommand="this.parentNode.parentNode.parentNode.remove()"/>
+				</PopupButton>
+				<spacer flex="1"/>
+			</hbox>
+			<children style="display: none;"/>
+		</xbl:content>
+
+		<implementation>
+
+			<constructor>
+				<![CDATA[
+this.setSelection(null,[]);
+this.core=Components.classes["@downloadhelper.net/core;1"].
+	getService(Components.interfaces.dhICore);
+				]]>
+			</constructor>
+						
+			<method name="setSelection">
+				<parameter name="media"/>
+				<parameter name="medias"/>
+				<body>
+				<![CDATA[
+this.dlMgr=Components.classes["@downloadhelper.net/download-manager;1"]
+	.getService(Components.interfaces.dhIDownloadMgr);
+this.media=media;
+this.medias=medias;
+var mediaButs=["xWatchBut","xMoreBut","xSourceBut"];
+for(var but in mediaButs) {
+	var mediaBut=mediaButs[but];
+	if(media==null)
+		this[mediaBut].setAttribute("hidden","true");
+	else
+		this[mediaBut].setAttribute("hidden","false");
+}
+mediaButs=["xDownloadBut","xRemoveBut"];
+for(var but in mediaButs) {
+	var mediaBut=mediaButs[but];
+	if(medias==null || medias.length==0)
+		this[mediaBut].setAttribute("hidden","true");
+	else
+		this[mediaBut].setAttribute("hidden","false");
+}
+				]]>
+				</body>
+			</method>
+
+			<method name="setView">
+				<parameter name="xView"/>
+				<body>
+				<![CDATA[
+this.xView=xView;
+				]]>
+				</body>
+			</method>
+
+			<method name="setList">
+				<parameter name="xList"/>
+				<body>
+				<![CDATA[
+this.xList=xList;
+				]]>
+				</body>
+			</method>
+
+						
+			<method name="watch">
+				<body>
+				<![CDATA[
+if(this.media!=null) {
+
+	var ds=this.mediaListMgr.getDataSource();
+	var url=this.util.getPropertyValueSS(ds,this.media,this.NS+"url");
+	var type=this.util.getPropertyValueSS(ds,this.media,this.NS+"type");
+	var pageurl=this.util.getPropertyValueSS(ds,this.media,this.NS+"pageurl");
+	if(url!=null) {
+		try {
+		this.mediaListMgr.addCurrentURL(url);
+		} catch(e) {
+			dump("!!![media-list-control] watch: "+e+"\n");
+		}
+		url=url.replace(/^(?:https?:\/\/)?(.*)$/,"$1");
+		var fullurl="http://www.downloadhelper.net/watch.php?media="+escape(url)+"&type="+escape(type);
+		if(pageurl!=null)
+			fullurl+="&pageurl="+escape(pageurl);
+		this.xView.setAttribute("src",fullurl);
+	}
+}
+				]]>
+				</body>
+			</method>
+
+			<method name="goSource">
+				<body>
+				<![CDATA[
+var ds=this.mediaListMgr.getDataSource();
+var media=this.xList.getSelectedMedia();
+if(media!=null) {
+	var url=this.util.getPropertyValueSS(ds,media,this.NS+"pageurl");
+	if(url!=null) {
+		window.open(url,"dwhelper-video-source");
+	}
+}
+				]]>
+				</body>
+			</method>
+
+			<method name="download">
+				<body>
+				<![CDATA[
+try {
+	var ds=this.mediaListMgr.getDataSource();
+	var medias=this.xList.getSelectedMedias();
+	for(var i in medias) {
+		var media=medias[i];
+		var uri = Components.classes["@mozilla.org/network/standard-url;1"].createInstance(Components.interfaces.nsIURI);
+    	uri.spec = this.util.getPropertyValueRS(ds,media,this.NS+"url");
+    	var filename = this.util.getPropertyValueRS(ds,media,this.NS+"filename");
+		var referer = this.util.getPropertyValueRS(ds,media,this.NS+"referer");
+		var desc=Components.classes["@mozilla.org/properties;1"].
+			createInstance(Components.interfaces.nsIProperties);
+		Util.setPropsString(desc,"media-url",uri.spec);
+		Util.setPropsString(desc,"page-url",referer);
+		Util.setPropsString(desc,"label",filename);
+		Util.setPropsString(desc,"file-name",filename);
+		this.core.quickProcess(desc);
+	}
+} catch(e) {}
+				]]>
+				</body>
+			</method>
+
+			<method name="remove">
+				<body>
+				<![CDATA[
+try {
+	var medias=this.xList.getSelectedMedias();
+	for(var i in medias) {
+		var media=medias[i];
+		this.mediaListMgr.removeFromList(this.xList.list,media.Value);
+	}
+} catch(e) {
+}
+				]]>
+				</body>
+			</method>
+			
+		</implementation>
+				
+	</binding>
+
+</bindings>

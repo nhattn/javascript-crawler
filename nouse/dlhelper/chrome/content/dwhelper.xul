@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!-- *****************************************************************************
+ *            Copyright (c) 2006-2009 Michel Gutierrez. All Rights Reserved.
+ ****************************************************************************** -->
+<?xml-stylesheet href="chrome://dwhelper/skin/dwhelper.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dwhelper/content/bindings.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://dwhelper/locale/dwhelper.dtd" >
+
+<overlay id="dwhelper"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript"
+		src="chrome://dwhelper/content/dwhelper.js" />
+
+	<keyset id="mainKeyset">
+		<key id="dwhelper-quick-key" oncommand="DWHelper.core.quickDownloadCommand()" key="Q" modifiers="control shift"/>
+		<key id="dwhelper-opendir-key" oncommand="DWHelper.core.openDownloadDirectoryCommand()" key="O" modifiers="control shift"/>
+	</keyset>
+
+	<toolbarpalette id="BrowserToolbarPalette">
+
+		<toolbaritem 
+		  	class="toolbaritem-1 chromeclass-toolbar-additional"
+			id="dwhelper-toolbaritem" align="center" pack="end" flex="0" context="_child"
+			>
+			<toolbarbutton id="dwhelper-button"
+			  	class="toolbarbutton-1 chromeclass-toolbar-additional"
+	    		flex="0"
+				image="chrome://dwhelper/skin/dwhelper16-on.gif"
+				label="&version.name;" hidden="false"
+				tooltiptext="&version.name;"
+				>
+				<menupopup class="DownloadMenu" dh-controlled-button="dwhelper-button"/>
+			</toolbarbutton>
+			<CounterLabel id="dwhelper-count"/>
+			<menupopup  class="SystemMenu" id="dwhelper-bctxmenupopup"/>
+		</toolbaritem>
+
+	</toolbarpalette>
+
+	<statusbar id="status-bar">
+		<statusbarpanel id="dwhelper-statusbarpanel"
+			insertbefore="security-button" hidden="true" context="_child">
+			<toolbarbutton id="dwhelper-statusbar-button" type="menu-button"
+			  	class="toolbarbutton-1 chromeclass-toolbar-additional"
+				image="chrome://dwhelper/skin/dwhelper16-on.gif"
+				tooltiptext="&version.name;"
+				oncommand="DWHelper_buttonClicked(event)">
+				<menupopup id="dwhelper-statusbar-menupopup" class="DownloadMenu" dh-controlled-button="dwhelper-statusbar-button"/>
+			</toolbarbutton>
+			<CounterLabel id="dwhelper-statusbar-count"/>
+			<menupopup  id="dwhelper-sbctxmenupopup" class="SystemMenu"/>
+		</statusbarpanel>
+	</statusbar>
+
+
+	<popup id="contentAreaContextMenu">
+    	<menu id="dwhelper-ctxmenu"
+      		label="&version.name;" 
+			insertbefore="context-sep-selectall,context-sep-stop,context-sep-copylink"
+      		class="menu-iconic"
+      		image="chrome://dwhelper/skin/dwhelper16-on.gif"
+		>
+			<menupopup id="dwhelper-ctxmenupopup" class="SystemMenu"/>
+		</menu>
+		<menuitem id="dwhelper-ytlinks" label="&menu.ytlinks;" class="ContextMenuitem" 
+			context-item-handler="@downloadhelper.net/youtube-links-context-item;1"/>
+    	<menu id="dwhelper-snmenu"
+    		class="ContextMenuIconic"
+    		context-item-handler="@downloadhelper.net/smart-namer;1"
+      		label="&smartname.menu-name;" 
+			insertbefore="context-sep-selectall,context-sep-stop,context-sep-copylink"
+      		image="chrome://dwhelper/skin/dwhelper16-on.gif"
+		>
+			<menupopup dwhelper-monitored-context-submenu="true">
+				<menuitem id="dwhelper-snmenu-set-name" label="&smartname.menu-set-name;" class="ContextMenuitem" context-item-handler="@downloadhelper.net/smart-namer;1" />
+				<menuitem id="dwhelper-snmenu-set-descr" label="&smartname.menu-set-descr;" class="ContextMenuitem" context-item-handler="@downloadhelper.net/smart-namer;1" />
+				<menuitem id="dwhelper-snmenu-share-now" label="&smartname.menu-share-now;" class="ContextMenuitem" context-item-handler="@downloadhelper.net/smart-namer;1" />
+				<menuitem id="dwhelper-snmenu-import" label="&smartname.menu-import;" class="ContextMenuitem" context-item-handler="@downloadhelper.net/smart-namer;1" />
+			</menupopup>
+		</menu>
+			
+	</popup>
+
+	<popup id="menu_ToolsPopup">
+		<menuseparator id="dwhelper-toolsmenu-separator"/>
+    	<menu id="dwhelper-toolsmenu"
+      		label="&version.name;" 
+      		class="menu-iconic"
+      		image="chrome://dwhelper/skin/dwhelper16-on.gif"
+		>
+			<menupopup id="dwhelper-toolsmenupopup" class="SystemMenu"/>
+		</menu>
+	</popup>
+	
+</overlay>
+

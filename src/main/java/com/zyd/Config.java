@@ -14,6 +14,10 @@ public class Config {
     public final static String PARAMETER_NAME_OBJECT_ID = "objectid";
 
     /**
+     * how many records to return by default
+     */
+    public final static int LENGTH_PAGE_SIZE = 20;
+    /**
      * the encoding all outgoing content will be using, including xml/js/html 
      */
     public final static String ENCODING_OUT_GOING_CONTENT = "GBK";
@@ -24,4 +28,9 @@ public class Config {
     public static String IdlePageUrl = ServerUrl + "/html/wait.html";
 
     public final static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
+    
+    /**
+     * if two gps point differs more than this number, in meters, it will be treated as two location.
+     */
+    public final static int THRESHOLD_GPS_LOCATION_DIFF = 100;
 }

@@ -43,11 +43,8 @@ public class object extends ServiceBase {
         } else {
             HashMap values = requestParameterToMap(req);
             boolean result = (Boolean) objectManager.create(values);
-            if (result == false) {
-                //TODO: what to do if it's not added
-            }
             linkManager.linkProcessed(referer);
-            output(RESULT_CHANGE, resp);
+            output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
         }
     }
 

@@ -65,5 +65,55 @@ CrUtil = {
 			}
 			return s.join('\n');
 		}
-	}
+	},
+	
+	objToString : function(obj){
+	    var r = [];
+	    for(var i in obj){
+	        r.push(i);
+	        r.push('=');
+	        r.push(obj[i]);
+	        r.push(', ');
+	    }
+	    return r.join('');
+	},
+
+	/**
+	 *  s is something like "小说类别：虚拟网游 总点击：4736 总推荐：419 总字数：228132 更新：2009年10月10日".
+	 *  extract the value for keys like "小说类别" or "总点击".
+	 */
+	extract : function(s, key, defaultValue){
+	    var start, end;
+	    if(typeof defaultValue == 'undefined'){
+	        defaultValue = '';
+	    }
+	    s = CrUtil.killSpace(s);
+	    start = s.indexOf(key);
+	    if(start<0){
+	        return defaultValue;
+	    }
+	    
+	    start = start + key.length;
+	    var space =  /^\s$/;
+	    while(start<s.length && space.test(s.charAt(start++))){
+	        // skip all the spaces
+	    }	    
+	    start--;
+	    end = start+1;
+        var nspace =  /^\S$/;
+        while(end<s.length && nspace.test(s.charAt(end++))){
+            // skip all the none spaces
+        }   	    
+        var r = '';
+        try{
+            r = s.substring(start,end);
+        }catch(e){
+            Crawler.error("crawler_loader.extract:"+e+":"+e);
+        }        
+        return r.trim();
+	},
+	
+	killSpace : function(s){
+	    return s.replace(/\s+/g, ' ');
+	}	
 }

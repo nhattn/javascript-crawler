@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=/home/yang/workspace/webcrawl/thirdparty/asprise/aspriseOCR.jar -DgroupId=com.asprise -DartifactId=ocr -Dversion=1.0 -Dpackaging=jar

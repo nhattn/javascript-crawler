@@ -22,8 +22,20 @@ public class House extends Handler {
     @SuppressWarnings("unchecked")
     public Object process(HashMap values) {
         String tel = (String) values.get(Columns.Tel);
-        if (tel == null || values.containsKey(Columns.Long) == false || values.containsKey(Columns.Lat) == false || values.containsKey(Columns.Address) == false) {
-            System.err.println("Can not add House, missing required paramters");
+        if (tel == null) {
+            System.err.println("Can not add House, missing required paramter - " + Columns.Tel);
+            return false;
+        }
+        if (values.containsKey(Columns.Long) == false) {
+            System.err.println("Can not add House, missing required paramter - " + Columns.Long);
+            return false;
+        }
+        if (values.containsKey(Columns.Address) == false) {
+            System.err.println("Can not add House, missing required paramter - " + Columns.Address);
+            return false;
+        }
+        if (values.containsKey(Columns.Lat) == false) {
+            System.err.println("Can not add House, missing required paramter - " + Columns.Lat);
             return false;
         }
         if (tel.length() > 100) {
@@ -39,13 +51,16 @@ public class House extends Handler {
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        // make sure house is unique
-        if (isUnique(session, values) == false) {
-        } else {
-            r = true;
-            session.save(getName(), values);
+        try {
+            // make sure house is unique
+            if (isUnique(session, values) == false) {
+            } else {
+                r = true;
+                session.save(getName(), values);
+            }
+        } finally {
+            session.getTransaction().commit();
         }
-        session.getTransaction().commit();
         return r;
     }
 

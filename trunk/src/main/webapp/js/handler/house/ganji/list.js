@@ -9,13 +9,13 @@ function handlerProcess() {
     var info = {
         dataUrl : Crawler.serverUrl + '/service/link',
         path : "/html/body/div[@id='wrapper']/div[@id='content']/div[3]/dl/dt/a",
-        nextPagePath: "/html/body/div[@id='wrapper']/div[@id='content']/div[3]/div/ul/li/a[@class='c']/parent::*//following-sibling::*[1]",
+        nextPagePath: "/html/body/div[@id='wrapper']/div[@id='content']/div[3]/div/ul/li/a[@class='c']/parent::*//following-sibling::*[1]/a",
         regex : new RegExp('http://sh\.ganji\.com/fang[0-9]+', 'i')
     };    
     
     var links = HandlerHelper.getMatchLinks(info.path, info.regex);    
     HandlerHelper.storeLinks(links, {
-        action : 'Eval.XPath.Link.Href',
+        action : 'Goto.XPath.Link.Href',
         param1 : info.nextPagePath
     });    
 }
@@ -25,7 +25,7 @@ function isTimeExpired(){
 	var reg = /([0-9][0-9])-([0-9][0-9]) ([0-9][0-9]):([0-9][0-9])/;
 	var arr = XPath.array(document, "//span[contains(@class,'time')]");
 	var now = new Date(), odate = new Date();
-	var maxDifference = 5 * 24 * 3600 * 1000;
+	var maxDifference = CrGlobal.HouseListMaxDifference;
 	for(var i=0;i<arr.length;i++){
 		var s = arr[i].textContent;		
 		if(!s || s.trim().length ==0){

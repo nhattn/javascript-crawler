@@ -1,5 +1,5 @@
 function handlerProcess(){
-	CrUtil.removeFrames(document);     
+//	CrUtil.removeFrames(document);     
     var obj = {}, xpath, s , reg = HandlerHelper.getRegGroupFirstValue, t;	
 	s = XPath.single(document,"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent.toString().replace(/:\s*\n\s*/g,':');
 	var s2 = s;		
@@ -74,7 +74,7 @@ function handlerProcess(){
 	var lonlatUrl = null;
 	if(window.write_frame){
 		lonlatUrl = window.write_frame.toString();
-		window.write_frame = function(){};
+		//window.write_frame = function(){};
 	}else{
 		lonlatUrl = document.getElementById('traffic_iframe');
 		if(lonlatUrl){
@@ -84,6 +84,12 @@ function handlerProcess(){
 	if(lonlatUrl){
 		var i = lonlatUrl.indexOf('latlng=');	
 		if(i!=-1){
+			var j = lonlatUrl.indexOf('&',i);
+			lonlatUrl = lonlatUrl.substring(i+7, j).split(',');
+			obj.la=lonlatUrl[0];
+			obj.lo=lonlatUrl[1];
+		}else{
+			i = lonlatUrl.indexOf('lnglat=');
 			var j = lonlatUrl.indexOf('&',i);
 			lonlatUrl = lonlatUrl.substring(i+7, j).split(',');
 			obj.lo=lonlatUrl[0];

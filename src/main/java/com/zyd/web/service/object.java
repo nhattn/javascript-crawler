@@ -45,6 +45,9 @@ public class object extends ServiceBase {
             boolean result = (Boolean) objectManager.create(values);
             linkManager.linkProcessed(referer);
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
+            if (result == false) {
+                System.err.println("Failed to handle url - " + referer);
+            }
         }
     }
 

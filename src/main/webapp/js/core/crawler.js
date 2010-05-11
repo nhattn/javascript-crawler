@@ -7,19 +7,34 @@ Crawler = {
 	loadJSFile : CrGlobal.loadJSFile,
 	
 	clog : function(txt){
-	    if(window.console) window.console.log(txt);
+        if(CrGlobal.RemoteLogging){
+            Crawler.remoteLog('clog', txt);
+        }else{
+            if(window.console) window.console.log(txt);
+        }
 	},
 	
 	log : function(txt){
-	    Crawler.clog(txt);
+        if(CrGlobal.RemoteLogging){
+            Crawler.remoteLog('log', txt);
+        }else{
+            Crawler.clog(txt);
+        }
 	},
 	
 	error: function(txt){
-	    Crawler.clog('Error: '+txt);
-	    CrGlobal.doAction = false;
-	    alert(txt);
+        CrGlobal.doAction = false;
+        if(CrGlobal.RemoteLogging){
+            Crawler.remoteLog('error', txt);
+        }else{
+    	    Crawler.clog('Error: '+txt);
+    	    alert(txt);
+        }
 	},	
 	
+	remoteLog: function(level, msg){
+	    CrUtil.getRequest(CrGlobal.RemoteLoggingUrl+'?level='+ level +'&msg='+msg);
+	},
 	/**
 	 * perform an action based on specificed command and parameters.
 	 * obj is the command object like such:
@@ -37,30 +52,32 @@ Crawler = {
 	        Crawler.clog('Error, no action specified');	        
 	    }	    	    
 	    switch(obj.action){
-    	    case 'Eval.XPath.Link.Href' :{
-    	    	alert(111);
-    	        // xpath should point to the A node, will take out the href
-    	        var link = XPath.single(null, obj.param1);
-    	        if(!link || !link.href){
-    	            Crawler.error("Error, can not locate link for XPath: "+obj.param1);    	            
-    	        }else{  
-    	           try{    	        	
-    	        	   alert(link.href);
-    	               eval(link.href);
-    	               processed = true;
-    	           }catch(e){
-    	               Crawler.error('Error, can not eval xpath link:'+link+':'+e);    	                   	               
-    	           }
-    	        }
-    	        break;
-    	    }
+            case 'Eval.XPath.Link.Href' :{
+                // xpath should point to the A node, will take out the href
+                var link = XPath.single(null, obj.param1);
+                if(!link || !link.href){
+                    Crawler.error("Error, can not locate link for XPath1: "+obj.param1);                 
+                }else{                    
+                    setTimeout(function(){
+                        try{     
+                            eval(link.href);
+                        }catch(e){
+                            Crawler.error('Error, can not eval xpath link:'+link+':'+e);                                        
+                        }
+                    }, CrGlobal.NextLinkWaitTime);   
+                    processed = true;                   
+                }
+                break;
+            }	    
     	    case 'Goto.XPath.Link.Href' : {
                 // xpath should point to the A node, will take out the href    	        
-                var link = XPath.single(null, obj.param1);
-                if(!link){
-                    Crawler.clog("Error, can not locate link for XPath: "+obj.param1);                    
+                var link = XPath.single(null, obj.param1);                
+                if(!link || !link.href){
+                    Crawler.error("Error, can not locate link for XPath2: "+obj.param1);                    
                 }else{  
-                    window.location = link.href;
+                    setTimeout(function(){
+                        window.location = link.href;
+                    }, CrGlobal.NextLinkWaitTime);                    
                     processed = true;
                 }      
                 break;
@@ -70,8 +87,7 @@ Crawler = {
     	        var url = Crawler.serverUrl + '/service/link?action=redirect';
     	        setTimeout(function(){
     	        	window.location = url;
-    	        }, CrGlobal.NextLinkWaitTime);
-    	        
+    	        }, CrGlobal.NextLinkWaitTime);    	        
     	        // must return here, or there will be loops.
     	        return;
     	    }

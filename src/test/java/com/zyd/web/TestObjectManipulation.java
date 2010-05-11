@@ -20,7 +20,7 @@ import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
 import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
-import com.zyd.Config;
+import com.zyd.Constants;
 import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.House;
 
@@ -141,7 +141,7 @@ public class TestObjectManipulation extends TestCase {
         is.setCharacterStream(new StringReader(s));
         Document docx = db.parse(is);
         NodeList nodes = docx.getElementsByTagName("object");
-        assertEquals(nodes.getLength(), Config.LENGTH_PAGE_SIZE);
+        assertEquals(nodes.getLength(), Constants.LENGTH_PAGE_SIZE);
     }
 
     private static HashMap getHouseConfig() {

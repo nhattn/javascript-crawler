@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.zyd.Config;
+import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.busi.BookManager;
 import com.zyd.core.busi.CrawlerManager;
@@ -92,7 +92,7 @@ public class book extends ServiceBase {
 			}
 			if ("xml".equals(format)) {
 				setResponseType("xml", resp);
-				content = book.toXMLString(withChapter, true, Config.Encoding);
+				content = book.toXMLString(withChapter, true, Constants.Encoding_DEFAULT_SYSTEM);
 			} else if (format == null || "json".equals(format)) {
 				setResponseType("js", resp);
 				content = book.toJsonString(withChapter);

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.zyd.Config;
+import com.zyd.Constants;
 
 public class LinkManager {
 
@@ -45,7 +45,7 @@ public class LinkManager {
     public synchronized String nextLink() {
         Iterator<String> it = links.iterator();
         if (it.hasNext() == false) {
-            return Config.IdlePageUrl;
+            return Constants.IdlePageUrl;
         }
         String l = it.next();
         links.remove(l);

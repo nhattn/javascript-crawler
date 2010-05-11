@@ -3,7 +3,7 @@ package com.zyd.core.objecthandler;
 import java.util.HashMap;
 import java.util.List;
 
-import com.zyd.Config;
+import com.zyd.core.objecthandler.Handler.Parameter;
 
 @SuppressWarnings("unchecked")
 public class ObjectManager {
@@ -20,7 +20,7 @@ public class ObjectManager {
      * @return
      */
     public Object create(HashMap values) {
-        String objectName = (String) values.get(Config.PARAMETER_NAME_OBJECT_ID);
+        String objectName = (String) values.get(Parameter.PARAMETER_OBJECT_ID);
         Handler handler = lookupObjectHandler(objectName);
         if (handler == null) {
             System.err.println("Can not find handler for " + objectName);
@@ -37,7 +37,7 @@ public class ObjectManager {
      * @return
      */
     public List query(HashMap criteria) {
-        String objectName = (String) criteria.get(Config.PARAMETER_NAME_OBJECT_ID);
+        String objectName = (String) criteria.get(Parameter.PARAMETER_OBJECT_ID);
         Handler handler = lookupObjectHandler(objectName);
         if (handler == null) {
             System.err.println("Can not find handler for " + objectName);

@@ -25,7 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.asprise.util.ocr.OCR;
-import com.zyd.Config;
+import com.zyd.Constants;
 import com.zyd.core.dom.Book;
 
 public class Utils {
@@ -256,7 +256,7 @@ public class Utils {
                     Object v = maps.get(o);
                     if (v != null && v instanceof String) {
                         String value = (String) v;
-                        value = new String(value.getBytes(Config.Encoding), Config.Encoding_DB);
+                        value = new String(value.getBytes(Constants.Encoding_DEFAULT_SYSTEM), Constants.ENCODING_DB);
                         try {
                             BeanUtils.setProperty(obj, s, value);
                         } catch (Exception e) {
@@ -283,7 +283,7 @@ public class Utils {
                     Object v = maps.get(o);
                     if (v != null && v instanceof String) {
                         String value = (String) v;
-                        value = new String(value.getBytes(Config.Encoding_DB), Config.Encoding);
+                        value = new String(value.getBytes(Constants.ENCODING_DB), Constants.Encoding_DEFAULT_SYSTEM);
                         try {
                             BeanUtils.setProperty(obj, s, value);
                         } catch (Exception e) {
@@ -382,10 +382,10 @@ public class Utils {
             Date[] r = new Date[] { null, null };
             try {
                 if (s1 != null) {
-                    r[0] = Config.DATEFORMAT_DEFAULT.parse(s1);
+                    r[0] = Constants.DATEFORMAT_DEFAULT.parse(s1);
                 }
                 if (s2 != null) {
-                    r[1] = Config.DATEFORMAT_DEFAULT.parse(s2);
+                    r[1] = Constants.DATEFORMAT_DEFAULT.parse(s2);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -431,6 +431,7 @@ public class Utils {
     }
 
     public static void main(String[] args) {
+        System.out.println(System.getProperty("os.name"));
         Book b = new Book();
         b.setName("ÎÒµÄÃû×Ö");
         toDBEncoding(b);

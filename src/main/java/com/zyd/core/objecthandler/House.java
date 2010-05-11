@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.zyd.Config;
+import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
 
@@ -109,7 +109,7 @@ public class House extends Handler {
         }
 
         //count 
-        int count = Config.LENGTH_PAGE_SIZE;
+        int count = Constants.LENGTH_PAGE_SIZE;
         s = (String) params.get("count");
         if (s != null && s.trim().length() != 0) {
             count = Utils.parseInit(s, 0);

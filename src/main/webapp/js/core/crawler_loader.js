@@ -11,8 +11,8 @@ CrGlobal = {
     extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
     handlerPath : '/js/handler',
 
-    doAction : true,
-//     doAction : false,
+//    doAction : true,
+     doAction : false,
     NextLinkWaitTime : 3 * 1000,
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',

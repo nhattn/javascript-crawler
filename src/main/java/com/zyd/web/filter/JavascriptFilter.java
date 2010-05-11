@@ -9,12 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.zyd.Config;
+import com.zyd.Constants;
 
 public class JavascriptFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        res.setCharacterEncoding(Config.ENCODING_OUT_GOING_CONTENT);
+        res.setCharacterEncoding(Constants.ENCODING_OUT_GOING_CONTENT);
         chain.doFilter(req, res);
     }
 

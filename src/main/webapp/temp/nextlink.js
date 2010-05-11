@@ -1,1 +1,0 @@
-{'action':'Eval.XPath.Link', 'para':'//a[text()="обр╩рЁ"]/@href'}

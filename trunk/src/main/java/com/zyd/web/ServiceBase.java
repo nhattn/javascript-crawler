@@ -11,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.Config;
+import com.zyd.Constants;
 import com.zyd.core.Utils;
 
 public class ServiceBase {
@@ -74,7 +74,7 @@ public class ServiceBase {
         if (s == null)
             return null;
         try {
-            return new String(s.getBytes("GBK"), Config.Encoding_DB);
+            return new String(s.getBytes("GBK"), Constants.ENCODING_DB);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -1,0 +1,12 @@
+<html>
+<head>
+    <script>
+    	function go(){
+        	window.location = '$p0$';
+        }
+        setTimeout(go, 100);
+    </script>
+</head>
+<body>
+</body>
+</html>

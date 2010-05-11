@@ -10,7 +10,7 @@ import com.tj.common.util.test.HttpTestUtil;
 
 public class ATestUtil {
     public static boolean clearServerData() throws Exception {
-        String s = HttpTestUtil.httpGetForString(Config.ServerUrl + "/service/controller?action=ClearAllData", null);
+        String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData", null);
         JSONObject o = new JSONObject(s);
         return o.getBoolean("result");
     }

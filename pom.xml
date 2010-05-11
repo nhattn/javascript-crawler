@@ -13,6 +13,7 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+					<encoding>GBK</encoding>
 				</configuration>
 			</plugin>
 		</plugins>

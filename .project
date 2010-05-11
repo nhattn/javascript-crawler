@@ -20,11 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>firefox_greasemonkey_gm_scripts</name>
-			<type>2</type>
-			<location>C:/Documents and Settings/Administrator/Application Data/Mozilla/Firefox/Profiles/dtnjt7l5.default/gm_scripts</location>
-		</link>
-	</linkedResources>
 </projectDescription>

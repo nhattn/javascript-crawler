@@ -1,29 +1,33 @@
 CrGlobal = {
+    debug : true,
     version : '0.1',
-    serverUrl : 'http://localhost:8080/crawler',    
- 
-    /**
-     * whether to do remote logging or not
-     */
-//    RemoteLogging : true,
-     RemoteLogging: false,    
-
-    extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
+    RemoteLogging : false,
+    doAction : true,
     handlerPath : '/js/handler',
-
-//    doAction : true,
-     doAction : false,
-    NextLinkWaitTime : 3 * 1000,
+    NextLinkWaitTime : 5 * 1000,
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
-    HouseListMaxDifference: 3*3600,//5 * 24 * 3600 * 1000,
-    
-    
+
+    /**
+     * how long before now should we go for grabbing house list
+     */
+    HouseListMaxDifference : 12 * 3600 * 1000,
+
+    extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
+
     setup : function() {
+        var hostDiv = document.getElementById('crawler_set_url');
+        if (!hostDiv) {
+            alert('error, no host div');
+            return;
+        }
+
+        CrGlobal.serverUrl = 'http://' + hostDiv.value;       
         CrGlobal.StoreLinkUrl = CrGlobal.serverUrl + '/service/link';
         CrGlobal.ObjectCreationUrl = CrGlobal.serverUrl + '/service/object';
         CrGlobal.RemoteLoggingUrl = CrGlobal.serverUrl + '/service/log';
-        CrGlobal.chainLoad(jsToLoad);
+        CrGlobal.initJsUrls();
+        CrGlobal.chainLoad(CrGlobal.jsToLoad);
     },
 
     loadJSFile : function(fileurl, callback) {
@@ -50,12 +54,14 @@ CrGlobal = {
         CrGlobal.loadJSFile(CrGlobal._chainFiles[CrGlobal._chainCurrent++], function() {
             CrGlobal._chainLoadFile();
         });
+    },
+
+    initJsUrls : function() {
+        CrGlobal.jsToLoad = [ CrGlobal.extFile, CrGlobal.serverUrl + '/js/core/crawler.js',
+                CrGlobal.serverUrl + '/js/core/handler_helper.js', CrGlobal.serverUrl + '/js/core/xpath.js',
+                CrGlobal.serverUrl + '/js/core/util.js', CrGlobal.serverUrl + '/js/mapping/house.js',
+                CrGlobal.serverUrl + '/js/core/kickoff.js' ];
     }
 }
-
-var jsToLoad = [ CrGlobal.extFile, CrGlobal.serverUrl + '/js/core/crawler.js',
-        CrGlobal.serverUrl + '/js/core/handler_helper.js', CrGlobal.serverUrl + '/js/core/xpath.js',
-        CrGlobal.serverUrl + '/js/core/util.js', CrGlobal.serverUrl + '/js/mapping/house.js',
-        CrGlobal.serverUrl + '/js/core/kickoff.js' ];
 
 CrGlobal.setup();

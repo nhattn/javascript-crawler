@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.util.SpringContext;
@@ -33,17 +35,21 @@ public class object extends ServiceBase {
      * {
      *  result: 'true'/'false'
      * }
+     * 
+     * Also, the referer url will be marked as processed.
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
         String referer = req.getHeader("Referer");
-        if (referer != null && linkManager.isLinkProcessed(referer) == true) {
+        if (referer != null && linkManager.isLinkProcessing(referer) == false) {
+            //TODO: should be strict like this: if (referer == null || linkManager.isLinkProcessing(referer) == false) {
+            //this is a link that we didn't process, come from somewhere else. ignore
             output(RESULT_NO_CHANGE, resp);
         } else {
             HashMap values = requestParameterToMap(req);
             boolean result = (Boolean) objectManager.create(values);
-            linkManager.linkProcessed(referer);
+            linkManager.linkFinished(referer);
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
             if (result == false) {
                 System.err.println("Failed to handle url - " + referer);
@@ -52,6 +58,7 @@ public class object extends ServiceBase {
     }
 
     /**
+     * Get a list of objects
      * TODO if there is no result how to notify
      */
     @Override
@@ -64,8 +71,8 @@ public class object extends ServiceBase {
 
     static String toXmlString(List list) {
         StringBuffer buf = new StringBuffer();
-        buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        buf.append("<objects>\n");
+        buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        buf.append("<objects>");
         for (int i = 0, len = list.size(); i < len; i++) {
             buf.append("<object>");
             HashMap map = (HashMap) list.get(i);
@@ -75,9 +82,11 @@ public class object extends ServiceBase {
                 buf.append('<');
                 buf.append(k);
                 buf.append('>');
+
                 Object o = map.get(k);
                 if (o != null) {
                     try {
+                        //                        buf.append(StringEscapeUtils.escapeXml(o.toString()));
                         buf.append(o.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -87,7 +96,7 @@ public class object extends ServiceBase {
                 buf.append(k);
                 buf.append('>');
             }
-            buf.append("</object>\n");
+            buf.append("</object>");
         }
         buf.append("</objects>");
         return buf.toString();

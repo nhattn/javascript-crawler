@@ -1,6 +1,6 @@
 function handlerProcess() {
 	if(isTimeExpired()==true){		
-		Crawler.log('expried');
+		Crawler.log('House list date expried, will stop process');
 		Crawler.action({
 			action:'Goto.Next.Link'
 		});		
@@ -42,7 +42,7 @@ function isTimeExpired(){
 		odate.setDate(parseInt(ts[2],10));
 		odate.setHours(parseInt(ts[3],10));
 		odate.setMinutes(parseInt(ts[4],10));
-		//console.log(now.getTime() - odate.getTime()+'  '+s);
+		//console.log(now.getTime() - odate.getTime()+'  '+s+'  '+maxDifference);
 		if((now.getTime() - odate.getTime())>maxDifference){
 			return true;
 		}

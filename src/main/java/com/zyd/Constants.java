@@ -2,11 +2,18 @@ package com.zyd;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 import com.tj.common.CommonUtil;
+import com.tj.common.OSHelper;
+import com.zyd.core.dom.Link;
 
 public class Constants {
     public static String SERVER_DOMAIN;
@@ -38,26 +45,48 @@ public class Constants {
      */
     public static String Encoding_DEFAULT_SYSTEM = Charset.defaultCharset().toString();
     public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
-
+    public static String FILENAME_LINK_WATCH_LIST = "watch.list";
+    public static Link[] WATCH_LIST = new Link[0];
     /***
      * These fields are derived, don't put any values
      */
     public static String ServerUrl;
-    public static String TemplatePath = "E:\\workspace\\webcrawl\\src\\main\\webapp\\temp";
     public static String IdlePageUrl;
 
+    static {
+        loadValues();
+    }
+
     public static void loadValues() {
-        System.err.println("Loading server configuration.....");
-        boolean r = CommonUtil.loadStaticPropertyFromFile(Constants.class, Constants.class.getClassLoader().getResourceAsStream("config.prop"));
+        String configFileName = null;
+        if (OSHelper.isLinux() == true) {
+            configFileName = "config.prop.linux";
+        } else if (OSHelper.isWindows() == true) {
+            configFileName = "config.prop.windows";
+        } else {
+            configFileName = "config.prop";
+        }
+
+        InputStream ins = Constants.class.getClassLoader().getResourceAsStream(configFileName);
+        if (ins == null) {
+            ins = Constants.class.getClassLoader().getResourceAsStream("config.prop");
+            if (ins == null) {
+                System.err.println("Can not load configuratoin file. System is not properly configured");
+                return;
+            }
+        }
+        System.err.println("Loading server configuration from " + configFileName);
+        boolean r = CommonUtil.loadStaticPropertyFromFile(Constants.class, ins);
         if (r == false) {
             System.err.println("Can not load configuration file from config.prop under classpath");
             return;
         }
         initValues();
+        loadWatchList();
         System.err.println(snapShotValues());
     }
 
-    public static void initValues() {
+    private static void initValues() {
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
     }
@@ -90,6 +119,15 @@ public class Constants {
             writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
             writer.newLine();
 
+            if (WATCH_LIST != null && WATCH_LIST.length != 0) {
+                writer.newLine();
+                writer.write("URLs to watch :");
+                writer.newLine();
+                for (int i = 0; i < WATCH_LIST.length; i++) {
+                    writer.write(WATCH_LIST[i].url);
+                    writer.newLine();
+                }
+            }
             writer.close();
             return bou.toString();
         } catch (Exception e) {
@@ -98,8 +136,31 @@ public class Constants {
         }
     }
 
-    static {
-        loadValues();
+    private static void loadWatchList() {
+        InputStream ins = null;
+        InputStreamReader reader = null;
+        try {
+            ins = Constants.class.getClassLoader().getResourceAsStream(FILENAME_LINK_WATCH_LIST);
+            if (ins == null) {
+                System.err.println("Can not load watch list from file :" + FILENAME_LINK_WATCH_LIST);
+                return;
+            }
+            reader = new InputStreamReader(ins, Encoding_DEFAULT_SYSTEM);
+            List list = IOUtils.readLines(ins);
+            if (list.size() != 0) {
+                WATCH_LIST = new Link[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    String url = (String) list.get(i);
+                    WATCH_LIST[i] = new Link(url);
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CommonUtil.closeStream(reader);
+            CommonUtil.closeStream(ins);
+        }
     }
 
 }

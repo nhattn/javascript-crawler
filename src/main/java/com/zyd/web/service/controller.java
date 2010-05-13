@@ -8,39 +8,41 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.core.Utils;
 import com.zyd.core.busi.CrawlerManager;
+import com.zyd.core.busi.LinkManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class controller extends ServiceBase {
-	private CrawlerManager cm;
 
-	public controller() {
-		cm = (CrawlerManager) SpringContext.getContext().getBean("crawlerManager");
-	}
+    public controller() {
+    }
 
-	/**
-	 * method: get description: perform various control functions parameters:
-	 * action, 'ClearAllData' will clear all data from the system, only used for
-	 * test.
-	 */
-	@Override
-	public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action = req.getParameter("action");
-		if ("ClearAllData".equals(action)) {
-			setResponseType("js", resp);
-			cm.clearAll();
-			output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
-		} else {
-			setResponseType("text", resp);
-			output("Invalid request:" + req.getRequestURI(), resp);
-		}
-	}
+    /**
+     * method: get description: perform various control functions parameters:
+     * action, 'ClearAllData' will clear all data from the system, only used for
+     * test.
+     */
+    @Override
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+        if ("ClearAllData".equals(action)) {
+            setResponseType("js", resp);
+            ((CrawlerManager) SpringContext.getContext().getBean("crawlerManager")).clearAll();
+            output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
+        } else if ("LinkSnapshot".equals(action)) {
+            setResponseType("text", resp);
+            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).snapshot(), resp);
+        } else {
+            setResponseType("text", resp);
+            output("Invalid request:" + req.getRequestURI(), resp);
+        }
+    }
 
-	/**
-	 * method: post *
-	 */
-	@Override
-	public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.getParameter("");
-	}
+    /**
+     * method: post *
+     */
+    @Override
+    public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getParameter("");
+    }
 }

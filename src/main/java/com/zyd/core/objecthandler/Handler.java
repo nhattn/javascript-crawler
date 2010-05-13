@@ -3,6 +3,7 @@ package com.zyd.core.objecthandler;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public abstract class Handler {
     public String getName() {
         return this.getClass().getName();

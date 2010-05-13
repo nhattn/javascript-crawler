@@ -41,11 +41,18 @@ function handlerProcess(){
 		t = reg(s2, /户型:\s*(.+)\s*/);
 	if(t){			
 		t = t.split('-');	
-		if(t.length<2){
-			Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : '+ t);
-		}else{
+		if(t.length==1){
+			t = t[0].trim();
+			if(t.indexOf('室')!=-1 ||t.indexOf('厅')!=-1 || t.indexOf('卫')!=-1){
+				obj.houseType = t;
+			}else{
+				Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : '+ t);
+			}			
+		}else if(t.length==2){
 			obj.subRentalType = t[0].trim();
 			obj.houseType = t[1].trim();
+		}else{
+			Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : '+ t);
 		}
 	}
 	
@@ -97,7 +104,6 @@ function handlerProcess(){
 		}
 	}
 	
-	obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
-	console.log(obj);	    
+	obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;	
     HandlerHelper.postObject(obj, {action:'Goto.Next.Link'});
 }

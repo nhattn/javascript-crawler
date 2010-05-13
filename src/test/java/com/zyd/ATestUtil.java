@@ -2,14 +2,15 @@ package com.zyd;
 
 import java.util.HashMap;
 
-import junit.framework.TestCase;
-
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.tj.common.util.test.HttpTestUtil;
 
 public class ATestUtil {
     public static boolean clearServerData() throws Exception {
+
         String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData", null);
         JSONObject o = new JSONObject(s);
         return o.getBoolean("result");
@@ -40,4 +41,10 @@ public class ATestUtil {
         JSONObject obj = new JSONObject(r);
         return obj.getBoolean("result");
     }
+
+    public static ApplicationContext setUpSpring() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:**/ContextConfig.xml");
+        return ctx;
+    }
+
 }

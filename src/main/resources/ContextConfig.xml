@@ -48,6 +48,7 @@
 
 	<bean id="linkManager" class="com.zyd.core.busi.LinkManager">
 	</bean>
+
 	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager">
 	</bean>
 

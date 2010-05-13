@@ -59,10 +59,10 @@ public class link extends ServiceBase {
             s = Utils.stringToFlatList(linkManager.getAllLinks());
         } else if ("get".equals(action)) {
             setResponseType("js", resp);
-            s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.nextLink() });
+            s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.nextLink().url });
         } else if ("redirect".equals(action)) {
             setResponseType("html", resp);
-            String l = linkManager.nextLink();
+            String l = linkManager.nextLink().url;
             ArrayList<String> p = new ArrayList<String>();
             p.add(l);
             s = templateManager.getTemplate("redirect", p);
@@ -91,7 +91,7 @@ public class link extends ServiceBase {
         try {
             JSONArray arr = new JSONArray(data);
             for (int i = 0; i < arr.length(); i++) {
-                if (linkManager.addLink(arr.getString(i))) {
+                if (linkManager.addLink(arr.getString(i)) != null) {
                     count++;
                 }
             }

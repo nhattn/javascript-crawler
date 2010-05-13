@@ -1,14 +1,14 @@
 
 use crawler;
 
-drop table house;
+drop table House;
 
-create table house(
-	id					 bigint NOT NULL AUTO_INCREMENT,
+create table House(
+	id					bigint NOT NULL AUTO_INCREMENT,
 	lo					double,
 	la					double,
 	rentalType 			tinyint,
-	subRentalType        varchar(10),
+	subRentalType       varchar(10),
 	price		        float,
 	paymentType	        varchar(10),
 	priceUit            varchar(10),
@@ -22,12 +22,24 @@ create table house(
 	tel					varchar(20),
 	contact				varchar(20),
 	photo				varchar(200),
-	description1		varchar(100),
-	description2		varchar(1000),
-	floor				varchar(2000),
+	description1		varchar(200),
+	description2		varchar(5000),
+	floor				varchar(10),
 	totalFloor			tinyint,
 	isAgent				tinyint,
 	equipment			varchar(100),
 	decoration			varchar(20),
- PRIMARY KEY (id)
+ 	PRIMARY KEY (id)
+);
+
+
+drop table Link;
+
+create table Link(
+	id					bigint NOT NULL AUTO_INCREMENT,
+	url					varchar(300),	
+	createTime          datetime,
+	processeTime		datetime,
+	tryCount			tinyint,
+	PRIMARY KEY (id)
 );

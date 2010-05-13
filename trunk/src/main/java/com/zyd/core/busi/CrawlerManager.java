@@ -196,9 +196,7 @@ public class CrawlerManager {
     }
 
     public void clearAll() {
-        this.siteManager.deleteAllSites();
         this.linkManager.deleteAllLinks();
-        this.bookManager.deleteAllBooks();
         this.objectManager.deleteAllObjects();
     }
 }

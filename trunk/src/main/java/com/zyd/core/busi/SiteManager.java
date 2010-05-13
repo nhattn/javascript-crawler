@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import com.zyd.core.Utils;
 import com.zyd.core.dao.SiteDao;
 import com.zyd.core.dom.Book;
@@ -15,10 +17,11 @@ import com.zyd.core.dom.ChapterSite;
 import com.zyd.core.dom.Site;
 
 public class SiteManager {
+	private JdbcTemplate jt = null;
 	private SiteDao dao = null;
 
 	public void setDataSource(DataSource ds) {
-		//jt = new JdbcTemplate(ds);
+		jt = new JdbcTemplate(ds);
 	}
 
 	public void setSiteDao(SiteDao dao) {

@@ -298,18 +298,6 @@ public class Utils {
         return obj;
     }
 
-    public static String ocrImageNumber(String byteString) {
-        try {
-            Base64 b = new Base64();
-            ByteArrayInputStream ins = new ByteArrayInputStream(b.decode(byteString.getBytes()));
-            BufferedImage image = ImageIO.read(ins);
-            return new OCR().recognizeEverything(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public static void castValues(Map map, String key, Class clazz) {
         String s = (String) map.get(key);

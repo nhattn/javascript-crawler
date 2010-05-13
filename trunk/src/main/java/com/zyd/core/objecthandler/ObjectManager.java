@@ -24,7 +24,7 @@ public class ObjectManager {
         Handler handler = lookupObjectHandler(objectName);
         if (handler == null) {
             System.err.println("Can not find handler for " + objectName);
-            return null;
+            return false;
         }
         Object r = handler.process(values);
         return r;

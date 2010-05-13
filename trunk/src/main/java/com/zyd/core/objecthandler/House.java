@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
+import com.zyd.core.util.Ocr;
 
 public class House extends Handler {
 
@@ -39,7 +41,7 @@ public class House extends Handler {
             return false;
         }
         if (tel.length() > 100) {
-            values.put(Columns.Tel, Utils.ocrImageNumber(tel).trim());
+            values.put(Columns.Tel, Ocr.ocrImageNumber(tel));
         }
         Utils.castValues(values, Columns.Lat, Double.class);
         Utils.castValues(values, Columns.Long, Double.class);
@@ -50,17 +52,18 @@ public class House extends Handler {
 
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        try {
-            // make sure house is unique
-            if (isUnique(session, values) == false) {
-            } else {
-                r = true;
-                session.save(getName(), values);
-            }
-        } finally {
-            session.getTransaction().commit();
+        Transaction tx = session.beginTransaction();
+        // make sure house is unique
+        if (isUnique(session, values) == false) {
+            System.err.println("House is not unique.");
+        } else {
+            r = true;
+
+            session.save(getName(), values);
         }
+        session.getTransaction().commit();
+        // TODO: what to do here if there is an error, how to close transaction
+
         return r;
     }
 
@@ -75,9 +78,8 @@ public class House extends Handler {
         String addressNum = Utils.extractNumbers((String) values.get(Columns.Address));
         for (int i = 0, len = houses.size(); i < len; i++) {
             HashMap obj = (HashMap) houses.get(i);
-            //            double lo = (Double) obj.get(Columns.Long);
-            //            double la = (Double) obj.get(Columns.Lat);
             if (addressNum.equals(Utils.extractNumbers((String) obj.get(Columns.Address)))) {
+                System.err.println("Address is not unique:" + obj.get(Columns.Address));
                 return false;
             }
         }

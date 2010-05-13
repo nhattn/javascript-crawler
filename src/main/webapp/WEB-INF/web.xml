@@ -8,7 +8,6 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:**/ContextConfig.xml</param-value>
 	</context-param>
-
 	<!--
 		make sure all content goes out has GBK encoding. 
 	 -->
@@ -18,10 +17,11 @@
 			com.zyd.web.filter.ServiceEncodingFilter
         </filter-class>
 	</filter>
-	
+
 	<!--
-		make sure all content goes out has GBK encoding. all our .js file is encoded with gbk 
-	 -->
+		make sure all content goes out has GBK encoding. all our .js file is
+		encoded with gbk
+	-->
 	<filter>
 		<filter-name>JavascriptFilter</filter-name>
 		<filter-class>
@@ -39,6 +39,11 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
+	<listener>
+		<listener-class>com.zyd.web.listener.ZydContextListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>GateServlet</servlet-name>
 		<servlet-class>com.zyd.web.servlet.GateServlet</servlet-class>

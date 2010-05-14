@@ -13,33 +13,31 @@ import org.hibernate.criterion.Restrictions;
 import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
+import com.zyd.core.objecthandler.Handler.Columns;
 import com.zyd.core.util.Ocr;
 
 public class House extends Handler {
+
+    private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address };
 
     public String getName() {
         return "House";
     }
 
     @SuppressWarnings("unchecked")
-    public Object process(HashMap values) {
+    public Object create(HashMap values) {
+        String missing = checkColumnExistence(requiredColumns, values);
+        if (missing != null) {
+            System.err.println("Can not add House, missing required paramter - " + missing);
+            return false;
+        }
+        if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
+            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
+        } else {
+            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
+        }
+
         String tel = (String) values.get(Columns.Tel);
-        if (tel == null) {
-            System.err.println("Can not add House, missing required paramter - " + Columns.Tel);
-            return false;
-        }
-        if (values.containsKey(Columns.Long) == false) {
-            System.err.println("Can not add House, missing required paramter - " + Columns.Long);
-            return false;
-        }
-        if (values.containsKey(Columns.Address) == false) {
-            System.err.println("Can not add House, missing required paramter - " + Columns.Address);
-            return false;
-        }
-        if (values.containsKey(Columns.Lat) == false) {
-            System.err.println("Can not add House, missing required paramter - " + Columns.Lat);
-            return false;
-        }
         if (tel.length() > 100) {
             values.put(Columns.Tel, Ocr.ocrImageNumber(tel));
         }
@@ -48,7 +46,7 @@ public class House extends Handler {
         Utils.castValues(values, Columns.RentalType, Integer.class);
         Utils.castValues(values, Columns.IsAgent, Integer.class);
         Utils.castValues(values, Columns.CreateTime, Date.class);
-        Utils.castValues(values, Columns.Price, Float.class);
+        Utils.castValues(values, Columns.Price, Double.class);
 
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -58,7 +56,6 @@ public class House extends Handler {
             System.err.println("House is not unique.");
         } else {
             r = true;
-
             session.save(getName(), values);
         }
         session.getTransaction().commit();
@@ -86,21 +83,29 @@ public class House extends Handler {
         return true;
     }
 
-    public List load(HashMap params) {
-        Object[] defaults = new Object[] { null, null };
+    private final static Double[] nullDoubles = new Double[2];
+    private final static Date[] nullDates = new Date[2];
 
+    public SearchResult query(HashMap params) {
         //  logitude         
-        Object[] los = defaults;
+        Double[] los = nullDoubles;
         String s = (String) params.get(Columns.Long);
         if (s != null && s.trim().length() != 0) {
-            los = Utils.parseRangeObject(s, Double.class);
+            los = (Double[]) Utils.parseRangeObject(s, Double.class);
         }
 
         // latitue
-        Object[] las = defaults;
+        Double[] las = nullDoubles;
         s = (String) params.get(Columns.Lat);
         if (s != null && s.trim().length() != 0) {
-            las = Utils.parseRangeObject(s, Double.class);
+            las = (Double[]) Utils.parseRangeObject(s, Double.class);
+        }
+
+        //price 
+        Double[] price = nullDoubles;
+        s = (String) params.get(Columns.Price);
+        if (s != null && s.trim().length() != 0) {
+            price = (Double[]) Utils.parseRangeObject(s, Double.class);
         }
 
         // start
@@ -127,30 +132,36 @@ public class House extends Handler {
         if (order == null || order.trim().length() == 0) {
             order = Parameter.PARAMETER_VALUE_ORDER_DESC;
         }
-        List result = queryHouse((los[0] == null ? -1d : (Double) los[0]), (los[1] == null ? -1d : (Double) los[1]), (las[0] == null ? -1d : (Double) las[0]),
-                (las[1] == null ? -1d : (Double) las[1]), -1d, -1d, null, null, start, count, orderBy, order);
+        SearchResult result = queryHouse((Double[]) los, (Double[]) las, (Double[]) price, start, count, orderBy, order);
         return result;
     }
 
-    private List queryHouse(double loFrom, double loTo, double laFrom, double laTo, double priceFrom, double priceTo, Date createTimeFrom, Date createTimeTo, int start, int length, String orderBy,
-            String orderDirection) {
-        List r = null;
+    private SearchResult queryHouse(Double[] longitudes, Double[] latitudes, Double[] prices, int start, int length, String orderBy, String orderDirection) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Criteria c = session.createCriteria(getName());
 
-        if (loFrom != -1) {
-            c.add(Restrictions.ge(Columns.Long, loFrom));
+        if (longitudes[0] != null) {
+            c.add(Restrictions.ge(Columns.Long, longitudes[0]));
         }
-        if (loTo != -1) {
-            c.add(Restrictions.le(Columns.Long, loTo));
+        if (longitudes[1] != null) {
+            c.add(Restrictions.le(Columns.Long, longitudes[1]));
         }
 
-        if (laFrom != -1) {
-            c.add(Restrictions.ge(Columns.Lat, laFrom));
+        if (latitudes[0] != null) {
+            c.add(Restrictions.ge(Columns.Lat, latitudes[0]));
         }
-        if (laTo != -1) {
-            c.add(Restrictions.le(Columns.Lat, laTo));
+
+        if (latitudes[1] != null) {
+            c.add(Restrictions.le(Columns.Lat, latitudes[1]));
+        }
+
+        if (prices[0] != null) {
+            c.add(Restrictions.ge(Columns.Price, prices[0]));
+        }
+
+        if (prices[1] != null) {
+            c.add(Restrictions.le(Columns.Price, prices[1]));
         }
 
         if (start != 0) {
@@ -162,9 +173,17 @@ public class House extends Handler {
         } else {
             c.addOrder(Order.desc(orderBy));
         }
-        r = c.list();
+
+        /*
+         Get total number of row
+        Integer totalSize = ((Integer) c.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+        c.setProjection(null);
+        c.setResultTransformer(Criteria.ROOT_ENTITY);
+        */
+        List list = c.list();
         session.getTransaction().commit();
-        return r;
+        SearchResult result = new SearchResult(list, -1, start, list.size());
+        return result;
     }
 
     public final static class Columns extends Handler.Columns {

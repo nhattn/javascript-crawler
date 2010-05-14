@@ -1,8 +1,6 @@
 package com.zyd.core;
 
-import java.awt.image.BufferedImage;
 import java.beans.XMLEncoder;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,18 +14,15 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.asprise.util.ocr.OCR;
 import com.zyd.Constants;
 import com.zyd.core.dom.Book;
 
+@SuppressWarnings("unchecked")
 public class Utils {
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
@@ -245,8 +240,7 @@ public class Utils {
     }
 
     public static <T> T toDBEncoding(T obj) {
-        if (true)
-            return obj;
+
         try {
             Map maps = BeanUtils.describe(obj);
             Set set = maps.keySet();
@@ -272,8 +266,6 @@ public class Utils {
     }
 
     public static <T> T fromDBEncoding(T obj) {
-        if (true)
-            return obj;
         try {
             Map maps = BeanUtils.describe(obj);
             Set set = maps.keySet();
@@ -298,7 +290,6 @@ public class Utils {
         return obj;
     }
 
-    @SuppressWarnings("unchecked")
     public static void castValues(Map map, String key, Class clazz) {
         String s = (String) map.get(key);
         if (s == null || s.trim().length() == 0)
@@ -318,6 +309,8 @@ public class Utils {
         }
     }
 
+    private final static Object[] Range_Default = new Object[2];
+
     /**
      * s is an '-' separated string , like "12.33-31.22" or "-12.00" or "21.0-"
      * clazz is what type of class to try to parse s to.
@@ -327,6 +320,7 @@ public class Utils {
      * @return an array of objects that has two elements, if neither is missing, will be null, or -1 for
      * primitive types. or null if there s is invalid or blank.
      */
+
     public static Object[] parseRangeObject(String s, Class clazz) {
         if (s == null || s.indexOf('-') == -1) {
             System.err.println("Invalid range:" + s);
@@ -345,7 +339,7 @@ public class Utils {
         }
 
         if (clazz.equals(Integer.class)) {
-            Integer[] r = new Integer[] { -1, -1 };
+            Integer[] r = new Integer[] { null, null };
             if (s1 != null) {
                 r[0] = Integer.parseInt(s1);
             }
@@ -356,7 +350,7 @@ public class Utils {
         }
 
         if (clazz.equals(Double.class)) {
-            Double[] r = new Double[] { -1d, -1d };
+            Double[] r = new Double[] { null, null };
             if (s1 != null) {
                 r[0] = Double.parseDouble(s1);
             }

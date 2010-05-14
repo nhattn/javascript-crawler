@@ -1,7 +1,6 @@
 package com.zyd.core.objecthandler;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.zyd.core.objecthandler.Handler.Parameter;
 
@@ -26,7 +25,7 @@ public class ObjectManager {
             System.err.println("Can not find handler for " + objectName);
             return false;
         }
-        Object r = handler.process(values);
+        Object r = handler.create(values);
         return r;
     }
 
@@ -36,14 +35,14 @@ public class ObjectManager {
      * @param criteria
      * @return
      */
-    public List query(HashMap criteria) {
+    public SearchResult query(HashMap criteria) {
         String objectName = (String) criteria.get(Parameter.PARAMETER_OBJECT_ID);
         Handler handler = lookupObjectHandler(objectName);
         if (handler == null) {
             System.err.println("Can not find handler for " + objectName);
             return null;
         }
-        List r = handler.load(criteria);
+        SearchResult r = handler.query(criteria);
         return r;
     }
 

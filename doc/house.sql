@@ -16,6 +16,7 @@ create table House(
 	houseType           varchar(30),
  	createTime          datetime,
 	address             varchar(200),
+	city				varchar(20),
 	district1           varchar(20),
 	district3           varchar(20),
 	district5			varchar(20),
@@ -29,6 +30,7 @@ create table House(
 	isAgent				tinyint,
 	equipment			varchar(100),
 	decoration			varchar(20),
+	ok					tinyint DEFAULT 0,
  	PRIMARY KEY (id)
 );
 

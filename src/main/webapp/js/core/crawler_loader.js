@@ -11,7 +11,7 @@ CrGlobal = {
     /**
      * how long before now should we go for grabbing house list
      */
-    HouseListMaxDifference : 12 * 3600 * 1000,
+    HouseListMaxDifference : 3 * 3600 * 1000,
 
     extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
 

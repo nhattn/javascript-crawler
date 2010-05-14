@@ -1,7 +1,6 @@
 package com.zyd.core.objecthandler;
 
 import java.util.HashMap;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public abstract class Handler {
@@ -9,11 +8,24 @@ public abstract class Handler {
         return this.getClass().getName();
     }
 
-    public abstract Object process(HashMap values);
+    public abstract Object create(HashMap values);
 
-    public abstract List load(HashMap params);
+    public abstract SearchResult query(HashMap params);
 
     public abstract int deleteAll();
+
+    /**
+     * make sure the key specified in columns, exist in values
+     * @return null if nothing is missing, or the missing column name
+     */
+    protected String checkColumnExistence(String[] columns, HashMap values) {
+        for (String c : columns) {
+            if (values.containsKey(c) == false) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     public final static class Parameter {
         /**
@@ -29,11 +41,15 @@ public abstract class Handler {
         public final static String PARAMETER_VALUE_ORDER_ASC = "asc";
         public final static String PARAMETER_VALUE_ORDER_DESC = "desc";
         public final static String PARAMETER_OBJECT_ID = "objectid";
+
+        protected final static Integer PARAMETER_VALUE_OK_YES = new Integer(1);
+        protected final static Integer PARAMETER_VALUE_OK_NO = new Integer(0);
     }
 
     public static class Columns {
         public final static String ID = "id";
         public final static String Long = "lo";
         public final static String Lat = "la";
+        public final static String OK = "ok";
     }
 }

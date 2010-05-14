@@ -67,8 +67,8 @@ public class TestObjectQuery extends TestCase {
             NodeList longs = docx.getElementsByTagName(House.Columns.Long);
             Double ld = -1d;
             for (int y = 0; y < longs.getLength(); y++) {
-                Node n = longs.item(y);                                
-                double textContentDouble = Double.parseDouble( n.getTextContent());
+                Node n = longs.item(y);
+                double textContentDouble = Double.parseDouble(n.getTextContent());
                 assertTrue(textContentDouble > ld);
                 ld = textContentDouble;
             }
@@ -84,5 +84,32 @@ public class TestObjectQuery extends TestCase {
         Document docx = db.parse(is);
         NodeList nodes = docx.getElementsByTagName("object");
         assertEquals(0, nodes.getLength());
+    }
+
+    public void testQueryByPrice() throws Exception {
+        TestObjectManipulation.createSomeObject();
+        HashMap<String, String> p = new HashMap<String, String>();
+        int pageSize = 5, start = 0;
+        p.put("objectid", "House");
+        p.put("count", "" + pageSize);
+        p.put(House.Columns.Price, "1001-1050");
+
+        p.put(Handler.Parameter.PARAMETER_START, "0");
+        p.put(Handler.Parameter.PARAMETER_COUNT, "100000");
+        String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL, p);
+        assertNotNull(s);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(s));
+        Document docx = db.parse(is);
+        NodeList nodes = docx.getElementsByTagName("object");
+        assertEquals(50, nodes.getLength());
+        nodes = docx.getElementsByTagName("price");
+        for (int i = 0; i < nodes.getLength(); i++) {
+            double d = Double.parseDouble(nodes.item(i).getTextContent());
+            assertTrue(d >= 1000d);
+            assertTrue(d <= 1050d);
+        }
     }
 }

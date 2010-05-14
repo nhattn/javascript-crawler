@@ -12,13 +12,14 @@
 		<property name="la" column="la" type="double" />
 		<property name="rentalType" column="rentaltype" type="int" />
 		<property name="subRentalType" column="subRentalType" type="string" />
-		<property name="price" column="price" type="float" />
+		<property name="price" column="price" type="double" />
 		<property name="paymentType" column="paymentType" type="string" />
 		<property name="priceUit" column="priceUit" type="string" />
 		<property name="size" column="size" type="string" />
 		<property name="houseType" column="houseType" type="string" />
 		<property name="createTime" column="createTime" type="date" />
 		<property name="address" column="address" type="string" />
+		<property name="city" column="city" type="string" />
 		<property name="district1" column="district1" type="string" />
 		<property name="district3" column="district3" type="string" />
 		<property name="district5" column="district5" type="string" />
@@ -32,6 +33,7 @@
 		<property name="isAgent" column="isAgent" type="int" />
 		<property name="equipment" column="equipment" type="string" />
 		<property name="decoration" column="decoration" type="string" />
+		<property name="ok" column="ok" type="int" />
 	</class>
 
 	<class name="com.zyd.core.dom.Link" table="Link">

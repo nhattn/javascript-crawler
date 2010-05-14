@@ -9,10 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.objecthandler.ObjectManager;
+import com.zyd.core.objecthandler.SearchResult;
 import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
@@ -65,24 +64,27 @@ public class object extends ServiceBase {
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/xml");
         HashMap params = requestParameterToMap(req);
-        List objects = objectManager.query(params);
-        resp.getWriter().write(toXmlString(objects));
+        SearchResult result = objectManager.query(params);
+        resp.getWriter().write(toXmlString(result, null));
     }
 
-    static String toXmlString(List list) {
+    static String toXmlString(SearchResult result, String encoding) {
+        List list = result.result;
         StringBuffer buf = new StringBuffer();
         buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        buf.append("<objects>");
+        buf.append("<objects start=\"" + result.start + "\" count=\"" + result.count + "\" total=\"" + result.totalResult + "\">");
         for (int i = 0, len = list.size(); i < len; i++) {
             buf.append("<object>");
             HashMap map = (HashMap) list.get(i);
-            map.remove("$type$");
+            String objectId = (String) map.remove("$type$");
+            buf.append("<type>");
+            buf.append(objectId);
+            buf.append("</type>");
             Set keys = map.keySet();
             for (Object k : keys) {
                 buf.append('<');
                 buf.append(k);
                 buf.append('>');
-
                 Object o = map.get(k);
                 if (o != null) {
                     try {
@@ -101,4 +103,5 @@ public class object extends ServiceBase {
         buf.append("</objects>");
         return buf.toString();
     }
+
 }

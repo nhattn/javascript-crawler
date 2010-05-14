@@ -1,5 +1,5 @@
-## convert an image to acceptable format for tesseract
-convert -monochrome num.png num.tif
-
-## run ocr on the new tif file
+rm num.tif
+rm num.txt
+convert num.png -type GrayScale -depth 8 num.tif
 tesseract num.tif num
+cat num.txt

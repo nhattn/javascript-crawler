@@ -39,6 +39,9 @@ public class Constants {
      * if two gps point differs more than this number, in meters, it will be treated as two location.
      */
     public static int THRESHOLD_GPS_LOCATION_DIFF;
+    
+    
+    public static String LINUX_OCR_DIR;
 
     /**
      * These fields are fixed, derived from system
@@ -47,6 +50,8 @@ public class Constants {
     public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
     public static String FILENAME_LINK_WATCH_LIST = "watch.list";
     public static Link[] WATCH_LIST = new Link[0];
+    
+    
     /***
      * These fields are derived, don't put any values
      */
@@ -118,7 +123,12 @@ public class Constants {
 
             writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
             writer.newLine();
-
+            
+            if(OSHelper.isLinux()){
+            	writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
+                writer.newLine();                	
+            }
+            
             if (WATCH_LIST != null && WATCH_LIST.length != 0) {
                 writer.newLine();
                 writer.write("URLs to watch :");

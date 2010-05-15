@@ -13,7 +13,6 @@ import org.hibernate.criterion.Restrictions;
 import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
-import com.zyd.core.objecthandler.Handler.Columns;
 import com.zyd.core.util.Ocr;
 
 public class House extends Handler {
@@ -173,6 +172,8 @@ public class House extends Handler {
         } else {
             c.addOrder(Order.desc(orderBy));
         }
+
+        c.add(Restrictions.eq(Columns.OK, new Integer(1)));
 
         /*
          Get total number of row

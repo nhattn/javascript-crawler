@@ -1,5 +1,6 @@
 function handlerProcess() {
     // CrUtil.removeFrames(document);
+//    Crawler.log('processing url '+window.location.toString());
     var obj = {}, xpath, s, reg = HandlerHelper.getRegGroupFirstValue, t;
     obj.city = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
     s = XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent.toString().replace(

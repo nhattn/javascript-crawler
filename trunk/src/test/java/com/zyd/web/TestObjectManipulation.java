@@ -72,21 +72,34 @@ public class TestObjectManipulation extends TestCase {
         assertTrue(obj.getBoolean("result"));
     }
 
-    public void testCreateObjectFail() throws Exception {
+    public void testCreateObjectWithoutLongLat() throws Exception {
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, "GBK");
             map.remove(House.Columns.Lat);
             String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
             JSONObject obj = new JSONObject(r);
-            assertFalse(obj.getBoolean("result"));
+            assertTrue(obj.getBoolean("result"));
         }
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, "GBK");
             map.remove(House.Columns.Long);
             String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
             JSONObject obj = new JSONObject(r);
-            assertFalse(obj.getBoolean("result"));
+            assertTrue(obj.getBoolean("result"));
         }
+        // make sure object without log/lat is not returned
+        String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL + "?objectid=House", null);
+        assertNotNull(s);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(s));
+        Document docx = db.parse(is);
+        NodeList nodes = docx.getElementsByTagName("object");
+        assertEquals(nodes.getLength(), 0);
+    }
+
+    public void testCreateObjectFail() throws Exception {
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, "GBK");
             map.remove(House.Columns.Address);

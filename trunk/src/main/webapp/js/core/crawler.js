@@ -154,5 +154,44 @@ Crawler = {
                 Crawler.error(e);
             }
         });
-    }	
+    },
+    
+    /**
+     * TODO:     ************************ this is not finished yet*****************
+     */
+    geocode: function(address, callback){
+        CrGlobal.loadJSFile(CrGlobal.googlemapFile, function(){
+            Crawler._translateAddress(address, callback);
+        });
+    },
+    
+    _translateAddress : function(address, callback) {
+        var geocoder = new google.maps.Geocoder();
+        if(!geocoder) CrGlobal._translateAddress.defer(500);
+        geocoder.geocode( {
+            'address' : address,
+            'language' : 'zh'
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var r = results[0];
+                var lng = r.geometry.location.lng();
+                var lat = r.geometry.location.lat();
+                if (callback) {
+                    callback('ok', lng, lat);
+                }
+            } else {
+                if (callback) {
+                    callback('failed-status-' + status);
+                }
+            }
+        });
+    },
+    
+    _geocallback: function(a,b,c){
+        if(a=='ok'){
+            console.log(a+'  '+b+'  '+c);
+        }else{
+        }
+    }
+        
 }

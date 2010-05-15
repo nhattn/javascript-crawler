@@ -48,6 +48,7 @@ public class Ocr {
             System.err.println("Can not find AspriseOCR under java.library.path, check if you have set up Asprise ocr correctly. Must add AspriseOCR.dll to your windows path. ");
             return null;
         } catch (ClassNotFoundException err) {
+            err.printStackTrace();
             System.err.println("Can not find com.asprise.util.ocr.OCR under your java class path. Check you have added aspriseOCR.jar to your class path or your server's class path");
             return null;
         } catch (Exception e) {

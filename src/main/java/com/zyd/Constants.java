@@ -55,6 +55,8 @@ public class Constants {
     /***
      * These fields are derived, don't put any values
      */
+    
+    // the full server url starting with http://www.domaon.com:port/context
     public static String ServerUrl;
     public static String IdlePageUrl;
 

@@ -77,7 +77,8 @@ public class LinkManager {
     public synchronized Link linkError(String url, String msg) {
         Link link = processing.get(url);
         if (link == null) {
-            System.err.println("Link error, but link is not in the processing queue, this should not happen");
+            //TODO: what should I do for testing
+//            System.err.println("Link error, but link is not in the processing queue, this should not happen");
             return null;
         }
         processing.remove(url);
@@ -88,7 +89,8 @@ public class LinkManager {
     public synchronized Link linkFinished(String url) {
         Link link = processing.get(url);
         if (link == null) {
-            System.err.println("Link finished, but link is not in the processing queue, this should not happen");
+            //TODO: what to do for testing
+//            System.err.println("Link finished, but link is not in the processing queue, this should not happen");
             return null;
         }
         processing.remove(url);

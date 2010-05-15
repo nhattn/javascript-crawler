@@ -1,3 +1,19 @@
+function startWatcher() {
+    if (window != window.top || !window.document || !window.document.body) {
+        return;
+    }
+    var wait_time = 30 * 1000;
+    GM_setValue('startTime', (new Date()).getTime().toString());
+    window.setInterval(function() {
+        var startTime = parseInt(GM_getValue('startTime', null));
+        var waitedHowLong = (new Date()).getTime() - startTime;
+        if (waitedHowLong > wait_time) {
+            window.location = 'http://' + GM_getValue('domain', null);
+        }
+    }, 500);
+}
+startWatcher();
+
 window.addEventListener('load', function() {
     if (window != window.top || !window.document || !window.document.body) {
         return;
@@ -18,6 +34,10 @@ window.addEventListener('load', function() {
         return;
     }
 
+    if (window.location.host == domain) {
+        // do nothing for local domain
+        return;
+    }
     var hostDiv = document.createElement('input');
     hostDiv.setAttribute('id', 'crawler_set_url');
     hostDiv.setAttribute('type', 'hidden');

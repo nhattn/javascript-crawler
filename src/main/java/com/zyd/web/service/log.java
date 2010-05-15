@@ -39,7 +39,7 @@ public class log extends ServiceBase {
         if ("view".equals(action)) {
             setResponseType("html", resp);
             Writer o = resp.getWriter();
-            o.write("<html><head><script>window.setInterval('window.location = window.location.toString()', 1000)</script></head><body>");
+            o.write("<html><head><script>window.setInterval('window.location = window.location.toString()', 5000)</script></head><body>");
             for (int i = msg.size() - 1; i > -1; i--) {
                 o.write(msg.get(i).toString());
                 o.write("<br>");
@@ -50,13 +50,6 @@ public class log extends ServiceBase {
             String level = req.getParameter("level");
             String m = req.getParameter("msg");
             msg.add(new Log(level, m, new Date(), req.getHeader("Referer")));
-            if (msg.size() > 50) {
-                Vector<Log> nmsg = new Vector<Log>();
-                for (int len = msg.size(), i = 40; i < len; i++) {
-                    nmsg.add(msg.get(len));
-                }
-                msg = nmsg;
-            }
         }
     }
 }

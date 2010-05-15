@@ -112,6 +112,7 @@
 			<groupId>com.asprise</groupId>
 			<artifactId>ocr</artifactId>
 			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.tj.common</groupId>

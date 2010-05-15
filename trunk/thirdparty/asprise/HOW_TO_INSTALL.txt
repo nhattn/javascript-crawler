@@ -1,0 +1,4 @@
+Asprise OCR is only used in windows sytems, to install: 
+ 
+1  copy aspriseOCR.jar to lib folder under tomcat cat
+2  add the container folder of this file to  windows path

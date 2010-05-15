@@ -17,14 +17,13 @@ import com.tj.common.OSHelper;
 import com.zyd.Constants;
 
 public class Ocr {
+    private final static boolean isLinux = OSHelper.isLinux();
 
     public static String ocrImageNumber(String byteString) {
-        if (OSHelper.isLinux()) {
+        if (isLinux) {
             return linuxOcrNumber(byteString);
-        } else if (OSHelper.isWindows()) {
-            return windowsOcrNumber(byteString);
         } else {
-            throw new UnsupportedOperationException("ocr not supported on your platform");
+            return windowsOcrNumber(byteString);
         }
     }
 
@@ -38,13 +37,19 @@ public class Ocr {
                     ocrInstance = Class.forName("com.asprise.util.ocr.OCR").newInstance();
                     ocrMethod = ocrInstance.getClass().getMethod("recognizeEverything", java.awt.image.RenderedImage.class);
                 }
-                com.asprise.util.ocr.OCR ocr = null;
             }
             Base64 b = new Base64();
             ByteArrayInputStream ins = new ByteArrayInputStream(b.decode(byteString.getBytes()));
             BufferedImage image = ImageIO.read(ins);
             String r = (String) ocrMethod.invoke(ocrInstance, image);
             return r.trim();
+        } catch (UnsatisfiedLinkError err) {
+            err.printStackTrace();
+            System.err.println("Can not find AspriseOCR under java.library.path, check if you have set up Asprise ocr correctly. Must add AspriseOCR.dll to your windows path. ");
+            return null;
+        } catch (ClassNotFoundException err) {
+            System.err.println("Can not find com.asprise.util.ocr.OCR under your java class path. Check you have added aspriseOCR.jar to your class path or your server's class path");
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

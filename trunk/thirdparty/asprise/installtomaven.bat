@@ -1,1 +1,2 @@
+rem This is only used to install the lib for testing
 mvn install:install-file -Dfile=E:\workspace\webcrawl\thirdparty\asprise\aspriseOCR.jar -DgroupId=com.asprise -DartifactId=ocr -Dversion=1.0 -Dpackaging=jar

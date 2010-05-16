@@ -1,8 +1,18 @@
+// ==UserScript==
+// @name           xpath
+// @namespace      test
+// @include        *
+// ==/UserScript==
+
 function startWatcher() {
+    // this line can be used to restart firefox 
+//    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+//    var Application = Components.classes["@mozilla.org/fuel/application;1"].getService(Components.interfaces.fuelIApplication);
+//    alert(Application);
     if (window != window.top || !window.document || !window.document.body) {
         return;
-    }
-    var wait_time = 30 * 1000;
+    }    
+    var wait_time = 10 * 1000;
     GM_setValue('startTime', (new Date()).getTime().toString());
     window.setInterval(function() {
         var startTime = parseInt(GM_getValue('startTime', null));
@@ -12,6 +22,7 @@ function startWatcher() {
         }
     }, 500);
 }
+
 startWatcher();
 
 window.addEventListener('load', function() {

@@ -10,11 +10,11 @@
 		</id>
 		<property name="lo" column="lo" type="double" />
 		<property name="la" column="la" type="double" />
-		<property name="rentalType" column="rentaltype" type="int" />
+		<property name="rentalType" column="rentaltype" type="string" />
 		<property name="subRentalType" column="subRentalType" type="string" />
 		<property name="price" column="price" type="double" />
 		<property name="paymentType" column="paymentType" type="string" />
-		<property name="priceUit" column="priceUit" type="string" />
+		<property name="priceUnit" column="priceUnit" type="string" />
 		<property name="size" column="size" type="string" />
 		<property name="houseType" column="houseType" type="string" />
 		<property name="createTime" column="createTime" type="date" />

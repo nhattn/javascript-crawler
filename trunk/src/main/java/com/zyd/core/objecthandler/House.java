@@ -41,8 +41,7 @@ public class House extends Handler {
             values.put(Columns.Tel, Ocr.ocrImageNumber(tel));
         }
         Utils.castValues(values, Columns.Lat, Double.class);
-        Utils.castValues(values, Columns.Long, Double.class);
-        Utils.castValues(values, Columns.RentalType, Integer.class);
+        Utils.castValues(values, Columns.Long, Double.class);        
         Utils.castValues(values, Columns.IsAgent, Integer.class);
         Utils.castValues(values, Columns.CreateTime, Date.class);
         Utils.castValues(values, Columns.Price, Double.class);
@@ -211,7 +210,7 @@ public class House extends Handler {
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
     }
-
+    
     @Override
     public int deleteAll() {
         final String deleteAll = "delete from " + getName();

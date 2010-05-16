@@ -1,8 +1,7 @@
 function handlerProcess() {
     // CrUtil.removeFrames(document);
-//    Crawler.log('processing url '+window.location.toString());
+    // Crawler.log('processing url '+window.location.toString());
     var obj = {}, xpath, s, reg = HandlerHelper.getRegGroupFirstValue, t;
-    obj.city = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
     s = XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent.toString().replace(
             /:\s*\n\s*/g, ':');
     var s2 = s;
@@ -21,19 +20,20 @@ function handlerProcess() {
     t = reg(s, /区域:\s*(.*\n.*)/);
     t = t.split('-');
     if (t.length == 1) {
-        obj.district1 = t[0].trim();
+        obj.district1 = t[0];
     } else if (t.length == 2) {
-        obj.district1 = t[0].trim();
-        obj.district3 = t[1].trim();
+        obj.district1 = t[0];
+        obj.district3 = t[1];
     } else {
         Crawler.error('house.detail - wrong number of parameter for 区域, raw text is : ' + t);
     }
 
-    t = reg(s, /租金:\s*(.*)/).trim();
+    t = reg(s, /租金:\s*(.*)/);
     obj.price = reg(t, /(\S+)/);
     // obj.priceUnit = reg(t, /[\S+]\s+(\S+)[（|\(]?/);
     obj.priceUnit = '元/月';
     obj.paymentType = reg(t, /\((.*)\)/);
+    obj.decoration = reg(s, /装修:\s*(.*)/);
     if (!obj.paymentType) {
         obj.paymentType = reg(t, /（(.*)）/);
     }
@@ -44,15 +44,15 @@ function handlerProcess() {
     if (t) {
         t = t.split('-');
         if (t.length == 1) {
-            t = t[0].trim();
+            t = t[0];
             if (t.indexOf('室') != -1 || t.indexOf('厅') != -1 || t.indexOf('卫') != -1) {
                 obj.houseType = t;
             } else {
                 Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : ' + t);
             }
         } else if (t.length == 2) {
-            obj.subRentalType = t[0].trim();
-            obj.houseType = t[1].trim();
+            obj.subRentalType = t[0];
+            obj.houseType = t[1];
         } else {
             Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : ' + t);
         }
@@ -107,10 +107,33 @@ function handlerProcess() {
     }
 
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
-    for(var p in obj){
-        obj[p] = obj[p].trim();
+
+    s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /.+\.ganji.com\/(fang[0-9]+)\/.*/)
+    obj.rentalType = rentalTypeMap[s];
+
+    s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
+    obj.city = cityMap[s];
+
+    obj.contact = XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[3]//span[1]").textContent;
+    obj.description1 = XPath.single(document, "//div[@class='detail_title']/h1").textContent;
+    for ( var p in obj) {
+        if (obj[p]) {
+            obj[p] = obj[p].trim();
+        }
     }
+    console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });
+}
+
+var cityMap = {
+    'sh' : '上海'
+}
+
+var rentalTypeMap = {
+    'fang1' : '出租',
+    'fang5' : '出售',
+    'fang3' : '合租',
+    'fang10' : '短租'
 }

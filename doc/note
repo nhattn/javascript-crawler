@@ -3,17 +3,6 @@ TODO: fix book cover update time
 tojsonstring or to xmlstring , add withchapter property
 
 
-
-
-
-
-
-
-
-
-
-
-
 Extjs on cachefly
 
 http://extjs.cachefly.net/ext-3.0.0/adapter/ext/ext-base.js
@@ -30,76 +19,6 @@ http://ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js
 http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core-debug.js
 
 
-
-
-
-
-
-
-## add event listener when page load
-var newBody = 
-'<html>' +
-'<head>' +
-'<title>My New Page</title>' +
-'</head>' +
-'<body>' +
-'<p>This page is a complete replacement of the original.</p>' +
-'</body>' +
-'</html>';
-window.addEventListener(
-    'load', 
-    function() { document.body.innerHTML = newBody; },
-    true);
-    
-    
-    
-    
-var paragraphCount = Ext.DomQuery.select("/html/body/form[id='aspnetForm']/div[id='mainContent']/div:nth(3)/div:nth(1)/div:nth(5)", document, null, XPathResult.ANY_TYPE, null );
-
-alert( 'This document contains ' + paragraphCount.numberValue + ' paragraph elements' );
-
-
-
-//get all divs - iterator style
-var result = document.evaluate("/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[3]/div[1]/div[5]", document.documentElement, null,XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-if (result){
-    var node = result.iterateNext();
-    while(node) {
-        alert(node.innerHTML);
-        node = node.iterateNext();
-    }
-}
-
-
-
-XPath.single(null,'//a[text()="下一页"]')
-
-
-
-
-
-
-<list>
-   <novel>
-       <name>
-       <length>
-       <updateTime>
-       <chapter>
-           <name>
-           <updateTime>
-           <url>
-       <author>
-       <allListUrl>
-   <novel>
-</list>     
-   
-   
-var p= new RegExp("http://[^\.]*\.qidian\.com/book/bookStore\.aspx*", 'i');
-p.test(window.location.toString())
-
-
-
-
 eclipse maven plugin
 http://m2eclipse.sonatype.org/update/
 
@@ -111,93 +30,16 @@ grease monkey
 https://addons.mozilla.org/en-US/firefox/addon/748 
 
    
-    
+*******************************************************
 
 
-
-
-var path = "/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td"; 
-var text = XPath.single(null, path).textContent;
-Crawler.extract(text, '小说类别：');       
-
-
-
-var n = XPath.single(null,"/html/body/form[@id='aspnetForm']/div[@id='mainContent']/div[2]/div[1]/div[2]/table[1]/tbody/tr/td[2]/table/tbody/tr[2]/td");
-
-
-
-var path = "/html/body/form[@id='form1']/center/div[@id='content']/div";
-var nodes = XPath.array(null, p);
-for(var i=0;i<nodes.length;i++){
-    var links = XPath.array(nodes[i], './/a');
-    for(var j=0;j<links.length;j++){
-        var l = links[j];
-        console.log(l);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-Book
-    id
-    name 
-    author
-    hit
-    finished      
-    bookCover  
-    
-Chapter
-    id
-    bookId
-    name
-    hit
-    hasContent
-    isPicuture
-
-Site
-    id
-    name
-    domainName
-    url    
-
-    
-BookSite
-    id
-    bookId
-    siteId    
-    updateTime
-    coverUrl
-    allChapterUrl
-
-
-
-    
-    
-ChapterSite
-    id    
-    chapterId    
-    siteId
-    updateTime
-    url
-    
-
-
-
-
-
-
-
-
-
-
-
-
+requriement 
+1 performance
+	200-300 hit/seconds to app server
+	500-800 hit/seconds to web server
+	
+2 data
+	separate collecting server and user facing server
+	how do they talk to each other. create a view, write separately.
+	production server running on 
+	zuiyidong.com/service/sync

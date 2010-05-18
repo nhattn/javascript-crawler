@@ -14,8 +14,28 @@ public class Link {
     // when link is send back for user to process
     public Date startTime;
 
-    public Link(){        
+    public int isError = 0;
+    public String errorMsg;
+
+    public int getIsError() {
+        return isError;
     }
+
+    public void setIsError(int isError) {
+        this.isError = isError;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+    public Link() {
+    }
+
     public Link(String url) {
         this.url = url;
     }

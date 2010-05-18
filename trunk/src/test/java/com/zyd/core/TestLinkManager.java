@@ -34,7 +34,6 @@ public class TestLinkManager extends TestCase {
     }
 
     public void testStoreAndLoad() throws Exception {
-        linkMan.storeToDb();
         linkMan.clearCache();
         linkMan.loadFromDb();
         assertEquals(200, linkMan.getWaiting().size());
@@ -55,7 +54,6 @@ public class TestLinkManager extends TestCase {
         assertEquals(50, linkMan.getProcessing().size());
 
         // when storing to db, processing should become waiting
-        linkMan.storeToDb();
         linkMan.clearCache();
         linkMan.loadFromDb();
         assertEquals(200, linkMan.getWaiting().size());
@@ -65,6 +63,7 @@ public class TestLinkManager extends TestCase {
     }
 
     public void testLinkError() {
+        Constants.LINK_MAX_TRY = 3;
         ArrayList<Link> errorList = new ArrayList<Link>();
         ArrayList<Link> rightList = new ArrayList<Link>();
         for (int i = 0; i < 25; i++) {
@@ -83,6 +82,10 @@ public class TestLinkManager extends TestCase {
         assertEquals(25, linkMan.getError().size());
         assertEquals(25, linkMan.getProcessing().size());
 
+        for (Link link : errorList) {
+            assertEquals(link.tryCount, 1);
+        }
+
         for (Link link : rightList) {
             linkMan.linkFinished(link.url);
         }
@@ -93,9 +96,15 @@ public class TestLinkManager extends TestCase {
         assertEquals(25, linkMan.getError().size());
         assertEquals(0, linkMan.getProcessing().size());
 
+        for (Link link : rightList) {
+            assertEquals(link.tryCount, 1);
+        }
+
         // make sure try count is correct for error links
         ArrayList<Link> allLinkList = new ArrayList<Link>();
+        int i = 0;
         while (true) {
+            i++;
             Link link = linkMan.nextLink();
             if (link.equals(LinkManager.IdlePageUrl)) {
                 break;
@@ -103,6 +112,7 @@ public class TestLinkManager extends TestCase {
             allLinkList.add(link);
             linkMan.linkFinished(link.url);
         }
+
         for (Link link : errorList) {
             assertEquals(link.tryCount, 2);
         }
@@ -112,7 +122,6 @@ public class TestLinkManager extends TestCase {
         assertEquals(0, linkMan.getProcessing().size());
 
         //store it, then load
-        linkMan.storeToDb();
         linkMan.clearCache();
         linkMan.loadFromDb();
         assertEquals(0, linkMan.getProcessing().size());
@@ -129,5 +138,55 @@ public class TestLinkManager extends TestCase {
         }
 
         assertEquals(25, count);
+    }
+
+    /**
+     * test when link is given up
+     */
+
+    public void testLinkError2() {
+        Constants.LINK_MAX_TRY = 1;
+        ArrayList<Link> errorList = new ArrayList<Link>();
+        ArrayList<Link> rightList = new ArrayList<Link>();
+        for (int i = 0; i < 25; i++) {
+            errorList.add(linkMan.nextLink());
+        }
+        for (int i = 0; i < 25; i++) {
+            rightList.add(linkMan.nextLink());
+        }
+
+        for (Link link : errorList) {
+            linkMan.linkError(link.url, "error " + link.url);
+        }
+        //make sure waiting and error and processing adds up
+        assertEquals(150, linkMan.getWaiting().size());
+        assertEquals(25, linkMan.getProcessed().size());
+        assertEquals(0, linkMan.getError().size());
+        assertEquals(25, linkMan.getProcessing().size());
+
+        for (Link link : errorList) {
+            assertEquals(link.tryCount, 1);
+            assertNotNull(link.processTime);
+            assertEquals(link.isError, 1);
+            assertTrue(link.startTime == null);
+        }
+
+        for (Link link : rightList) {
+            linkMan.linkFinished(link.url);
+            assertEquals(link.tryCount, 1);
+            assertNotNull(link.processTime);
+            assertEquals(link.isError, 0);
+            assertTrue(link.startTime == null);
+        }
+
+        // make sure waiting and processed and error adds up
+        assertEquals(150, linkMan.getWaiting().size());
+        assertEquals(50, linkMan.getProcessed().size());
+        assertEquals(0, linkMan.getError().size());
+        assertEquals(0, linkMan.getProcessing().size());
+
+        for (Link link : rightList) {
+            assertEquals(link.tryCount, 1);
+        }
     }
 }

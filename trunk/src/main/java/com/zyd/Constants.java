@@ -9,7 +9,8 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import org.apache.commons.io.EndianUtils;
+import javax.naming.LinkLoopException;
+
 import org.apache.commons.io.IOUtils;
 
 import com.tj.common.CommonUtil;
@@ -43,6 +44,16 @@ public class Constants {
 
     public static String LINUX_OCR_DIR;
 
+    /**
+     * when starting, how long ago should system load the links.
+     */
+    public static int LINK_LOAD_BEFORE;
+    
+    /**
+     * How many time should try, before giving up a link.
+     */
+    public static int LINK_MAX_TRY;
+    
     /**
      * These fields are fixed, derived from system
      */
@@ -127,6 +138,11 @@ public class Constants {
 
             writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
             writer.newLine();
+
+            writer.write("LINK_LOAD_BEFORE : " + LINK_LOAD_BEFORE + "seconds, or " + ((int) LINK_LOAD_BEFORE / 3600) + " hours");
+            writer.newLine();
+
+            LINK_LOAD_BEFORE = LINK_LOAD_BEFORE * 1000;
 
             if (OSHelper.isLinux()) {
                 writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);

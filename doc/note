@@ -42,4 +42,25 @@ requriement
 	separate collecting server and user facing server
 	how do they talk to each other. create a view, write separately.
 	production server running on 
-	zuiyidong.com/service/sync
+	
+	
+	
+	server will have House as a table, PHouse as a view with only oked data
+	
+	client will have House as a table without PK.
+	
+	client will have the /service/sync url opened,
+	/service/sync?action=history showing history of all syncs
+	/service/sync?action=status showing status of current syncs
+	/service/sync?action=trigger start a new sync
+	
+	sync will run every 15 minutes
+	
+	in config file there will be a variable called IS_SERVER, indicating whether or not this is a server
+	
+	
+	
+	
+	
+	 
+	 

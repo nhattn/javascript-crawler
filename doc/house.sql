@@ -1,4 +1,4 @@
-drop database crawler if EXISTS crawler;
+drop database if EXISTS crawler;
 create database crawler;
 use crawler;
 
@@ -10,7 +10,7 @@ create table House(
 	subRentalType       varchar(10),
 	price		        float,
 	paymentType	        varchar(10),
-	priceUnit            varchar(10),
+	priceUnit           varchar(10),
 	size                varchar(10),
 	houseType           varchar(30),
  	createTime          datetime,
@@ -63,7 +63,6 @@ create view PHouse as select
 	equipment,			
 	decoration
 from House where ok=1 order by id desc;
-
 
 create table Link(
 	id					bigint NOT NULL AUTO_INCREMENT,

@@ -16,6 +16,19 @@ CrUtil = {
         }, 100);
     },
 
+    removeGA: function(document){
+        var hs = document.getElementsByTagName('script');
+        for(var i=0;i<hs.length;i++){
+            var h = hs[i];    
+            if(h.src && h.src.indexOf('google-analytics')!=-1){
+                h.parentNode.removeChild(h);
+            }
+            if(h.textContent && h.textContent.indexOf('google-analytics')!=-1){
+                h.parentNode.removeChild(h);
+            }
+        }
+    },
+
     /**
      * encode a image as base64, image is an html image element get by
      * document.getElementById

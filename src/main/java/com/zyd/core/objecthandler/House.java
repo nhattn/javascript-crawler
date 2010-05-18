@@ -35,7 +35,7 @@ public class House extends Handler {
         } else {
             values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
         }
-        
+
         String tel = (String) values.get(Columns.Tel);
         if (tel.length() > 100) {
             values.put(Columns.Tel, Ocr.ocrImageNumber(tel));
@@ -43,13 +43,12 @@ public class House extends Handler {
         Utils.castValues(values, Columns.Lat, Double.class);
         Utils.castValues(values, Columns.Long, Double.class);
         Utils.castValues(values, Columns.IsAgent, Integer.class);
-        Utils.castValues(values, Columns.CreateTime, Date.class);
         Utils.castValues(values, Columns.Price, Double.class);
-
+        values.put(Columns.CreateTime, new Date());
+        
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        // make sure house is unique
         if (isUnique(session, values) == false) {
             System.err.println("House is not unique.");
         } else {

@@ -44,5 +44,7 @@
 		<property name="createTime" column="createTime" type="date" />
 		<property name="processTime" column="processTime" type="date" />
 		<property name="tryCount" column="tryCount" type="int" />
+		<property name="isError" column="isError" type="int" />
+		<property name="errorMsg" column="errorMsg" type="string" />
 	</class>
 </hibernate-mapping>

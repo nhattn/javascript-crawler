@@ -70,5 +70,7 @@ create table Link(
 	createTime          datetime,
 	processeTime		datetime,
 	tryCount			tinyint,
+	isFailure           tinyint,
+	errorMsg            varchar(300),
 	PRIMARY KEY (id)
 );

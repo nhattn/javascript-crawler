@@ -14,7 +14,6 @@ public class ZydContextListener implements ServletContextListener {
     }
 
     public void contextDestroyed(ServletContextEvent arg0) {
-        ((LinkManager) SpringContext.getContext().getBean("linkManager")).storeToDb();
     }
 
     public void contextInitialized(ServletContextEvent arg0) {

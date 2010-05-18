@@ -32,8 +32,10 @@ public class LinkManager {
         if (isLinkManaged(link)) {
             return null;
         }
+
         Link l = new Link(link);
         l.createTime = new Date();
+        saveOrUpdateLink(l, false);
         waiting.put(link, l);
         return l;
     }
@@ -59,16 +61,15 @@ public class LinkManager {
             Link link = waiting.remove(url);
             link.startTime = new Date();
             processing.put(url, link);
-            link.tryCount++;
             return link;
         }
 
         if (error.size() > 0) {
+            // should not try too much of error links
             String url = error.keySet().iterator().next();
             Link link = error.remove(url);
             link.startTime = new Date();
-            processing.put(url, link);
-            link.tryCount++;
+            processing.put(url, link);            
             return link;
         }
         return nextWatchedLink();
@@ -77,25 +78,38 @@ public class LinkManager {
     public synchronized Link linkError(String url, String msg) {
         Link link = processing.get(url);
         if (link == null) {
-            //TODO: what should I do for testing
-//            System.err.println("Link error, but link is not in the processing queue, this should not happen");
+            //TODO: should pay special attention in production. Link is in finished but not in our queue, somebody hacking.            
             return null;
         }
+        link.tryCount++;
         processing.remove(url);
-        error.put(url, link);
+        link.startTime = null;
+        if (link.tryCount < Constants.LINK_MAX_TRY) {
+            // ok, keep trying            
+            error.put(url, link);
+        } else {
+            // tried to much, giving up
+            processed.put(url, link);
+            link.processTime = new Date();
+            link.isError = 1;
+        }
+        saveOrUpdateLink(link, true);
         return link;
     }
 
     public synchronized Link linkFinished(String url) {
         Link link = processing.get(url);
         if (link == null) {
-            //TODO: what to do for testing
-//            System.err.println("Link finished, but link is not in the processing queue, this should not happen");
+            //TODO: should pay special attention in production. Link is in finished but not in our queue, somebody hacking. 
             return null;
         }
+        link.tryCount++;
+        link.processTime = new Date();
+        link.startTime = null;
+        link.isError = 0;
+        saveOrUpdateLink(link, true);
         processing.remove(url);
         processed.put(url, link);
-        link.processTime = new Date();
         return link;
     }
 
@@ -106,8 +120,9 @@ public class LinkManager {
     public synchronized void loadFromDb() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        System.out.println("Going to load links from database:");
-        List list = session.createQuery("from Link as link where link.createTime > ? order by link.id desc").setDate(0, CommonUtil.daysBefore(5)).list();
+        System.out.println("Going to load links from database :");
+        List list = session.createQuery("from Link as link where link.createTime > ? and link.tryCount < ? and link.isError<>1 order by link.id desc").setDate(0,
+                CommonUtil.msecefore(Constants.LINK_LOAD_BEFORE)).setInteger(1, Constants.LINK_MAX_TRY).list();
         for (int i = 0, len = list.size(); i < len; i++) {
             Link link = (Link) list.get(i);
             if (link.processTime == null) {
@@ -120,28 +135,14 @@ public class LinkManager {
         System.out.println(snapshot());
     }
 
-    /*
-     * waiting & processing is treated as waiting
-     */
-    public synchronized void storeToDb() {
+    private void saveOrUpdateLink(Link link, boolean isUpdate) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        int counter = 0;
-        HashMap[] values = new HashMap[] { waiting, processing, processed, error };
-        System.err.println("Going to store links to database: ");
-        System.err.println(snapshot());
-        for (int j = 0; j < values.length; j++) {
-            Collection links = values[j].values();
-            for (Object o : links) {
-                session.saveOrUpdate(o);
-                if (++counter % 20 == 0) {
-                    session.flush();
-                    session.clear();
-                }
-            }
-        }
+        if (isUpdate)
+            session.update(link);
+        else
+            session.save(link);
         tx.commit();
-        System.err.println("Successfully stored links to database");
     }
 
     public List<String> getAllLinks() {

@@ -1,1 +1,1 @@
-{'action':'Eval.XPath.Link', 'para':'//a[text()="��һҳ"]/@href'}
+{'action':'Eval.XPath.Link', 'para':'//a[text()="下一页"]/@href'}

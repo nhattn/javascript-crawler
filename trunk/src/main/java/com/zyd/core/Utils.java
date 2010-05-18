@@ -29,16 +29,16 @@ public class Utils {
     private final static HashMap<Character, Character> CHARMAP = new HashMap<Character, Character>();
 
     static {
-        CHARMAP.put('Ò»', '1');
-        CHARMAP.put('¶ş', '2');
-        CHARMAP.put('Èı', '3');
-        CHARMAP.put('ËÄ', '4');
-        CHARMAP.put('Îå', '5');
-        CHARMAP.put('Áù', '6');
-        CHARMAP.put('Æß', '7');
-        CHARMAP.put('Áã', '0');
-        CHARMAP.put('°Ë', '8');
-        CHARMAP.put('¾Å', '9');
+        CHARMAP.put('ä¸€', '1');
+        CHARMAP.put('äºŒ', '2');
+        CHARMAP.put('ä¸‰', '3');
+        CHARMAP.put('å››', '4');
+        CHARMAP.put('äº”', '5');
+        CHARMAP.put('å…­', '6');
+        CHARMAP.put('ä¸ƒ', '7');
+        CHARMAP.put('é›¶', '0');
+        CHARMAP.put('å…«', '8');
+        CHARMAP.put('ä¹', '9');
         CHARMAP.put('1', '1');
         CHARMAP.put('7', '7');
         CHARMAP.put('2', '2');
@@ -216,7 +216,7 @@ public class Utils {
     }
 
     private static DateFormat[] dateFormats = new SimpleDateFormat[] { new SimpleDateFormat("yy-MM-dd HH:mm"), /* 09-10-13 13:57 */
-    new SimpleDateFormat("yyyyÄêMMÔÂddÈÕ"), /* 2009Äê10ÔÂ15ÈÕ */
+    new SimpleDateFormat("yyyyå¹´MMæœˆddæ—¥"), /* 2009å¹´10æœˆ15æ—¥ */
     new SimpleDateFormat("yyyy-MM-dd"),/* 2008-10-17 */
     new SimpleDateFormat("yyyy-MM-d"),/* 2008-10-17 */
     new SimpleDateFormat("yyyy-M-dd"),/* 2008-1-17 */
@@ -415,7 +415,7 @@ public class Utils {
     public static void main(String[] args) {
         System.out.println(System.getProperty("os.name"));
         Book b = new Book();
-        b.setName("ÎÒµÄÃû×Ö");
+        b.setName("æˆ‘çš„åå­—");
         toDBEncoding(b);
         System.out.println(b);
         System.out.println(getDomain("http://www.aaa.com"));
@@ -425,12 +425,12 @@ public class Utils {
         System.out.println(getDomain("bbb.com"));
         System.out.println(getDomain("http://bbb.com"));
         System.out.println(parseDate("09-10-13 13:57"));
-        System.out.println(extractNumbers("ÉÏº£ÊĞÂ½¼Ò×ìÂ·ÆßºÅ°Ëµ¥Ôª2  02"));
+        System.out.println(extractNumbers("ä¸Šæµ·å¸‚é™†å®¶å˜´è·¯ä¸ƒå·å…«å•å…ƒ2  02"));
     }
 
     /**
      * Given a string contains some numbers/characters/chinese numbers, extract the number part.
-     * e.g. ÉÏº£ÊĞÂ½¼Ò×ìÂ·ÆßºÅ°Ëµ¥Ôª202, will return 78202
+     * e.g. ä¸Šæµ·å¸‚é™†å®¶å˜´è·¯ä¸ƒå·å…«å•å…ƒ202, will return 78202
      * @param s
      * @return
      */

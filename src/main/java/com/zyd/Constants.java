@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.commons.io.EndianUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.tj.common.CommonUtil;
@@ -39,8 +40,7 @@ public class Constants {
      * if two gps point differs more than this number, in meters, it will be treated as two location.
      */
     public static int THRESHOLD_GPS_LOCATION_DIFF;
-    
-    
+
     public static String LINUX_OCR_DIR;
 
     /**
@@ -50,12 +50,11 @@ public class Constants {
     public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
     public static String FILENAME_LINK_WATCH_LIST = "watch.list";
     public static Link[] WATCH_LIST = new Link[0];
-    
-    
+
     /***
      * These fields are derived, don't put any values
      */
-    
+
     // the full server url starting with http://www.domaon.com:port/context
     public static String ServerUrl;
     public static String IdlePageUrl;
@@ -114,10 +113,13 @@ public class Constants {
             writer.write("IdlePageUrl : " + IdlePageUrl);
             writer.newLine();
 
-            writer.write("ENCODING_DB : " + SERVER_DOMAIN);
+            writer.write("ENCODING_DB : " + ENCODING_DB);
             writer.newLine();
 
             writer.write("ENCODING_OUT_GOING_CONTENT : " + ENCODING_OUT_GOING_CONTENT);
+            writer.newLine();
+
+            writer.write("Encoding_DEFAULT_SYSTEM : " + Encoding_DEFAULT_SYSTEM);
             writer.newLine();
 
             writer.write("LENGTH_PAGE_SIZE : " + LENGTH_PAGE_SIZE);
@@ -125,12 +127,12 @@ public class Constants {
 
             writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
             writer.newLine();
-            
-            if(OSHelper.isLinux()){
-            	writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
-                writer.newLine();                	
+
+            if (OSHelper.isLinux()) {
+                writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
+                writer.newLine();
             }
-            
+
             if (WATCH_LIST != null && WATCH_LIST.length != 0) {
                 writer.newLine();
                 writer.write("URLs to watch :");

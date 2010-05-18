@@ -14,7 +14,8 @@ import com.zyd.Constants;
 public class JavascriptFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        res.setCharacterEncoding(Constants.ENCODING_OUT_GOING_CONTENT);
+        //TODO: this need to be checked thoroughly
+        res.setCharacterEncoding(Constants.Encoding_DEFAULT_SYSTEM);
         chain.doFilter(req, res);
     }
 

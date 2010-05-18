@@ -1,0 +1,1 @@
+mvn tomcat:undeploy tomcat:deploy -DskipTests=true

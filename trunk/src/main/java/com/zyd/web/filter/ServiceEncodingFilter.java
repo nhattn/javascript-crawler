@@ -17,10 +17,11 @@ import com.zyd.Constants;
 public class ServiceEncodingFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        //        res.setCharacterEncoding(Constants.ENCODING_OUT_GOING_CONTENT);
+        res.setCharacterEncoding(Constants.ENCODING_OUT_GOING_CONTENT);
         if (req.getCharacterEncoding() == null) {
             req.setCharacterEncoding(Constants.ENCODING_INCOMING_CONTENT);
         }
+        
         chain.doFilter(req, res);
     }
 

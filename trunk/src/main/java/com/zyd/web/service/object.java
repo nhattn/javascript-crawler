@@ -61,7 +61,7 @@ public class object extends ServiceBase {
      * TODO if there is no result how to notify
      */
     @Override
-    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {        
         resp.setContentType("text/xml");
         HashMap params = requestParameterToMap(req);
         SearchResult result = objectManager.query(params);

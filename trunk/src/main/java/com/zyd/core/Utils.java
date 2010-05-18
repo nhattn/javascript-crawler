@@ -303,7 +303,7 @@ public class Utils {
         } else if (clazz.equals(Double.class)) {
             map.put(key, Double.parseDouble(s));
         } else if (clazz.equals(Date.class)) {
-            map.put(key, Long.parseLong(s));
+            throw new UnsupportedOperationException();
         } else {
             throw new UnsupportedOperationException("not supported class " + clazz);
         }

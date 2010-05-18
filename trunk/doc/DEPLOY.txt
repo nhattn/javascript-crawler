@@ -1,0 +1,11 @@
+Things to check before deploy.
+
+1. Install tomcat, mysql, tesseract, imagemagick
+2. configured mysql to use utf-8 encoding, removed local binding from my.cnf
+
+    add to [mysqld] section and [mysql] section
+
+    default-character-set=utf8
+
+3. configured tomcat deploy user
+

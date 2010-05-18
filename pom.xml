@@ -25,7 +25,7 @@
 					<server>server1</server>
 					<path>/</path>
 				</configuration>
-			</plugin>
+			</plugin> 
 		</plugins>
 
 	</build>

@@ -9,3 +9,4 @@ Things to check before deploy.
 
 3. configured tomcat deploy user
 
+4. firefox, remember to enable codebase_principal_support in about:config. or cross domain image coding will not work.

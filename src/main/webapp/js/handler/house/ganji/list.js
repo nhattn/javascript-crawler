@@ -32,7 +32,7 @@ function isTimeExpired(){
 	var reg = /([0-9][0-9])-([0-9][0-9]) ([0-9][0-9]):([0-9][0-9])/;
 	var arr = XPath.array(document, "//span[contains(@class,'time')]");
 	var now = new Date(), odate = new Date();
-	var maxDifference = CrGlobal.HouseListMaxDifference;
+    var maxDifference = CrGlobal.HouseListMaxDifference[CrUtil.getShortestDomain(window.location.host)];
 	for(var i=0;i<arr.length;i++){
 		var s = arr[i].textContent;		
 		if(!s || s.trim().length ==0){

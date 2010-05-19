@@ -44,4 +44,25 @@ public class TestSystemSetup extends TestCase {
         }
         assertTrue(have);
     }
+
+    public void nottestHibernateDuplicates() throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        HashMap values = new HashMap();
+        try {
+            values.put(House.Columns.SubRentalType, "dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+            session.save("House", values);
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        session = HibernateUtil.getSessionFactory().openSession();
+        tx = session.beginTransaction();
+        values = new HashMap();
+        values.put(House.Columns.SubRentalType, cntext);
+        session.save("House", values);
+        tx.commit();
+
+    }
 }

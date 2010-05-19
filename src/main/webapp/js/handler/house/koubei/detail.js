@@ -1,163 +1,79 @@
 function handlerProcess() {
-    // CrUtil.removeFrames(document);
-    // Crawler.log('processing url '+window.location.toString());
-    var obj = {}, xpath, s, s1, s2, i1, i2, reg = HandlerHelper.getRegGroupFirstValue;
-    
-    s = XPath.single(document, "//div[@id='houseBaseInfo']").textContent.toString();
+    var s = XPath.single(document, "//div[@id='houseBaseInfo']").textContent.toString();                 
+    var s1 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='allInfo']").textContent.toString().replace('[访问小区主页]', ''));    
+    var s2 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='communityInfo']").textContent.toString()); 
+    var floors =  HandlerHelper.getRegGroupFirstValue(s, /楼层：\s*(.*)/);
+    var url = window.location.toString(); 
+    var objInfo1 = [
+        {name: 'price', op:'xpath.textcontent.regex',  param1:"//div[@id='houseBaseInfo']//span[contains(@class, 'price')]"},
+        {name: 'size', op:'xpath.text.regex', param1:s, param2:/面积：\s*([0-9]+[\.[0-9]*]?)/},
+        {name: 'paymentType',  op:'xpath.text.regex', param1:s, param2:/付款条件：\s*(\S*)/},
+        {name: 'rentalLength', op:'xpath.text.regex',  param1:s, param2:/租期：\s*(\S*)/},
+        {name: 'downPayment', op:'xpath.text.regex',  param1:s, param2:/押金：\s*(\S*)/},
+        {name: 'subRentalType', op:'xpath.text.regex',  param1:s, param2:/类型：\s*(\S*)/},
+        {name: 'houseType', op:'xpath.text.regex',  param1:s, param2:/类型：\s*(\S*)/},
+        {name: 'yearBuild', op:'xpath.text.regex',  param1:s, param2:/建筑年代：\s*(\S*)/},
+        {name: 'decoration', op:'xpath.text.regex',  param1:s, param2:/装修：\s*(\S*)/},
+        {name: 'floor', op:'xpath.text.regex',  param1:floors, param2:/第([0-9]+)层/},
+        {name: 'totalFloor', op:'xpath.text.regex',  param1:s, param2:/总([0-9]+)层/},       
+        {name: 'address', op:'xpath.text.regex',  param1:s1, param2:/房屋地址：\s*(\S*)\[?/},
+        {name: 'decoration', op:'xpath.text.regex',  param1:s1, param2:/装修程度：\s*(\S*)/},
+        {name: 'description1', op:'xpath.textcontent.regex',  param1:"//div[@id='houseBaseInfo']//div[contains(@class,'houseName')]//h1"},
+        {name: 'description2', op:'xpath.text.regex',  param1:s1, param2:/补充信息：\s*(\S*)/},        
+        {name: 'contact', op:'xpath.textcontent.regex', param1:"//div[@id='houseBaseInfo']//div[contains(@class, 'contact-main')]/text()[2]"}           
+    ];           
         
-    obj.size = reg(s, /面积：\s*([0-9]+[\.[0-9]*]?)/);
+    var obj = HandlerHelper.parseObject(objInfo1);    
     if (!parseInt(obj.size)) {
         delete obj.size;
+    }   
+
+    var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']//li[2]");    
+    if(priceUnit && priceUnit.textContent){
+        priceUnit = priceUnit.textContent;        
+        priceUnit = priceUnit.replace('(贷款计算器)','');        
+        priceUnit = HandlerHelper.getRegGroupFirstValue(priceUnit, /[0-9]+(\S+)/)
+        obj.priceUnit = priceUnit;
     }
     
-    obj.paymentType = reg(s, /付款条件：\s*(\S*)/);
-    obj.rentalLength = reg(s, /租期：\s*(\S*)/);
-    obj.downPayment =  reg(s, /押金：\s*(\S*)/);
-    obj.subRentalType = reg(s, /方式：\s*(\S*)/);
-    obj.houseType = reg(s, /类型：\s*(\S*)/);
-    obj.yearBuild = reg(s, /建筑年代：\s*(\S*)/);
- 
-    obj.decoration   = reg(s, /装修：\s*(\S*)/);
-    s1 = reg(s, /楼层：\s*(.*)/);
-    console.log(s1)
-    obj.floor = reg(s1, /第([0-9]+)层/);
-    obj.totalFloor = reg(s1, /总([0-9]+)层/);   
+    var equipments = XPath.array(document, "//div[contains(@class, 'infoItem')]//span[contains(@class, 'yes')]"), t=[];
+    for(var i=0;i<equipments.length;i++){
+        t.push(equipments[i].textContent.trim());
+    }
+    obj.equipment = t.join(' ');
+        
+    var telImg = XPath.single(document,"//div[@id='houseBaseInfo']//span//img");
+    if(telImg && telImg.src){
+        obj.tel = CrUtil.encodeImage(telImg);
+        obj.telImageName = telImg.src+'&a.jpg';
+    }
     
-    s = XPath.single(document, "//div[@id='allInfo']").textContent.toString().replace('[访问小区主页]', '');
-    
-    console.log(s);
-    i1 = s.indexOf('房屋区域：');
-    i2 = s.indexOf('房屋地址：');
-    console.log(i1);
-    console.log(i2);
-    s1 = s.substring(i1+5,i2);
-    console.log(s1);
-    console.log(obj);
-    return;
-      
-    obj.district5 = reg(s, /小区:\s*(.*)/);
-    obj.address = reg(s, /地址:\s*(.*)/);
-    obj.equipment = reg(s, /配置:\s*(.*)/);
-
-
-
-    t = reg(s, /区域:\s*(.*\n.*)/);
-    t = t.split('-');
-    if (t.length == 1) {
-        obj.district1 = t[0];
-    } else if (t.length == 2) {
-        obj.district1 = t[0];
-        obj.district3 = t[1];
-    } else {
-        Crawler.error('house.detail - wrong number of parameter for 区域, raw text is : ' + t);
+    var districts = CrUtil.getBetween(s1,'房屋区域：','房屋地址：');    
+    if(districts && districts.split('-').length>0){
+         districts = districts.split('-');
+        if(districts[0]) obj.district1 = districts[0];  
+        if(districts[1]) obj.district3 = districts[1];  
+        if(districts[2]) obj.district5 = districts[2];  
     }
-
-    t = reg(s, /租金:\s*(.*)/);
-    obj.price = reg(t, /(\S+)/);
-    // obj.priceUnit = reg(t, /[\S+]\s+(\S+)[（|\(]?/);
-    obj.priceUnit = '元/月';
-
-    
-    if (!obj.paymentType) {
-        obj.paymentType = reg(t, /（(.*)）/);
-    }
-
-    t = reg(s2, /房型:\s*(.+)\s*/);
-    if (!t)
-        t = reg(s2, /户型:\s*(.+)\s*/);
-    if (t) {
-        t = t.split('-');
-        if (t.length == 1) {
-            t = t[0];
-            if (t.indexOf('室') != -1 || t.indexOf('厅') != -1 || t.indexOf('卫') != -1) {
-                
-            } else {
-                Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : ' + t);
-            }
-        } else if (t.length == 2) {
-          
-            obj.houseType = t[1];
-        } else {
-            Crawler.error('house.detail - wrong number of parameter for 户型, raw text is : ' + t);
-        }
-    }
-
-    // 详细描述
-    xpath = "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//p";
-    var arr = XPath.array(document, xpath), buf = [];
-    for ( var i = 0; i < arr.length; i++) {
-        var p = arr[i];
-        if (!p.className || p.className.indexOf('text') >= 0) {
-            buf[buf.length] = p.textContent.trim();
-        }
-    }
-    obj.description2 = buf.join(' ');
-
-    // 电话
-    xpath = "/html/body/div[@id='wrapper2']/div[1]/div[2]/ul/li[2]";
-    var node = XPath.single(document, xpath), tel = '';
-    if (node.children && node.children.length != 0) {
-        tel = CrUtil.encodeImage(node.children[0]);
-    } else {
-        tel = node.textContent;
-    }
-    obj.tel = tel;
-
-    // GPS
-    var lonlatUrl = null;
-    if (window.write_frame) {
-        lonlatUrl = window.write_frame.toString();
-        // window.write_frame = function(){};
-    } else {
-        lonlatUrl = document.getElementById('traffic_iframe');
-        if (lonlatUrl) {
-            lonlatUrl = lonlatUrl.src;
-        }
-    }
-    if (lonlatUrl) {
-        var i = lonlatUrl.indexOf('latlng=');
-        if (i != -1) {
-            var j = lonlatUrl.indexOf('&', i);
-            lonlatUrl = lonlatUrl.substring(i + 7, j).split(',');
-            obj.la = lonlatUrl[0];
-            obj.lo = lonlatUrl[1];
-        } else {
-            i = lonlatUrl.indexOf('lnglat=');
-            var j = lonlatUrl.indexOf('&', i);
-            lonlatUrl = lonlatUrl.substring(i + 7, j).split(',');
-            obj.lo = lonlatUrl[0];
-            obj.la = lonlatUrl[1];
-        }
-    }
-
-    obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
-
-    s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /.+\.ganji.com\/(fang[0-9]+)\/.*/)
+                  
+    s = HandlerHelper.getRegGroupFirstValue(url, /.*fang\/detail-([^-]+).*/)
     obj.rentalType = rentalTypeMap[s];
-
-    s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
+    
+    s = HandlerHelper.getRegGroupFirstValue(url, /http:\/\/([a-z]+)\.koubei\.com/);
     obj.city = cityMap[s];
-
-    obj.contact = XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[3]//span[1]").textContent;
-    obj.description1 = XPath.single(document, "//div[@class='detail_title']/h1").textContent;
-    for ( var p in obj) {
-        if (obj[p]) {
-            obj[p] = obj[p].trim();
-        }
-    }
-    console.log(obj);
+    CrUtil.trimAttributes(obj);    
+    obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
+    //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });
 }
 
 var cityMap = {
-    'sh' : '上海'
+    'shanghai' : '上海'
 }
 
 var rentalTypeMap = {
-    'fang1' : '出租',
-    'fang5' : '出售',
-    'fang3' : '合租',
-    'fang10' : '短租'
+    'rent' : '出租',
+    'sell' : '出售'
 }

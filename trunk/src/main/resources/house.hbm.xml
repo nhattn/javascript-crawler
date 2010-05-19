@@ -41,8 +41,8 @@
 			<generator class="native" />
 		</id>
 		<property name="url" column="url" type="string" />
-		<property name="createTime" column="createTime" type="date" />
-		<property name="processTime" column="processTime" type="date" />
+		<property name="createTime" column="createTime" type="timestamp" />
+		<property name="processTime" column="processTime" type="timestamp" />
 		<property name="tryCount" column="tryCount" type="int" />
 		<property name="isError" column="isError" type="int" />
 		<property name="errorMsg" column="errorMsg" type="string" />

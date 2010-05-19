@@ -18,7 +18,7 @@ public class TestSystemSetup extends TestCase {
     public final static String cntext = "你应该看到这段中文文";
 
     public void testOcrSetup() throws Exception {
-        assertEquals("13482172316", Ocr.ocrImageNumber(number13482172316));
+        assertEquals("13482172316", Ocr.ocrImageNumber(number13482172316, "png"));
     }
 
     public void testChinese() throws Exception {

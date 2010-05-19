@@ -2,7 +2,7 @@ HandlerHelper = {
 	/**
 	 * post an array of links to server side, then execute next action.
 	 * 
-	 * the target url is "urlStoreLink", it will return a json object with the
+	 * the target url is "CrGlobal.StoreLinkUrl", it will return a json object with the
 	 * number of links added like such : { result: 2 } meaning 2 of the links
 	 * posted were added.
 	 * 
@@ -13,9 +13,8 @@ HandlerHelper = {
 	 */
 	storeLinks : function(linkArray, nextAction) {
 		if (!linkArray || linkArray.length == 0) {
-			Crawler
-					.error('HandlerHelper.storeLinks-no link to store, will go to next page.');
-			// Crawler.nextLink();
+			Crawler.error('HandlerHelper.storeLinks-no link to store, will go to next page.');
+			Crawler.nextLink();
 			return;
 		}
 

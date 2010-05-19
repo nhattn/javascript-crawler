@@ -19,18 +19,24 @@ import com.zyd.Constants;
 public class Ocr {
     private final static boolean isLinux = OSHelper.isLinux();
 
-    public static String ocrImageNumber(String byteString) {
+    /**
+     * 
+     * @param byteString the image data in byte, encoded with base64. 
+     * @param format the suffix of the image, png, jpg etc
+     * @return
+     */
+    public static String ocrImageNumber(String byteString, String format) {
         if (isLinux) {
-            return linuxOcrNumber(byteString);
+            return linuxOcrNumber(byteString, format);
         } else {
-            return windowsOcrNumber(byteString);
+            return windowsOcrNumber(byteString, format);
         }
     }
 
     private static Object ocrInstance = null;
     private static Method ocrMethod = null;
 
-    private static String windowsOcrNumber(String byteString) {
+    private static String windowsOcrNumber(String byteString, String format) {
         try {
             if (ocrMethod == null) {
                 synchronized (Ocr.class) {
@@ -59,7 +65,7 @@ public class Ocr {
 
     private static int TEMP_COUNTER = 10000;
 
-    private static String linuxOcrNumber(String byteString) {
+    private static String linuxOcrNumber(String byteString, String format) {
         int suffix = 0;
         synchronized (Ocr.class) {
             suffix = TEMP_COUNTER++;
@@ -71,11 +77,11 @@ public class Ocr {
         FileOutputStream fout = null;
         FileWriter writer = null;
         try {
-            fout = new FileOutputStream(new File(Constants.LINUX_OCR_DIR, fileHandle + ".png"));
+            fout = new FileOutputStream(new File(Constants.LINUX_OCR_DIR, fileHandle + "." + format));
             IOUtils.write(bs, fout);
             fout.flush();
             StringBuffer buf = new StringBuffer();
-            buf.append("convert " + fileHandle + ".png -type GrayScale -depth 8 " + fileHandle + ".tif");
+            buf.append("convert " + fileHandle + "." + format + " -type GrayScale -depth 8 " + fileHandle + ".tif");
             buf.append("\n");
             buf.append("tesseract " + fileHandle + ".tif " + fileHandle);
             buf.append("\n");
@@ -100,7 +106,9 @@ public class Ocr {
 
     public static void main(String[] args) {
         System.out
-                .println(linuxOcrNumber("iVBORw0KGgoAAAANSUhEUgAAALAAAAAaCAYAAAAXMNbWAAAD3klEQVR4nO1bPZLqMAzea70rvI4TUHMADpA6J0jJESjeUNEys8WmTckwNFvSpsqrzHiFJOvPLMy4ULEbO/6k77Ms2+FjnuelWbN3tQ/u4TDtltVxvfz59/duVNvL7boM027ZnLY/+qyO66Ub++Xz+0sN7nK7PozPYchxaDHk+POxNqftMkw7FW5N3OZ5fvBPYlHYo3nT+g6x7M8HFItYwJgASmD254Mo6N3Yq4LRjb0YgxQHxHC5Xclxclsd16IJoImbV8Be7FG8eXyXYFEJmALBgfn8/noYkHqPNJvBd2oxpLGGaffw//358CP4WMCoQF5uV3R8S9zyviXDCPVij+LN4zuXqJJtTlu9gFfHNUo+BwLOcixDcLMJwwGXRQoDbJeLFM5uiCEtWXmfRDAkh8pG1rhJDAo1x+nFHsGbx3dMvAkTlSxYAaeslf72EoFliVKfPAjY0oL1KbXhnnOBKom/VtwokuH4Edi9vFl9x1YAbc3NbuJqCLgUxLx9amsRMCTWSqQ1BlEC5rJvTRxa3ixjwhXCstGvKmBsGSuBzEuBNKslGGAJkWcEmIm0pwq/KWAu+9bCYeFNOybMvt3Y30uXVBZ1Y1+csKECTo5jRT1Wp0HLhZaTZQlICgoUL7chkLxX2j9CwDALaieeFLuXN4vvsFbGauccN1UqhQuYAlCawdxSKcWAZQ4oaK2IuM1hbQF7s68Uu4c3q+/Y5pwzavI9RcCSmZQ7BMmSYiidi6ZdspQIT/b2ChjGUpt9Ndg9vFl9xxLNMO2Wy+16v9CAz7EJWK0Gzm9VoIhgMCBYCFSCAdtxD9MOFbREiBip0SRyxk3omtg1vHl8l4gTlhUYb9VPIeb58awPLuXYQT11iJ8/T06Xaj3sSprLaFh77VLqiZsn+0Zgl/IWKWDKl1K7pwi4dCTDLV+cJQHDbIERhp05SgWg3cR44wb90WTPCOxS3jy+S7+XeAkBl97jFbAUY6ldpACscbNm32jxevyQ9JFMUskEeoqAPTdCEgzwuSUY8ATDcisUETdL9o3G7uVN4rvkbB62wUqYEAGnq0TsTh0734u+SIC1Glbsc/UcVl5oNmxRArZkXw/2WrxJfedqdWktHyJgahMG+1Li8mKgvsrqxh79zC8nmfqMj/syrJaAtdnXi70Wb1LfMfyb0xY9I6Y2kG4BY+KhzHKRIA1I6RKDylDaA3WpGLV9sKtVreA12GvypvHd8g13qIBTMKiv+tOvAjxLsjYg1K8LsE3NqwjYUvt6sdfiTeu79Vc0IgE3a/bK1gTc7K2tCbjZW1sTcLO3tibgZm9tTcDN3tr+Ay02ZsKz6ivBAAAAAElFTkSuQmCC"));
+                .println(ocrImageNumber(
+                        "iVBORw0KGgoAAAANSUhEUgAAALAAAAAaCAYAAAAXMNbWAAAD3klEQVR4nO1bPZLqMAzea70rvI4TUHMADpA6J0jJESjeUNEys8WmTckwNFvSpsqrzHiFJOvPLMy4ULEbO/6k77Ms2+FjnuelWbN3tQ/u4TDtltVxvfz59/duVNvL7boM027ZnLY/+qyO66Ub++Xz+0sN7nK7PozPYchxaDHk+POxNqftMkw7FW5N3OZ5fvBPYlHYo3nT+g6x7M8HFItYwJgASmD254Mo6N3Yq4LRjb0YgxQHxHC5Xclxclsd16IJoImbV8Be7FG8eXyXYFEJmALBgfn8/noYkHqPNJvBd2oxpLGGaffw//358CP4WMCoQF5uV3R8S9zyviXDCPVij+LN4zuXqJJtTlu9gFfHNUo+BwLOcixDcLMJwwGXRQoDbJeLFM5uiCEtWXmfRDAkh8pG1rhJDAo1x+nFHsGbx3dMvAkTlSxYAaeslf72EoFliVKfPAjY0oL1KbXhnnOBKom/VtwokuH4Edi9vFl9x1YAbc3NbuJqCLgUxLx9amsRMCTWSqQ1BlEC5rJvTRxa3ixjwhXCstGvKmBsGSuBzEuBNKslGGAJkWcEmIm0pwq/KWAu+9bCYeFNOybMvt3Y30uXVBZ1Y1+csKECTo5jRT1Wp0HLhZaTZQlICgoUL7chkLxX2j9CwDALaieeFLuXN4vvsFbGauccN1UqhQuYAlCawdxSKcWAZQ4oaK2IuM1hbQF7s68Uu4c3q+/Y5pwzavI9RcCSmZQ7BMmSYiidi6ZdspQIT/b2ChjGUpt9Ndg9vFl9xxLNMO2Wy+16v9CAz7EJWK0Gzm9VoIhgMCBYCFSCAdtxD9MOFbREiBip0SRyxk3omtg1vHl8l4gTlhUYb9VPIeb58awPLuXYQT11iJ8/T06Xaj3sSprLaFh77VLqiZsn+0Zgl/IWKWDKl1K7pwi4dCTDLV+cJQHDbIERhp05SgWg3cR44wb90WTPCOxS3jy+S7+XeAkBl97jFbAUY6ldpACscbNm32jxevyQ9JFMUskEeoqAPTdCEgzwuSUY8ATDcisUETdL9o3G7uVN4rvkbB62wUqYEAGnq0TsTh0734u+SIC1Glbsc/UcVl5oNmxRArZkXw/2WrxJfedqdWktHyJgahMG+1Li8mKgvsrqxh79zC8nmfqMj/syrJaAtdnXi70Wb1LfMfyb0xY9I6Y2kG4BY+KhzHKRIA1I6RKDylDaA3WpGLV9sKtVreA12GvypvHd8g13qIBTMKiv+tOvAjxLsjYg1K8LsE3NqwjYUvt6sdfiTeu79Vc0IgE3a/bK1gTc7K2tCbjZW1sTcLO3tibgZm9tTcDN3tr+Ay02ZsKz6ivBAAAAAElFTkSuQmCC",
+                        "png"));
         // ocrImageNumber("iVBORw0KGgoAAAANSUhEUgAAALAAAAAaCAYAAAAXMNbWAAAD3klEQVR4nO1bPZLqMAzea70rvI4TUHMADpA6J0jJESjeUNEys8WmTckwNFvSpsqrzHiFJOvPLMy4ULEbO/6k77Ms2+FjnuelWbN3tQ/u4TDtltVxvfz59/duVNvL7boM027ZnLY/+qyO66Ub++Xz+0sN7nK7PozPYchxaDHk+POxNqftMkw7FW5N3OZ5fvBPYlHYo3nT+g6x7M8HFItYwJgASmD254Mo6N3Yq4LRjb0YgxQHxHC5Xclxclsd16IJoImbV8Be7FG8eXyXYFEJmALBgfn8/noYkHqPNJvBd2oxpLGGaffw//358CP4WMCoQF5uV3R8S9zyviXDCPVij+LN4zuXqJJtTlu9gFfHNUo+BwLOcixDcLMJwwGXRQoDbJeLFM5uiCEtWXmfRDAkh8pG1rhJDAo1x+nFHsGbx3dMvAkTlSxYAaeslf72EoFliVKfPAjY0oL1KbXhnnOBKom/VtwokuH4Edi9vFl9x1YAbc3NbuJqCLgUxLx9amsRMCTWSqQ1BlEC5rJvTRxa3ixjwhXCstGvKmBsGSuBzEuBNKslGGAJkWcEmIm0pwq/KWAu+9bCYeFNOybMvt3Y30uXVBZ1Y1+csKECTo5jRT1Wp0HLhZaTZQlICgoUL7chkLxX2j9CwDALaieeFLuXN4vvsFbGauccN1UqhQuYAlCawdxSKcWAZQ4oaK2IuM1hbQF7s68Uu4c3q+/Y5pwzavI9RcCSmZQ7BMmSYiidi6ZdspQIT/b2ChjGUpt9Ndg9vFl9xxLNMO2Wy+16v9CAz7EJWK0Gzm9VoIhgMCBYCFSCAdtxD9MOFbREiBip0SRyxk3omtg1vHl8l4gTlhUYb9VPIeb58awPLuXYQT11iJ8/T06Xaj3sSprLaFh77VLqiZsn+0Zgl/IWKWDKl1K7pwi4dCTDLV+cJQHDbIERhp05SgWg3cR44wb90WTPCOxS3jy+S7+XeAkBl97jFbAUY6ldpACscbNm32jxevyQ9JFMUskEeoqAPTdCEgzwuSUY8ATDcisUETdL9o3G7uVN4rvkbB62wUqYEAGnq0TsTh0734u+SIC1Glbsc/UcVl5oNmxRArZkXw/2WrxJfedqdWktHyJgahMG+1Li8mKgvsrqxh79zC8nmfqMj/syrJaAtdnXi70Wb1LfMfyb0xY9I6Y2kG4BY+KhzHKRIA1I6RKDylDaA3WpGLV9sKtVreA12GvypvHd8g13qIBTMKiv+tOvAjxLsjYg1K8LsE3NqwjYUvt6sdfiTeu79Vc0IgE3a/bK1gTc7K2tCbjZW1sTcLO3tibgZm9tTcDN3tr+Ay02ZsKz6ivBAAAAAElFTkSuQmCC");
     }
 }

@@ -77,6 +77,7 @@ function handlerProcess() {
     var node = XPath.single(document, xpath), tel = '';
     if (node.children && node.children.length != 0) {
         tel = CrUtil.encodeImage(node.children[0]);
+        obj.telImageName = node.children[0].src;
     } else {
         tel = node.textContent;
     }

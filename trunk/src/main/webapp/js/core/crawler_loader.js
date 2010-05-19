@@ -1,8 +1,8 @@
 CrGlobal = {
     debug : true,
     version : '0.1',
-    RemoteLogging : true,
-    doAction : true,    
+    RemoteLogging : false,
+    doAction : false,    
     handlerPath : '/js/handler',
     NextLinkWaitTime : 5 * 1000,
     ParameterName_ObjectId : 'objectid',

@@ -21,6 +21,13 @@ function handlerProcess() {
 }
 
 
+/**
+  * it will go down the list, 
+  * if it sees a '更新' , will return false,
+  * if it sees a time that is not expired, will return false.
+  * if it sees a time that is expired, will return true.
+  * if it goes down the list and see nothing meet the conditions before, will return false.
+  */
 function isTimeExpired(){
 	var reg = /([0-9][0-9])-([0-9][0-9]) ([0-9][0-9]):([0-9][0-9])/;
 	var arr = XPath.array(document, "//span[contains(@class,'time')]");
@@ -33,6 +40,9 @@ function isTimeExpired(){
 		}			
 		
 		s = s.trim();
+		if(s.indexOf('更新')!=-1){
+		    return false;
+		}
 		var ts = s.match(reg);			
 		if(!ts || ts.length!=5){
 			continue;
@@ -45,6 +55,8 @@ function isTimeExpired(){
 		//console.log(now.getTime() - odate.getTime()+'  '+s+'  '+maxDifference);
 		if((now.getTime() - odate.getTime())>maxDifference){
 			return true;
+		}else{
+		    return false;
 		}
 	}
 	return false;

@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.tj.common.CommonUtil;
 import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
@@ -38,14 +39,15 @@ public class House extends Handler {
 
         String tel = (String) values.get(Columns.Tel);
         if (tel.length() > 100) {
-            values.put(Columns.Tel, Ocr.ocrImageNumber(tel));
+            String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
+            values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
         }
         Utils.castValues(values, Columns.Lat, Double.class);
         Utils.castValues(values, Columns.Long, Double.class);
         Utils.castValues(values, Columns.IsAgent, Integer.class);
         Utils.castValues(values, Columns.Price, Double.class);
         values.put(Columns.CreateTime, new Date());
-        
+
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
@@ -208,6 +210,7 @@ public class House extends Handler {
         public final static String IsAgent = "isAgent";
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
+        public final static String TelImageName = "telImageName";
     }
 
     @Override

@@ -96,20 +96,29 @@ HandlerHelper = {
 	/**
 	 * perform a serious of operation based on commands and xpaths, return an
 	 * object with the parsed values mapping is an array of object, each of
-	 * which contains a specification of what to do: { name: the attribute name
-	 * to assign to after action is executed param[1-9]: the parameters op: the
-	 * operation to execute, can be 1 run.func, this will run param1 as the
-	 * function, and the rest of params as arguments to the function . 2
-	 * xpath.textcontent.regex, this will call the extractFromXpathNodeText
-	 * function to extract the textContent of the node. optionallly can specify
-	 * a regex group to further process the textContent, then only the first
-	 * group value will be returned
+	 * which contains a specification of what to do: 
+	 * { 
+	 *   name: the attribute name to assign to after action is executed 	 
+	 *   param[1-9]: the parameters 
+	 *   op: the operation to execute, can be 
+	 *                1 run.func, this will run param1 as the function, 
+	 *                    and the rest of params as arguments to the function . 
+	 *
+	 *                2 xpath.textcontent.regex, this will call the extractFromXpathNodeText
+	 *                    function to extract the textContent of the node. optionallly can specify
+	 *                    a regex group to further process the textContent, then only the first
+	 *                    group value will be returned
 	 * 
-	 * param1 is the path of node whoes text content will be taken param2 is
-	 * optional, a regular expression with group specification, the regex will
-	 * be applyed against the textContent, and the first group value will be
-	 * taken. 3 assign.value, this will simply assign the value of param1 to the
-	 * [name] attribute
+	 *                    param1 specifies the xpath of node whoes text content will be taken 
+	 *                    param2 is optional, a regular expression with group specification, the regex will
+	 *                    be applyed against the textContent, and the first group value will be
+	 *                    taken. 
+	 *
+	 *                3 xpath.text.regex, extract a regex group value from a given text. Takes two params,
+	 *                   param1 the text, param2 the xpath that contains only 1 regex group, it's value will be assinged to object
+	 * 
+	 *                4 assign.value, this will simply assign the value of param1 to the
+	 *                    [name] attribute
 	 */
 	parseObject : function(mapping) {
 		var obj = {};
@@ -124,6 +133,10 @@ HandlerHelper = {
 				obj[m.name] = HandlerHelper.extractFromXpathNodeText.apply(
 						HandlerHelper, HandlerHelper._getParams(m)).trim();
 				break;
+            case 'xpath.text.regex':
+                obj[m.name] = HandlerHelper.getRegGroupFirstValue.apply(
+                        HandlerHelper, HandlerHelper._getParams(m)).trim();
+                break;
 			case 'assign.value':
 				obj[m.name] = m.param1;
 				break;

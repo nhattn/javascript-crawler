@@ -34,6 +34,7 @@ CrUtil = {
      * document.getElementById
      */
     encodeImage : function(img) {
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -149,6 +150,24 @@ CrUtil = {
         }
         return "";
     },
+    /**
+     * extract a string that is inside s, between start and end, excluding both.
+     * s= 'aabbccddeeffgg', start = 'aa', end = 'ff' will return 'bbccddee'.
+     */
+    getBetween: function(s, start, end){
+        if(!s || s.length == 0){
+            return '';
+        }
+        var i = s.indexOf(start);
+        var j = s.indexOf(end);
+        
+        if(i==-1 || j==-1){
+            return '';
+        }
+        
+        i = i + start.length;
+        return s.substring(i,j);        
+    },
     
     getRequest : function(url) {              
         var AJAX = new XMLHttpRequest();        
@@ -161,9 +180,31 @@ CrUtil = {
         }
     },
     
-    trimNewLine : function(s){
-        if(s) return s.replace(/:\s*\n\s*/g, ':');        
-    }
+    removeNewLine : function(s){
+        if(s) return s.replace(/\s*\n\s*/g, ' ');        
+    },
     
-    
+    trimAttributes: function(obj){
+        for (var p in obj) {
+            if (obj[p]) {
+                obj[p] = obj[p].trim();
+            }
+        }    
+    },
+    /**
+     * shanghai.koubei.com -> koubei.com
+     * www.ganji.com -> ganji.com
+     */
+    getShortestDomain: function(domain){
+        domain = domain.toString();
+        var end = domain.lastIndexOf('.');
+        if(end == -1){
+            return domain;
+        }
+        var start = domain.lastIndexOf('.', end-1);
+        if(start == -1){
+            return domain;
+        }
+        return domain.substring(start+1);
+    }    
 }

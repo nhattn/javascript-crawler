@@ -9,14 +9,19 @@ CrGlobal.handlerMapping = [
     ////http://sh.ganji.com/fang1/10050707_2950136.htm
     {pattern:'http://sh\.ganji\.com/fang[0-9]+/[^/|^\.]+\.html?$$',           file:'house/ganji/detail'},
     
-    
-    
+       
     
     /**************************
         koubei.com
     ******************************/
    // http://shanghai.koubei.com/fang/listrentout--count-9999---pageNo-1#tab-fangchan
+   // http://shanghai.koubei.com/fang/listsell--count-9999---pageNo-3#tab-fangchan
    {pattern:'shanghai\.koubei\.com/fang/list.+',     file:'house/koubei/list'},
+    
+   //http://shanghai.koubei.com/fang/li-rent-all.html
+   //http://shanghai.koubei.com/fang/li-sell-all.html
+   {pattern:'shanghai\.koubei\.com/fang/li-.+',     file:'house/koubei/list'},   
+   
    
    //http://shanghai.koubei.com/fang/detail-rent-r64860de0ce154ebc85647b0643944183.html
    {pattern:'shanghai\.koubei\.com/fang/detail.+',     file:'house/koubei/detail'}

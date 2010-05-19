@@ -1,17 +1,20 @@
 CrGlobal = {
     debug : true,
     version : '0.1',
-    RemoteLogging : false,
-    doAction : false,    
+    RemoteLogging : true,
+    doAction : true,    
     handlerPath : '/js/handler',
-    NextLinkWaitTime : 5 * 1000,
+    NextLinkWaitTime : 10 * 1000,
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
 
     /**
      * how long before now should we go for grabbing house list
      */
-    HouseListMaxDifference : 12 * 3600 * 1000,
+    HouseListMaxDifference : {
+        'ganji.com' :12 * 3600 * 1000,
+        'koubei.com': 12 * 3600 * 1000
+    },
 
     extFile : 'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',
     googlemapFile : 'http://maps.google.com/maps/api/js?sensor=false',

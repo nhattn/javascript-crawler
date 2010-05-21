@@ -4,7 +4,7 @@ CrGlobal = {
     RemoteLogging : true,
     doAction : true,    
     handlerPath : '/js/handler',
-    NextLinkWaitTime : 10 * 1000,
+    NextLinkWaitTime : 15 * 1000,
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
 

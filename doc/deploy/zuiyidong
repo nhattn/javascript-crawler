@@ -1,0 +1,14 @@
+<VirtualHost www.zuiyidong.com:80>
+    ServerAdmin zuiyidong@gmail.com
+    DocumentRoot /tomcat/zuiyidong/webapps/ROOT    
+    JkMount  /* worker1
+    <Directory /tomcat/zuiyidong/webapps/ROOT>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    ErrorLog /var/log/apache2/error.log
+    LogLevel warn
+    CustomLog /var/log/apache2/access.log combined
+</VirtualHost>

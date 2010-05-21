@@ -61,6 +61,20 @@ function handlerProcess() {
     
     s = HandlerHelper.getRegGroupFirstValue(url, /http:\/\/([a-z]+)\.koubei\.com/);
     obj.city = cityMap[s];
+    
+    var iframe = XPath.single(document, "//div[@id='mapInfo']//iframe");
+    if(iframe && iframe.src){
+        var url = iframe.src;
+        obj.lo = CrUtil.extractParameter(url, 'centerx');
+        obj.la = CrUtil.extractParameter(url, 'centery');
+        if(obj.lo && parseInt(obj.lo)){
+            obj.lo = parseInt(obj.lo)/100000;        
+        }
+        if (obj.la && parseInt(obj.la)){            
+            obj.la = parseInt(obj.la)/100000;
+        }
+    }
+    
     CrUtil.trimAttributes(obj);    
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
     //console.log(obj);
@@ -68,6 +82,7 @@ function handlerProcess() {
         action : 'Goto.Next.Link'
     });
 }
+
 
 var cityMap = {
     'shanghai' : '上海'

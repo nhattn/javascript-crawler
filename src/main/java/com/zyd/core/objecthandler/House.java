@@ -26,41 +26,48 @@ public class House extends Handler {
 
     @SuppressWarnings("unchecked")
     public Object create(HashMap values) {
-        String missing = checkColumnExistence(requiredColumns, values);
-        if (missing != null) {
-            System.err.println("Can not add House, missing required paramter - " + missing);
+        try {
+            String missing = checkColumnExistence(requiredColumns, values);
+            if (missing != null) {
+                System.err.println("Can not add House, missing required paramter - " + missing);
+                return false;
+            }
+            if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
+                values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
+            } else {
+                values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
+            }
+
+            String tel = (String) values.get(Columns.Tel);
+            if (tel.length() > 100) {
+                String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
+                values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
+            }
+            Utils.castValues(values, Columns.Lat, Double.class);
+            Utils.castValues(values, Columns.Long, Double.class);
+            Utils.castValues(values, Columns.IsAgent, Integer.class);
+            Utils.castValues(values, Columns.Price, Double.class);
+            values.put(Columns.CreateTime, new Date());
+
+            boolean r = false;
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction tx = session.beginTransaction();
+            if (isUnique(session, values) == false) {
+                System.err.println("House is not unique.");
+            } else {
+                r = true;
+                session.save(getName(), values);
+            }
+            session.getTransaction().commit();
+            // TODO: what to do here if there is an error, how to close transaction
+
+            return r;
+        } catch (Exception e) {
+            System.err.println("=================================== exception when saving object  ");
+            System.out.println(values);
+            e.printStackTrace();
             return false;
         }
-        if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
-            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
-        } else {
-            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
-        }
-
-        String tel = (String) values.get(Columns.Tel);
-        if (tel.length() > 100) {
-            String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
-            values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
-        }
-        Utils.castValues(values, Columns.Lat, Double.class);
-        Utils.castValues(values, Columns.Long, Double.class);
-        Utils.castValues(values, Columns.IsAgent, Integer.class);
-        Utils.castValues(values, Columns.Price, Double.class);
-        values.put(Columns.CreateTime, new Date());
-
-        boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        if (isUnique(session, values) == false) {
-            System.err.println("House is not unique.");
-        } else {
-            r = true;
-            session.save(getName(), values);
-        }
-        session.getTransaction().commit();
-        // TODO: what to do here if there is an error, how to close transaction
-
-        return r;
     }
 
     private boolean isUnique(Session session, HashMap values) {

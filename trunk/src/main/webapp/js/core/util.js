@@ -186,7 +186,7 @@ CrUtil = {
     
     trimAttributes: function(obj){
         for (var p in obj) {
-            if (obj[p]) {
+            if (obj[p]  && obj[p].trim) {
                 obj[p] = obj[p].trim();
             }
         }    
@@ -206,5 +206,28 @@ CrUtil = {
             return domain;
         }
         return domain.substring(start+1);
-    }    
+    },
+    
+    /**
+      * extract parameter from a given http url.
+      * url = http://ditu.koubei.com/map/fangdetailmap.html?city=2076&searchtype=2&centerx=12141764&centery=3117466&centername=%D6%D0%BB%AA%C3%C5%B4%F3%CF%C3&rentorsell=rent"
+      * param = centerx
+      * return = 12141764
+      */
+    extractParameter: function(url, param){
+        if(!url || !param){
+            return '';
+        }
+        param = param+'=';
+        var start = url.indexOf(param);
+        if(start == -1){
+            return '';
+        }
+        var end = url.indexOf('&', start + 1);
+        if(end == -1){
+            end = url.length;
+        }
+        return url.substring(start + param.length, end);
+    }
+        
 }

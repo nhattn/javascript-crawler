@@ -124,8 +124,7 @@ function handlerProcess() {
         if (obj[p]) {
             obj[p] = obj[p].trim();
         }
-    }
-    console.log(obj);
+    }    
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });

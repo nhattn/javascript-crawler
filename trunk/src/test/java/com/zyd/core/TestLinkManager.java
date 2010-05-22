@@ -188,5 +188,5 @@ public class TestLinkManager extends TestCase {
         for (Link link : rightList) {
             assertEquals(link.tryCount, 1);
         }
-    }
+    }       
 }

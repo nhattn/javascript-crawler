@@ -18,14 +18,25 @@ import com.zyd.core.dom.Link;
 public class LinkManager {
 
     private HashMap<String, Link> waiting = new HashMap<String, Link>();
-
     private HashMap<String, Link> processed = new HashMap<String, Link>();
     private HashMap<String, Link> processing = new HashMap<String, Link>();
     private HashMap<String, Link> error = new HashMap<String, Link>();
 
     public final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
 
+    private LinkUpdateThread monitor;
+
     private LinkManager() {
+        monitor = new LinkUpdateThread();
+        monitor.startMonitor();
+    }
+
+    public LinkUpdateThread getLinkUpdateThread() {
+        return monitor;
+    }
+
+    public void stopMonitor() {
+        monitor.stopMoniter();
     }
 
     public synchronized Link addLink(String link) {
@@ -69,7 +80,7 @@ public class LinkManager {
             String url = error.keySet().iterator().next();
             Link link = error.remove(url);
             link.startTime = new Date();
-            processing.put(url, link);            
+            processing.put(url, link);
             return link;
         }
         return nextWatchedLink();
@@ -155,6 +166,7 @@ public class LinkManager {
         session.beginTransaction();
         int r = session.createQuery(deleteAll).executeUpdate();
         session.getTransaction().commit();
+        clearCache();
     }
 
     public void clearCache() {
@@ -202,5 +214,60 @@ public class LinkManager {
         buf.append("\n");
         buf.append("Error      :" + error.size());
         return buf.toString();
+    }
+
+    class LinkUpdateThread extends Thread {
+        public LinkUpdateThread() {
+            super("LinkUpdateThread - " + (new Date()).toString());
+        }
+
+        private boolean shouldStop;
+
+        public void startMonitor() {
+            shouldStop = false;
+            this.start();
+        }
+
+        public void stopMoniter() {
+            shouldStop = true;
+            this.interrupt();
+        }
+
+        private void clean() {
+            System.err.println("start cleaning cycle");
+            int count = 0;
+            if (processing.size() != 0) {
+                HashMap<String, Link> ps;
+                synchronized (processing) {
+                    ps = (HashMap<String, Link>) processing.clone();
+                }
+                long now = new Date().getTime();
+                for (Link link : ps.values()) {
+                    if (now - link.startTime.getTime() > Constants.LINK_PROCESSING_EXPIRE) {
+                        count++;
+                        linkError(link.url, "Url has been processed for too long, expired. First started on " + link.startTime);
+                    }
+                }
+            }
+            System.err.println("end cleaning cycle, cleaned " + count + " links.");
+        }
+
+        @Override
+        public void run() {
+            System.err.println("Link manager started");
+            while (shouldStop == false) {
+                try {
+                    try {
+                        Thread.sleep(Constants.LINK_MONITOR_SLEEP);
+                    } catch (InterruptedException e) {
+                    }
+                    clean();
+                } catch (Exception e) {
+                    System.err.println(e.toString());
+                    e.printStackTrace();
+                }
+            }
+            System.err.println("Link manager stopped");
+        }
     }
 }

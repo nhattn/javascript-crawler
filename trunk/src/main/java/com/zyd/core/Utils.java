@@ -1,9 +1,6 @@
 package com.zyd.core;
 
-import java.beans.XMLEncoder;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zyd.Constants;
-import com.zyd.core.dom.Book;
 
 @SuppressWarnings("unchecked")
 public class Utils {
@@ -56,40 +52,6 @@ public class Utils {
         StringBuffer buf = new StringBuffer(Long.toString(d.getTime()));
         String l = StringUtils.leftPad(Integer.toString(Math.abs(rand.nextInt())), 15, '0');
         buf.append(l);
-        return buf.toString();
-    }
-
-    public static String objToXml(Object obj) throws UnsupportedEncodingException {
-        return objToXml(obj, "UTF-8");
-    }
-
-    public static String objToXml(Object obj, String encoding) throws UnsupportedEncodingException {
-        if (obj instanceof List<?>) {
-            List<?> list = (List<?>) obj;
-            if (list.size() > 0 && list.get(0) instanceof Book) {
-                try {
-                    return bookListToXml((List<Book>) obj, encoding);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        XMLEncoder enc = new XMLEncoder(out);
-        enc.writeObject(obj);
-        enc.close();
-        return new String(out.toByteArray(), encoding);
-    }
-
-    public static String bookListToXml(List<Book> books, String encoding) {
-        StringBuffer buf = new StringBuffer();
-        buf.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>");
-        buf.append("<books>");
-        for (Book book : books) {
-            buf.append(book.toXMLString(encoding));
-            buf.append("\n");
-        }
-        buf.append("</books>");
         return buf.toString();
     }
 
@@ -148,26 +110,6 @@ public class Utils {
             usedString.add(s);
             return s;
         }
-    }
-
-    public synchronized static String nextBookId() {
-        return "b" + getNoRepeatString();
-    }
-
-    public synchronized static String nextChapterId() {
-        return "c" + getNoRepeatString();
-    }
-
-    public synchronized static String nextSiteId() {
-        return "s" + getNoRepeatString();
-    }
-
-    public synchronized static String nextBookSiteId() {
-        return "bs" + getNoRepeatString();
-    }
-
-    public synchronized static String nextChapterSiteId() {
-        return "cs" + getNoRepeatString();
     }
 
     public static <T> T getUpdateObject(T s1, T s2) {
@@ -413,11 +355,6 @@ public class Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println(System.getProperty("os.name"));
-        Book b = new Book();
-        b.setName("我的名字");
-        toDBEncoding(b);
-        System.out.println(b);
         System.out.println(getDomain("http://www.aaa.com"));
         System.out.println(getDomain("http://www.aaa.bbb.com"));
         System.out.println(getDomain("www.bbb.com"));

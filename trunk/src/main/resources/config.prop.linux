@@ -10,3 +10,7 @@ LINUX_OCR_DIR=/dev/shm
 LINK_LOAD_BEFORE=259200
 # How many times should try before giving up a link
 LINK_MAX_TRY=2
+#if a link is processed for too long, it will be treated as an error, this defined how long this will happen, in seconds
+LINK_PROCESSING_EXPIRE=1200
+#How long will link manager sleep for each cycle, in seconds
+LINK_MONITOR_SLEEP=600

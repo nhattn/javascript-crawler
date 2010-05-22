@@ -67,7 +67,7 @@ public class LinkManager {
     }
 
     public synchronized Link nextLink() {
-        if (waiting.size() > 0) {
+        if (waiting.size() > 0) {            
             String url = waiting.keySet().iterator().next();
             Link link = waiting.remove(url);
             link.startTime = new Date();
@@ -94,15 +94,15 @@ public class LinkManager {
         }
         link.tryCount++;
         processing.remove(url);
+        link.isError = 1;
         link.startTime = null;
         if (link.tryCount < Constants.LINK_MAX_TRY) {
-            // ok, keep trying            
+            // ok, keep trying                     
             error.put(url, link);
         } else {
-            // tried to much, giving up
-            processed.put(url, link);
+            // tried to much, giving up            
             link.processTime = new Date();
-            link.isError = 1;
+            processed.put(url, link);
         }
         saveOrUpdateLink(link, true);
         return link;

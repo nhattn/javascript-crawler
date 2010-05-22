@@ -9,8 +9,6 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.naming.LinkLoopException;
-
 import org.apache.commons.io.IOUtils;
 
 import com.tj.common.CommonUtil;
@@ -48,12 +46,22 @@ public class Constants {
      * when starting, how long ago should system load the links.
      */
     public static int LINK_LOAD_BEFORE;
-    
+
     /**
      * How many time should try, before giving up a link.
      */
     public static int LINK_MAX_TRY;
-    
+
+    /**
+     * if a link is processed for too long, it will be treated as an error, this defined how long this will happen, in seconds
+     */
+    public static int LINK_PROCESSING_EXPIRE;
+
+    /**
+     * how long will link manager sleep for each cycle
+     */
+    public static int LINK_MONITOR_SLEEP;
+
     /**
      * These fields are fixed, derived from system
      */
@@ -142,6 +150,14 @@ public class Constants {
             writer.write("LINK_LOAD_BEFORE : " + LINK_LOAD_BEFORE + "seconds, or " + ((int) LINK_LOAD_BEFORE / 3600) + " hours");
             writer.newLine();
 
+            writer.write("LINK_PROCESSING_EXPIRE : " + LINK_PROCESSING_EXPIRE);
+            writer.newLine();
+
+            writer.write("LINK_MONITOR_SLEEP : " + LINK_MONITOR_SLEEP);
+            writer.newLine();
+
+            LINK_MONITOR_SLEEP = LINK_MONITOR_SLEEP * 1000;
+            LINK_PROCESSING_EXPIRE = LINK_PROCESSING_EXPIRE * 1000;
             LINK_LOAD_BEFORE = LINK_LOAD_BEFORE * 1000;
 
             if (OSHelper.isLinux()) {

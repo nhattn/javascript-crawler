@@ -10,10 +10,20 @@ import com.tj.common.util.test.HttpTestUtil;
 
 public class ATestUtil {
     public static boolean clearServerData() throws Exception {
-
         String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData", null);
         JSONObject o = new JSONObject(s);
         return o.getBoolean("result");
+    }
+
+    public static boolean createObject(HashMap v) throws Exception {
+        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v);
+        JSONObject obj = new JSONObject(r);
+        return obj.getBoolean("result");
+    }
+
+    public static ApplicationContext setUpSpring() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:**/ContextConfig.xml");
+        return ctx;
     }
 
     public static void main(String[] args) {
@@ -35,16 +45,4 @@ public class ATestUtil {
         double c = 2 * Math.asin(Math.sqrt(a));
         System.out.println(6371 * 1000 * c);
     }
-
-    public static boolean createObject(HashMap v) throws Exception {
-        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v);
-        JSONObject obj = new JSONObject(r);
-        return obj.getBoolean("result");
-    }
-
-    public static ApplicationContext setUpSpring() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:**/ContextConfig.xml");
-        return ctx;
-    }
-
 }

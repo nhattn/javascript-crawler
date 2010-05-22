@@ -8,12 +8,11 @@ import com.zyd.core.busi.LinkManager;
 import com.zyd.core.util.SpringContext;
 
 public class ZydContextListener implements ServletContextListener {
-
     public ZydContextListener() {
-
     }
 
     public void contextDestroyed(ServletContextEvent arg0) {
+        ((LinkManager) SpringContext.getContext().getBean("linkManager")).stopMonitor();
     }
 
     public void contextInitialized(ServletContextEvent arg0) {

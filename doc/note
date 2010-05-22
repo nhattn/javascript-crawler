@@ -41,9 +41,7 @@ requriement
 2 data
 	separate collecting server and user facing server
 	how do they talk to each other. create a view, write separately.
-	production server running on 
-	
-	
+	production server running on 		
 	
 	server will have House as a table, PHouse as a view with only oked data
 	
@@ -63,8 +61,16 @@ today's todo
 perfect crawler
   * how to deal with hibernate exception
   * geocoding on client side
-  
-focusing on providing data
+  ** how to update client script
+  ** make configuration changable, javascript, next link time etc
+  ** fixing logger problem
+  ** add cleaning thread
+  ** add minifier
+  ** adding more sites
+  ** adding an html viewer
+  ** add more query variables
+  ** stop mysql & hibernate gracefully
+
 
 
 

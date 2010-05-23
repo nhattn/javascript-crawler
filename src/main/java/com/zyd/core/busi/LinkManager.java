@@ -291,7 +291,8 @@ public class LinkManager {
             } else if (n > 50) {
                 suggestedLinkRefreshTime = 20;
             } else {
-                suggestedLinkRefreshTime = 30;
+                if (suggestedLinkRefreshTime < 30)
+                    suggestedLinkRefreshTime = 30;
                 for (int i = 0; i < waitingQueueSizeHistory.size(); i++) {
                     if (waitingQueueSizeHistory.get(i) >= 30)
                         return;

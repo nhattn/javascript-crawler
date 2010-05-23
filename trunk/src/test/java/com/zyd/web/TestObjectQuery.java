@@ -26,7 +26,7 @@ public class TestObjectQuery extends TestCase {
     }
 
     public void testQueryObject() throws Exception {
-        TestObjectManipulation.createSomeObject();
+        ATestUtil.createSomeObject();
         HashMap<String, String> p = new HashMap<String, String>();
         p.put("lo", "0-18");
         p.put("la", "0-18");
@@ -43,7 +43,7 @@ public class TestObjectQuery extends TestCase {
     }
 
     public void testQueryPagingAndSorting() throws Exception {
-        TestObjectManipulation.createSomeObject();
+        ATestUtil.createSomeObject();
         HashMap<String, String> p = new HashMap<String, String>();
         int pageSize = 5, start = 0;
         p.put("objectid", "House");
@@ -87,7 +87,7 @@ public class TestObjectQuery extends TestCase {
     }
 
     public void testQueryByPrice() throws Exception {
-        TestObjectManipulation.createSomeObject();
+        ATestUtil.createSomeObject();
         HashMap<String, String> p = new HashMap<String, String>();
         int pageSize = 5, start = 0;
         p.put("objectid", "House");

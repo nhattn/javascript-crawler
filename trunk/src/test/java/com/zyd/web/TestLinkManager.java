@@ -4,11 +4,7 @@ import java.util.HashMap;
 
 import junit.framework.TestCase;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.tj.common.util.test.HttpTestUtil;
-import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
 import com.zyd.Constants;
 
@@ -19,17 +15,17 @@ public class TestLinkManager extends TestCase {
     @Override
     protected void setUp() throws Exception {
         assertTrue(ATestUtil.clearServerData());
-        createSomeLinks();
     }
 
     public void testLinkProcessingExpire() throws Exception {
-        String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=UpdateLinkScannerParameter&expire=" + expire + "&sleep=" + sleep, null);
-        JSONObject o = new JSONObject(s);
-        assertTrue(o.getBoolean("result"));
+        ATestUtil.createSomeLinks();
+        HashMap<String, String> config = new HashMap<String, String>();
+        config.put("LINK_PROCESSING_EXPIRE", Integer.toString(expire));
+        config.put("LINK_MONITOR_SLEEP", Integer.toString(expire));
+        String s = null;
+        ATestUtil.updateServerConfigure(config);
         for (int i = 0; i < 5; i++) {
-            s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/link?action=redirect", null);
-            assertNotNull(s);
-            assertTrue(s.indexOf("window.location") > 0);
+            ATestUtil.getNextLink();
         }
         try {
             System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
@@ -39,22 +35,34 @@ public class TestLinkManager extends TestCase {
         s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
         assertNotNull(s);
         s = s.replaceAll(" ", "");
-        assertTrue(s, s.indexOf("Error:5") > 0);
+        assertTrue(s, s.indexOf("error:5") > 0);
+        assertTrue(ATestUtil.reststoreServerConfigure());
     }
 
-    public static void createSomeLinks() throws Exception {
-        JSONArray arr = new JSONArray();
-        for (int i = 0; i < ATestConstants.TEST_LINK_COUNT; i++) {
-            arr.put("http://www.zuiyidong.com/link_" + i);
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testLinkManagerPurgeLinks() throws Exception {
+        String s = null;
+        assertTrue(ATestUtil.createSomeObject() > 0);
+        HashMap<String, String> configure = new HashMap<String, String>();
+        configure.put("LINK_MONITOR_SLEEP", sleep + "");
+        configure.put("LINK_LOAD_BEFORE", sleep + "");
+        ATestUtil.updateServerConfigure(configure);
+
+        try {
+            System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
+            Thread.sleep(sleep * 5);
+        } catch (Exception e) {
         }
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("data", arr.toString());
-        String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
-        JSONObject o = new JSONObject(s);
-        assertEquals(s, ATestConstants.TEST_LINK_COUNT, o.getInt("result"));
-    }
-
-    public static void main(String[] args) {
-        System.out.println("add   bb".replaceAll(" ", ""));
+        s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
+        assertNotNull(s);
+        s = s.replaceAll(" ", "");
+        assertTrue(s, s.indexOf("processed:0") != -1);
+        assertTrue(s, s.indexOf("error:0") != -1);
+        assertTrue(s, s.indexOf("processing:0") != -1);
+        assertTrue(s, s.indexOf("waiting:0") != -1);
+        assertTrue(ATestUtil.reststoreServerConfigure());
     }
 }

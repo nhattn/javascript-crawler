@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -24,14 +25,14 @@ public class LinkManager {
 
     public final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
 
-    private LinkUpdateThread monitor;
+    private LinkMonitorThread monitor;
 
     private LinkManager() {
-        monitor = new LinkUpdateThread();
+        monitor = new LinkMonitorThread();
         monitor.startMonitor();
     }
 
-    public LinkUpdateThread getLinkUpdateThread() {
+    public LinkMonitorThread getLinkMonitorThread() {
         return monitor;
     }
 
@@ -67,7 +68,7 @@ public class LinkManager {
     }
 
     public synchronized Link nextLink() {
-        if (waiting.size() > 0) {            
+        if (waiting.size() > 0) {
             String url = waiting.keySet().iterator().next();
             Link link = waiting.remove(url);
             link.startTime = new Date();
@@ -102,6 +103,7 @@ public class LinkManager {
         } else {
             // tried to much, giving up            
             link.processTime = new Date();
+            link.errorMsg = msg;
             processed.put(url, link);
         }
         saveOrUpdateLink(link, true);
@@ -206,19 +208,32 @@ public class LinkManager {
 
     public String snapshot() {
         StringBuffer buf = new StringBuffer();
-        buf.append("Waiting    :" + waiting.size());
+        buf.append("waiting    :" + waiting.size());
         buf.append("\n");
-        buf.append("Processing :" + processing.size());
+        buf.append("processing :" + processing.size());
         buf.append("\n");
         buf.append("processed  :" + processed.size());
         buf.append("\n");
-        buf.append("Error      :" + error.size());
+        buf.append("error      :" + error.size());
         return buf.toString();
     }
 
-    class LinkUpdateThread extends Thread {
-        public LinkUpdateThread() {
-            super("LinkUpdateThread - " + (new Date()).toString());
+    /**
+     * Link monitor will do several things:
+     * ## every Constants.LINK_MONITOR_SLEEP, it will check all the links that is being processed, 
+     *    if any link has been processed for long than Constants.LINK_PROCESSING_EXPIRE, it will 
+     *    mark this link as error.
+     *    
+     * ## every Constants.LINK_LOAD_BEFORE * 0.2, it will go through all the links, then release
+     *    the links that is older than Constants.LINK_LOAD_BEFORE.
+     *
+     */
+    class LinkMonitorThread extends Thread {
+        private long lastLinkFlushTime;
+
+        public LinkMonitorThread() {
+            super("LinkMonitorThread - " + (new Date()).toString());
+            lastLinkFlushTime = new Date().getTime();
         }
 
         private boolean shouldStop;
@@ -235,13 +250,13 @@ public class LinkManager {
 
         private void clean() {
             System.err.println("start cleaning cycle");
+            long now = new Date().getTime();
             int count = 0;
             if (processing.size() != 0) {
                 HashMap<String, Link> ps;
                 synchronized (processing) {
                     ps = (HashMap<String, Link>) processing.clone();
                 }
-                long now = new Date().getTime();
                 for (Link link : ps.values()) {
                     if (now - link.startTime.getTime() > Constants.LINK_PROCESSING_EXPIRE) {
                         count++;
@@ -250,6 +265,37 @@ public class LinkManager {
                 }
             }
             System.err.println("end cleaning cycle, cleaned " + count + " links.");
+
+            if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
+                System.err.println("Will start flushing links");
+                int processedCount = 0;
+                HashMap<String, Link> p;
+
+                synchronized (processed) {
+                    p = (HashMap<String, Link>) processed.clone();
+                }
+                processedCount = purgeExpiredLinks(p, now);
+                synchronized (processed) {
+                    processed.clear();
+                    processed = p;
+                }
+                p = null;
+                System.err.println("Flushed " + processedCount + " processed link.");
+            }
+        }
+
+        private int purgeExpiredLinks(HashMap<String, Link> p, long now) {
+            int count = 0;
+            ArrayList<Link> links = new ArrayList<Link>(p.values());
+            for (int i = links.size() - 1; i > -1; i--) {
+                Link link = links.get(i);
+                Date time = link.processTime;
+                if (now - time.getTime() > Constants.LINK_LOAD_BEFORE) {
+                    p.remove(link.url);
+                    count++;
+                }
+            }
+            return count;
         }
 
         @Override

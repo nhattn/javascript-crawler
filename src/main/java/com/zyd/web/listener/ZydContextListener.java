@@ -20,6 +20,7 @@ public class ZydContextListener implements ServletContextListener {
             // do nothing just to initialize 
         }
         ((LinkManager) SpringContext.getContext().getBean("linkManager")).loadFromDb();
+        ((LinkManager) SpringContext.getContext().getBean("linkManager")).startMonitor();
     }
 
 }

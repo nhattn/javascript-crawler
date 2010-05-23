@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -23,17 +23,30 @@ public class LinkManager {
     private HashMap<String, Link> processing = new HashMap<String, Link>();
     private HashMap<String, Link> error = new HashMap<String, Link>();
 
+    /**
+     * How soon should the client refresh it self, based on the current size of waiting list.
+     */
+    private int suggestedLinkRefreshTime = 20;
+
+    public int getSuggestedLinkRefreshTime() {
+        return suggestedLinkRefreshTime;
+    }
+
     public final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
 
     private LinkMonitorThread monitor;
 
     private LinkManager() {
-        monitor = new LinkMonitorThread();
-        monitor.startMonitor();
     }
 
     public LinkMonitorThread getLinkMonitorThread() {
         return monitor;
+    }
+
+    public void startMonitor() {
+        if (monitor == null)
+            monitor = new LinkMonitorThread();
+        monitor.startMonitor();
     }
 
     public void stopMonitor() {
@@ -208,6 +221,8 @@ public class LinkManager {
 
     public String snapshot() {
         StringBuffer buf = new StringBuffer();
+        buf.append("suggestedRefreshTime :" + suggestedLinkRefreshTime);
+        buf.append("\n");
         buf.append("waiting    :" + waiting.size());
         buf.append("\n");
         buf.append("processing :" + processing.size());
@@ -230,16 +245,21 @@ public class LinkManager {
      */
     class LinkMonitorThread extends Thread {
         private long lastLinkFlushTime;
+        private LinkedList<Integer> waitingQueueSizeHistory;
+        private int lastCrawlerRefreshRage;
 
         public LinkMonitorThread() {
             super("LinkMonitorThread - " + (new Date()).toString());
             lastLinkFlushTime = new Date().getTime();
+            waitingQueueSizeHistory = new LinkedList<Integer>();
+            lastCrawlerRefreshRage = suggestedLinkRefreshTime;
         }
 
         private boolean shouldStop;
 
         public void startMonitor() {
             shouldStop = false;
+            //TODO: potential bug, can be started twice
             this.start();
         }
 
@@ -249,25 +269,45 @@ public class LinkManager {
         }
 
         private void clean() {
-            System.err.println("start cleaning cycle");
-            long now = new Date().getTime();
-            int count = 0;
-            if (processing.size() != 0) {
-                HashMap<String, Link> ps;
-                synchronized (processing) {
-                    ps = (HashMap<String, Link>) processing.clone();
-                }
-                for (Link link : ps.values()) {
-                    if (now - link.startTime.getTime() > Constants.LINK_PROCESSING_EXPIRE) {
-                        count++;
-                        linkError(link.url, "Url has been processed for too long, expired. First started on " + link.startTime);
-                    }
-                }
-            }
-            System.err.println("end cleaning cycle, cleaned " + count + " links.");
+            cleanOutdatedProcessingLink();
+            flushOldProssedLinks();
+            updateSuggestedRefreshRate();
+        }
 
+        private void updateSuggestedRefreshRate() {
+            int n = waiting.size();
+            waitingQueueSizeHistory.offerFirst(n);
+            if (waitingQueueSizeHistory.size() > 4) {
+                waitingQueueSizeHistory.pollLast();
+            }
+            if (n > 1000) {
+                suggestedLinkRefreshTime = 2;
+            } else if (n > 800) {
+                suggestedLinkRefreshTime = 4;
+            } else if (n > 500) {
+                suggestedLinkRefreshTime = 5;
+            } else if (n > 300) {
+                suggestedLinkRefreshTime = 10;
+            } else if (n > 50) {
+                suggestedLinkRefreshTime = 20;
+            } else {
+                suggestedLinkRefreshTime = 30;
+                for (int i = 0; i < waitingQueueSizeHistory.size(); i++) {
+                    if (waitingQueueSizeHistory.get(i) >= 30)
+                        return;
+                }
+                suggestedLinkRefreshTime += 5;
+            }
+            if (suggestedLinkRefreshTime != lastCrawlerRefreshRage) {
+                System.err.println("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRage + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
+                lastCrawlerRefreshRage = suggestedLinkRefreshTime;
+            }
+        }
+
+        private void flushOldProssedLinks() {
+            long now = new Date().getTime();
             if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
-                System.err.println("Will start flushing links");
+                //                System.err.println("Will start flushing old processed links");
                 int processedCount = 0;
                 HashMap<String, Link> p;
 
@@ -280,8 +320,32 @@ public class LinkManager {
                     processed = p;
                 }
                 p = null;
-                System.err.println("Flushed " + processedCount + " processed link.");
+                System.err.println("Flushed " + processedCount + " old processed link.");
             }
+        }
+
+        private void cleanOutdatedProcessingLink() {
+            //            System.err.println("Start cleaning outdated processing link");
+            long now = new Date().getTime();
+            int count = 0;
+            if (processing.size() != 0) {
+                HashMap<String, Link> ps;
+                synchronized (processing) {
+                    ps = (HashMap<String, Link>) processing.clone();
+                }
+                for (Link link : ps.values()) {
+                    Date start = link.startTime;
+                    if (start == null) {
+                        continue;
+                    }
+                    if (now - start.getTime() > Constants.LINK_PROCESSING_EXPIRE) {
+                        count++;
+                        linkError(link.url, "Url has been processed for too long, expired. First started on " + start.toString());
+                    }
+                }
+            }
+            System.err.println("End cleaning outdated processing link, cleaned " + count + " links.");
+
         }
 
         private int purgeExpiredLinks(HashMap<String, Link> p, long now) {

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.AssertionFailure;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -97,6 +98,8 @@ public class link extends ServiceBase {
             }
         } catch (JSONException e) {
             throw new IOException(e);
+        } catch (AssertionFailure ex) {
+            System.err.println("Exceptoin happened when saving link, thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId() + ", error is " + ex.toString());
         }
         String s = Utils.stringArrayToJsonString(new String[] { "result", Integer.toString(count) });
         output(s, resp);

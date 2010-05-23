@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zyd.core.busi.ClientManager;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class log extends ServiceBase {
@@ -45,6 +47,9 @@ public class log extends ServiceBase {
                 o.write("<br>");
             }
             o.write("</body></html>");
+        } else if ("ViewClient".equals(action)) {
+            setResponseType("text", resp);
+            resp.getWriter().write(((ClientManager) SpringContext.getContext().getBean("clientManager")).getClientReport());
         } else {
             setResponseType("text", resp);
             String level = req.getParameter("level");

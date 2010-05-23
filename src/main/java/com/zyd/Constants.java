@@ -69,6 +69,10 @@ public class Constants {
     public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
     public static String FILENAME_LINK_WATCH_LIST = "watch.list";
     public static Link[] WATCH_LIST = new Link[0];
+    /**
+     * how soon to check if links should be checked and flushed out of memomry.
+     */
+    public static int LINK_FLUSH_CYCLE_LENGTH;
 
     /***
      * These fields are derived, don't put any values
@@ -101,9 +105,14 @@ public class Constants {
             }
         }
         System.err.println("Loading server configuration from " + configFileName);
+        loadValueFromStream(ins);
+
+    }
+
+    public static void loadValueFromStream(InputStream ins) {
         boolean r = CommonUtil.loadStaticPropertyFromFile(Constants.class, ins);
         if (r == false) {
-            System.err.println("Can not load configuration file from config.prop under classpath");
+            System.err.println("Serious error, can not load configuration!!!!!");
             return;
         }
         initValues();
@@ -112,14 +121,17 @@ public class Constants {
     }
 
     private static void initValues() {
+        LINK_FLUSH_CYCLE_LENGTH = (int) (LINK_LOAD_BEFORE * 0.2);
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
     }
 
-    private static String snapShotValues() {
+    public static String snapShotValues() {
         try {
             ByteArrayOutputStream bou = new ByteArrayOutputStream();
             BufferedWriter writer = new BufferedWriter(new PrintWriter(bou));
+            writer.write("--------------------Server Configuration Snapshot-------------------------------------");
+            writer.newLine();
             writer.write("SERVER_DOMAIN : " + SERVER_DOMAIN);
             writer.newLine();
 
@@ -147,7 +159,7 @@ public class Constants {
             writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
             writer.newLine();
 
-            writer.write("LINK_LOAD_BEFORE : " + LINK_LOAD_BEFORE + "seconds, or " + ((int) LINK_LOAD_BEFORE / 3600) + " hours");
+            writer.write("LINK_LOAD_BEFORE : " + LINK_LOAD_BEFORE);
             writer.newLine();
 
             writer.write("LINK_PROCESSING_EXPIRE : " + LINK_PROCESSING_EXPIRE);
@@ -156,9 +168,8 @@ public class Constants {
             writer.write("LINK_MONITOR_SLEEP : " + LINK_MONITOR_SLEEP);
             writer.newLine();
 
-            LINK_MONITOR_SLEEP = LINK_MONITOR_SLEEP * 1000;
-            LINK_PROCESSING_EXPIRE = LINK_PROCESSING_EXPIRE * 1000;
-            LINK_LOAD_BEFORE = LINK_LOAD_BEFORE * 1000;
+            writer.write("LINK_FLUSH_CYCLE_LENGTH : " + LINK_FLUSH_CYCLE_LENGTH);
+            writer.newLine();
 
             if (OSHelper.isLinux()) {
                 writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
@@ -174,6 +185,8 @@ public class Constants {
                     writer.newLine();
                 }
             }
+            writer.write("--------------------End Server Configuration Snapshot-------------------------------------");
+            writer.newLine();
             writer.close();
             return bou.toString();
         } catch (Exception e) {

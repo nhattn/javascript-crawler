@@ -2,9 +2,7 @@ package com.zyd.web;
 
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,32 +58,24 @@ public class TestObjectManipulation extends TestCase {
 
     public void testCreateObjectWithNoImageTel() throws Exception {
         Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile1, Constants.Encoding_DEFAULT_SYSTEM);
-        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
-        JSONObject obj = new JSONObject(r);
-        assertTrue(obj.getBoolean("result"));
+        assertTrue(ATestUtil.createObject(map));
     }
 
     public void testCreateObjectWithImageTel() throws Exception {
         Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
-        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
-        JSONObject obj = new JSONObject(r);
-        assertTrue(obj.getBoolean("result"));
+        assertTrue(ATestUtil.createObject(map));
     }
 
     public void testCreateObjectWithoutLongLat() throws Exception {
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
             map.remove(House.Columns.Lat);
-            String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
-            JSONObject obj = new JSONObject(r);
-            assertTrue(obj.getBoolean("result"));
+            assertTrue(ATestUtil.createObject(map));
         }
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile1, Constants.Encoding_DEFAULT_SYSTEM);
             map.remove(House.Columns.Long);
-            String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
-            JSONObject obj = new JSONObject(r);
-            assertTrue(obj.getBoolean("result"));
+            assertTrue(ATestUtil.createObject(map));
         }
         // make sure object without log/lat is not returned
         String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL + "?objectid=House", null);
@@ -96,56 +86,23 @@ public class TestObjectManipulation extends TestCase {
         is.setCharacterStream(new StringReader(s));
         Document docx = db.parse(is);
         NodeList nodes = docx.getElementsByTagName("object");
-        assertEquals(nodes.getLength(), 0);
+        assertEquals(0, nodes.getLength());
     }
 
     public void testCreateObjectFail() throws Exception {
         {
             Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
             map.remove(House.Columns.Address);
-            String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, map);
-            JSONObject obj = new JSONObject(r);
-            assertFalse(obj.getBoolean("result"));
+            assertFalse(ATestUtil.createObject(map));
         }
-    }
-
-    public static int createSomeObject() throws Exception {
-        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile1, Constants.Encoding_DEFAULT_SYSTEM);
-        Set keys = map.keySet();
-        Set changableValues = new HashSet();
-        changableValues.add("address");
-        changableValues.add("description2");
-        changableValues.add("district1");
-        changableValues.add("district5");
-        changableValues.add("equipment");
-        int num = ATestConstants.TEST_OBJECT_COUNT;
-        for (int i = 0; i < num; i++) {
-            HashMap nv = new HashMap();
-            for (Object k : keys) {
-                String s = (String) k;
-                String value = (String) map.get(k);
-                if (changableValues.contains(k) == true) {
-                    nv.put(s, i + " -- " + value);
-                } else {
-                    nv.put(k, value);
-                }
-            }
-            nv.put(House.Columns.Price, (1000 + i) + "");
-            nv.put(House.Columns.Long, i + "");
-            nv.put(House.Columns.Lat, i + "");
-            String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, nv);
-            JSONObject obj = new JSONObject(r);
-            assertTrue(obj.getBoolean("result"));
-        }
-        return num;
     }
 
     public static void testCreateCustomObject() throws Exception {
-        createSomeObject();
+        ATestUtil.createSomeObject();
     }
 
     public void testListObject() throws Exception {
-        int num = createSomeObject();
+        int num = ATestUtil.createSomeObject();
         String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL + "?objectid=House", null);
         assertNotNull(s);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -158,7 +115,7 @@ public class TestObjectManipulation extends TestCase {
     }
 
     private static HashMap getHouseConfig() {
-        HashMap val = new HashMap(), oldval;
+        HashMap val = new HashMap();
         val.put(House.Columns.Tel, "13911212");
         val.put(House.Columns.Long, "31.111");
         val.put(House.Columns.Lat, "31.111");

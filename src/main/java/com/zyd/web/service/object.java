@@ -41,9 +41,12 @@ public class object extends ServiceBase {
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
         String referer = req.getHeader("Referer");
-        if (referer != null && linkManager.isLinkProcessing(referer) == false) {
-            //TODO: should be strict like this: if (referer == null || linkManager.isLinkProcessing(referer) == false) {
-            //this is a link that we didn't process, come from somewhere else. ignore
+        if (referer == null || linkManager.isLinkProcessing(referer) == false) {
+            if (referer == null) {
+                System.out.println("can not process link, no refeerer");
+            } else {
+                System.out.println("can not process link, link is not in processing list:" + referer);
+            }
             output(RESULT_NO_CHANGE, resp);
         } else {
             HashMap values = requestParameterToMap(req);
@@ -61,7 +64,7 @@ public class object extends ServiceBase {
      * TODO if there is no result how to notify
      */
     @Override
-    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {        
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/xml");
         HashMap params = requestParameterToMap(req);
         SearchResult result = objectManager.query(params);

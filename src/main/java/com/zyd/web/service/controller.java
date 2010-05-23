@@ -1,5 +1,6 @@
 package com.zyd.web.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -20,8 +21,12 @@ public class controller extends ServiceBase {
 
     /**
      * method: get description: perform various control functions parameters:
-     * action, 'ClearAllData' will clear all data from the system, only used for
-     * test.
+     * action: 
+     *         "ClearAllData" will clear all data from the system, only used for test.
+     *         
+     *         "ConfigureSnapshot" will give an snapshot of current configuration.
+     *         
+     *         "LinkSnapshot", will give an snap shot of current LinkManager.
      */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,30 +35,52 @@ public class controller extends ServiceBase {
             setResponseType("js", resp);
             ((CrawlerManager) SpringContext.getContext().getBean("crawlerManager")).clearAll();
             output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
+            return;
         } else if ("LinkSnapshot".equals(action)) {
             setResponseType("text", resp);
             output(((LinkManager) SpringContext.getContext().getBean("linkManager")).snapshot(), resp);
-        } else if ("UpdateLinkScannerParameter".equals(action)) {
-            setResponseType("js", resp);
-            String exp = req.getParameter("expire");
-            String sleep = req.getParameter("sleep");
-            Constants.LINK_MONITOR_SLEEP = Integer.parseInt(sleep);
-            Constants.LINK_PROCESSING_EXPIRE = Integer.parseInt(exp);
-
-            System.err.println("LINK_MONITOR_SLEEP updated to :" + Constants.LINK_MONITOR_SLEEP);
-            System.err.println("LINK_PROCESSING_EXPIRE updated to :" + Constants.LINK_PROCESSING_EXPIRE);
-            ((Thread) ((LinkManager) SpringContext.getContext().getBean("linkManager")).getLinkUpdateThread()).interrupt();
-            output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
-        } else {
+            return;
+        } else if ("ConfigureSnapshot".equals(action)) {
             setResponseType("text", resp);
-            output("Invalid request:" + req.getRequestURI(), resp);
+            output(Constants.snapShotValues(), resp);
+            return;
         }
+        setResponseType("text", resp);
+        output("Invalid request:" + req.getRequestURI(), resp);
+
+    }
+
+    private void wakeUpThreads() {
+        ((Thread) ((LinkManager) SpringContext.getContext().getBean("linkManager")).getLinkMonitorThread()).interrupt();
     }
 
     /**
-     * method: post *
+     *  action : "UpdateConfigure" will update system configuration, it takes a configuration file as parameter,
+     *            Then update Constants. It only updates those values that is contained in the configuration file.
+     *            The rest will be left there unchanged.
+     *            parameter: content, is a string containing the content of configuration file.
+     *            
      */
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+        if ("UpdateConfigure".equals(action)) {
+            setResponseType("js", resp);
+            String content = req.getParameter("content");
+            if (content != null) {
+                ByteArrayInputStream ins = new ByteArrayInputStream(content.getBytes());
+                Constants.loadValueFromStream(ins);
+                wakeUpThreads();
+                output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
+                return;
+            }
+        } else if ("ReloadConfigure".equals(action)) {
+            Constants.loadValues();
+            wakeUpThreads();
+            output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
+            return;
+        }
+        setResponseType("text", resp);
+        output("Invalid request:" + req.getRequestURI(), resp);
     }
 }

@@ -64,16 +64,23 @@ perfect crawler
   ** how to update client script
   ** make configuration changable, javascript, next link time etc
   ** fixing logger problem
-  ** add cleaning thread
   ** add minifier
   ** adding more sites
   ** adding an html viewer
   ** add more query variables
   ** stop mysql & hibernate gracefully
-
+  
+  ** make it possible to dynamically update crawler crawl time 
+  ** make it possible to see who's active crawling
+  ** make it distribute crawler links
+  ** make it purge links
+  ** do column length check.
+  ** add password to controller 
+  
 
 
 
 	
 	 
 	 
+漕河泾附近好房出租，电梯房，个人出租，无中介费，付一压一，一月一付。出门就是公交车车站，有92，92B，506，120，171，205，沪松专线等公交经过，交通很便利，步行至9号线漕河泾开发区站15分钟。小区环境优雅，附近有联华，迪亚天天，好德等超市，菜市场5分钟距离，生活便利。家电全配，2M的网线免费使用，其他合租的租客工作稳定，素质较高，很好相处。工作日晚上6点之后看房，周末全天

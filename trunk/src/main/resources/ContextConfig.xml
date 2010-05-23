@@ -26,6 +26,9 @@
 	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager">
 	</bean>
 
+	<bean id="clientManager" class="com.zyd.core.busi.ClientManager">
+	</bean>
+
 	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
 		<property name="linkManager" ref="linkManager" />
 		<property name="objectManager" ref="objectManager" />

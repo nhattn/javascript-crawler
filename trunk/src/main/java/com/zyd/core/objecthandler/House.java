@@ -16,6 +16,7 @@ import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.util.Ocr;
 
+@SuppressWarnings("unchecked")
 public class House extends Handler {
 
     private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address };
@@ -24,8 +25,10 @@ public class House extends Handler {
         return "House";
     }
 
-    @SuppressWarnings("unchecked")
     public Object create(HashMap values) {
+        Session session = null;
+        Transaction tx = null;
+
         try {
             String missing = checkColumnExistence(requiredColumns, values);
             if (missing != null) {
@@ -50,8 +53,8 @@ public class House extends Handler {
             values.put(Columns.CreateTime, new Date());
 
             boolean r = false;
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
             if (isUnique(session, values) == false) {
                 System.err.println("House is not unique.");
             } else {
@@ -60,12 +63,14 @@ public class House extends Handler {
             }
             session.getTransaction().commit();
             // TODO: what to do here if there is an error, how to close transaction
-
             return r;
         } catch (Exception e) {
-            System.err.println("=================================== exception when saving object  ");
-            System.out.println(values);
-            e.printStackTrace();
+            System.err.println("Exception when saving object in handler.House: " + e.toString());
+            System.err.println("Values trying to save are:");
+            System.err.println(values);
+            System.err.println("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
+            if (session != null)
+                session.getTransaction().rollback();
             return false;
         }
     }

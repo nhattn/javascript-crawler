@@ -62,6 +62,7 @@ CrGlobal = {
 	initJsUrls : function() {
 		CrGlobal.jsToLoad = [ CrGlobal.extFile,
 				CrGlobal.serverUrl + '/js/core/crawler.js',
+				CrGlobal.serverUrl + '/service/file/crawlerconfig',
 				CrGlobal.serverUrl + '/js/core/handler_helper.js',
 				CrGlobal.serverUrl + '/js/core/xpath.js',
 				CrGlobal.serverUrl + '/js/core/util.js',

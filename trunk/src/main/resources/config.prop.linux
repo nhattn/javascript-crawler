@@ -6,11 +6,11 @@ ENCODING_OUT_GOING_CONTENT=UTF8
 ENCODING_INCOMING_CONTENT=UTF8
 THRESHOLD_GPS_LOCATION_DIFF=100
 LINUX_OCR_DIR=/dev/shm
-# when starting, system will load previous stored links, how long before should it go, default to 3 days. 
-LINK_LOAD_BEFORE=259200000
+# when starting, system will load previous stored links, how long before should it go, default to 5 min
+LINK_LOAD_BEFORE=300000
 # How many times should try before giving up a link
 LINK_MAX_TRY=2
 #if a link is processed for too long, it will be treated as an error, this defined how long this will happen
-LINK_PROCESSING_EXPIRE=1200000
+LINK_PROCESSING_EXPIRE=60000
 #How long will link manager sleep for each cycle
-LINK_MONITOR_SLEEP=600000
+LINK_MONITOR_SLEEP=10000

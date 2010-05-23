@@ -25,7 +25,7 @@ create table House(
 	description1		varchar(200),
 	description2		varchar(5000),
 	floor				varchar(10),
-	totalFloor			tinyint,
+	totalFloor			smallint,
 	isAgent				tinyint,
 	equipment			varchar(100),
 	decoration			varchar(20),

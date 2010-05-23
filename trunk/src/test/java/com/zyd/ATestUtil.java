@@ -102,16 +102,23 @@ public class ATestUtil {
         System.out.println(6371 * 1000 * c);
     }
 
+    /**
+     * NOTE : this have some problem.
+     * @param v
+     * @param referer
+     * @return
+     * @throws Exception
+     */
     public static boolean createObject(Map v, String referer) throws Exception {
         createLink(referer);
-        getNextLink();
-        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v, referer);
+        String l = getNextLink();
+        String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v, l);
         JSONObject obj = new JSONObject(r);
         return obj.getBoolean("result");
     }
 
     public static boolean createObject(Map v) throws Exception {
-        return createObject(v, ATestConstants.OBJECT_REFERER_PREFIX + new Date().getTime());
+        return createObject(v, ATestConstants.OBJECT_REFERER_PREFIX + CommonTestUtil.getNonRepeatString());
     }
 
     public static int createSomeObject() throws Exception {
@@ -178,10 +185,16 @@ public class ATestUtil {
         if (i == -1) {
             throw new Exception("Can not get next link: " + s);
         }
-        int j = s.indexOf(";", i + 1);
+        i = s.indexOf("\'", i + 1);
+
+        if (i == -1) {
+            throw new Exception("Can not get next link: " + s);
+        }
+        int j = s.indexOf("\'", i + 1);
         if (j == -1) {
             throw new Exception("Can not get next link: " + s);
         }
-        return s.substring(i + "window.location".length(), j);
+        return s.substring(i + 1, j);
     }
+
 }

@@ -60,14 +60,16 @@ CrGlobal = {
 	},
 
 	initJsUrls : function() {
+	    var stamp = '?s='+(new Date()).getTime() + 's';
+	    
 		CrGlobal.jsToLoad = [ CrGlobal.extFile,
-				CrGlobal.serverUrl + '/js/core/crawler.js',
-				CrGlobal.serverUrl + '/service/file/crawlerconfig',
-				CrGlobal.serverUrl + '/js/core/handler_helper.js',
-				CrGlobal.serverUrl + '/js/core/xpath.js',
-				CrGlobal.serverUrl + '/js/core/util.js',
-				CrGlobal.serverUrl + '/js/mapping/house.js',
-				CrGlobal.serverUrl + '/js/core/kickoff.js' ];
+				CrGlobal.serverUrl + '/js/core/crawler.js'+stamp,
+				CrGlobal.serverUrl + '/service/file/crawlerconfig'+stamp,
+				CrGlobal.serverUrl + '/js/core/handler_helper.js'+stamp,
+				CrGlobal.serverUrl + '/js/core/xpath.js'+stamp,
+				CrGlobal.serverUrl + '/js/core/util.js'+stamp,
+				CrGlobal.serverUrl + '/js/mapping/house.js'+stamp,
+				CrGlobal.serverUrl + '/js/core/kickoff.js'+stamp ];
 	}
 }
 

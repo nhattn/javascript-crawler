@@ -298,6 +298,9 @@ public class LinkManager {
                         return;
                 }
                 suggestedLinkRefreshTime += 5;
+                if (suggestedLinkRefreshTime > 60) {
+                    suggestedLinkRefreshTime = 60;
+                }
             }
             if (suggestedLinkRefreshTime != lastCrawlerRefreshRage) {
                 System.err.println("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRage + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);

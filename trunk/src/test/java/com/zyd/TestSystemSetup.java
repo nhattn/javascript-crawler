@@ -35,8 +35,7 @@ public class TestSystemSetup extends TestCase {
         boolean have = false;
         for (Object o : list) {
             HashMap m = (HashMap) o;
-            String s = (String) m.get(House.Columns.SubRentalType);
-            System.out.println(s);
+            String s = (String) m.get(House.Columns.SubRentalType);            
             if (cntext.equals(s)) {
                 have = true;
                 break;

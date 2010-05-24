@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.core.busi.ClientManager;
-import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class GateServlet extends HttpServlet {
@@ -17,11 +15,6 @@ public class GateServlet extends HttpServlet {
     private final static String ServicePackage = "com.zyd.web.";
     private final static ServiceBase defaultService = new ServiceBase();
     private static HashMap<String, ServiceBase> serviceMap = new HashMap<String, ServiceBase>();
-    private ClientManager clientManager;
-
-    public GateServlet() {
-        clientManager = (ClientManager) SpringContext.getContext().getBean("clientManager");
-    }
 
     /**
      * Looking up services in com.zyd.web.service directory, based on the urls
@@ -63,16 +56,13 @@ public class GateServlet extends HttpServlet {
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
         service.get(req, resp);
-        clientManager.logRequest(req);
-
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
-        service.put(req, resp);
-        clientManager.logRequest(req);
+        service.put(req, resp);     
     }
 
     @Override
@@ -80,7 +70,6 @@ public class GateServlet extends HttpServlet {
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
         service.post(req, resp);
-        clientManager.logRequest(req);
     }
 
     @Override

@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zyd.core.busi.ClientManager;
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.objecthandler.SearchResult;
@@ -19,10 +20,12 @@ import com.zyd.web.ServiceBase;
 public class object extends ServiceBase {
     private LinkManager linkManager;
     private ObjectManager objectManager;
+    private ClientManager clientManager;
 
     public object() {
         linkManager = (LinkManager) SpringContext.getContext().getBean("linkManager");
         objectManager = (ObjectManager) SpringContext.getContext().getBean("objectManager");
+        clientManager = (ClientManager) SpringContext.getContext().getBean("clientManager");
     }
 
     /**
@@ -56,6 +59,7 @@ public class object extends ServiceBase {
             if (result == false) {
                 System.err.println("Failed to handle url - " + referer);
             }
+            clientManager.logRequest(req);
         }
     }
 

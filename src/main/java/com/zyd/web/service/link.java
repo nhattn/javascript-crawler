@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.zyd.core.Utils;
+import com.zyd.core.busi.ClientManager;
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.busi.TemplateManager;
 import com.zyd.core.util.SpringContext;
@@ -21,11 +22,14 @@ import com.zyd.web.ServiceBase;
 public class link extends ServiceBase {
     private LinkManager linkManager;
     private TemplateManager templateManager;
+    private ClientManager clientManager;
 
     public link() {
         linkManager = (LinkManager) SpringContext.getContext().getBean("linkManager");
         templateManager = (TemplateManager) SpringContext.getContext().getBean("templateManager");
+        clientManager = (ClientManager) SpringContext.getContext().getBean("clientManager");
     }
+    
 
     /**
      * method: get 
@@ -103,5 +107,6 @@ public class link extends ServiceBase {
         }
         String s = Utils.stringArrayToJsonString(new String[] { "result", Integer.toString(count) });
         output(s, resp);
+        clientManager.logRequest(req);
     }
 }

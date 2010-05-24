@@ -159,13 +159,11 @@ CrUtil = {
             return '';
         }
         var i = s.indexOf(start);
-        var j = s.indexOf(end);
+        i = i + start.length;        
+        if(i==-1) return '';
         
-        if(i==-1 || j==-1){
-            return '';
-        }
-        
-        i = i + start.length;
+        var j = s.indexOf(end, i+1);
+        if(j==-1) return '';                
         return s.substring(i,j);        
     },
     
@@ -228,6 +226,19 @@ CrUtil = {
             end = url.length;
         }
         return url.substring(start + param.length, end);
+    },
+    
+    deleteTokens: function(s, tokens){
+        if(!s || !tokens || tokens.length ==0){
+            return s;
+        }
+        for(var i=0;i<tokens.length;i++){            
+            var t = tokens[i];
+            if(t)
+                s = s.replace(t, '');            
+        }
+        return s;
     }
+    
         
 }

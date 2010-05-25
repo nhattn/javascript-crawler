@@ -6,10 +6,12 @@ tomcat
 /tomcat/zuiyidong/webapps/
 ****mysql username/password
 root/root
+****deploy folder 
+/tomcat/deploy  
 
 *******************************************************************************************************************************
 ** Install apache tomcat, mysql, tesseract, imagemagick
-    sudo apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk apache2 tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk mysql-server xfsprogs emacs openssh-server 
+    sudo apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk apache2 tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk mysql-server xfsprogs emacs openssh-server subversion maven2  
 
 ** create a local user  tomcat
 groupadd tomcat
@@ -35,11 +37,11 @@ cd /tomcat
 tomcat6-instance-create zuiyidong
 
 ** configure tomcat to enable mod-jk, manager, users
+mkdir /tomcat/deploy
 mv /tomcat/deploy/tomcat-users.xml /tomcat/zuiyidong/conf/tomcat-users.xml
 mkdir -p /tomcat/zuiyidong/conf/Catalina/localhost/
 mv /tomcat/deploy/manager.xml /tomcat/zuiyidong/conf/Catalina/localhost/
-cp /etc/tomcat6/server.xml /tomcat/zuiyidong/conf/       ################## edit to enable 8009 port
-
+emacs /tomcat/zuiyidong/conf/server.xml
 
 
 ** configure apache to enable mod-jk
@@ -53,7 +55,9 @@ a2dissite default
 a2ensite zuiyidong
 
 ** configure mysql to use utf-8 encoidng, remove local binding from my.cnf
-mv /tomcat/deploy/my.cnf /etc/mysql/
+
+##better run emacs to edit this file, it might  be different on different machines. 
+#mv /tomcat/deploy/my.cnf /etc/mysql/,   if you are restoring, ignore this
 
 ** configure mysql to use external drive, !!! make sure the drive name is correct 
 chmod u+x /tomcat/deploy/movemysql.sh

@@ -4,11 +4,12 @@ gzip -c  /tomcat/zuiyidong/logs/catalina.out > /root/tomcatlog.gz
 
 scp -i /y/work/ec2/yangkey.pem root@184.73.171.54:/root/tomcatlog.gz /tmp/
 
-
 /tomcat/zuiyidong/bin/shutdown.sh
 /tomcat/zuiyidong/bin/startup.sh
 
 emacs /tomcat/zuiyidong/webapps/ROOT/js/core/crawler_loader.js 
+
+tail -f /tomcat/zuiyidong/logs/catalina.out &
 
 ## mysql 
 
@@ -28,3 +29,9 @@ mysql -uroot -proot < /y/workspace/webcrawl/tmp/db
 
 ## deploy
 /y/workspace/webcrawl/doc/script/deploy.prod.sh
+
+
+## check out code from server
+svn checkout http://javascript-crawler.googlecode.com/svn/trunk/ crawler
+svn checkout http://yjcommon.googlecode.com/svn/trunk/ yjcommon
+

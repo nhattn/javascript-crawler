@@ -48,7 +48,8 @@ CrGlobal = {
 	},
 
 	_chainLoadFile : function() {
-		if (CrGlobal._chainCurrent >= CrGlobal._chainFiles.length) {
+	    
+		if (!CrGlobal || !CrGlobal._chainFiles || !CrGlobal._chainFiles.length || CrGlobal._chainCurrent >= CrGlobal._chainFiles.length) {
 			delete CrGlobal._chainFiles;
 			delete CrGlobal._chainCurrent;
 			return;

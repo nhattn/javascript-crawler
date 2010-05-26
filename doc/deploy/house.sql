@@ -74,3 +74,13 @@ create table Link(
 	errorMsg            varchar(300),
 	PRIMARY KEY (id)
 );
+
+create table AppLog(
+    id                  bigint not null auto_increment,
+    app                 varchar(50),
+    action              varchar(50),
+    clientId            varchar(50),
+    createTime          datetime,
+    ip                  varchar(20),
+    PRIMARY KEY (id)
+);

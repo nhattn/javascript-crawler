@@ -71,6 +71,7 @@ public class ObjectManager {
     public void deleteAllObjects() {
         //TODO: have to auto load every thing, can't hard code here.
         (new House()).deleteAll();
+        (new AppLog()).deleteAll();
     }
 
 }

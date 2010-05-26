@@ -47,4 +47,15 @@
 		<property name="isError" column="isError" type="int" />
 		<property name="errorMsg" column="errorMsg" type="string" />
 	</class>
+
+	<class entity-name="AppLog">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="clientId" column="clientId" type="string" />
+		<property name="app" column="app" type="string" />
+		<property name="action" column="action" type="string" />
+		<property name="ip" column="ip" type="string" />
+		<property name="createTime" column="createTime" type="timestamp" />
+	</class>
 </hibernate-mapping>

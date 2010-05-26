@@ -5,7 +5,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
+import com.zyd.core.objecthandler.SearchResult;
 
 public class ServiceBase {
 
@@ -82,7 +85,7 @@ public class ServiceBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected static HashMap<String, String> requestParameterToMap(HttpServletRequest req) {        
+    protected static HashMap<String, String> requestParameterToMap(HttpServletRequest req) {
         HashMap<String, String> values = new HashMap<String, String>();
         Enumeration<String> names = req.getParameterNames();
         while (names.hasMoreElements()) {
@@ -108,4 +111,41 @@ public class ServiceBase {
         ResponseTypes.put("js", "application/javascript; charset=GBK");
         ResponseTypes.put("text", "text/plain; charset=GBK");
     }
+
+    public static String toXmlString(SearchResult result, String encoding) {
+        List list = result.result;
+        StringBuffer buf = new StringBuffer();
+        buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        buf.append("<objects start=\"" + result.start + "\" count=\"" + result.count + "\" total=\"" + result.totalResult + "\">");
+        for (int i = 0, len = list.size(); i < len; i++) {
+            buf.append("<object>");
+            HashMap map = (HashMap) list.get(i);
+            String objectId = (String) map.remove("$type$");
+            buf.append("<type>");
+            buf.append(objectId);
+            buf.append("</type>");
+            Set keys = map.keySet();
+            for (Object k : keys) {
+                buf.append('<');
+                buf.append(k);
+                buf.append('>');
+                Object o = map.get(k);
+                if (o != null) {
+                    try {
+                        //                        buf.append(StringEscapeUtils.escapeXml(o.toString()));
+                        buf.append(o.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                buf.append("</");
+                buf.append(k);
+                buf.append('>');
+            }
+            buf.append("</object>");
+        }
+        buf.append("</objects>");
+        return buf.toString();
+    }
+
 }

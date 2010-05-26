@@ -4,9 +4,7 @@ import java.util.HashMap;
 
 @SuppressWarnings("unchecked")
 public abstract class Handler {
-    public String getName() {
-        return this.getClass().getName();
-    }
+    public abstract String getName();
 
     public abstract Object create(HashMap values);
 

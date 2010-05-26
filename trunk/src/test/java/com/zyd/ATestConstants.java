@@ -6,6 +6,7 @@ public class ATestConstants {
     public final static String SERVICE_OBJECT_URL = SERVER_URL + "/service/object";
     public final static String SERVICE_LINK_URL = SERVER_URL + "/service/link";
     public final static String CONTROLLER_URL = Constants.ServerUrl + "/service/controller";
+    public final static String APPLOG_URL = Constants.ServerUrl + "/service/mobile/log";
 
     public final static String OBJECT_REFERER_PREFIX = SERVER_URL + "/refererurl_";
     public final static int TEST_OBJECT_COUNT = 89;

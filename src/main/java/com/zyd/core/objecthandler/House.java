@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -18,7 +18,7 @@ import com.zyd.core.util.Ocr;
 
 @SuppressWarnings("unchecked")
 public class House extends Handler {
-
+    private static Logger logger = Logger.getLogger(House.class);
     private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address };
 
     public String getName() {
@@ -27,14 +27,13 @@ public class House extends Handler {
 
     public Object create(HashMap values) {
         Session session = null;
-        Transaction tx = null;
-
         try {
             String missing = checkColumnExistence(requiredColumns, values);
             if (missing != null) {
-                System.err.println("Can not add House, missing required paramter - " + missing);
+                logger.warn("Can not add House, missing required paramter - " + missing);
                 return false;
             }
+
             if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
                 values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
             } else {
@@ -54,23 +53,23 @@ public class House extends Handler {
 
             boolean r = false;
             session = HibernateUtil.getSessionFactory().getCurrentSession();
-            tx = session.beginTransaction();
+            session.beginTransaction();
             if (isUnique(session, values) == false) {
-                System.err.println("House is not unique.");
+                logger.warn("House is not unique.");
             } else {
                 r = true;
                 session.save(getName(), values);
             }
             session.getTransaction().commit();
-            // TODO: what to do here if there is an error, how to close transaction
             return r;
         } catch (Exception e) {
-            System.err.println("Exception when saving object in handler.House: " + e.toString());
-            System.err.println("Values trying to save are:");
-            System.err.println(values);
-            System.err.println("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
             if (session != null)
                 session.getTransaction().rollback();
+            logger.error("Exception when saving object in handler.House.");
+            logger.error(e);
+            logger.debug("Values trying to save are:");
+            logger.debug(values);
+            logger.debug("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
             return false;
         }
     }
@@ -81,13 +80,11 @@ public class House extends Handler {
         if (houses.size() == 0) {
             return true;
         }
-        //        double nlo = (Double) values.get(Columns.Long);
-        //        double nla = (Double) values.get(Columns.Lat);
         String addressNum = Utils.extractNumbers((String) values.get(Columns.Address));
         for (int i = 0, len = houses.size(); i < len; i++) {
             HashMap obj = (HashMap) houses.get(i);
             if (addressNum.equals(Utils.extractNumbers((String) obj.get(Columns.Address)))) {
-                System.err.println("Address is not unique:" + obj.get(Columns.Address));
+                logger.warn("Address is not unique:" + obj.get(Columns.Address));
                 return false;
             }
         }

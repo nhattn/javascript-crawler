@@ -27,9 +27,6 @@ public class log extends ServiceBase {
         values.put(Parameter.PARAMETER_OBJECT_ID, "AppLog");
         values.put(Columns.Ip, req.getRemoteAddr());
         boolean result = (Boolean) objectManager.create(values);
-        if (result == false) {
-            System.err.println("Can not create applog :" + values);
-        }
         setResponseType("text", resp);
         output("ok", resp);
     }

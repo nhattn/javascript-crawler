@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +14,7 @@ import com.tj.common.CommonUtil;
 import com.zyd.Constants;
 
 public class TemplateManager {
+    private static Logger logger = Logger.getLogger(TemplateManager.class);
 
     private static HashMap<String, String> templateCache = new HashMap<String, String>();
 
@@ -25,7 +27,8 @@ public class TemplateManager {
             try {
                 r = loadTemplateFileByName(name);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Failed load tempate with name :" + name);
+                logger.error(e);
             }
         }
         return r;
@@ -61,7 +64,8 @@ public class TemplateManager {
             }
             r = nextAction.toString();
         } catch (JSONException e) {
-            e.printStackTrace();
+           logger.warn("Invalid json parameter:");
+           logger.warn(e);
         }
         return r;
     }

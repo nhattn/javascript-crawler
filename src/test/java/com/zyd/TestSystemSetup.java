@@ -35,7 +35,7 @@ public class TestSystemSetup extends TestCase {
         boolean have = false;
         for (Object o : list) {
             HashMap m = (HashMap) o;
-            String s = (String) m.get(House.Columns.SubRentalType);            
+            String s = (String) m.get(House.Columns.SubRentalType);
             if (cntext.equals(s)) {
                 have = true;
                 break;
@@ -44,7 +44,7 @@ public class TestSystemSetup extends TestCase {
         assertTrue(have);
     }
 
-    public void nottestHibernateDuplicates() throws Exception {
+    public void testHibernateDuplicates() throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         HashMap values = new HashMap();

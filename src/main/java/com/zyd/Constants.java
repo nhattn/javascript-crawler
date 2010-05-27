@@ -2,6 +2,7 @@ package com.zyd;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -10,12 +11,15 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import com.tj.common.CommonUtil;
 import com.tj.common.OSHelper;
 import com.zyd.core.dom.Link;
 
+@SuppressWarnings("unchecked")
 public class Constants {
+    private static Logger logger = Logger.getLogger(Constants.class);
     public static String SERVER_DOMAIN;
     public static String APPLICATION_CONTEXT;
     public static String ENCODING_DB;
@@ -100,24 +104,29 @@ public class Constants {
         if (ins == null) {
             ins = Constants.class.getClassLoader().getResourceAsStream("config.prop");
             if (ins == null) {
-                System.err.println("Can not load configuratoin file. System is not properly configured");
+                logger.fatal("Can not load configuratoin file. System is not properly configured");
                 return;
             }
         }
-        System.err.println("Loading server configuration from " + configFileName);
+        logger.info("Loading server configuration from " + configFileName);
         loadValueFromStream(ins);
 
     }
 
     public static void loadValueFromStream(InputStream ins) {
-        boolean r = CommonUtil.loadStaticPropertyFromFile(Constants.class, ins);
+        boolean r = false;
+        try {
+            r = CommonUtil.loadStaticPropertyFromFile(Constants.class, ins);
+        } catch (IOException e) {
+            logger.fatal("Serious error, can not load configuration from given stream!!!!!");
+        }
         if (r == false) {
-            System.err.println("Serious error, can not load configuration!!!!!");
+            logger.fatal("Serious error, can not load configuration from given stream!!!!!");
             return;
         }
         initValues();
         loadWatchList();
-        System.err.println(snapShotValues());
+        logger.info(snapShotValues());
     }
 
     private static void initValues() {
@@ -190,7 +199,7 @@ public class Constants {
             writer.close();
             return bou.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }
@@ -201,7 +210,7 @@ public class Constants {
         try {
             ins = Constants.class.getClassLoader().getResourceAsStream(FILENAME_LINK_WATCH_LIST);
             if (ins == null) {
-                System.err.println("Can not load watch list from file :" + FILENAME_LINK_WATCH_LIST);
+                logger.error("Can not load watch list from file :" + FILENAME_LINK_WATCH_LIST);
                 return;
             }
             reader = new InputStreamReader(ins, Encoding_DEFAULT_SYSTEM);
@@ -215,11 +224,10 @@ public class Constants {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         } finally {
             CommonUtil.closeStream(reader);
             CommonUtil.closeStream(ins);
         }
     }
-
 }

@@ -25,6 +25,19 @@ public class House extends Handler {
         return "House";
     }
 
+    /**
+     * Create a new entry on House table.
+     * When creating house, the following procedure is taken.
+     * 1. check if tel and address is there, if not, not adding
+     * 2. try to list all houses under the same tel, 
+     *     2.a if there is nothing, add house
+     *     2.b if there is already houses under the same tel, check to see if the digits in those house is the same
+     *         2.b.1 if it's not the same, add
+     *         2.b.2 if it's the same, try to find an house with url as the same, 
+     *             2.b.2.a  if found,  then this is an update, update the update time, and all other valeus to the new one
+     *             2.b.2.b  if not found, this is a duplicates in different site or same site, add the dup or id field of the other record as this record's dup
+     *  NOT IMPLEMENTED.     
+     */
     public Object create(HashMap values) {
         Session session = null;
         try {
@@ -205,6 +218,7 @@ public class House extends Handler {
         public final static String Size = "size";
         public final static String HouseType = "houseType";
         public final static String CreateTime = "createTime";
+        public final static String UpdateTime = "updateTime";
         public final static String Address = "address";
         public final static String District1 = "district1";
         public final static String District3 = "district3";
@@ -220,6 +234,8 @@ public class House extends Handler {
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
         public final static String TelImageName = "telImageName";
+        public final static String Url = "url";
+        public final static String Dup = "dup";
     }
 
     @Override
@@ -232,4 +248,40 @@ public class House extends Handler {
         return r;
     }
 
+    private void saveOrUpdateHouse(Session session, HashMap values) {
+        String tel = (String) values.get(Columns.Tel);
+        List houses = session.createQuery("from " + getName() + " as a where a." + Columns.Tel + " = ?").setString(0, tel).list();
+        if (houses.size() == 0) {
+            // just add
+        } else {
+            String newAddress = (String) values.get(Columns.Address);
+            for (int i = houses.size() - 1; i > -1; i--) {
+                HashMap obj = (HashMap) houses.get(i);
+                if (isSameAddress(newAddress, (String) obj.get(Columns.Address)) == false) {
+                    houses.remove(i);
+                }
+            }
+            if (houses.size() == 0) {
+                // ok, no same address, just add                
+            } else {
+                String url = (String) values.get(Columns.Url);
+                for (int i = houses.size() - 1; i > -1; i--) {
+                    HashMap obj = (HashMap) houses.get(i);
+                    if (url.equals(obj.get(Columns.Url)) == false) {
+                        houses.remove(i);
+                    }
+                }
+                if (houses.size() == 0) {
+                    // just a duplicate but with different url
+                } else {
+
+                }
+            }
+        }
+
+    }
+
+    private static boolean isSameAddress(String addr1, String addr2) {
+        return Utils.extractNumbers(addr1).equals(Utils.extractNumbers(addr2));
+    }
 }

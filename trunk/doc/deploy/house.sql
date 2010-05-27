@@ -13,7 +13,6 @@ create table House(
 	priceUnit           varchar(10),
 	size                varchar(10),
 	houseType           varchar(30),
- 	createTime          datetime,
 	address             varchar(200),
 	city				varchar(20),
 	district1           varchar(20),
@@ -29,8 +28,11 @@ create table House(
 	isAgent				tinyint,
 	equipment			varchar(100),
 	decoration			varchar(20),
-	ok					tinyint DEFAULT 0,
-	state 				tinyint DEFAULT 0,
+    ok					tinyint DEFAULT 0,
+	link                varchar(300),
+ 	createTime          datetime,
+ 	updateTime          datetime,
+	dup                 bigint,
  	PRIMARY KEY (id)
 );
 

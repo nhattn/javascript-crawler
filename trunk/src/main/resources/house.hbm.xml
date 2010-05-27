@@ -17,7 +17,6 @@
 		<property name="priceUnit" column="priceUnit" type="string" />
 		<property name="size" column="size" type="string" />
 		<property name="houseType" column="houseType" type="string" />
-		<property name="createTime" column="createTime" type="timestamp" />
 		<property name="address" column="address" type="string" />
 		<property name="city" column="city" type="string" />
 		<property name="district1" column="district1" type="string" />
@@ -33,6 +32,10 @@
 		<property name="isAgent" column="isAgent" type="int" />
 		<property name="equipment" column="equipment" type="string" />
 		<property name="decoration" column="decoration" type="string" />
+		<property name="createTime" column="createTime" type="timestamp" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+		<property name="url" column="url" type="string" />
+		<property name="dup" column="dup" type="long" />
 		<property name="ok" column="ok" type="int" />
 	</class>
 

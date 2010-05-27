@@ -69,13 +69,13 @@ perfect crawler
   ** make it distribute crawler links
   ** do column length check.
   ** add password to controller 
-
-
-  ** add server script, hudson for server
-      # deploy on server, check out code, then deploy to server's own tomcat instance
-      # backup database script to web folder, under /data/db.gz, log.gz, etc...
-      
+ 
+ 
   ** fixing logger problem
   ** add status page, containing all links to management console.	
+  ** add link, createTime, last updateTime to house table
+  ** add picture 
+  ** removing long page loading
+  
 	 
 	

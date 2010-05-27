@@ -13,12 +13,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zyd.Constants;
+import org.apache.log4j.Logger;
+
 import com.zyd.core.Utils;
 import com.zyd.core.objecthandler.SearchResult;
 
 public class ServiceBase {
-
+    private static Logger logger = Logger.getLogger(ServiceBase.class);
     public static String RESULT_NO_CHANGE;
     public static String RESULT_CHANGE;
 
@@ -27,7 +28,7 @@ public class ServiceBase {
             RESULT_NO_CHANGE = Utils.stringArrayToJsonString(new String[] { "result", "false" });
             RESULT_CHANGE = Utils.stringArrayToJsonString(new String[] { "result", "true" });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -44,8 +45,9 @@ public class ServiceBase {
     }
 
     private void serviceNotFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String msg = "The requested service: " + req.getRequestURI() + ", method:" + req.getMethod() + " is not found.";
-        System.out.println(msg);
+        String uri = req.getRequestURI();
+        String msg = "The requested service: " + uri + ", method:" + req.getMethod() + " is not found.";
+        logger.warn("Client requested a wrong uri : " + uri + ", client ip " + req.getRemoteAddr());
         resp.getWriter().write(msg);
     }
 
@@ -55,7 +57,7 @@ public class ServiceBase {
     protected void setResponseType(String type, HttpServletResponse resp) {
         String types = ResponseTypes.get(type);
         if (types == null) {
-            System.err.println("Error: invalid type:" + type);
+            logger.debug("Invalid response type, will set to text, requested type is :" + type);
             types = ResponseTypes.get("text");
         }
         resp.setHeader("Content-Type", types);
@@ -70,18 +72,6 @@ public class ServiceBase {
 
     protected void output(String s, HttpServletResponse response) throws IOException {
         output(s, "GBK", response);
-    }
-
-    protected String param(HttpServletRequest req, String key) {
-        String s = req.getParameter(key);
-        if (s == null)
-            return null;
-        try {
-            return new String(s.getBytes("GBK"), Constants.ENCODING_DB);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -131,12 +121,7 @@ public class ServiceBase {
                 buf.append('>');
                 Object o = map.get(k);
                 if (o != null) {
-                    try {
-                        //                        buf.append(StringEscapeUtils.escapeXml(o.toString()));
-                        buf.append(o.toString());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    buf.append(o.toString());
                 }
                 buf.append("</");
                 buf.append(k);

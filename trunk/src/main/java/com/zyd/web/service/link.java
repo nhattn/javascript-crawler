@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.AssertionFailure;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +21,7 @@ import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class link extends ServiceBase {
+    private static Logger logger = Logger.getLogger(link.class);
     private LinkManager linkManager;
     private TemplateManager templateManager;
     private ClientManager clientManager;
@@ -29,7 +31,6 @@ public class link extends ServiceBase {
         templateManager = (TemplateManager) SpringContext.getContext().getBean("templateManager");
         clientManager = (ClientManager) SpringContext.getContext().getBean("clientManager");
     }
-    
 
     /**
      * method: get 
@@ -101,9 +102,10 @@ public class link extends ServiceBase {
                 }
             }
         } catch (JSONException e) {
-            throw new IOException(e);
-        } catch (AssertionFailure ex) {
-            System.err.println("Exceptoin happened when saving link, thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId() + ", error is " + ex.toString());
+            logger.warn("Invalid json string :");
+            logger.warn(e);
+            logger.warn(data);
+            count = 0;
         }
         String s = Utils.stringArrayToJsonString(new String[] { "result", Integer.toString(count) });
         output(s, resp);

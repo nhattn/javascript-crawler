@@ -4,16 +4,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
 import com.zyd.core.db.HibernateUtil;
 
 @SuppressWarnings("unchecked")
 public class AppLog extends Handler {
+    private static Logger logger = Logger.getLogger(AppLog.class);
 
     public final static String name = "AppLog";
 
@@ -33,12 +34,13 @@ public class AppLog extends Handler {
             tx.commit();
             return true;
         } catch (Exception e) {
-            System.err.println("Exception when saving object in handler.AppLogHandler: " + e.toString());
-            System.err.println("Values trying to save are:");
-            System.err.println(values);
-            System.err.println("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
             if (session != null)
                 session.getTransaction().rollback();
+            logger.error("Exception when saving object in handler.AppLogHandler:");
+            logger.error(e);
+            logger.debug("Values trying to save are:");
+            logger.debug(values);
+            logger.debug("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
             return false;
         }
     }

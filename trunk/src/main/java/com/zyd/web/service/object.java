@@ -2,12 +2,12 @@ package com.zyd.web.service;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import com.zyd.core.busi.ClientManager;
 import com.zyd.core.busi.LinkManager;
@@ -18,6 +18,7 @@ import com.zyd.web.ServiceBase;
 
 @SuppressWarnings("unchecked")
 public class object extends ServiceBase {
+    private static Logger logger = Logger.getLogger(object.class);
     private LinkManager linkManager;
     private ObjectManager objectManager;
     private ClientManager clientManager;
@@ -46,9 +47,9 @@ public class object extends ServiceBase {
         String referer = req.getHeader("Referer");
         if (referer == null || linkManager.isLinkProcessing(referer) == false) {
             if (referer == null) {
-                System.out.println("can not process link, no refeerer");
+                logger.warn("Can not process link, no refeerer");
             } else {
-                System.out.println("can not process link, link is not in processing list:" + referer);
+                logger.warn("Can not process link, link is not in processing list:" + referer);
             }
             output(RESULT_NO_CHANGE, resp);
         } else {
@@ -57,7 +58,7 @@ public class object extends ServiceBase {
             linkManager.linkFinished(referer);
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
             if (result == false) {
-                System.err.println("Failed to handle url - " + referer);
+                logger.warn("Failed to handle url - " + referer);
             }
             clientManager.logRequest(req);
         }

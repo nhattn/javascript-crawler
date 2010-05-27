@@ -8,9 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.zyd.web.ServiceBase;
 
 public class GateServlet extends HttpServlet {
+    private static Logger logger = Logger.getLogger(GateServlet.class);
+
     private static final long serialVersionUID = 1L;
     private final static String ServicePackage = "com.zyd.web.";
     private final static ServiceBase defaultService = new ServiceBase();
@@ -35,8 +39,8 @@ public class GateServlet extends HttpServlet {
                     serviceMap.put(className, service);
                 } catch (Exception e) {
                     // TODO: add an entry for not matched path, save lookup time.
-                    System.err.println("Error trying to look up service for url:" + req.getRequestURL());
-                    e.printStackTrace(); // TODO: delete me
+                    logger.warn("Error trying to look up service for url:" + req.getRequestURL());
+                    logger.warn(e);
                 }
             }
         }
@@ -62,7 +66,7 @@ public class GateServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
-        service.put(req, resp);     
+        service.put(req, resp);
     }
 
     @Override

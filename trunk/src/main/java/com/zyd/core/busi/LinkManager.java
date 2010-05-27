@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -17,7 +18,7 @@ import com.zyd.core.dom.Link;
 
 @SuppressWarnings("unchecked")
 public class LinkManager {
-
+    private static Logger logger = Logger.getLogger(LinkManager.class);
     private HashMap<String, Link> waiting = new HashMap<String, Link>();
     private HashMap<String, Link> processed = new HashMap<String, Link>();
     private HashMap<String, Link> processing = new HashMap<String, Link>();
@@ -146,7 +147,7 @@ public class LinkManager {
     public synchronized void loadFromDb() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        System.out.println("Going to load links from database :");
+        logger.debug("Going to load links from database...");
         List list = session.createQuery("from Link as link where link.createTime > ? and link.tryCount < ? and link.isError<>1 order by link.id desc").setDate(0,
                 CommonUtil.msecefore(Constants.LINK_LOAD_BEFORE)).setInteger(1, Constants.LINK_MAX_TRY).list();
         for (int i = 0, len = list.size(); i < len; i++) {
@@ -158,7 +159,8 @@ public class LinkManager {
             }
         }
         tx.commit();
-        System.out.println(snapshot());
+        logger.info("Loaded links from database :");
+        logger.info(snapshot());
     }
 
     private void saveOrUpdateLink(Link link, boolean isUpdate) {
@@ -303,7 +305,7 @@ public class LinkManager {
                 }
             }
             if (suggestedLinkRefreshTime != lastCrawlerRefreshRage) {
-                System.err.println("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRage + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
+                logger.info("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRage + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
                 lastCrawlerRefreshRage = suggestedLinkRefreshTime;
             }
         }
@@ -311,7 +313,6 @@ public class LinkManager {
         private void flushOldProssedLinks() {
             long now = new Date().getTime();
             if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
-                //                System.err.println("Will start flushing old processed links");
                 int processedCount = 0;
                 HashMap<String, Link> p;
 
@@ -324,12 +325,11 @@ public class LinkManager {
                     processed = p;
                 }
                 p = null;
-                System.err.println("Flushed " + processedCount + " old processed link.");
+                logger.info("Flushed " + processedCount + " old processed link.");
             }
         }
 
         private void cleanOutdatedProcessingLink() {
-            //            System.err.println("Start cleaning outdated processing link");
             long now = new Date().getTime();
             int count = 0;
             if (processing.size() != 0) {
@@ -348,7 +348,7 @@ public class LinkManager {
                     }
                 }
             }
-            System.err.println("End cleaning outdated processing link, cleaned " + count + " links.");
+            logger.info("End cleaning outdated processing link, cleaned " + count + " links.");
 
         }
 
@@ -368,7 +368,7 @@ public class LinkManager {
 
         @Override
         public void run() {
-            System.err.println("Link manager started");
+            logger.info("Link manager started");
             while (shouldStop == false) {
                 try {
                     try {
@@ -377,11 +377,11 @@ public class LinkManager {
                     }
                     clean();
                 } catch (Exception e) {
-                    System.err.println(e.toString());
-                    e.printStackTrace();
+                    logger.error("Error while running link manager looping taskes ");
+                    logger.error(e.toString());
                 }
             }
-            System.err.println("Link manager stopped");
+            logger.info("Link manager stopped");
         }
     }
 }

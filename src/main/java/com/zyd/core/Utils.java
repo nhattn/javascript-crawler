@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +20,8 @@ import com.zyd.Constants;
 
 @SuppressWarnings("unchecked")
 public class Utils {
+    private static Logger logger = Logger.getLogger(Utils.class);
+
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
     private final static HashMap<Character, Character> CHARMAP = new HashMap<Character, Character>();
@@ -99,7 +101,7 @@ public class Utils {
         return obj.toString();
     }
 
-    private static String getNoRepeatString() {
+    public static String getNoRepeatString() {
         StringBuffer buf = new StringBuffer();
         Date d = new Date();
         buf.append(Long.toString(d.getTime() + rand.nextInt(100000)));
@@ -174,62 +176,10 @@ public class Utils {
             }
         }
         if (date == null) {
-            // System.err.println("Unable to parse date string :" + s);
             // TODO: have to report this
             date = new Date();
         }
         return date;
-    }
-
-    public static <T> T toDBEncoding(T obj) {
-
-        try {
-            Map maps = BeanUtils.describe(obj);
-            Set set = maps.keySet();
-            for (Object o : set) {
-                if (o instanceof String) {
-                    String s = (String) o;
-                    Object v = maps.get(o);
-                    if (v != null && v instanceof String) {
-                        String value = (String) v;
-                        value = new String(value.getBytes(Constants.Encoding_DEFAULT_SYSTEM), Constants.ENCODING_DB);
-                        try {
-                            BeanUtils.setProperty(obj, s, value);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
-    public static <T> T fromDBEncoding(T obj) {
-        try {
-            Map maps = BeanUtils.describe(obj);
-            Set set = maps.keySet();
-            for (Object o : set) {
-                if (o instanceof String) {
-                    String s = (String) o;
-                    Object v = maps.get(o);
-                    if (v != null && v instanceof String) {
-                        String value = (String) v;
-                        value = new String(value.getBytes(Constants.ENCODING_DB), Constants.Encoding_DEFAULT_SYSTEM);
-                        try {
-                            BeanUtils.setProperty(obj, s, value);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return obj;
     }
 
     public static void castValues(Map map, String key, Class clazz) {
@@ -251,8 +201,6 @@ public class Utils {
         }
     }
 
-    private final static Object[] Range_Default = new Object[2];
-
     /**
      * s is an '-' separated string , like "12.33-31.22" or "-12.00" or "21.0-"
      * clazz is what type of class to try to parse s to.
@@ -265,9 +213,8 @@ public class Utils {
 
     public static Object[] parseRangeObject(String s, Class clazz) {
         if (s == null || s.indexOf('-') == -1) {
-            System.err.println("Invalid range:" + s);
+            logger.warn("Invalid range string: " + s);
             return null;
-
         }
         int i = s.indexOf('-');
         String s1 = null, s2 = null;
@@ -312,7 +259,8 @@ public class Utils {
                     r[1] = Constants.DATEFORMAT_DEFAULT.parse(s2);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Invalid date format for string " + s1 + " or " + s2);
+                logger.error(e);
             }
             return r;
         }
@@ -324,8 +272,8 @@ public class Utils {
         try {
             defaultValue = Integer.parseInt(s);
         } catch (Exception e) {
-            //TODO:
-            e.printStackTrace();
+            logger.error("Invalid integer as a string : " + s);
+
         }
         return defaultValue;
 

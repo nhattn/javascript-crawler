@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -107,6 +108,10 @@ public class ServiceBase {
         StringBuffer buf = new StringBuffer();
         buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         buf.append("<objects start=\"" + result.start + "\" count=\"" + result.count + "\" total=\"" + result.totalResult + "\">");
+        Set cdataColumns = result.cdataColumns;
+        if (cdataColumns == null) {
+            cdataColumns = new HashSet(0);
+        }
         for (int i = 0, len = list.size(); i < len; i++) {
             buf.append("<object>");
             HashMap map = (HashMap) list.get(i);
@@ -120,7 +125,14 @@ public class ServiceBase {
                 buf.append(k);
                 buf.append('>');
                 Object o = map.get(k);
-                if (o != null) {
+                if (o == null) {
+                    o = "";
+                }
+                if (cdataColumns.contains(k)) {
+                    buf.append("<![CDATA[");
+                    buf.append(o.toString());
+                    buf.append("]]>");
+                } else {
                     buf.append(o.toString());
                 }
                 buf.append("</");

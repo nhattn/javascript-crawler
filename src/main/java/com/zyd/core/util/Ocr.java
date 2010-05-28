@@ -28,11 +28,20 @@ public class Ocr {
      * @return
      */
     public static String ocrImageNumber(String byteString, String format) {
+        String n = "";
         if (isLinux) {
-            return linuxOcrNumber(byteString, format);
+            n = linuxOcrNumber(byteString, format);
         } else {
-            return windowsOcrNumber(byteString, format);
+            n = windowsOcrNumber(byteString, format);
         }
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0, len = n.length(); i < len; i++) {
+            char c = n.charAt(i);
+            if (Character.isWhitespace(c) == false) {
+                buf.append(c);
+            }
+        }
+        return buf.toString();
     }
 
     private static Object ocrInstance = null;

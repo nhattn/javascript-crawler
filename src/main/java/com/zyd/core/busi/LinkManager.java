@@ -1,6 +1,7 @@
 package com.zyd.core.busi;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class LinkManager {
     private HashMap<String, Link> processed = new HashMap<String, Link>();
     private HashMap<String, Link> processing = new HashMap<String, Link>();
     private HashMap<String, Link> error = new HashMap<String, Link>();
+    private Calendar calendar = Calendar.getInstance();
 
     /**
      * How soon should the client refresh it self, based on the current size of waiting list.
@@ -36,8 +38,33 @@ public class LinkManager {
     public final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
 
     private LinkMonitorThread monitor;
+    private int lastCrawlerRefreshRate;
 
-    private LinkManager() {
+    public LinkManager() {
+        lastCrawlerRefreshRate = suggestedLinkRefreshTime;
+    }
+
+    private void updateSuggestedRefreshRate() {
+        int n = waiting.size();
+        if (n > 1000) {
+            suggestedLinkRefreshTime = 2;
+        } else if (n > 800) {
+            suggestedLinkRefreshTime = 4;
+        } else if (n > 500) {
+            suggestedLinkRefreshTime = 5;
+        } else if (n > 300) {
+            suggestedLinkRefreshTime = 10;
+        } else if (n > 20) {
+            suggestedLinkRefreshTime = 20;
+        } else if (n > 5) {
+            suggestedLinkRefreshTime = 30;
+        } else {
+            suggestedLinkRefreshTime = 60;
+        }
+        if (suggestedLinkRefreshTime != lastCrawlerRefreshRate) {
+            logger.info("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRate + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
+            lastCrawlerRefreshRate = suggestedLinkRefreshTime;
+        }
     }
 
     public LinkMonitorThread getLinkMonitorThread() {
@@ -81,9 +108,26 @@ public class LinkManager {
         return processing.containsKey(link);
     }
 
+    private static int random = 0;
+    private long lastLinkListCheckTime = calendar.getTimeInMillis();
+
     public synchronized Link nextLink() {
+        if (calendar.getTimeInMillis() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
+            lastLinkListCheckTime = calendar.getTimeInMillis();
+            return nextWatchedLink();
+        }
+        random++;
+        if (random % 5 == 0) {
+            updateSuggestedRefreshRate();
+        }
+
         if (waiting.size() > 0) {
-            String url = waiting.keySet().iterator().next();
+            String url;
+            if (random % 2 == 0)
+                url = waiting.keySet().iterator().next();
+            else
+                url = ((Link) waiting.values().iterator().next()).url;
+
             Link link = waiting.remove(url);
             link.startTime = new Date();
             processing.put(url, link);
@@ -112,7 +156,7 @@ public class LinkManager {
         link.isError = 1;
         link.startTime = null;
         if (link.tryCount < Constants.LINK_MAX_TRY) {
-            // ok, keep trying                     
+            // ok, keep trying            computeTime         
             error.put(url, link);
         } else {
             // tried to much, giving up            
@@ -247,14 +291,10 @@ public class LinkManager {
      */
     class LinkMonitorThread extends Thread {
         private long lastLinkFlushTime;
-        private LinkedList<Integer> waitingQueueSizeHistory;
-        private int lastCrawlerRefreshRage;
 
         public LinkMonitorThread() {
             super("LinkMonitorThread - " + (new Date()).toString());
-            lastLinkFlushTime = new Date().getTime();
-            waitingQueueSizeHistory = new LinkedList<Integer>();
-            lastCrawlerRefreshRage = suggestedLinkRefreshTime;
+            lastLinkFlushTime = calendar.getTimeInMillis();
         }
 
         private boolean shouldStop;
@@ -273,45 +313,10 @@ public class LinkManager {
         private void clean() {
             cleanOutdatedProcessingLink();
             flushOldProssedLinks();
-            updateSuggestedRefreshRate();
-        }
-
-        private void updateSuggestedRefreshRate() {
-            int n = waiting.size();
-            waitingQueueSizeHistory.offerFirst(n);
-            if (waitingQueueSizeHistory.size() > 4) {
-                waitingQueueSizeHistory.pollLast();
-            }
-            if (n > 1000) {
-                suggestedLinkRefreshTime = 2;
-            } else if (n > 800) {
-                suggestedLinkRefreshTime = 4;
-            } else if (n > 500) {
-                suggestedLinkRefreshTime = 5;
-            } else if (n > 300) {
-                suggestedLinkRefreshTime = 10;
-            } else if (n > 50) {
-                suggestedLinkRefreshTime = 20;
-            } else {
-                if (suggestedLinkRefreshTime < 30)
-                    suggestedLinkRefreshTime = 30;
-                for (int i = 0; i < waitingQueueSizeHistory.size(); i++) {
-                    if (waitingQueueSizeHistory.get(i) >= 30)
-                        return;
-                }
-                suggestedLinkRefreshTime += 5;
-                if (suggestedLinkRefreshTime > 60) {
-                    suggestedLinkRefreshTime = 60;
-                }
-            }
-            if (suggestedLinkRefreshTime != lastCrawlerRefreshRage) {
-                logger.info("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRage + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
-                lastCrawlerRefreshRage = suggestedLinkRefreshTime;
-            }
         }
 
         private void flushOldProssedLinks() {
-            long now = new Date().getTime();
+            long now = calendar.getTimeInMillis();
             if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
                 int processedCount = 0;
                 HashMap<String, Link> p;
@@ -330,7 +335,7 @@ public class LinkManager {
         }
 
         private void cleanOutdatedProcessingLink() {
-            long now = new Date().getTime();
+            long now = calendar.getTimeInMillis();
             int count = 0;
             if (processing.size() != 0) {
                 HashMap<String, Link> ps;

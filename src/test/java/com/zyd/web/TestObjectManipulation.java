@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.TestCase;
 
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -32,28 +31,17 @@ public class TestObjectManipulation extends TestCase {
         assertTrue(ATestUtil.clearServerData());
     }
 
-    public void testCreateDuplicates() throws Exception {
+    public void testCreateDuplicatesHouses() throws Exception {
+        String link1 = "http://www.test.com/href1";
+        String link2 = "http://www.test.com/href2";
+
+        // first attempt
         HashMap val = getHouseConfig();
-        assertTrue(ATestUtil.createObject(val));
+        assertTrue(ATestUtil.createObject(val, link1));
 
-        //  send again
+        //  same object, different url,  work
         val = getHouseConfig();
-        assertFalse(ATestUtil.createObject(val));
-
-        // change address but number is the same 
-        val = getHouseConfig();
-        val.put(House.Columns.Address, "上海市陆家嘴路7号8单元201");
-        assertFalse(ATestUtil.createObject(val));
-
-        //  change tel number
-        val = getHouseConfig();
-        val.put(House.Columns.Tel, "1112233");
-        assertTrue(ATestUtil.createObject(val));
-
-        // change address
-        val = getHouseConfig();
-        val.put(House.Columns.Address, "上海市陆家嘴路七号八单元204");
-        assertTrue(ATestUtil.createObject(val));
+        assertTrue(ATestUtil.createObject(val, link2));
     }
 
     public void testCreateObjectWithNoImageTel() throws Exception {

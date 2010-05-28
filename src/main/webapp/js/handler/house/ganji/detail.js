@@ -30,6 +30,9 @@ function handlerProcess() {
     if (!parseInt(obj.size)) {
         delete obj.size;
     }
+    if (!parseInt(obj.price)) {
+        delete obj.size;
+    }
     
     if(fangType == 'fang1'|| fangType == 'fang3'){
     	var district = HandlerHelper.getRegGroupFirstValue(s1, /区域:\s*(.*)地址:/);

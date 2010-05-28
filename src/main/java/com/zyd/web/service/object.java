@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.zyd.core.busi.ClientManager;
 import com.zyd.core.busi.LinkManager;
+import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.objecthandler.SearchResult;
 import com.zyd.core.util.SpringContext;
@@ -54,6 +55,7 @@ public class object extends ServiceBase {
             output(RESULT_NO_CHANGE, resp);
         } else {
             HashMap values = requestParameterToMap(req);
+            values.put(Handler.Columns.Referer, referer);
             boolean result = (Boolean) objectManager.create(values);
             linkManager.linkFinished(referer);
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);

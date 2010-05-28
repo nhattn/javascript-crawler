@@ -73,11 +73,13 @@ public class Constants {
     public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
     public static String FILENAME_LINK_WATCH_LIST = "watch.list";
     public static Link[] WATCH_LIST = new Link[0];
+
     /**
      * how soon to check if links should be checked and flushed out of memomry.
      */
     public static int LINK_FLUSH_CYCLE_LENGTH;
 
+    public static int INTERVAL_CHECK_LINK_LIST = 3 * 60 * 1000;
     /***
      * These fields are derived, don't put any values
      */

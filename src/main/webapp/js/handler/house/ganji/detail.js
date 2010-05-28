@@ -1,6 +1,6 @@
 function handlerProcess() {
 	var s1 = CrUtil.removeNewLine(XPath.single(document,
-			"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent).replace('(', ' (').replace('（', ' (').replace('function', '    \nfunction');    
+			"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent).replace('(', ' (').replace('（', ' (').replace('）', ')').replace('function', '    \nfunction');    
 	s1 = CrUtil.deleteTokens(s1,['短信发送至手机', '收藏该房源']);	
     var fangType = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /.+\.ganji.com\/(fang[0-9]+)\/.*/)
         
@@ -26,7 +26,11 @@ function handlerProcess() {
     }
     
     var obj = HandlerHelper.parseObject(objInfo);
-
+    
+    if (!parseInt(obj.size)) {
+        delete obj.size;
+    }
+    
     if(fangType == 'fang1'|| fangType == 'fang3'){
     	var district = HandlerHelper.getRegGroupFirstValue(s1, /区域:\s*(.*)地址:/);
     	district = district.split('-');
@@ -68,7 +72,9 @@ function handlerProcess() {
 			obj.subRentalType = houseType[0];
 			obj.houseType = houseType[1];
 		} else {
-			Crawler.error('house.detail.2 - wrong number of parameter for HouseType, raw text is : ' + houseType);
+		    obj.subRentalType = houseType[0];
+            obj.houseType = houseType[1];
+			//Crawler.error('house.detail.2 - wrong number of parameter for HouseType, raw text is : ' + houseType);
 		}
 	}
 	
@@ -80,7 +86,11 @@ function handlerProcess() {
             buf[buf.length] = p.textContent.trim();
         }
     }
-    obj.description2 = buf.join(' ');
+    var txt = buf.join(' ');
+    if (!txt || txt.trim().length == 0) {
+        txt = XPath.single(document, "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//div[@class='tuiguang_text']").textContent;
+    }
+    obj.description2 = txt;
     
     
     // tel

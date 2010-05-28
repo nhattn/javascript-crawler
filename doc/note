@@ -68,12 +68,10 @@ perfect crawler
   ** stop mysql & hibernate gracefully      
   ** make it distribute crawler links
   ** do column length check.
-  ** add password to controller 
+  ** add password to controller  
  
- 
-  ** fixing logger problem
   ** add status page, containing all links to management console.	
-  ** add link, createTime, last updateTime to house table
+  ** add link, createTime, last updateTime to house table, allowing duplicates
   ** add picture 
   ** removing long page loading
   

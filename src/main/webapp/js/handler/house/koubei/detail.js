@@ -18,7 +18,7 @@ function handlerProcess() {
         {name: 'totalFloor', op:'xpath.text.regex',  param1:s, param2:/总([0-9]+)层/},       
         {name: 'address', op:'xpath.text.regex',  param1:s1, param2:/房屋地址：\s*(\S*)\[?/},
         {name: 'decoration', op:'xpath.text.regex',  param1:s1, param2:/装修程度：\s*(\S*)/},
-        {name: 'description1', op:'xpath.textcontent.regex',  param1:"//div[@id='houseBaseInfo']//div[contains(@class,'houseName')]//h1"},
+        {name: 'description1', op:'xpath.textcontent.regex',  param1:"//div[@id='houseBaseInfo']//div[contains(@class,'houseName')]//h1[1]//text()[1]"},
         {name: 'description2', op:'xpath.text.regex',  param1:s1, param2:/补充信息：\s*(\S*)/},        
         {name: 'contact', op:'xpath.textcontent.regex', param1:"//div[@id='houseBaseInfo']//div[contains(@class, 'contact-main')]/text()[2]"}           
     ];           
@@ -28,12 +28,14 @@ function handlerProcess() {
         delete obj.size;
     }   
 
-    var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']//li[2]");    
+    var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']");    
     if(priceUnit && priceUnit.textContent){
         priceUnit = priceUnit.textContent;        
-        priceUnit = priceUnit.replace('(贷款计算器)','');        
-        priceUnit = HandlerHelper.getRegGroupFirstValue(priceUnit, /[0-9]+(\S+)/)
-        obj.priceUnit = priceUnit;
+        if(priceUnit.indexOf('万元')!=-1){
+            obj.priceUnit = '万';
+        }else if(priceUnit.indexOf('元/月')!=-1){
+            obj.priceUnit = '元/月';
+        }
     }
     
     var equipments = XPath.array(document, "//div[contains(@class, 'infoItem')]//span[contains(@class, 'yes')]"), t=[];

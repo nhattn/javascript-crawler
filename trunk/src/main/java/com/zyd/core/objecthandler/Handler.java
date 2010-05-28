@@ -16,7 +16,7 @@ public abstract class Handler {
      * make sure the key specified in columns, exist in values
      * @return null if nothing is missing, or the missing column name
      */
-    protected String checkColumnExistence(String[] columns, HashMap values) {
+    protected static String checkColumnExistence(String[] columns, HashMap values) {
         for (String c : columns) {
             if (values.containsKey(c) == false) {
                 return c;
@@ -49,5 +49,6 @@ public abstract class Handler {
         public final static String Long = "lo";
         public final static String Lat = "la";
         public final static String OK = "ok";
+        public final static String Referer = "referer";
     }
 }

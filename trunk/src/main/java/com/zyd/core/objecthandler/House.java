@@ -2,6 +2,7 @@ package com.zyd.core.objecthandler;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,63 +19,67 @@ import com.zyd.core.util.Ocr;
 
 @SuppressWarnings("unchecked")
 public class House extends Handler {
+    public final static String name = "House";
     private static Logger logger = Logger.getLogger(House.class);
-    private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address };
-
-    public String getName() {
-        return "House";
+    private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address, Columns.Referer };
+    private final static HashSet CDataColumns = new HashSet();
+    static {
+        CDataColumns.add(Columns.Description1);
+        CDataColumns.add(Columns.Description2);
     }
 
-    /**
-     * Create a new entry on House table.
-     * When creating house, the following procedure is taken.
-     * 1. check if tel and address is there, if not, not adding
-     * 2. try to list all houses under the same tel, 
-     *     2.a if there is nothing, add house
-     *     2.b if there is already houses under the same tel, check to see if the digits in those house is the same
-     *         2.b.1 if it's not the same, add
-     *         2.b.2 if it's the same, try to find an house with url as the same, 
-     *             2.b.2.a  if found,  then this is an update, update the update time, and all other valeus to the new one
-     *             2.b.2.b  if not found, this is a duplicates in different site or same site, add the dup or id field of the other record as this record's dup
-     *  NOT IMPLEMENTED.     
-     */
+    public String getName() {
+        return name;
+    }
+
     public Object create(HashMap values) {
+        if (normalizeValeus(values) == false) {
+            return false;
+        }
+        return doSave(values);
+    }
+
+    private static boolean normalizeValeus(HashMap values) {
+        String missing = checkColumnExistence(requiredColumns, values);
+        if (missing != null) {
+            logger.warn("Can not add House, missing required paramter - " + missing);
+            return false;
+        }
+
+        if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
+            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
+        } else {
+            values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
+        }
+
+        String tel = (String) values.get(Columns.Tel);
+        if (tel.length() > 100) {
+            String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
+            values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
+        }
+        Utils.castValues(values, Columns.Lat, Double.class);
+        Utils.castValues(values, Columns.Long, Double.class);
+        Utils.castValues(values, Columns.IsAgent, Integer.class);
+        Utils.castValues(values, Columns.Price, Double.class);
+        values.put(Columns.CreateTime, new Date());
+        return true;
+    }
+
+    private static boolean doSave(HashMap values) {
         Session session = null;
+        boolean r = false;
         try {
-            String missing = checkColumnExistence(requiredColumns, values);
-            if (missing != null) {
-                logger.warn("Can not add House, missing required paramter - " + missing);
-                return false;
-            }
-
-            if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
-                values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
-            } else {
-                values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
-            }
-
-            String tel = (String) values.get(Columns.Tel);
-            if (tel.length() > 100) {
-                String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
-                values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
-            }
-            Utils.castValues(values, Columns.Lat, Double.class);
-            Utils.castValues(values, Columns.Long, Double.class);
-            Utils.castValues(values, Columns.IsAgent, Integer.class);
-            Utils.castValues(values, Columns.Price, Double.class);
-            values.put(Columns.CreateTime, new Date());
-
-            boolean r = false;
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            if (isUnique(session, values) == false) {
-                logger.warn("House is not unique.");
+            long oid = isUniqueByHashValue(session, values);
+            if (oid != -1) {
+                logger.debug("House is duplicates. Trying to update existing one with id:" + oid);
+                return false;
             } else {
+                session.save(name, values);
                 r = true;
-                session.save(getName(), values);
             }
             session.getTransaction().commit();
-            return r;
         } catch (Exception e) {
             if (session != null)
                 session.getTransaction().rollback();
@@ -83,29 +88,34 @@ public class House extends Handler {
             logger.debug("Values trying to save are:");
             logger.debug(values);
             logger.debug("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
-            return false;
         }
+        return r;
     }
 
-    private boolean isUnique(Session session, HashMap values) {
-        String tel = (String) values.get(Columns.Tel);
-        List houses = session.createQuery("from " + getName() + " as a where a." + Columns.Tel + " = ?").setString(0, tel).list();
-        if (houses.size() == 0) {
-            return true;
-        }
-        String addressNum = Utils.extractNumbers((String) values.get(Columns.Address));
-        for (int i = 0, len = houses.size(); i < len; i++) {
-            HashMap obj = (HashMap) houses.get(i);
-            if (addressNum.equals(Utils.extractNumbers((String) obj.get(Columns.Address)))) {
-                logger.warn("Address is not unique:" + obj.get(Columns.Address));
-                return false;
+    /**
+     * trying to look for the house has the same url, if found, return the id of the entry,
+     * if not, return -1
+     * @param session
+     * @param values
+     * @return
+     */
+    private static long isUniqueByHashValue(Session session, HashMap values) {
+        String url = (String) values.get(Columns.Referer);
+        String hash = Integer.toString(url.hashCode());
+        List houses = session.createQuery("from " + name + " as a where a." + Columns.Hash + " = ?").setString(0, hash).list();
+        if (houses.size() != 0) {
+            for (int len = houses.size(), i = 0; i < len; i++) {
+                HashMap e = (HashMap) houses.get(i);
+                if (url.equals(e.get(Columns.Referer))) {
+                    return Long.parseLong(e.get(Columns.ID).toString());
+                }
             }
         }
-        return true;
+        values.put(Columns.Hash, hash);
+        return -1;
     }
 
     private final static Double[] nullDoubles = new Double[2];
-    private final static Date[] nullDates = new Date[2];
 
     public SearchResult query(HashMap params) {
         //  logitude         
@@ -206,6 +216,7 @@ public class House extends Handler {
         List list = c.list();
         session.getTransaction().commit();
         SearchResult result = new SearchResult(list, -1, start, list.size());
+        result.cdataColumns = CDataColumns;
         return result;
     }
 
@@ -234,8 +245,7 @@ public class House extends Handler {
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
         public final static String TelImageName = "telImageName";
-        public final static String Url = "url";
-        public final static String Dup = "dup";
+        public final static String Hash = "hash";
     }
 
     @Override
@@ -248,40 +258,24 @@ public class House extends Handler {
         return r;
     }
 
-    private void saveOrUpdateHouse(Session session, HashMap values) {
-        String tel = (String) values.get(Columns.Tel);
-        List houses = session.createQuery("from " + getName() + " as a where a." + Columns.Tel + " = ?").setString(0, tel).list();
-        if (houses.size() == 0) {
-            // just add
-        } else {
-            String newAddress = (String) values.get(Columns.Address);
-            for (int i = houses.size() - 1; i > -1; i--) {
-                HashMap obj = (HashMap) houses.get(i);
-                if (isSameAddress(newAddress, (String) obj.get(Columns.Address)) == false) {
-                    houses.remove(i);
-                }
-            }
-            if (houses.size() == 0) {
-                // ok, no same address, just add                
-            } else {
-                String url = (String) values.get(Columns.Url);
-                for (int i = houses.size() - 1; i > -1; i--) {
-                    HashMap obj = (HashMap) houses.get(i);
-                    if (url.equals(obj.get(Columns.Url)) == false) {
-                        houses.remove(i);
-                    }
-                }
-                if (houses.size() == 0) {
-                    // just a duplicate but with different url
-                } else {
-
-                }
-            }
-        }
-
-    }
-
     private static boolean isSameAddress(String addr1, String addr2) {
         return Utils.extractNumbers(addr1).equals(Utils.extractNumbers(addr2));
+    }
+
+    private static boolean isUniqueByTelAddress(Session session, HashMap values) {
+        String tel = (String) values.get(Columns.Tel);
+        List houses = session.createQuery("from " + name + " as a where a." + Columns.Tel + " = ?").setString(0, tel).list();
+        if (houses.size() == 0) {
+            return true;
+        }
+        String addressNum = Utils.extractNumbers((String) values.get(Columns.Address));
+        for (int i = 0, len = houses.size(); i < len; i++) {
+            HashMap obj = (HashMap) houses.get(i);
+            if (addressNum.equals(Utils.extractNumbers((String) obj.get(Columns.Address)))) {
+                logger.warn("Address is not unique:" + obj.get(Columns.Address));
+                return false;
+            }
+        }
+        return true;
     }
 }

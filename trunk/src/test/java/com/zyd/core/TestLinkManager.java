@@ -188,5 +188,11 @@ public class TestLinkManager extends TestCase {
         for (Link link : rightList) {
             assertEquals(link.tryCount, 1);
         }
-    }       
+    }
+
+    public void testShowSomeLinks() {
+        for (int i = 0; i < 200; i++) {
+            System.out.println(linkMan.nextLink());
+        }
+    }
 }

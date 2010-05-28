@@ -9,11 +9,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.zyd.core.busi.ClientManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class log extends ServiceBase {
+    private static Logger logger = Logger.getLogger(log.class);
+
     static Vector<Log> msg = new Vector<Log>();
 
     static class Log {
@@ -54,7 +58,11 @@ public class log extends ServiceBase {
             setResponseType("text", resp);
             String level = req.getParameter("level");
             String m = req.getParameter("msg");
-            msg.add(new Log(level, m, new Date(), req.getHeader("Referer")));
+            if (m != null && level != null) {
+                Log l = new Log(level, m, new Date(), req.getHeader("Referer"));
+                msg.add(l);
+                logger.info("Client logging message: " + l.toString());
+            }
         }
     }
 }

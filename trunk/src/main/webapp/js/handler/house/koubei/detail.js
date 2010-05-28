@@ -27,6 +27,9 @@ function handlerProcess() {
     if (!parseInt(obj.size)) {
         delete obj.size;
     }   
+    if (!parseInt(obj.price)) {
+        delete obj.size;
+    }   
 
     var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']");    
     if(priceUnit && priceUnit.textContent){

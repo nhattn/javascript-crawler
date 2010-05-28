@@ -161,7 +161,7 @@ public class ATestUtil {
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
         if (1 != o.getInt("result")) {
-            throw new Exception("Links are not created");
+            throw new Exception("Links are not created: raw response is: "+ s );
         }
         return true;
     }

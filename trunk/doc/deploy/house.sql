@@ -8,7 +8,7 @@ create table House(
 	la					double,
 	rentalType 			varchar(5),
 	subRentalType       varchar(10),
-	price		        float,
+	price		        double,
 	paymentType	        varchar(10),
 	priceUnit           varchar(10),
 	size                varchar(10),
@@ -24,15 +24,15 @@ create table House(
 	description1		varchar(200),
 	description2		varchar(5000),
 	floor				varchar(10),
-	totalFloor			smallint,
-	isAgent				tinyint,
+	totalFloor			varchar(5),
+	isAgent				integer,
 	equipment			varchar(100),
 	decoration			varchar(20),
-    ok					tinyint DEFAULT 0,
-	link                varchar(300),
+    ok					integer DEFAULT 0,
+	referer             varchar(300),
  	createTime          datetime,
  	updateTime          datetime,
-	dup                 bigint,
+ 	hash                varchar(50),
  	PRIMARY KEY (id)
 );
 
@@ -70,9 +70,9 @@ create table Link(
 	id					bigint NOT NULL AUTO_INCREMENT,
 	url					varchar(300),	
 	createTime          datetime,
-	processeTime		datetime,
-	tryCount			tinyint,
-	isFailure           tinyint,
+	processTime		    datetime,
+	tryCount			integer,
+	isError           integer,
 	errorMsg            varchar(300),
 	PRIMARY KEY (id)
 );
@@ -82,7 +82,7 @@ create table AppLog(
     app                 varchar(50),
     action              varchar(50),
     clientId            varchar(50),
-    createTime          datetime,
+    createTime          datetime,    
     ip                  varchar(20),
     PRIMARY KEY (id)
 );

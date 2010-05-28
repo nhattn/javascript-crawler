@@ -3,7 +3,6 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- class name="com.zyd.core.dom.House" table="house" -->
 	<class entity-name="House">
 		<id name="id" type="long" column="id">
 			<generator class="native" />
@@ -34,8 +33,8 @@
 		<property name="decoration" column="decoration" type="string" />
 		<property name="createTime" column="createTime" type="timestamp" />
 		<property name="updateTime" column="updateTime" type="timestamp" />
-		<property name="url" column="url" type="string" />
-		<property name="dup" column="dup" type="long" />
+		<property name="referer" column="referer" type="string" />
+		<property name="hash" column="hash" type="string" />
 		<property name="ok" column="ok" type="int" />
 	</class>
 

@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,7 +23,6 @@ public class LinkManager {
     private HashMap<String, Link> processed = new HashMap<String, Link>();
     private HashMap<String, Link> processing = new HashMap<String, Link>();
     private HashMap<String, Link> error = new HashMap<String, Link>();
-    private Calendar calendar = Calendar.getInstance();
 
     /**
      * How soon should the client refresh it self, based on the current size of waiting list.
@@ -109,16 +107,18 @@ public class LinkManager {
     }
 
     private static int random = 0;
-    private long lastLinkListCheckTime = calendar.getTimeInMillis();
+    private long lastLinkListCheckTime = 0;
 
     public synchronized Link nextLink() {
-        if (calendar.getTimeInMillis() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
-            lastLinkListCheckTime = calendar.getTimeInMillis();
-            return nextWatchedLink();
-        }
         random++;
         if (random % 5 == 0) {
             updateSuggestedRefreshRate();
+            Date now = new Date();
+            if (now.getTime() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
+                lastLinkListCheckTime = now.getTime();
+                logger.info("Returning next watched link ");
+                return nextWatchedLink();
+            }
         }
 
         if (waiting.size() > 0) {
@@ -156,7 +156,7 @@ public class LinkManager {
         link.isError = 1;
         link.startTime = null;
         if (link.tryCount < Constants.LINK_MAX_TRY) {
-            // ok, keep trying            computeTime         
+            // ok, keep trying 
             error.put(url, link);
         } else {
             // tried to much, giving up            
@@ -294,7 +294,7 @@ public class LinkManager {
 
         public LinkMonitorThread() {
             super("LinkMonitorThread - " + (new Date()).toString());
-            lastLinkFlushTime = calendar.getTimeInMillis();
+            lastLinkFlushTime = (new Date()).getTime();
         }
 
         private boolean shouldStop;
@@ -316,7 +316,7 @@ public class LinkManager {
         }
 
         private void flushOldProssedLinks() {
-            long now = calendar.getTimeInMillis();
+            long now = new Date().getTime();
             if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
                 int processedCount = 0;
                 HashMap<String, Link> p;
@@ -335,7 +335,7 @@ public class LinkManager {
         }
 
         private void cleanOutdatedProcessingLink() {
-            long now = calendar.getTimeInMillis();
+            long now = new Date().getTime();
             int count = 0;
             if (processing.size() != 0) {
                 HashMap<String, Link> ps;

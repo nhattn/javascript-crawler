@@ -1,41 +1,63 @@
 function startWatcher() {
-    try{
-        if (window != window.top || !window.document || !window.document.body) 
-            return;        
-    }catch(ex){
+    try {
+        if (window != window.top || !window.document || !window.document.body || !window.location) {
+            setInterval(function() {
+                if (stopit)
+                    stopit();
+            }, 50);
+            stopit();
+            return;
+        }
+    } catch (ex) {
+        stopit();
         return;
-    } 
+    }
     var wait_time = 60 * 1000;
     GM_setValue('startTime', (new Date()).getTime().toString());
     window.setInterval(function() {
         var startTime = parseInt(GM_getValue('startTime', null));
         var waitedHowLong = (new Date()).getTime() - startTime;
-        if (waitedHowLong > wait_time) 
-            window.location = 'http://' + GM_getValue('domain', null);        
+        if (waitedHowLong > wait_time)
+            window.location = 'http://' + GM_getValue('domain', null);
     }, 500);
 }
 
 startWatcher();
+function stopit() {
+    try {
+        window.stop();
+        if (window.document && window.document.childNodes) {
+            var nodes = window.document.childNodes;
+            for ( var i = 0; i < nodes.length; i++) {
+                nodes[i].parentNode.removeChild(nodes[i]);
+            }
+        }
+    } catch (e) {
+    }
+}
 
 window.addEventListener('load', function() {
-    try{
-        if (window != window.top || !window.document || !window.document.body) 
-            return;        
-    }catch(ex){
+    try {
+        if (window != window.top || !window.document || !window.document.body || !window.location) {
+            stopit();
+            return;
+        }
+    } catch (ex) {
+        stopit();
         return;
-    } 
+    }
     var domain = GM_getValue('domain', null);
     if (window.document.getElementById('crawler_set_url_reset')) {
         domain = window.location.host;
         GM_setValue('domain', domain);
     }
 
-    if (!domain)        
-        return;    
-
-    if (window.location.host == domain) 
+    if (!domain)
         return;
-            
+
+    if (window.location.host == domain)
+        return;
+
     var hostDiv = document.createElement('input');
     hostDiv.setAttribute('id', 'crawler_set_url');
     hostDiv.setAttribute('type', 'hidden');

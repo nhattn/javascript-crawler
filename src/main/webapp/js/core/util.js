@@ -16,16 +16,27 @@ CrUtil = {
         }, 100);
     },
 
-    removeGA: function(document){
+    removeGA : function(document) {
         var hs = document.getElementsByTagName('script');
-        for(var i=0;i<hs.length;i++){
-            var h = hs[i];    
-            if(h.src && h.src.indexOf('google-analytics')!=-1){
+        for ( var i = 0; i < hs.length; i++) {
+            var h = hs[i];
+            if (h.src && h.src.indexOf('google-analytics') != -1) {
                 h.parentNode.removeChild(h);
             }
-            if(h.textContent && h.textContent.indexOf('google-analytics')!=-1){
+            if (h.textContent && h.textContent.indexOf('google-analytics') != -1) {
                 h.parentNode.removeChild(h);
             }
+        }
+    },
+
+    removeElementsByTagName : function(tagName, parentNode) {
+        if (!parentNode) {
+            parentNode = document;
+        }
+        var els = parentNode.getElementsByTagName(tagName);
+        for ( var i = els.length - 1; i > -1; i--) {
+            var e = els[i];
+            e.parentNode.removeChild(e);
         }
     },
 
@@ -69,21 +80,21 @@ CrUtil = {
             params : params
         });
     },
-    getAjaxReponseErrorString: function(r){
-        if(r.responseText){
-            return 'Server raw reponse : \n'+r.responseText;
-        }else{
-            var s = ['Ajax state :'];
-            for(var i in r){
-                s.push(i+' = '+r[i]);
+    getAjaxReponseErrorString : function(r) {
+        if (r.responseText) {
+            return 'Server raw reponse : \n' + r.responseText;
+        } else {
+            var s = [ 'Ajax state :' ];
+            for ( var i in r) {
+                s.push(i + ' = ' + r[i]);
             }
             return s.join('\n');
         }
     },
-    
-    objToString : function(obj){
+
+    objToString : function(obj) {
         var r = [];
-        for(var i in obj){
+        for ( var i in obj) {
             r.push(i);
             r.push('=');
             r.push(obj[i]);
@@ -93,50 +104,50 @@ CrUtil = {
     },
 
     /**
-     *  s is something like "小说类别：虚拟网游 总点击：4736 总推荐：419 总字数：228132 更新：2009年10月10日".
-     *  extract the value for keys like "小说类别" or "总点击".
+     * s is something like "小说类别：虚拟网游 总点击：4736 总推荐：419 总字数：228132
+     * 更新：2009年10月10日". extract the value for keys like "小说类别" or "总点击".
      */
-    extract : function(s, key, defaultValue){
+    extract : function(s, key, defaultValue) {
         var start, end;
-        if(typeof defaultValue == 'undefined'){
+        if (typeof defaultValue == 'undefined') {
             defaultValue = '';
         }
         s = CrUtil.killSpace(s);
         start = s.indexOf(key);
-        if(start<0){
+        if (start < 0) {
             return defaultValue;
         }
-        
+
         start = start + key.length;
-        var space =  /^\s$/;
-        while(start<s.length && space.test(s.charAt(start++))){
-            // skip all the spaces
-        }       
+        var space = /^\s$/;
+        while (start < s.length && space.test(s.charAt(start++))) {
+            /* skip all the spaces */
+        }
         start--;
-        end = start+1;
-        var nspace =  /^\S$/;
-        while(end<s.length && nspace.test(s.charAt(end++))){
-            // skip all the none spaces
-        }           
+        end = start + 1;
+        var nspace = /^\S$/;
+        while (end < s.length && nspace.test(s.charAt(end++))) {
+            /* skip all the none spaces */
+        }
         var r = '';
-        try{
-            r = s.substring(start,end);
-        }catch(e){
-            Crawler.error("crawler_loader.extract:"+e+":"+e);
-        }        
+        try {
+            r = s.substring(start, end);
+        } catch (e) {
+            Crawler.error("crawler_loader.extract:" + e + ":" + e);
+        }
         return r.trim();
     },
-    
-    killSpace : function(s){
+
+    killSpace : function(s) {
         return s.replace(/\s+/g, ' ');
     },
-    
+
     setCookie : function(c_name, value, expiredays) {
         var exdate = new Date();
         exdate.setDate(exdate.getDate() + expiredays);
         document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toUTCString());
     },
-    
+
     getCookie : function(c_name) {
         if (document.cookie.length > 0) {
             c_start = document.cookie.indexOf(c_name + "=");
@@ -154,21 +165,23 @@ CrUtil = {
      * extract a string that is inside s, between start and end, excluding both.
      * s= 'aabbccddeeffgg', start = 'aa', end = 'ff' will return 'bbccddee'.
      */
-    getBetween: function(s, start, end){
-        if(!s || s.length == 0){
+    getBetween : function(s, start, end) {
+        if (!s || s.length == 0) {
             return '';
         }
         var i = s.indexOf(start);
-        i = i + start.length;        
-        if(i==-1) return '';
-        
-        var j = s.indexOf(end, i+1);
-        if(j==-1) return '';                
-        return s.substring(i,j);        
+        if (i == -1)
+            return '';
+        i = i + start.length;
+
+        var j = s.indexOf(end, i + 1);
+        if (j == -1)
+            return '';
+        return s.substring(i, j);
     },
-    
-    getRequest : function(url) {              
-        var AJAX = new XMLHttpRequest();        
+
+    getRequest : function(url) {
+        var AJAX = new XMLHttpRequest();
         if (AJAX) {
             AJAX.open("GET", url, false);
             AJAX.send(null);
@@ -177,68 +190,66 @@ CrUtil = {
             return false;
         }
     },
-    
-    removeNewLine : function(s){
-        if(s) return s.replace(/\s*\n\s*/g, ' ');        
+
+    removeNewLine : function(s) {
+        if (s)
+            return s.replace(/\s*\n\s*/g, ' ');
     },
-    
-    trimAttributes: function(obj){
-        for (var p in obj) {
-            if (obj[p]  && obj[p].trim) {
+
+    trimAttributes : function(obj) {
+        for ( var p in obj) {
+            if (obj[p] && obj[p].trim) {
                 obj[p] = obj[p].trim();
             }
-        }    
+        }
     },
     /**
-     * shanghai.koubei.com -> koubei.com
-     * www.ganji.com -> ganji.com
+     * shanghai.koubei.com -> koubei.com www.ganji.com -> ganji.com
      */
-    getShortestDomain: function(domain){
+    getShortestDomain : function(domain) {
         domain = domain.toString();
         var end = domain.lastIndexOf('.');
-        if(end == -1){
+        if (end == -1) {
             return domain;
         }
-        var start = domain.lastIndexOf('.', end-1);
-        if(start == -1){
+        var start = domain.lastIndexOf('.', end - 1);
+        if (start == -1) {
             return domain;
         }
-        return domain.substring(start+1);
+        return domain.substring(start + 1);
     },
-    
+
     /**
-      * extract parameter from a given http url.
-      * url = http://ditu.koubei.com/map/fangdetailmap.html?city=2076&searchtype=2&centerx=12141764&centery=3117466&centername=%D6%D0%BB%AA%C3%C5%B4%F3%CF%C3&rentorsell=rent"
-      * param = centerx
-      * return = 12141764
-      */
-    extractParameter: function(url, param){
-        if(!url || !param){
+     * extract parameter from a given http url. url =
+     * http://ditu.koubei.com/map/fangdetailmap.html?city=2076&searchtype=2&centerx=12141764&centery=3117466&centername=%D6%D0%BB%AA%C3%C5%B4%F3%CF%C3&rentorsell=rent"
+     * param = centerx return = 12141764
+     */
+    extractParameter : function(url, param) {
+        if (!url || !param) {
             return '';
         }
-        param = param+'=';
+        param = param + '=';
         var start = url.indexOf(param);
-        if(start == -1){
+        if (start == -1) {
             return '';
         }
         var end = url.indexOf('&', start + 1);
-        if(end == -1){
+        if (end == -1) {
             end = url.length;
         }
         return url.substring(start + param.length, end);
     },
-    
-    deleteTokens: function(s, tokens){
-        if(!s || !tokens || tokens.length ==0){
+
+    deleteTokens : function(s, tokens) {
+        if (!s || !tokens || tokens.length == 0) {
             return s;
         }
-        for(var i=0;i<tokens.length;i++){            
+        for ( var i = 0; i < tokens.length; i++) {
             var t = tokens[i];
-            if(t)
-                s = s.replace(t, '');            
+            if (t)
+                s = s.replace(t, '');
         }
         return s;
     }
-    
-        
+
 }

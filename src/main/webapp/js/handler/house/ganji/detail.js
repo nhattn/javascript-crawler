@@ -1,4 +1,5 @@
 function handlerProcess() {
+    CrUtil.removeElementsByTagName('script');
 	var s1 = CrUtil.removeNewLine(XPath.single(document,
 			"/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent).replace('(', ' (').replace('（', ' (').replace('）', ')').replace('function', '    \nfunction');    
 	s1 = CrUtil.deleteTokens(s1,['短信发送至手机', '收藏该房源']);	
@@ -18,22 +19,35 @@ function handlerProcess() {
     if(fangType == 'fang1'|| fangType == 'fang3'){
         objInfo.push({name: 'district5', op:'xpath.text.regex', param1:s1, param2:/小区:\s*(\S*)/});
         objInfo.push({name: 'price', op:'xpath.text.regex', param1:s1, param2:/租金:\s*(\S+)/});
-        objInfo.push({name: 'priceUnit', op:'xpath.text.regex', param1:s1, param2:/租金:\s*\S+\s+(\S+)/});
+//        objInfo.push({name: 'priceUnit', op:'xpath.text.regex', param1:s1, param2:/租金:\s*\S+\s+(\S+)/});
         objInfo.push({name: 'paymentType', op:'xpath.text.regex', param1:s1, param2:/租金:\s*\S+\s+\S+\s*\((\S+)\)/});
     }else if(fangType == 'fang5'){        
         objInfo.push({name: 'price', op:'xpath.text.regex', param1:s1, param2:/售价:\s*(\S+)/});
-        objInfo.push({name: 'priceUnit', op:'xpath.text.regex', param1:s1, param2:/售价:\s*\S+\s+(\S+)/});        
-    }
+//        objInfo.push({name: 'priceUnit', op:'xpath.text.regex', param1:s1, param2:/售价:\s*\S+\s+(\S+)/});        
+    }   
     
     var obj = HandlerHelper.parseObject(objInfo);
+    
+    if (s1.indexOf('元/月') != -1) {
+        obj.priceUnit = '元/月';
+    } else if (s1.indexOf('万') != -1) {
+        obj.priceUnit = '万';
+    }
     
     if (!parseInt(obj.size)) {
         delete obj.size;
     }
     if (!parseInt(obj.price)) {
-        delete obj.size;
+        delete obj.price;
     }
     
+    var isAgent = document.body.textContent;
+    
+    if(isAgent.indexOf('个人房源')!=-1){
+        obj.isAgent = 0;
+    }else if(isAgent.indexOf('经纪人')!=-1){
+        obj.isAgent = 1;
+    }
     if(fangType == 'fang1'|| fangType == 'fang3'){
     	var district = HandlerHelper.getRegGroupFirstValue(s1, /区域:\s*(.*)地址:/);
     	district = district.split('-');
@@ -60,6 +74,9 @@ function handlerProcess() {
 
 
 	var houseType = CrUtil.getBetween(s1, '型:', ':');
+	if(!houseType || houseType.length ==0){
+	    houseType = CrUtil.getBetween(s1, '合租:', ':');
+	}		
 	if (houseType && houseType.length>2) {
 		houseType = houseType.substring(0, houseType.length-2);
 		houseType = houseType.split('-');
@@ -71,9 +88,10 @@ function handlerProcess() {
 			} else {
 				Crawler.error('house.detail.1 - wrong number of parameter for HouseType, raw text is : ' + houseType);
 			}
-		} else if (houseType.length == 2) {
+		} else if (houseType.length == 2) {		    
 			obj.subRentalType = houseType[0];
 			obj.houseType = houseType[1];
+			
 		} else {
 		    obj.subRentalType = houseType[0];
             obj.houseType = houseType[1];

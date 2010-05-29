@@ -1,4 +1,5 @@
 function handlerProcess() {
+    CrUtil.removeElementsByTagName('script');
     var s = XPath.single(document, "//div[@id='houseBaseInfo']").textContent.toString();                 
     var s1 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='allInfo']").textContent.toString().replace('[访问小区主页]', ''));    
     var s2 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='communityInfo']").textContent.toString()); 
@@ -19,8 +20,9 @@ function handlerProcess() {
         {name: 'address', op:'xpath.text.regex',  param1:s1, param2:/房屋地址：\s*(\S*)\[?/},
         {name: 'decoration', op:'xpath.text.regex',  param1:s1, param2:/装修程度：\s*(\S*)/},
         {name: 'description1', op:'xpath.textcontent.regex',  param1:"//div[@id='houseBaseInfo']//div[contains(@class,'houseName')]//h1[1]//text()[1]"},
-        {name: 'description2', op:'xpath.text.regex',  param1:s1, param2:/补充信息：\s*(\S*)/},        
-        {name: 'contact', op:'xpath.textcontent.regex', param1:"//div[@id='houseBaseInfo']//div[contains(@class, 'contact-main')]/text()[2]"}           
+        {name: 'description2', op:'xpath.textcontent.regex',  param1:"//div[@id='allInfo']/ul[2]/li/div"},        
+        {name: 'contact', op:'xpath.textcontent.regex', param1:"//div[@id='houseBaseInfo']//div[contains(@class, 'contact-main')]/text()[2]"},
+        {name: 'isAgent', op:'assign.value',  param1:'1'}
     ];           
         
     var obj = HandlerHelper.parseObject(objInfo1);    
@@ -28,9 +30,8 @@ function handlerProcess() {
         delete obj.size;
     }   
     if (!parseInt(obj.price)) {
-        delete obj.size;
-    }   
-
+        delete obj.price;
+    }       
     var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']");    
     if(priceUnit && priceUnit.textContent){
         priceUnit = priceUnit.textContent;        
@@ -87,7 +88,6 @@ function handlerProcess() {
         action : 'Goto.Next.Link'
     });
 }
-
 
 var cityMap = {
     'shanghai' : '上海'

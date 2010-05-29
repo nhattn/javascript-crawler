@@ -162,6 +162,9 @@ public class House extends Handler {
         String order = (String) params.get(Parameter.PARAMETER_ORDER);
         if (order == null || order.trim().length() == 0) {
             order = Parameter.PARAMETER_VALUE_ORDER_DESC;
+        } else {
+            // for extjs, only sending "ASC"/"DESC"
+            order = order.toLowerCase();
         }
         SearchResult result = queryHouse((Double[]) los, (Double[]) las, (Double[]) price, start, count, orderBy, order);
         return result;

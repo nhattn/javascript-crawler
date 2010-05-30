@@ -1,0 +1,29 @@
+<project name="MyProject" default="minify" basedir=".">
+	<property name="target.file" location="src/main/webapp/js/core/m.js" />
+	<property name="target.debug.file" location="src/main/webapp/js/core/md.js" />
+
+	<target name="clean">
+		<delete file="${target.file}}" />
+		<delete file="${target.debug.file}}" />
+	</target>
+
+	<target name="concat" depends="clean">
+		<concat destfile="${target.debug.file}" binary="yes">
+			<filelist>
+				<file name="src/main/webapp/js/core/crawler.js" />
+				<file name="src/main/webapp/js/core/handler_helper.js" />
+				<file name="src/main/webapp/js/core/xpath.js" />
+				<file name="src/main/webapp/js/core/util.js" />
+				<file name="src/main/webapp/js/mapping/house.js" />
+				<file name="src/main/webapp/js/core/kickoff.js" />
+			</filelist>
+		</concat>
+	</target>
+
+	<target name="minify" depends="concat">
+		<java jar="thirdparty/yui-compressor/yuicompressor-2.4.2.jar" fork="true">
+			<arg line="${target.debug.file}" />
+			<arg line="-o ${target.file}" />
+		</java>
+	</target>
+</project>

@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -67,6 +68,10 @@ public class Constants {
     public static int LINK_MONITOR_SLEEP;
 
     /**
+     * the name of the running instance, prod, dev etc.
+     */
+    public static String INSTANCE_NAME;
+    /**
      * These fields are fixed, derived from system
      */
     public static String Encoding_DEFAULT_SYSTEM = Charset.defaultCharset().toString();
@@ -75,11 +80,14 @@ public class Constants {
     public static Link[] WATCH_LIST = new Link[0];
 
     /**
-     * how soon to check if links should be checked and flushed out of memomry.
+     * how soon to check if links should be checked and flushed out of memory.
      */
     public static int LINK_FLUSH_CYCLE_LENGTH;
 
     public static int INTERVAL_CHECK_LINK_LIST = 3 * 60 * 1000;
+
+    public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
+    
     /***
      * These fields are derived, don't put any values
      */

@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zyd.Constants;
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.busi.TemplateManager;
 import com.zyd.core.util.SpringContext;
@@ -41,6 +42,7 @@ public class crawlerconfig extends ServiceBase {
         values.add(Integer.toString(refreshRate));
         values.add("43200000");
         values.add("43200000");
+        values.add(Constants.VERSION_STRING);
         return templateManager.getTemplate("crawlerconfig", values);
     }
 }

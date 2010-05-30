@@ -1,0 +1,18 @@
+CrConfig = {
+    version : '$p3$',
+    RemoteLogging : true,
+    doAction : true,
+    NextLinkWaitTime : $p0$,
+    HouseListMaxDifference : {
+        'ganji.com' : '$p1$',
+        'koubei.com' : '$p2$'
+    },
+    ParameterName_ObjectId : 'objectid',
+    HouseObjectId : 'House',
+    localJsToLoad : [ 
+       '/js/core/m.js'     
+    ],
+    remoteJsToLoad : [
+       'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js' 
+    ]
+}

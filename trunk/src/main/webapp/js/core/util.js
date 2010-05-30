@@ -29,7 +29,7 @@ CrUtil = {
         }
     },
 
-    removeElementsByTagName : function(tagName, parentNode) {
+    removeElementsByTagName : function(tagName, parentNode) {        
         if (!parentNode) {
             parentNode = document;
         }

@@ -16,6 +16,7 @@ tail -f /tomcat/zuiyidong/logs/catalina.out &
 mysql -uroot -proot -e "select count(*) from crawler.House"
 mysql -uroot -proot -e "select count(*) from crawler.PHouse"
 mysql -uroot -proot -e "select count(*) from crawler.Link"
+mysql -uroot -proot -e "select count(*) from crawler.Link where url like '%koubei%'"
 mysql -uroot -proot -e "select * from crawler.Link  where errorMsg is not null limit 20"
 
 ## to local

@@ -26,6 +26,7 @@ public class TemplateManager {
         if (r == null) {
             try {
                 r = loadTemplateFileByName(name);
+                templateCache.put(name, r);
             } catch (Exception e) {
                 logger.error("Failed load tempate with name :" + name);
                 logger.error(e);
@@ -45,7 +46,16 @@ public class TemplateManager {
     private String loadTemplateFileByName(String name) throws IOException {
         InputStream ins = null;
         try {
-            ins = TemplateManager.class.getClassLoader().getResourceAsStream("template/" + name);
+            String fileName = name;
+            ins = TemplateManager.class.getClassLoader().getResourceAsStream("template/" + fileName);
+            if (ins == null) {
+                fileName = name + "." + Constants.INSTANCE_NAME;
+                ins = TemplateManager.class.getClassLoader().getResourceAsStream("template/" + fileName);
+            }
+            if (ins == null) {
+                throw new IOException("Can not load template " + name);
+            }
+            logger.info("Loading template " + name + " from file " + fileName);
             return IOUtils.toString(ins, Constants.Encoding_DEFAULT_SYSTEM);
         } finally {
             CommonUtil.closeStream(ins);
@@ -64,8 +74,8 @@ public class TemplateManager {
             }
             r = nextAction.toString();
         } catch (JSONException e) {
-           logger.warn("Invalid json parameter:");
-           logger.warn(e);
+            logger.warn("Invalid json parameter:");
+            logger.warn(e);
         }
         return r;
     }

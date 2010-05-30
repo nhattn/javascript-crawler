@@ -73,7 +73,7 @@ public class House extends Handler {
             session.beginTransaction();
             long oid = isUniqueByHashValue(session, values);
             if (oid != -1) {
-                logger.debug("House is duplicates. Trying to update existing one with id:" + oid);
+                logger.debug("House is duplicate, id:" + oid);
                 return false;
             } else {
                 session.save(name, values);

@@ -41,7 +41,7 @@ CrGlobal = {
         });
     },
     initJsUrls : function() {
-        var verstring = '?v=' + CrGlobal.version;
+        var verstring = '?v=' + CrGlobal.Version;
         var jsToLoad = [];
         if (CrGlobal.remoteJsToLoad) {
             for ( var i = 0; i < CrGlobal.remoteJsToLoad.length; i++) {

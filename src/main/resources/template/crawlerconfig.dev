@@ -1,5 +1,5 @@
 CrConfig = {
-    version : '$p3$',
+    Version : '$p3$',
     RemoteLogging : true,
     doAction : true,
     NextLinkWaitTime : $p0$,

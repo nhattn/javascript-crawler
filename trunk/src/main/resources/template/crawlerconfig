@@ -1,5 +1,0 @@
-CrGlobal.NextLinkWaitTime = $p0$;
-CrGlobal.HouseListMaxDifference = {
-    'ganji.com'  : '$p1$',
-    'koubei.com' : '$p2$',
-};

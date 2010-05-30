@@ -113,7 +113,8 @@ HandlerHelper = {
 	 *                    param2 is optional, a regular expression with group specification, the regex will
 	 *                    be applyed against the textContent, and the first group value will be
 	 *                    taken. 
-	 *
+	 *                or, use xpath.textcontent.regex.if. this will only assign the value if the regex exists.
+	 *                
 	 *                3 xpath.text.regex, extract a regex group value from a given text. Takes two params,
 	 *                   param1 the text, param2 the xpath that contains only 1 regex group, it's value will be assinged to object
 	 * 
@@ -133,6 +134,10 @@ HandlerHelper = {
 				obj[m.name] = HandlerHelper.extractFromXpathNodeText.apply(
 						HandlerHelper, HandlerHelper._getParams(m)).trim();
 				break;
+            case 'xpath.textcontent.regex.if':
+                obj[m.name] = HandlerHelper.extractFromXpathNodeTextIf.apply(
+                        HandlerHelper, HandlerHelper._getParams(m)).trim();
+                break;				
             case 'xpath.text.regex':
                 obj[m.name] = HandlerHelper.getRegGroupFirstValue.apply(
                         HandlerHelper, HandlerHelper._getParams(m)).trim();
@@ -147,6 +152,25 @@ HandlerHelper = {
 		return obj;
 	},
 
+	/**
+	 * will not through exception, return '' if there is nothing.
+	 */
+	extractFromXpathNodeTextIf : function(xp, reg) {
+        try {
+            var n = XPath.single(null, xp);
+            if (n && n.textContent) {
+                var r = n.textContent;
+                if (typeof reg == 'object') {
+                    r = HandlerHelper.getRegGroupFirstValue(r, reg);
+                }
+                return r;
+            }
+        } catch (e) {
+            Crawler.error('extractFromXpathNodeTextIf' + e);
+        }
+        return '';
+    },
+    
 	extractFromXpathNodeText : function(xp, reg) {
 		var r = XPath.single(null, xp).textContent;
 		if (typeof reg == 'object') {

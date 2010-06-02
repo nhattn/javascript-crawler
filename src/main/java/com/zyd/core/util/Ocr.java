@@ -37,7 +37,14 @@ public class Ocr {
         StringBuffer buf = new StringBuffer();
         for (int i = 0, len = n.length(); i < len; i++) {
             char c = n.charAt(i);
-            if (Character.isWhitespace(c) == false) {
+            if (Character.isWhitespace(c) == true) {
+                continue;
+            }
+            if (c == 'o' || c == 'O') {
+                buf.append('0');
+            } else if (c == 'l' || c == 'L') {
+                buf.append('1');
+            } else {
                 buf.append(c);
             }
         }

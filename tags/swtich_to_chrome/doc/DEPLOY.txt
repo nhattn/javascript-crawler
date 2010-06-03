@@ -1,0 +1,108 @@
+****tomcat user home  
+/tomcat/
+****tomcat password
+tomcat
+****tomcat server webapp folder
+/tomcat/zuiyidong/webapps/
+****mysql username/password
+root/root
+****deploy folder 
+/tomcat/deploy  
+
+*******************************************************************************************************************************
+** Install apache tomcat, mysql, tesseract, imagemagick
+    sudo apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk apache2 tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk mysql-server xfsprogs emacs openssh-server subversion maven2  
+
+** create a local user  tomcat
+groupadd tomcat
+useradd -g tomcat -d /tomcat tomcat
+passwd tomcat
+mkdir /tomcat
+ 
+** create a new volume, then mount it, !!!!! make sure the disk name is correct
+grep -q xfs /proc/filesystems || sudo modprobe xfs
+mkfs.xfs /dev/sdf  #########change_to_your_local_hard_disk###
+echo "/dev/sdf /vol xfs noatime 0 0" | tee -a /etc/fstab         #########change_to_your_local_hard_disk###
+mkdir -m 000 /vol
+mount /vol
+
+** stop tomcat, apache, mysql, removing tomcat from default startup
+/etc/init.d/tomcat6 stop
+/etc/init.d/apache2 stop
+service mysql stop
+update-rc.d -f tomcat6 remove
+
+** create a local tomcat-instance on /tomcat
+cd /tomcat
+tomcat6-instance-create zuiyidong
+
+** configure tomcat to enable mod-jk, manager, users
+mkdir /tomcat/deploy
+mv /tomcat/deploy/tomcat-users.xml /tomcat/zuiyidong/conf/tomcat-users.xml
+mkdir -p /tomcat/zuiyidong/conf/Catalina/localhost/
+mv /tomcat/deploy/manager.xml /tomcat/zuiyidong/conf/Catalina/localhost/
+emacs /tomcat/zuiyidong/conf/server.xml
+
+
+** configure apache to enable mod-jk
+mv /tomcat/deploy/httpd.conf /etc/apache2/
+mv /tomcat/deploy/workers.properties /etc/apache2/
+
+** create zuiyidong site
+mv /tomcat/deploy/zuiyidong /etc/apache2/sites-available/
+mkdir -p /tomcat/zuiyidong/webapps/ROOT
+a2dissite default
+a2ensite zuiyidong
+
+** configure mysql to use utf-8 encoidng, remove local binding from my.cnf
+
+##better run emacs to edit this file, it might  be different on different machines. 
+#mv /tomcat/deploy/my.cnf /etc/mysql/,   if you are restoring, ignore this
+
+** configure mysql to use external drive, !!! make sure the drive name is correct 
+chmod u+x /tomcat/deploy/movemysql.sh
+/tomcat/deploy/movemysql.sh
+
+** restart all services
+/etc/init.d/apache2 start
+service mysql start
+
+** create a test database
+mysql -u root -p -e 'CREATE DATABASE crawler_test'
+
+** change ownership of /tomcat to tomcat
+chown -R tomcat:tomcat /tomcat
+
+
+** restart servers
+/etc/init.d/apache2 reload
+service mysql restart
+
+
+** change to tomcat user
+su tomcat
+/tomcat/zuiyidong/bin/shutdown.sh
+/tomcat/zuiyidong/bin/startup.sh
+
+
+
+tail -f /tomcat/zuiyidong/logs/catalina.out &
+tail -f /var/log/apache2/error.log &
+tail -f /var/log/apache2/mod_jk.log &
+
+tail -f /tomcat/zuiyidong/logs/catalina.out /var/log/apache2/error.log /var/log/apache2/mod_jk.log & 
+
+
+
+
+    
+    
+2. configured mysql to use utf-8 encoding, removed local binding from my.cnf
+
+    add to [mysqld] section and [mysql] section
+
+    default-character-set=utf8
+
+3. configured tomcat deploy user
+
+4. firefox, remember to enable codebase_principal_support in about:config. or cross domain image coding will not work.

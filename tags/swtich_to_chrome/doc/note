@@ -1,0 +1,79 @@
+TODO: fix book cover update time
+
+tojsonstring or to xmlstring , add withchapter property
+
+
+Extjs on cachefly
+
+http://extjs.cachefly.net/ext-3.0.0/adapter/ext/ext-base.js
+http://extjs.cachefly.net/ext-3.0.0/ext-all.js
+http://extjs.cachefly.net/ext-3.0.0/resources/css/ext-all.css
+
+// directly access it
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js
+// alias the newest 3.0.x version
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0/ext-core.js
+// alias the newest 3.x.x version
+http://ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js
+// directly access the uncompressed code
+http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core-debug.js
+
+
+eclipse maven plugin
+http://m2eclipse.sonatype.org/update/
+
+subclipse plguin
+http://subclipse.tigris.org/update_1.6.x
+ 
+ 
+grease monkey
+https://addons.mozilla.org/en-US/firefox/addon/748 
+
+   
+*******************************************************
+
+
+requriement 
+1 performance
+	200-300 hit/seconds to app server
+	500-800 hit/seconds to web server
+	
+2 data
+	separate collecting server and user facing server
+	how do they talk to each other. create a view, write separately.
+	production server running on 		
+	
+	server will have House as a table, PHouse as a view with only oked data
+	
+	client will have House as a table without PK.
+	
+	client will have the /service/sync url opened,
+	/service/sync?action=history showing history of all syncs
+	/service/sync?action=status showing status of current syncs
+	/service/sync?action=trigger start a new sync
+	
+	sync will run every 15 minutes
+	
+	in config file there will be a variable called IS_SERVER, indicating whether or not this is a server
+	
+    	
+today's todo
+perfect crawler
+  * geocoding on client side
+  ** how to update client script
+  ** add minifier
+  ** adding more sites
+  ** adding an html viewer for house
+  ** add more query variables
+  ** stop mysql & hibernate gracefully      
+  ** make it distribute crawler links
+  ** do column length check.
+  ** add password to controller  
+ 
+  ** add status page, containing all links to management console.	
+  ** add link, createTime, last updateTime to house table, allowing duplicates
+  ** add picture 
+  ** removing long page loading
+  
+	 
+	

@@ -14,7 +14,8 @@ function handlerProcess() {
         regex : new RegExp('fang/detail', 'i')
     };    
     
-    var links = HandlerHelper.getMatchLinks(info.path, info.regex);    
+    var links = HandlerHelper.getMatchLinks(info.path, info.regex);
+    console.log(links);
     HandlerHelper.storeLinks(links, {
         action : 'Goto.XPath.Link.Href',
         param1 : info.nextPagePath

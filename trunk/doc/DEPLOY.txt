@@ -11,6 +11,7 @@ root/root
 
 *******************************************************************************************************************************
 ** Install apache tomcat, mysql, tesseract, imagemagick
+    tasksel install lamp-server
     sudo apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk apache2 tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk mysql-server xfsprogs emacs openssh-server subversion maven2  
 
 ** create a local user  tomcat

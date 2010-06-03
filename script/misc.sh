@@ -41,3 +41,26 @@ mysql -uroot -proot < /tomcat/source/crawler/doc/deploy/house.sql
 svn checkout http://javascript-crawler.googlecode.com/svn/trunk/ crawler
 svn checkout http://yjcommon.googlecode.com/svn/trunk/ yjcommon
 
+
+mysql -uroot -pjyang20012001 
+use crawler
+select * from House where tel like '%l%';
+
+
+
+
+#### valid field is correct
+select address from House where address like '%<%';
+select address from House where address like '%>%';
+
+select district1 from House where district1 like '%<%';
+select district1 from House where district1 like '%>%';
+
+select district3 from House where district3 like '%<%';
+select district3 from House where district3 like '%>%';
+
+select district5 from House where district5 like '%<%';
+select district5 from House where district5 like '%>%';
+
+select address from House where address like '%<%';
+select address from House where address like '%>%';

@@ -30,7 +30,6 @@ CrGlobal = {
         CrGlobal._chainLoadFile();
     },
     _chainLoadFile : function() {
-
         if (!CrGlobal || !CrGlobal._chainFiles || !CrGlobal._chainFiles.length || CrGlobal._chainCurrent >= CrGlobal._chainFiles.length) {
             delete CrGlobal._chainFiles;
             delete CrGlobal._chainCurrent;
@@ -56,6 +55,6 @@ CrGlobal = {
             delete CrGlobal.localJsToLoad;
         }
         CrGlobal.jsToLoad = jsToLoad;
-    }
+    }        
 }
 CrGlobal.setup();

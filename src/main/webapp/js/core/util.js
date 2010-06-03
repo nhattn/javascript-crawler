@@ -29,7 +29,7 @@ CrUtil = {
         }
     },
 
-    removeElementsByTagName : function(tagName, parentNode) {        
+    removeElementsByTagName : function(tagName, parentNode) {
         if (!parentNode) {
             parentNode = document;
         }
@@ -45,7 +45,7 @@ CrUtil = {
      * document.getElementById
      */
     encodeImage : function(img) {
-        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+        //netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -250,6 +250,94 @@ CrUtil = {
                 s = s.replace(t, '');
         }
         return s;
-    }
+    },
+    /**
+     * requesting a service from the extension,
+     * config is an object like this 
+     * {
+     *    action : 'name of the service',
+     *    callback : function def that will be invoked, can only take one parameter, function(r){}
+     *    any ther parameters..    
+     * }
+     * How does messaging work.
+     * 
+     * requester (client) set a "_cr_value_client" on document.body, with the parameter stringifed as value.
+     * then initiate a "cr_message_client" event.
+     * requester then listens on "cr_message_server" event, check  "_cr_value_server"
+     *
+     * 
+     * service listens "cr_message_client" on document.body, get parameter from "cr_message_client", then do it's part, after it's done,
+     * initiate a "cr_message_server" event, set the "_cr_value_server" property
+     * 
+     * callback function will be stored in 'cr_message_callback' 
+     */
+    requestService : function(config) {
+        CrUtil._clearService();
+        var nconfig = {};        
+        var proxy = document.getElementById('crawler_messaging_proxy');        
+        var customEvent = document.createEvent('Event');
+        customEvent.initEvent('cr_message_client', true, true);
+        Ext.apply(nconfig, config);
+        if (nconfig.callback) {
+            CrUtil.cr_message_callback = nconfig.callback;  
+            nconfig.callback = undefined;
+        }
 
+        proxy.value = JSON.stringify(nconfig);
+        proxy.addEventListener('cr_message_server', CrUtil._serviceEventListener, true);
+        proxy.dispatchEvent(customEvent);
+    },
+
+    _clearService : function() {
+        var proxy = document.getElementById('crawler_messaging_proxy');
+        proxy.removeEventListener('cr_message_server', CrUtil._serviceEventListener, true);
+        var values = [ 'cr_message_callback', 'cr_message_client', 'cr_message_server' ];
+        for ( var i = 0; i < values.length; i++) {
+            delete proxy[values[i]];
+        }
+    },
+
+    _serviceEventListener : function() {        
+        var proxy = document.getElementById('crawler_messaging_proxy');
+        var serverReturnedValue = proxy.value;
+        if (CrUtil.cr_message_callback) {
+            CrUtil.cr_message_callback(JSON.parse(serverReturnedValue));
+        }
+        CrUtil._clearService();
+    },
+
+    encodeImage2 : function(imgDom, callback) {
+        if (!imgDom.id) {
+            imgDom.id = CrUtil.randomString();
+        }
+        CrUtil.requestService( {
+            action : 'EncodeImage',
+            id : imgDom.id,
+            callback : callback
+        });
+    },
+
+    ajax : function(config, callback) {
+        var nconfig = {};
+        Ext.apply(nconfig, config);
+        nconfig.action = 'Ajax';
+        nconfig.callback = callback;
+        CrUtil.requestService(nconfig);
+    },
+
+    exampleRequeest : function() {
+        CrUtil.ajax( {
+            url : 'http://news.sina.com.cn',
+            method : 'GET'
+        }, function(r) {
+            console.log('in client ' + r.response.responseText);
+        });
+        CrUtil.encodeImage2(document.getElementsByTagName('img')[1], function(r) {
+            console.log('in client ' + r.response.responseText);
+        })
+    },
+    
+    randomString : function() {
+        return 'sid' + new Date().getTime();
+    }
 }

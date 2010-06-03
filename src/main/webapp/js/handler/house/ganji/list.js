@@ -13,7 +13,8 @@ function handlerProcess() {
         regex : new RegExp('http://sh\.ganji\.com/fang[0-9]+', 'i')
     };    
     
-    var links = HandlerHelper.getMatchLinks(info.path, info.regex);    
+    var links = HandlerHelper.getMatchLinks(info.path, info.regex);
+    console.log(links);
     HandlerHelper.storeLinks(links, {
         action : 'Goto.XPath.Link.Href',
         param1 : info.nextPagePath

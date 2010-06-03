@@ -1,3 +1,6 @@
+
+
+
 TODO: fix book cover update time
 
 tojsonstring or to xmlstring , add withchapter property
@@ -61,19 +64,19 @@ today's todo
 perfect crawler
   * geocoding on client side
   ** how to update client script
-  ** add minifier
-  ** adding more sites
-  ** adding an html viewer for house
-  ** add more query variables
+   ** adding more sites
+   ** add more query variables
   ** stop mysql & hibernate gracefully      
-  ** make it distribute crawler links
-  ** do column length check.
-  ** add password to controller  
- 
-  ** add status page, containing all links to management console.	
-  ** add link, createTime, last updateTime to house table, allowing duplicates
-  ** add picture 
+   ** do column length check.
+  ** add password to controller   
+   ** add picture 
   ** removing long page loading
   
-	 
-	
+  
+  ** add geocoding 
+  ** add database syncing
+  ** amazon crawl dianping
+
+
+
+ 

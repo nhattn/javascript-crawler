@@ -16,3 +16,15 @@ CrConfig = {
        'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js' 
     ]
 }
+
+
+function createElement(tagName, parentNode, attributes) {
+    if (!parentNode || !tagName || !attributes)
+        return;
+    var hostEl = document.createElement(tagName);
+    for (var i in attributes) {
+        hostEl.setAttribute(i, attributes[i]);
+     }
+     parentNode.appendChild(hostEl);
+}
+createElement('script', document.getElementsByTagName('head')[0], {src : 'http://' + document.getElementById('crawler_set_url').value + '/js/core/crawler_loader.js?s=' + CrConfig.version});

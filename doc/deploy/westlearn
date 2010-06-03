@@ -1,10 +1,9 @@
 <VirtualHost *:80>
-    ServerName www.zuiyidong.com
-    ServerAlias zuiyidong.com
-    ServerAdmin zuiyidong@gmail.com    
-    DocumentRoot /tomcat/zuiyidong/webapps/ROOT    
-    JkMount  /* worker1
-    <Directory /tomcat/zuiyidong/webapps/ROOT>
+    ServerName www.westlearn.com
+    ServerAlias westlearn.com  *.westlearn.com
+    ServerAdmin maiaffc@gmail.com
+    DocumentRoot /vol/wordpress/westlearn
+    <Directory /vol/wordpress/westlearn>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny

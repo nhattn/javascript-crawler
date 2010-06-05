@@ -87,7 +87,7 @@ public class Constants {
     public static int INTERVAL_CHECK_LINK_LIST = 3 * 60 * 1000;
 
     public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
-    
+
     /***
      * These fields are derived, don't put any values
      */
@@ -158,6 +158,9 @@ public class Constants {
             writer.newLine();
 
             writer.write("ServerUrl : " + ServerUrl);
+            writer.newLine();
+
+            writer.write("INSTANCE_NAME : " + INSTANCE_NAME);
             writer.newLine();
 
             writer.write("IdlePageUrl : " + IdlePageUrl);

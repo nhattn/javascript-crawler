@@ -9,19 +9,16 @@ CrConfig = {
     },
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
-    localJsToLoad : [ 
+    jsToLoad : [
+       'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js',  
        '/js/core/crawler.js', 
        '/js/core/handler_helper.js',
        '/js/core/xpath.js',
        '/js/core/util.js', 
        '/js/mapping/house.js',
        '/js/core/kickoff.js'
-    ],
-    remoteJsToLoad : [
-       'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js' 
-    ]
+    ]    
 }
-
 function createElement(tagName, parentNode, attributes) {
     if (!parentNode || !tagName || !attributes)
         return;
@@ -31,4 +28,4 @@ function createElement(tagName, parentNode, attributes) {
      }
      parentNode.appendChild(hostEl);
 }
-createElement('script', document.getElementsByTagName('head')[0], {src : 'http://' + document.getElementById('crawler_set_url').value + '/js/core/crawler_loader.js?s=' + CrConfig.version});
+createElement('script', document.getElementsByTagName('head')[0], {src : 'http://' + document.getElementById('crawler_set_url').value + '/js/core/crawler_loader.js?s=' + CrConfig.Version});

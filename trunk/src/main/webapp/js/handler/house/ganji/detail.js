@@ -152,11 +152,11 @@ function handlerProcess() {
     obj.description2 = txt;
 
     // GPS
-    var lonlatUrl = null;
+    var lonlatUrl = null;        
     if (window.write_frame) {
         lonlatUrl = window.write_frame.toString();
     } else {
-        lonlatUrl = document.getElementById('traffic_iframe');
+        lonlatUrl = CrUtil.getFrameInfoById('traffic_iframe');                
         if (lonlatUrl) {
             lonlatUrl = lonlatUrl.src;
         }
@@ -180,7 +180,7 @@ function handlerProcess() {
     obj.rentalType = rentalTypeMap[fangType];
     var s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
     obj.city = cityMap[s];
-    
+
     if (!parseInt(obj.size)) {
         delete obj.size;
     }
@@ -194,7 +194,7 @@ function handlerProcess() {
     xpath = "/html/body/div[@id='wrapper2']/div[1]/div[2]/ul/li[2]";
     var node = XPath.single(document, xpath), tel = '';
     if (node.children && node.children.length != 0) {
-        CrUtil.encodeImage2(node.children[0], function(r) {            
+        CrUtil.encodeImage2(node.children[0], function(r) {
             obj.tel = r;
             obj.telImageName = node.children[0].src;
             handlerProcess2(obj);
@@ -206,7 +206,7 @@ function handlerProcess() {
 }
 
 function handlerProcess2(obj) {
-    console.log(obj);
+    //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });

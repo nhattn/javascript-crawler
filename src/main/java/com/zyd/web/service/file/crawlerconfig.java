@@ -40,8 +40,8 @@ public class crawlerconfig extends ServiceBase {
     private String generateContent(int refreshRate) {
         ArrayList<String> values = new ArrayList<String>();
         values.add(Integer.toString(refreshRate));
-        values.add("43200000");
-        values.add("43200000");
+        values.add("43200000");  //koubei.com
+        values.add("102000000"); //koubei.com
         values.add(Constants.VERSION_STRING);
         return templateManager.getTemplate("crawlerconfig", values);
     }

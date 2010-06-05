@@ -1,86 +1,57 @@
 var Content = {
     MaxWaitTime : 60 * 1000,
-    CheckInterval : 500,
+    WatcherInterval : 500,
+    service : chrome.extension.sendRequest,
     /**
      * config{
-     *     id: img id,
-     *     //or
-     *     dom: img dom
-     * }
-     * callback: function(r){
-     *     r is the encoded string
+     *     'action' : 'EncodeImage', 
+     *     'id': src url          
+     *     'width': image width, integer in pixel
+     *     'height': image height, integer in pixel
      * }
      */
-    encodeImage : function(config, callback) {
-        var imgDom = null;
-        if (config.id) {
-            imgDom = document.getElementById(config.id);
-        }
-        if (!imgDom) {
-            imgDom = config.dom;
-        }
-        if (!imgDom) {
-            log('no dom object');
-            return;
-        }
-        if (!imgDom.complete) {
-            Content.encodeImage.defer(50, null, [ config, callback ]);
-            return;
-        }
-        chrome.extension.sendRequest( {
-            'action' : 'EncodeImage',
-            'src' : imgDom.src,
-            'width' : imgDom.width,
-            'height' : imgDom.height
-        }, callback);
-    },
 
-    /*
-     * config is the extjs ajax request config, without callback.
+    /**
+     * config is the extjs ajax request config, and action set to 'Ajax', and without callback.
      * callback: function(r){
-     *  // r is the same as extjs callback
+     *   action:'Ajax',
+     *   v: is the same as extjs callback, parsed in one object with same parameter names
      * }
      */
-    ajax : function(config, callback) {
-        var request = {};
-        Ext.apply(request, config);
-        request.action = 'Ajax';
-        chrome.extension.sendRequest(request, function(r) {
-            if (callback) {
-                callback(r);
-            }
-        });
-    },
-    storeValue : function(key, value) {
-        chrome.extension.sendRequest( {
-            action : 'StoreValue',
-            key : key,
-            value : value
-        });
-    },
-    getValue : function(key, callback) {
-        chrome.extension.sendRequest( {
-            action : 'GetValue',
-            key : key
-        }, callback);
-    },
+
+    /**
+     * config{
+     *    'action':'StoreValue'
+     *    'key':
+     *    'value':
+     * }
+     */
+
+    /**
+     * config{
+     *    'action':'GetValue'
+     *    'key':
+     * }
+     */
+
     setup_1 : function() {
-        try {
-            if (window != window.top || !window.document || !window.document.body || !window.location) {
-                Content.stopit();
-                return;
-            }
-        } catch (ex) {
-            Content.stopit();
+        if(Content.injected == true){
             return;
         }
-        Content.getValue('domain', Content.setup_2);
+        Content.injected = true;
+        Content.service( {
+            'action' : 'GetValue',
+            'key' : 'domain'
+        }, Content.setup_2);
     },
-
     setup_2 : function(domain) {
         if (window.document.getElementById('crawler_set_url_reset')) {
             domain = window.location.host;
-            Content.storeValue('domain', domain);
+            Content.service( {
+                action : 'StoreValue',
+                key : 'domain',
+                value : domain
+            });
         }
 
         if (!domain)
@@ -104,27 +75,13 @@ var Content = {
 
         Content.setupClientProxy()
 
-        var stamp = (new Date()).getTime() + 's';
         if (document.getElementsByTagName('head')) {
+            var stamp = (new Date()).getTime() + 's';
             Content.createElement('script', document.getElementsByTagName('head')[0], {
                 src : 'http://' + domain + '/service/file/crawlerconfig?s=' + stamp
             });
         }
     },
-
-    stopit : function() {
-        try {
-            window.stop();
-            if (window.document && window.document.childNodes) {
-                var nodes = window.document.childNodes;
-                for ( var i = 0; i < nodes.length; i++) {
-                    nodes[i].parentNode.removeChild(nodes[i]);
-                }
-            }
-        } catch (e) {
-        }
-    },
-
     createElement : function(tagName, parentNode, attributes) {
         if (!parentNode || !tagName || !attributes)
             return;
@@ -134,21 +91,15 @@ var Content = {
         }
         parentNode.appendChild(hostEl);
     },
-
     setupClientProxy : function() {
         var proxy = document.getElementById('crawler_messaging_proxy');
         proxy.addEventListener('cr_message_client', Content._serviceEventListener, true);
     },
-
     _serviceEventListener : function() {
         var proxy = document.getElementById('crawler_messaging_proxy');
-        var value = proxy.value;
-        value = JSON.parse(value);
-        if (value.action == 'EncodeImage') {
-            Content.encodeImage(value, Content._serviceCallback);
-        } else if (value.action == 'Ajax') {
-            Content.ajax(value, Content._serviceCallback)
-        }
+        var config = proxy.value;
+        config = JSON.parse(config);
+        Content.service(config, Content._serviceCallback);
     },
     _serviceCallback : function(r) {
         var proxy = document.getElementById('crawler_messaging_proxy');
@@ -158,67 +109,55 @@ var Content = {
         customEvent.initEvent('cr_message_server', true, true);
         proxy.dispatchEvent(customEvent);
     },
+    /**
+     * This will stop all iframes, clear all contents inside iframe.
+     * Also it will start the monitor to make sure page is not dead here.
+     */
     startWatcher : function() {
-        try {
-            if (window != window.top || !window.document || !window.document.body || !window.location) {
-                console.log('inframe');
-                setInterval(function() {
-                    if (Content.stopit)
-                        Content.stopit();
-                }, 50);
-                Content.stopit();
-                return;
-            }
-        } catch (ex) {
-            Content.stopit();
+        if (window && window.location && window.location.toString().indexOf('chrome-extension') != -1)
             return;
-        }
         var wait_time = Content.MaxWaitTime;
         Content.startTime = new Date().getTime();
         Content._interval = window.setInterval(function() {
-            var waitedHowLong = (new Date()).getTime() - Content.startTime;
-            if (waitedHowLong > wait_time) {
+            var waitedHowLong = (new Date()).getTime() - Content.startTime;            
+            if (waitedHowLong > wait_time) {                            
                 window.clearInterval(Content._interval);
-                try {
-                    chrome.extension.sendRequest( {
-                        'action' : 'GoHome'
-                    });
-                } catch (e) {
-                    log('error 2' + e);
-                }
-
-                /*
-                chrome.tabs.executeScript(null, {
-                    code : "document.body.bgColor='red'"
+                Content.service( {
+                    'action' : 'GoHome',
+                    'url' : 'http://' + Content.domain
                 });
-                window.location = 'http://' + Content.domain;
-                */
             }
-        }, Content.CheckInterval);
+        }, Content.WatcherInterval);
+    },
+    stopit : function() {        
+        log(window.location.toString());
+        try {
+            window.stop();
+            if (window.document && window.document.childNodes) {
+                var nodes = window.document.childNodes;
+                for ( var i = 0; i < nodes.length; i++) {
+                    nodes[i].parentNode.removeChild(nodes[i]);
+                }
+            }
+        } catch (e) {
+            log(e);
+        }
+    },
+    makeSureStarted: function(){
+        if(Content.injected == true){
+            return;
+        }
+        log('not injected, will force inject');
+        Content.setup_1();
     }
 }
+
+Content.startWatcher();
+Content.makeSureStarted.defer(20000);
+Ext.onReady(function() {
+    Content.setup_1.defer(1000);
+});
 
 function log(r) {
     console.log(r);
 }
-Ext.onReady(function() {
-    Content.startWatcher();
-    Content.setup_1();
-});
-
-/*
-Content.encodeImage(document.getElementsByTagName('img')[0], function(c) {
-    console.log(c)
-});
-
-Content.ajax('http://www.sina.com.cn', 'GET', function(opt, suc, response) {
-    console.log(arguments);
-    console.log(response.responseText);
-})
-
-
-  Content.storeValue('a', 'b');
-  Content.getValue('a', function(c) {
-    console.log(c);
-})
-*/

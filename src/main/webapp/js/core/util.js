@@ -45,7 +45,6 @@ CrUtil = {
      * document.getElementById
      */
     encodeImage : function(img) {
-        //netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -80,6 +79,7 @@ CrUtil = {
             params : params
         });
     },
+
     getAjaxReponseErrorString : function(r) {
         if (r.responseText) {
             return 'Server raw reponse : \n' + r.responseText;
@@ -271,16 +271,15 @@ CrUtil = {
      * 
      * callback function will be stored in 'cr_message_callback' 
      */
-    requestService : function(config) {
+    requestService : function(config, callback) {
         CrUtil._clearService();
-        var nconfig = {};        
-        var proxy = document.getElementById('crawler_messaging_proxy');        
+        var nconfig = {};
+        var proxy = document.getElementById('crawler_messaging_proxy');
         var customEvent = document.createEvent('Event');
         customEvent.initEvent('cr_message_client', true, true);
         Ext.apply(nconfig, config);
-        if (nconfig.callback) {
-            CrUtil.cr_message_callback = nconfig.callback;  
-            nconfig.callback = undefined;
+        if (callback) {
+            CrUtil.cr_message_callback = callback;
         }
 
         proxy.value = JSON.stringify(nconfig);
@@ -297,7 +296,7 @@ CrUtil = {
         }
     },
 
-    _serviceEventListener : function() {        
+    _serviceEventListener : function() {
         var proxy = document.getElementById('crawler_messaging_proxy');
         var serverReturnedValue = proxy.value;
         if (CrUtil.cr_message_callback) {
@@ -307,36 +306,47 @@ CrUtil = {
     },
 
     encodeImage2 : function(imgDom, callback) {
-        if (!imgDom.id) {
-            imgDom.id = CrUtil.randomString();
+        if (!imgDom.complete) {
+            CrUtil.encodeImage2.defer(50, null, [ imageDom, callback ]);
+            return;
         }
+
         CrUtil.requestService( {
             action : 'EncodeImage',
-            id : imgDom.id,
-            callback : callback
-        });
+            src : imgDom.src,
+            width : imgDom.width,
+            height : imgDom.height
+        }, callback);
     },
 
     ajax : function(config, callback) {
         var nconfig = {};
         Ext.apply(nconfig, config);
         nconfig.action = 'Ajax';
-        nconfig.callback = callback;
-        CrUtil.requestService(nconfig);
+        CrUtil.requestService(nconfig, callback);
     },
 
-    exampleRequeest : function() {
-        CrUtil.ajax( {
-            url : 'http://news.sina.com.cn',
-            method : 'GET'
-        }, function(r) {
-            console.log('in client ' + r.response.responseText);
-        });
-        CrUtil.encodeImage2(document.getElementsByTagName('img')[1], function(r) {
-            console.log('in client ' + r.response.responseText);
-        })
+    getFrameInfo : function() {
+        var frames = [];
+        for ( var i = 0; i < 20; i++) {
+            var f = document.getElementById('crframe__' + i);
+            if (f) {
+                frames.push(JSON.parse(f.value));
+            } else {
+                break;
+            }
+        }
+        return frames;
     },
-    
+    getFrameInfoById : function(id) {
+        var frames = CrUtil.getFrameInfo();
+        for ( var i = 0; i < frames.length; i++) {
+            if (frames[i].id == id) {
+                return frames[i];
+            }
+        }
+        return null;
+    },
     randomString : function() {
         return 'sid' + new Date().getTime();
     }

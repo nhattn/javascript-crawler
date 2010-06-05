@@ -15,7 +15,7 @@ function handlerProcess() {
     };    
     
     var links = HandlerHelper.getMatchLinks(info.path, info.regex);
-    console.log(links);
+//    console.log(links);
     HandlerHelper.storeLinks(links, {
         action : 'Goto.XPath.Link.Href',
         param1 : info.nextPagePath

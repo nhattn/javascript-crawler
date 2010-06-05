@@ -127,24 +127,30 @@ function handlerProcess() {
     s = HandlerHelper.getRegGroupFirstValue(url, /http:\/\/([a-z]+)\.koubei\.com/);
     obj.city = cityMap[s];
 
-    var iframe = XPath.single(document, "//div[@id='mapInfo']//iframe");
-    if (iframe && iframe.src) {
-        var url = iframe.src;
-        obj.lo = CrUtil.extractParameter(url, 'centerx');
-        obj.la = CrUtil.extractParameter(url, 'centery');
-        if (obj.lo && parseInt(obj.lo)) {
-            obj.lo = parseInt(obj.lo) / 100000;
+    var iframes = CrUtil.getFrameInfo();
+    if (iframes && iframes.length > 0) {
+        for ( var i = 0; i < iframes.length; i++) {
+            var f = iframes[i];
+            if (f.src && f.src.indexOf('centerx') > 0 && f.src.indexOf('centery') > 0) {
+                var url = f.src;
+                obj.lo = CrUtil.extractParameter(url, 'centerx');
+                obj.la = CrUtil.extractParameter(url, 'centery');
+                if (obj.lo && parseInt(obj.lo)) {
+                    obj.lo = parseInt(obj.lo) / 100000;
+                }
+                if (obj.la && parseInt(obj.la)) {
+                    obj.la = parseInt(obj.la) / 100000;
+                }
+            }
         }
-        if (obj.la && parseInt(obj.la)) {
-            obj.la = parseInt(obj.la) / 100000;
-        }
+
     }
     CrUtil.trimAttributes(obj);
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 
     var telImg = XPath.single(document, "//div[@id='houseBaseInfo']//span//img");
     if (telImg && telImg.src) {
-        CrUtil.encodeImage2(telImg, function(r) {            
+        CrUtil.encodeImage2(telImg, function(r) {
             obj.tel = r;
             obj.telImageName = telImg.src + '&a.jpg';
             handlerProcess2(obj);
@@ -155,7 +161,7 @@ function handlerProcess() {
 }
 
 function handlerProcess2(obj) {
-    console.log(obj);
+    //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });

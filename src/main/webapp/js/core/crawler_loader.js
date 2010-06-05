@@ -1,3 +1,4 @@
+//CrConfig.doAction=false;
 CrGlobal = {
     handlerPath : '/js/handler',
     setup : function() {
@@ -42,19 +43,18 @@ CrGlobal = {
     initJsUrls : function() {
         var verstring = '?v=' + CrGlobal.Version;
         var jsToLoad = [];
-        if (CrGlobal.remoteJsToLoad) {
-            for ( var i = 0; i < CrGlobal.remoteJsToLoad.length; i++) {
-                jsToLoad.push(CrGlobal.remoteJsToLoad[i]);
+        if (CrGlobal.jsToLoad) {
+            for ( var i = 0; i < CrGlobal.jsToLoad.length; i++) {
+                var js = CrGlobal.jsToLoad[i];
+                if (js.indexOf(':/') > 0) {
+                    jsToLoad.push(js);
+                } else {
+                    jsToLoad.push(CrGlobal.serverUrl + js + verstring);
+                }
             }
-            delete CrGlobal.remoteJsToLoad;
-        }
-        if (CrGlobal.localJsToLoad) {
-            for ( var i = 0; i < CrGlobal.localJsToLoad.length; i++) {
-                jsToLoad.push(CrGlobal.serverUrl + CrGlobal.localJsToLoad[i] + verstring);
-            }
-            delete CrGlobal.localJsToLoad;
+            delete CrGlobal.jsToLoad;
         }
         CrGlobal.jsToLoad = jsToLoad;
-    }        
+    }
 }
 CrGlobal.setup();

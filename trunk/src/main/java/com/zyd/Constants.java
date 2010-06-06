@@ -84,7 +84,7 @@ public class Constants {
      */
     public static int LINK_FLUSH_CYCLE_LENGTH;
 
-    public static int INTERVAL_CHECK_LINK_LIST = 3 * 60 * 1000;
+    public static int INTERVAL_CHECK_LINK_LIST = 8 * 60 * 1000;
 
     public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
 

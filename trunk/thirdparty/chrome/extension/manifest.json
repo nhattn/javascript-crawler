@@ -1,12 +1,8 @@
 {
-  "name": "My First Extension",
+  "name": "www.zuiyidong.com -- distrubted crawler",
   "version": "1.0",
-  "description": "The first extension that I made.",
+  "description": "www.zuiyidong.com",
   "background_page": "background.html",      
-  "browser_action": {
-    "default_icon": "icon.png"
-  },
-  
   "content_scripts": [
     {
       "matches": ["http://*/*", "chrome://chromewebdata/"], 

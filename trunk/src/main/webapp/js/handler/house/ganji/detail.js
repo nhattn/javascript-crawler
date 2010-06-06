@@ -1,5 +1,5 @@
 function handlerProcess() {
-    //    CrUtil.removeElementsByTagName('script');
+    CrUtil.removeElementsByTagName('script');
     var s1 = CrUtil.removeNewLine(XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent).replace('(', ' (').replace('（',
             ' (').replace('）', ')').replace('function', '    \nfunction');
     s1 = CrUtil.deleteTokens(s1, [ '短信发送至手机', '收藏该房源' ]);
@@ -152,11 +152,11 @@ function handlerProcess() {
     obj.description2 = txt;
 
     // GPS
-    var lonlatUrl = null;        
+    var lonlatUrl = null;
     if (window.write_frame) {
         lonlatUrl = window.write_frame.toString();
     } else {
-        lonlatUrl = CrUtil.getFrameInfoById('traffic_iframe');                
+        lonlatUrl = CrUtil.getFrameInfoById('traffic_iframe');
         if (lonlatUrl) {
             lonlatUrl = lonlatUrl.src;
         }

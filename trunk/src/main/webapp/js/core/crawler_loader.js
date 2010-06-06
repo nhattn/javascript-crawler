@@ -1,6 +1,7 @@
 //CrConfig.doAction=false;
 CrGlobal = {
     handlerPath : '/js/handler',
+    restartInterval : 50,
     setup : function() {
         var hostDiv = document.getElementById('crawler_set_url');
         if (!hostDiv) {

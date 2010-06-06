@@ -338,6 +338,7 @@ CrUtil = {
         }
         return frames;
     },
+
     getFrameInfoById : function(id) {
         var frames = CrUtil.getFrameInfo();
         for ( var i = 0; i < frames.length; i++) {
@@ -346,6 +347,13 @@ CrUtil = {
             }
         }
         return null;
+    },
+
+    restartBrowser : function(homeurl) {
+        CrUtil.requestService( {
+            action : 'GoHome',
+            url : homeurl
+        });
     },
     randomString : function() {
         return 'sid' + new Date().getTime();

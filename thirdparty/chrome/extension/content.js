@@ -56,11 +56,11 @@ var Content = {
 
         if (!domain)
             return;
-
-        Content.domain = domain;
-        if (window.location.host == domain)
+        Content.domain = domain;        
+        if (window.location.host == domain){
             return;
-
+        }
+        Content.setupPageCounter();        
         Content.createElement('input', window.document.body, {
             id : 'crawler_set_url',
             type : 'hidden',
@@ -81,6 +81,18 @@ var Content = {
                 src : 'http://' + domain + '/service/file/crawlerconfig?s=' + stamp
             });
         }
+    },
+    setupPageCounter: function(){
+        Content.service({action:'GetValue', key:'PageCounter'}, function(r){
+            if(!r) r = 0;            
+            r = parseInt(r)+1;
+            Content.service({action:'StoreValue',key:'PageCounter', value:(r+'')});
+            Content.createElement('input', document.body, {
+                id:'crawler_page_counter',
+                type:'hidden',
+                value: (r+'')
+            });
+        });
     },
     createElement : function(tagName, parentNode, attributes) {
         if (!parentNode || !tagName || !attributes)

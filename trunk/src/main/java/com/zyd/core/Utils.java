@@ -1,15 +1,12 @@
 package com.zyd.core;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,7 +18,6 @@ import com.zyd.Constants;
 @SuppressWarnings("unchecked")
 public class Utils {
     private static Logger logger = Logger.getLogger(Utils.class);
-
     static Random rand = new Random();
     static HashSet<String> usedString = new HashSet<String>();
     private final static HashMap<Character, Character> CHARMAP = new HashMap<Character, Character>();
@@ -49,14 +45,6 @@ public class Utils {
         CHARMAP.put('6', '6');
     }
 
-    public static String getUniqueBookId() {
-        Date d = new Date();
-        StringBuffer buf = new StringBuffer(Long.toString(d.getTime()));
-        String l = StringUtils.leftPad(Integer.toString(Math.abs(rand.nextInt())), 15, '0');
-        buf.append(l);
-        return buf.toString();
-    }
-
     public static String stringToFlatList(List<String> list) {
         StringBuffer buf = new StringBuffer();
         for (String s : list) {
@@ -64,19 +52,6 @@ public class Utils {
             buf.append("\r\n");
         }
         return buf.toString();
-    }
-
-    public static String mapToJsonString(HashMap<String, Object> map) throws IOException {
-        JSONObject obj = new JSONObject();
-        Set<String> names = map.keySet();
-        try {
-            for (String name : names) {
-                obj.put(name, map.get(name).toString());
-            }
-        } catch (JSONException e) {
-            throw new IOException(e);
-        }
-        return obj.toString();
     }
 
     /**
@@ -114,28 +89,6 @@ public class Utils {
         }
     }
 
-    public static <T> T getUpdateObject(T s1, T s2) {
-        if (s1 == null && s2 != null) {
-            return s2;
-        } else if (s1 == null && s2 == null) {
-            return null;
-        } else if (s1 != null && s2 != null) {
-            return s2;
-        } else if (s1 != null && s2 == null) {
-            return s1;
-        }
-        return null;
-    }
-
-    public static <T> boolean strictEqual(T o1, T o2) {
-        if (o1 == null && o2 == null)
-            return true;
-        if (o1 != null && o2 != null) {
-            return o1.equals(o2);
-        }
-        return false;
-    }
-
     public static String getDomain(String s) {
         if (s == null)
             return null;
@@ -157,29 +110,6 @@ public class Utils {
             s = s.substring(i + 1);
         }
         return "www." + s;
-    }
-
-    private static DateFormat[] dateFormats = new SimpleDateFormat[] { new SimpleDateFormat("yy-MM-dd HH:mm"), /* 09-10-13 13:57 */
-    new SimpleDateFormat("yyyy年MM月dd日"), /* 2009年10月15日 */
-    new SimpleDateFormat("yyyy-MM-dd"),/* 2008-10-17 */
-    new SimpleDateFormat("yyyy-MM-d"),/* 2008-10-17 */
-    new SimpleDateFormat("yyyy-M-dd"),/* 2008-1-17 */
-    new SimpleDateFormat("yyyy-M-d"),/* 2008-1-1 */
-    };
-
-    public static Date parseDate(String s) {
-        Date date = null;
-        for (DateFormat d : dateFormats) {
-            try {
-                date = d.parse(s);
-            } catch (Exception e) {
-            }
-        }
-        if (date == null) {
-            // TODO: have to report this
-            date = new Date();
-        }
-        return date;
     }
 
     public static void castValues(Map map, String key, Class clazz) {
@@ -268,7 +198,7 @@ public class Utils {
         return null;
     }
 
-    public static int parseInit(String s, int defaultValue) {
+    public static int parseInt(String s, int defaultValue) {
         try {
             defaultValue = Integer.parseInt(s);
         } catch (Exception e) {
@@ -277,40 +207,6 @@ public class Utils {
         }
         return defaultValue;
 
-    }
-
-    public static int gpsDistance(double lat1, double lon1, double lat2, double lon2) {
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return (int) (6371 * 1000 * c);
-    }
-
-    public static int gpsDistance2(double lat1, double lon1, double lat2, double lon2) {
-        double EARTH_CIRC_METERS = 40030218;
-        double radLat1 = lat1;//  Math.toRadians(lat1);
-        double radLon1 = lon1; //Math.toRadians(lon1);
-        double radLat2 = lat2; //Math.toRadians(lat2);
-        double radLon2 = lon2; //Math.toRadians(lon2);        
-        double d = Math.acos((Math.cos(radLat1) * Math.cos(radLat2)) + (Math.sin(radLat1) * Math.sin(radLat2)) * (Math.cos(radLon1 - radLon2)));
-        return (int) (d * EARTH_CIRC_METERS);
-    }
-
-    public static void main1(String[] args) {
-        System.out.println(gpsDistance(-86.670048, 36.120197, 33.941722, -118.400517));
-        System.out.println(gpsDistance2(-86.670048, 36.120197, 33.941722, -118.400517));
-    }
-
-    public static void main(String[] args) {
-        System.out.println(getDomain("http://www.aaa.com"));
-        System.out.println(getDomain("http://www.aaa.bbb.com"));
-        System.out.println(getDomain("www.bbb.com"));
-        System.out.println(getDomain("cc.bbb.com"));
-        System.out.println(getDomain("bbb.com"));
-        System.out.println(getDomain("http://bbb.com"));
-        System.out.println(parseDate("09-10-13 13:57"));
-        System.out.println(extractNumbers("上海市陆家嘴路七号八单元2  02"));
     }
 
     /**

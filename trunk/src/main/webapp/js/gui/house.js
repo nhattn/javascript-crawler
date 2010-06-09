@@ -3,15 +3,18 @@ var columns = [  'lo', 'la', 'price', 'id','rentalType', 'subRentalType',  'paym
         'district1', 'district3', 'district5', 'tel', 'contact', 'photo', 'floor', 'totalFloor', 'isAgent',
         'equipment', 'decoration', 'ok', 'referer', 'createTime', 'updateTime', 'hash' , 'description1', 'description2'];
 
+var defaultParams = {
+    objectid : 'House',
+    count : pageSize
+};
+
 function loadit() {
     var store = new Ext.data.Store( {
         autoLoad : false,
         remoteSort : true,
         url : '/service/object',
         restful : true,
-        baseParams : {
-            objectid : 'House'
-        },
+        baseParams : defaultParams,
         reader : new Ext.data.XmlReader( {
             record : 'object',
             id : 'id'
@@ -83,15 +86,18 @@ function loadit() {
         buttons : [ {
             text : 'Search',
             handler : function(button, event) {
-                var values = form.getForm().getValues();
+                var values = form.getForm().getValues(), param={};
+                Ext.apply(param, defaultParams);
+                Ext.apply(param, values);
+                /*
                 var name = validQueryParam(values);
                 if(name){
                     alert(name + ' is not in a valid format, fix or just leave it blank');
                     return false;
                 }
-                store.load( {
-                    params : values
-                });
+                */
+                store.baseParams = param;
+                store.load();                
             }
         } ]
     });
@@ -107,8 +113,7 @@ function loadit() {
 
     store.load( {
         params : {
-            start : 0,
-            count : pageSize
+            start : 0            
         }
     });
 }

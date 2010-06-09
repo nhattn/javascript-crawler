@@ -95,6 +95,14 @@ public class Constants {
     // the full server url starting with http://www.domaon.com:port/context
     public static String ServerUrl;
     public static String IdlePageUrl;
+    
+    
+    /***
+     * These are system wide comment variables, should never be changed or reassigned
+     */
+    
+    public final static Object[] ZERO_OBJECT_LIST = new Object[0];
+    
 
     static {
         loadValues();

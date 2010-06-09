@@ -1,7 +1,6 @@
 package com.zyd.core.busi;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -106,12 +105,12 @@ public class LinkManager {
         return processing.containsKey(link);
     }
 
-    private static int random = 0;
-    private long lastLinkListCheckTime = 0;
+    private static int Counter = 0;
+    private long lastLinkListCheckTime = new Date().getTime();
 
     public synchronized Link nextLink() {
-        random++;
-        if (random % 5 == 0) {
+        Counter++;
+        if (Counter % 5 == 0) {
             updateSuggestedRefreshRate();
             Date now = new Date();
             if (now.getTime() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
@@ -123,7 +122,7 @@ public class LinkManager {
 
         if (waiting.size() > 0) {
             String url;
-            if (random % 2 == 0)
+            if (Counter % 2 == 0)
                 url = waiting.keySet().iterator().next();
             else
                 url = ((Link) waiting.values().iterator().next()).url;

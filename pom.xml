@@ -26,6 +26,7 @@
 				<configuration>
 					<url>http://www.zuiyidong.com/manager</url>
 					<server>t410</server>
+					<uriEncoding>utf8</uriEncoding>
 					<path>/</path>
 				</configuration>
 			</plugin>

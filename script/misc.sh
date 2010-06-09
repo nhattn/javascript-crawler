@@ -26,7 +26,9 @@ scp -i /y/work/ec2/yangkey.pem root@184.73.171.54:/root/db.gz /y/workspace/webcr
 gunzip  /y/workspace/webcrawl/tmp/db.gz
         
 ## import on local
-mysql -uroot -proot < /y/workspace/webcrawl/tmp/db 
+mysql -uroot -proot < /y/workspace/webcrawl/tmp/db
+mysql -uroot -proot crawler < /y/workspace/webcrawl/backup/house.db.backup-2009-06-06
+
 
 
 ## create table on remote 

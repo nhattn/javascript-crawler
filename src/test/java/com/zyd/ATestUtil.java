@@ -3,7 +3,6 @@ package com.zyd;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -145,6 +144,7 @@ public class ATestUtil {
             nv.put(House.Columns.Price, (1000 + i) + "");
             nv.put(House.Columns.Long, i + "");
             nv.put(House.Columns.Lat, i + "");
+            nv.put(House.Columns.RentalType, new String[] { "出租", "出售", "合租", "短租" }[i % 4]);
             String referer = ATestConstants.OBJECT_REFERER_PREFIX + i;
             if (createObject(nv, referer) == false) {
                 throw new Exception("Can not create object :" + nv.toString());
@@ -161,7 +161,7 @@ public class ATestUtil {
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
         if (1 != o.getInt("result")) {
-            throw new Exception("Links are not created: raw response is: "+ s );
+            throw new Exception("Links are not created: raw response is: " + s);
         }
         return true;
     }

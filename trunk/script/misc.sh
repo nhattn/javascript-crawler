@@ -37,6 +37,9 @@ mysql -uroot -proot < /tomcat/source/crawler/doc/deploy/house.sql
 
 ## deploy
 /y/workspace/webcrawl/doc/script/deploy.prod.sh
+
+cd /tomcat/source/crawler/
+
 /tomcat/source/crawler/script/production_server_deploy_local.sh
 
 ## check out code from server

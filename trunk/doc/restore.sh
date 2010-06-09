@@ -49,8 +49,7 @@ service mysql start
 
 
 emacs /etc/maven2/settings.xml
-emacs /tomcat/zuiyidong/conf/server.xml
-############
+***
 add this part
   <servers>
     <server>
@@ -59,8 +58,17 @@ add this part
       <password>yang</password>
     </server>
   </servers>  
-
+  
+  
 ########## tomcat user part
+emacs /tomcat/zuiyidong/conf/server.xml
+**
+enable 8009 ajp
+and uri encoding
+<Connector port="8080" URIEncoding="UTF-8"/>
+<Connector port="8009" protocol="AJP/1.3" URIEncoding="UTF-8"/>
+
+
 /tomcat/zuiyidong/bin/startup.sh
 tail -f /tomcat/zuiyidong/logs/catalina.out &    # press "ctrl + c" after this
 

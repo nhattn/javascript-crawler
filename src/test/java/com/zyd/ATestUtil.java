@@ -17,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
 import com.zyd.core.objecthandler.House;
+import com.zyd.core.objecthandler.House.Columns;
 import com.zyd.web.TestObjectManipulation;
 
 @SuppressWarnings("unchecked")
@@ -153,6 +154,13 @@ public class ATestUtil {
         return num;
     }
 
+    public static boolean createbjectWithReferer(String referer) throws Exception {
+        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1, Constants.Encoding_DEFAULT_SYSTEM);
+        map.put(Columns.Tel, CommonTestUtil.getNonRepeatString());
+        map.put(Columns.Address, "address_" + CommonTestUtil.getNonRepeatString());
+        return createObject(map, referer);
+    }
+
     public static boolean createLink(String link) throws Exception {
         JSONArray arr = new JSONArray();
         arr.put(link);
@@ -161,7 +169,7 @@ public class ATestUtil {
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
         if (1 != o.getInt("result")) {
-            throw new Exception("Links are not created: raw response is: " + s);
+            return false;
         }
         return true;
     }

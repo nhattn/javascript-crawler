@@ -1,6 +1,7 @@
 package com.zyd.web;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import junit.framework.TestCase;
 
@@ -15,6 +16,9 @@ public class TestLinkManager extends TestCase {
     @Override
     protected void setUp() throws Exception {
         assertTrue(ATestUtil.clearServerData());
+        HashMap<String, String> config = new HashMap<String, String>();
+        config.put("INTERVAL_CHECK_LINK_LIST", Integer.toString(100000000));
+        ATestUtil.updateServerConfigure(config);
     }
 
     public void testLinkProcessingExpire() throws Exception {
@@ -29,7 +33,7 @@ public class TestLinkManager extends TestCase {
         }
         try {
             System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
-            Thread.sleep(sleep * 5);
+            Thread.sleep(sleep * 3);
         } catch (Exception e) {
         }
         s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
@@ -53,7 +57,7 @@ public class TestLinkManager extends TestCase {
 
         try {
             System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
-            Thread.sleep(sleep * 5);
+            Thread.sleep(sleep * 3);
         } catch (Exception e) {
         }
         s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
@@ -63,6 +67,39 @@ public class TestLinkManager extends TestCase {
         assertTrue(s, s.indexOf("error:0") != -1);
         assertTrue(s, s.indexOf("processing:0") != -1);
         assertTrue(s, s.indexOf("waiting:0") != -1);
+        assertTrue(ATestUtil.reststoreServerConfigure());
+    }
+
+    public void testDuplicateLinks() throws Exception {
+        for (int i = 0; i < 100; i++) {
+            String link = "http://www.test.com/link_" + i;
+            assertTrue(ATestUtil.createLink(link));
+        }
+
+        for (int i = 0; i < 100; i++) {
+            String link = "http://www.test.com/link_" + i;
+            assertFalse(ATestUtil.createLink(link));
+        }
+
+        HashSet<String> processing = new HashSet<String>();
+        for (int i = 0; i < 50; i++) {
+            String link = ATestUtil.getNextLink();
+            assertNotNull(link);
+            processing.add(link);
+        }
+        // make sure processing link is counted
+        for (String l : processing) {
+            assertFalse(ATestUtil.createLink(l));
+        }
+
+        // make sure processed link is counted
+        for (String l : processing) {
+            assertTrue(ATestUtil.createbjectWithReferer(l));
+        }
+
+        for (String l : processing) {
+            assertFalse(ATestUtil.createLink(l));
+        }
         assertTrue(ATestUtil.reststoreServerConfigure());
     }
 }

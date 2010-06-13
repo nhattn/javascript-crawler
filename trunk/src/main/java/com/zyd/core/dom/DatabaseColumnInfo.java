@@ -7,6 +7,7 @@ public class DatabaseColumnInfo {
 
     public DatabaseColumnInfo(String name, int type, int size) {
         this.name = name;
+        /** java.sql.Types **/
         this.type = type;
         this.size = size;
     }

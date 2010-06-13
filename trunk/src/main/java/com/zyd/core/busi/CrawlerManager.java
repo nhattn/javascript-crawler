@@ -19,7 +19,7 @@ public class CrawlerManager {
     }
 
     public void clearAll() {
-        this.linkManager.deleteAllLinks();
+        this.linkManager.cleanAll();
         this.objectManager.deleteAllObjects();
     }
 }

@@ -2,20 +2,29 @@ package com.zyd.core.dom;
 
 import java.util.Date;
 
+import com.zyd.core.Utils;
+
 public class Link {
     public long id;
     public String url;
     public Date createTime;
+    public String hash;
 
-    // when link is been processed, if this is not null, meaning link is processed OK.
     public Date processTime;
-
+    public String errorMsg;
     public int tryCount;
-    // when link is send back for user to process
+    public int isError;
+
+    // when link is send back for user to process, not persistent
     public Date startTime;
 
-    public int isError = 0;
-    public String errorMsg;
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
 
     public int getIsError() {
         return isError;
@@ -34,10 +43,19 @@ public class Link {
     }
 
     public Link() {
+        this(null, null, null);
     }
 
     public Link(String url) {
+        this(url, new Date(), Utils.stringHash(url));
+    }
+
+    public Link(String url, Date createTime, String hash) {
         this.url = url;
+        this.createTime = createTime;
+        this.hash = hash;
+        this.tryCount = 0;
+        this.isError = 0;
     }
 
     public int getTryCount() {
@@ -100,5 +118,15 @@ public class Link {
     @Override
     public String toString() {
         return "[Link, url=" + url + ", id=" + id + "]";
+    }
+
+    public void cleanup() {
+        this.id = 0;
+        this.isError = 0;
+        this.processTime = null;
+        this.createTime = null;
+        this.errorMsg = null;
+        this.startTime = null;
+        this.url = null;
     }
 }

@@ -1,6 +1,7 @@
 package com.zyd.web;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -23,7 +24,9 @@ public class TestHibernateExceptionHandling extends TestCase {
     protected void setUp() throws Exception {
         ApplicationContext ctx = ATestUtil.setUpSpring();
         om = (ObjectManager) ctx.getBean("objectManager");
+        ATestUtil.stopReturningWatchedLink();
         ATestUtil.clearServerData();
+        
     }
 
     public void testSingleThread() throws Exception {
@@ -109,7 +112,7 @@ public class TestHibernateExceptionHandling extends TestCase {
                     }
                     Date d = new Date();
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                     }                    
                 }

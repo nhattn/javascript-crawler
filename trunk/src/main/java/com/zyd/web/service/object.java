@@ -46,7 +46,7 @@ public class object extends ServiceBase {
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
         String referer = req.getHeader("Referer");
-        if (referer == null || linkManager.isLinkProcessing(referer) == false) {
+        if (referer == null || linkManager.getProcessingLink(referer) == null) {
             if (referer == null) {
                 logger.warn("Can not process link, no refeerer");
             } else {

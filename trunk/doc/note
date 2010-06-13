@@ -1,9 +1,12 @@
+TODO:  
+
+http://sh.ganji.com/fang5/10061210_600101.htm
+http://shanghai.koubei.com/fang/detail-sell-sb9fb9b77cd054d02adc304c57ab594bc.html
+
+Has a weired string
 
 
 
-TODO: fix book cover update time
-
-tojsonstring or to xmlstring , add withchapter property
 
 
 Extjs on cachefly
@@ -64,32 +67,47 @@ today's todo
 perfect crawler
   * geocoding on client side
   ** how to update client script
-   ** adding more sites
-   ** add more query variables
+  ** adding more sites
+  ** add more query variables
   ** stop mysql & hibernate gracefully      
-   ** do column length check.
+  ** do column length check.
   ** add password to controller   
-   ** add picture 
+  ** add picture 
   ** removing long page loading
   ** add geocoding 
   ** add database syncing
-
-
   ** link manager       
-  ** query interface for housing, generic query interface
   
   
-  
-  
-  
-  1-877-839-7935
-  5262 2519 8670 7025- 04/13, 706
-  
-  
-  
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+Linkmanager
+    Site -> waiting list    
+    Processed link -> one big list    
+    processing link -> one big list
+    Error link -> one big list 
 
 
-
+     
+  
+  
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  

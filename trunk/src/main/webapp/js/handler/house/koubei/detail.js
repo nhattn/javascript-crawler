@@ -88,12 +88,6 @@ function handlerProcess() {
     } ];
 
     var obj = HandlerHelper.parseObject(objInfo1);
-    if (!parseInt(obj.size)) {
-        delete obj.size;
-    }
-    if (!parseInt(obj.price)) {
-        delete obj.price;
-    }
     var priceUnit = XPath.single(document, "//div[@id='houseBaseInfo']");
     if (priceUnit && priceUnit.textContent) {
         priceUnit = priceUnit.textContent;
@@ -146,6 +140,20 @@ function handlerProcess() {
 
     }
     CrUtil.trimAttributes(obj);
+    
+    if (!parseFloat(obj.price)) {
+        delete obj.price;
+    }
+    if (!parseFloat(obj.size)) {
+        delete obj.size;
+    }
+    if (!parseInt(obj.floor)) {
+        delete obj.floor;
+    }
+    if (!parseInt(obj.totalFloor)) {
+        delete obj.totalFloor;
+    }
+    
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 
     var telImg = XPath.single(document, "//div[@id='houseBaseInfo']//span//img");

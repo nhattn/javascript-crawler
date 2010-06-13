@@ -12,8 +12,6 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.io.IOUtils;
 
-import com.tj.common.CommonUtil;
-import com.tj.common.util.test.CommonTestUtil;
 import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
 import com.zyd.core.objecthandler.Handler;
@@ -27,6 +25,7 @@ public class TestEncoding extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
+        ATestUtil.stopReturningWatchedLink();
         ATestUtil.clearServerData();
         params = new HashMap<String, String>();
         params.put(House.Columns.Description1, "你应该看到这段中文文");

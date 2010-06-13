@@ -1,6 +1,7 @@
 package com.zyd.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javassist.expr.NewArray;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.jms.listener.SubscriptionNameProvider;
 
 import com.zyd.Constants;
 
@@ -110,6 +114,41 @@ public class Utils {
             s = s.substring(i + 1);
         }
         return "www." + s;
+    }
+
+    /**
+     * given a url, return the domain name, without the www part
+     *  http://www.abc.com/anypage -> abc.com
+     *  https://wwww.abc.com.cn/anypay -> abc.com.cn
+     *  
+     * if s doesn't start with http: or https: then it's not a valid url, will return null
+     * @param s
+     * @return
+     */
+    public static String getShortestDomain(String s) {
+        if (s == null)
+            return null;
+        if (s.startsWith("http://")) {
+            s = s.substring(7);
+        } else if (s.startsWith("https://")) {
+            s = s.substring(8);
+        } else {
+            return null;
+        }
+
+        int i = s.indexOf("/");
+        if (i != -1) {
+            s = s.substring(0, i);
+        }
+        if (s.startsWith("www.")) {
+            s = s.substring(4);
+        }
+        i = s.indexOf('.');
+        if (i == -1) {
+            // must contain at least one dot
+            return null;
+        }
+        return new String(s);
     }
 
     public static void castValues(Map map, String key, Class clazz) {
@@ -226,5 +265,31 @@ public class Utils {
             }
         }
         return buf.toString();
+    }
+
+    public static long stringHash2(String s) {
+        long h = 0;
+        int off = 0;
+        char val[] = s.toCharArray();
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            h = 63 * h + val[off++];
+        }
+        return h;
+    }
+
+    public static String stringHash(String s) {        
+        long h = 0;
+        int off = 0;
+        char val[] = s.toCharArray();
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            h = 63 * h + val[off++];
+        }
+        return Long.toString(h);
+    }
+
+    public static void main(String[] args) {
+
     }
 }

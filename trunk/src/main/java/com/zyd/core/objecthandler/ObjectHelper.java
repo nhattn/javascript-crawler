@@ -1,7 +1,6 @@
 package com.zyd.core.objecthandler;
 
 import java.sql.Connection;
-
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -9,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -83,6 +83,10 @@ public class ObjectHelper {
             }
         }
     }
+
+    private static DateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    private static DateFormat time = new SimpleDateFormat("HH:mm:ss");
+    private static DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Given a string, which could be a range object or a single object, like '100-1000' or '100' and the type,
@@ -210,8 +214,49 @@ public class ObjectHelper {
         return r;
     }
 
-    private static DateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-    private static DateFormat time = new SimpleDateFormat("HH:mm:ss");
-    private static DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+    /**
+     * transfer raw request from client into a valid request with appropriate data to the database, 
+     * say a double field with value of "12.3" of string type is transfered into double value of 12.3.
+     * @param values
+     * @param meta
+     */
+    public static void nomorlizedParameters(HashMap values, HashMap<String, DatabaseColumnInfo> meta) {
+        Iterator iter = values.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
+            DatabaseColumnInfo info = meta.get(key);
+            if (info == null)
+                continue;
+            String value = null;
+            try {
+                value = (String) values.get(key);
+                if (value == null) {
+                    values.remove(key);
+                }
+                switch (info.type) {
+                case Types.INTEGER:
+                    values.put(key, Integer.parseInt(value));
+                    break;
+                case Types.DOUBLE:
+                    values.put(key, Double.parseDouble(value));
+                    break;
+                case Types.BIGINT:
+                    values.put(key, Long.parseLong(value));
+                    break;
+                case Types.FLOAT:
+                    values.put(key, Float.parseFloat(value));
+                    break;
+                case Types.VARCHAR:
+                case Types.CHAR:
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Type is not supported " + info.type + ", key is " + key + ", value is " + value);
+                }
+            } catch (NumberFormatException e) {
+                logger.debug("Invalid format, ignoring key. Can not parse value for type: " + info.type + ", key is " + key + ", value is " + value, e);
+                values.remove(key);
+            }
+        }
 
+    }
 }

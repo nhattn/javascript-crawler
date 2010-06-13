@@ -179,15 +179,22 @@ function handlerProcess() {
 
     obj.rentalType = rentalTypeMap[fangType];
     var s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
-    obj.city = cityMap[s];
-
-    if (!parseInt(obj.size)) {
-        delete obj.size;
-    }
-    if (!parseInt(obj.price)) {
+    obj.city = cityMap[s];        
+    CrUtil.trimAttributes(obj);
+    
+    if (!parseFloat(obj.price)) {
         delete obj.price;
     }
-    CrUtil.trimAttributes(obj);
+    if (!parseFloat(obj.size)) {
+        delete obj.size;
+    }
+    if (!parseInt(obj.floor)) {
+        delete obj.floor;
+    }
+    if (!parseInt(obj.totalFloor)) {
+        delete obj.totalFloor;
+    }
+    
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 
     // tel

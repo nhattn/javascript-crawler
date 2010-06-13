@@ -26,7 +26,6 @@ scp -i /y/work/ec2/yangkey.pem root@184.73.171.54:/root/db.gz /y/workspace/webcr
 gunzip  /y/workspace/webcrawl/tmp/db.gz
         
 ## import on local
-mysql -uroot -proot < /y/workspace/webcrawl/tmp/db
 mysql -uroot -proot crawler < /y/workspace/webcrawl/backup/house.db.backup-2009-06-06
 
 
@@ -34,6 +33,8 @@ mysql -uroot -proot crawler < /y/workspace/webcrawl/backup/house.db.backup-2009-
 ## create table on remote 
 mysql -uroot -proot < /tomcat/source/crawler/doc/deploy/house.sql
 
+## create database on local
+mysql -uroot -proot < /y/workspace/webcrawl/doc/deploy/house.sql
 
 ## deploy
 /y/workspace/webcrawl/doc/script/deploy.prod.sh

@@ -22,14 +22,14 @@ public class crawlerconfig extends ServiceBase {
     public crawlerconfig() {
         linkManager = (LinkManager) SpringContext.getContext().getBean("linkManager");
         templateManager = (TemplateManager) SpringContext.getContext().getBean("templateManager");
-        lastRefreshRate = linkManager.getSuggestedLinkRefreshTime();
+        lastRefreshRate = linkManager.getSuggestedLinkRefreshInterval();
         content = generateContent(lastRefreshRate * 1000);
     }
 
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
-        int i = linkManager.getSuggestedLinkRefreshTime();
+        int i = linkManager.getSuggestedLinkRefreshInterval();
         if (i != lastRefreshRate) {
             lastRefreshRate = i;
             content = generateContent(lastRefreshRate * 1000);

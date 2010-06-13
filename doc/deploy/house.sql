@@ -11,7 +11,7 @@ create table House(
 	price		        double,
 	paymentType	        varchar(10),
 	priceUnit           varchar(10),
-	size                varchar(10),
+	size                double,
 	houseType           varchar(30),
 	address             varchar(200),
 	city				varchar(20),
@@ -23,8 +23,8 @@ create table House(
 	photo				varchar(200),
 	description1		varchar(200),
 	description2		varchar(5000),
-	floor				varchar(10),
-	totalFloor			varchar(5),
+	floor				integer,
+    totalFloor			integer,
 	isAgent				integer,
 	equipment			varchar(100),
 	decoration			varchar(20),
@@ -68,12 +68,13 @@ from House where ok=1 order by id desc;
 
 create table Link(
 	id					bigint NOT NULL AUTO_INCREMENT,
+	hash                varchar(20),
 	url					varchar(300),	
 	createTime          datetime,
 	processTime		    datetime,
 	tryCount			integer,
-	isError           integer,
 	errorMsg            varchar(300),
+	isError             integer,	
 	PRIMARY KEY (id)
 );
 

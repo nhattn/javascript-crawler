@@ -1,67 +1,166 @@
 package com.zyd.core.busi;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.tj.common.CommonUtil;
 import com.zyd.Constants;
+import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
+import com.zyd.core.dom.Client;
 import com.zyd.core.dom.Link;
 
-@SuppressWarnings("unchecked")
 public class LinkManager {
-    private static Logger logger = Logger.getLogger(LinkManager.class);
-    private HashMap<String, Link> waiting = new HashMap<String, Link>();
-    private HashMap<String, Link> processed = new HashMap<String, Link>();
-    private HashMap<String, Link> processing = new HashMap<String, Link>();
-    private HashMap<String, Link> error = new HashMap<String, Link>();
-
-    /**
-     * How soon should the client refresh it self, based on the current size of waiting list.
-     */
-    private int suggestedLinkRefreshTime = 20;
-
-    public int getSuggestedLinkRefreshTime() {
-        return suggestedLinkRefreshTime;
-    }
-
     public final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
-
+    /* How soon should the client refresh it self, based on the current size of waiting list.*/
+    private int suggestedLinkRefreshInterval = 20;
+    private static Logger logger = Logger.getLogger(LinkManager.class);
+    private HashMap<String, LinkStore> linkStoreMap;
+    private ArrayList<LinkStore> linkStoreList;
+    private int storeSize = 0;
     private LinkMonitorThread monitor;
-    private int lastCrawlerRefreshRate;
 
     public LinkManager() {
-        lastCrawlerRefreshRate = suggestedLinkRefreshTime;
+        linkStoreMap = new HashMap<String, LinkStore>();
+        linkStoreList = new ArrayList<LinkStore>();
     }
 
-    private void updateSuggestedRefreshRate() {
-        int n = waiting.size();
-        if (n > 1000) {
-            suggestedLinkRefreshTime = 2;
-        } else if (n > 800) {
-            suggestedLinkRefreshTime = 4;
-        } else if (n > 500) {
-            suggestedLinkRefreshTime = 5;
-        } else if (n > 300) {
-            suggestedLinkRefreshTime = 10;
+    public Link add(String link) {
+        String domain = Utils.getShortestDomain(link);
+        if (domain == null) {
+            logger.warn("Can not add link, can not get domain name :" + link);
+            return null;
+        }
+        LinkStore store = linkStoreMap.get(domain);
+        if (store == null) {
+            store = new LinkStore(domain);
+            linkStoreMap.put(domain, store);
+            linkStoreList.add(store);
+            storeSize++;
+        }
+        return store.addLink(link);
+    }
+
+    private int lastStoreIndex = 0;
+    private int counter = 0;
+
+    public Link next(Client client) {
+        if (counter++ % 8 == 0) {
+            updateSuggestedRefreshInterval();
+            if (shouldCheckLinkList()) {
+                return nextWatchedLink();
+            }
+        }
+        // starting from lastStoreIndex, check to see if any have links to crawl. if do , return it.
+        synchronized (this) {
+            for (int i = 0; i < storeSize; i++) {
+                LinkStore store = linkStoreList.get((lastStoreIndex + i) % storeSize);
+                Link link = store.next();
+                if (link != null) {
+                    lastStoreIndex = (lastStoreIndex + i + 1) % storeSize;
+                    return link;
+                }
+            }
+        }
+        // return next watched link
+        return nextWatchedLink();
+    }
+
+    public Link next() {
+        return next(null);
+    }
+
+    public Link linkFinished(String link) {
+        LinkStore store = getLinkStoreByUrl(link, true);
+        if (store == null)
+            return null;
+        return store.linkFinished(link);
+    }
+
+    public Link linkError(String link, String msg) {
+        LinkStore store = getLinkStoreByUrl(link, true);
+        if (store == null)
+            return null;
+        return store.linkError(link, msg);
+    }
+
+    public int getSuggestedLinkRefreshInterval() {
+        return suggestedLinkRefreshInterval;
+    }
+
+    private int lastCrawlerRefreshInterval = 0;
+
+    private void updateSuggestedRefreshInterval() {
+        int n = 0;
+        for (int i = 0; i < storeSize; i++) {
+            n = n + linkStoreList.get(i).getWaitingSize();
+        }
+
+        if (n > 50) {
+            suggestedLinkRefreshInterval = 2;
         } else if (n > 20) {
-            suggestedLinkRefreshTime = 20;
+            suggestedLinkRefreshInterval = 20;
         } else if (n > 5) {
-            suggestedLinkRefreshTime = 30;
+            suggestedLinkRefreshInterval = 30;
         } else {
-            suggestedLinkRefreshTime = 60;
+            suggestedLinkRefreshInterval = 60;
         }
-        if (suggestedLinkRefreshTime != lastCrawlerRefreshRate) {
-            logger.info("Updated suggestedLinkRefreshTime from " + lastCrawlerRefreshRate + " to " + suggestedLinkRefreshTime + ", current size of wating list " + n);
-            lastCrawlerRefreshRate = suggestedLinkRefreshTime;
+        if (suggestedLinkRefreshInterval != lastCrawlerRefreshInterval) {
+            logger.info("Updated suggestedLinkRefreshInterval from " + lastCrawlerRefreshInterval + " to " + suggestedLinkRefreshInterval + ", current size of wating list " + n);
+            lastCrawlerRefreshInterval = suggestedLinkRefreshInterval;
         }
+
+    }
+
+    public Link getProcessingLink(String link) {
+        LinkStore store = getLinkStoreByUrl(link, true);
+        if (store == null) {
+            return null;
+        }
+        return store.getProcessingLink(link);
+    }
+
+    private LinkStore getLinkStoreByUrl(String link, boolean shouldWarn) {
+        String domain = Utils.getShortestDomain(link);
+        if (domain == null) {
+            logger.warn("Invalid link, can not get domain name :" + link);
+            return null;
+        }
+        LinkStore store = linkStoreMap.get(domain);
+        if (store == null) {
+            if (shouldWarn) {
+                logger.warn("Check this: Invalid link, domain is not in list :" + link);
+            }
+            return null;
+        }
+        return store;
+    }
+
+    private int lastWatchedLinkIndex = -1;
+
+    private Link nextWatchedLink() {
+        if (Constants.WATCH_LIST.length == 0) {
+            return IdlePageUrl;
+        }
+        synchronized (this) {
+            lastWatchedLinkIndex = (lastWatchedLinkIndex + 1) % Constants.WATCH_LIST.length;
+            return Constants.WATCH_LIST[lastWatchedLinkIndex];
+        }
+    }
+
+    private long lastLinkListCheckTime = new Date().getTime();
+
+    private boolean shouldCheckLinkList() {
+        Date now = new Date();
+        if (now.getTime() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
+            lastLinkListCheckTime = now.getTime();
+            return true;
+        }
+        return false;
     }
 
     public LinkMonitorThread getLinkMonitorThread() {
@@ -78,203 +177,50 @@ public class LinkManager {
         monitor.stopMoniter();
     }
 
-    public synchronized Link addLink(String link) {
-        if (isLinkManaged(link)) {
-            return null;
+    public void loadFromDb() {
+        for (LinkStore store : linkStoreList) {
+            store.loadFromDb();
         }
-
-        Link l = new Link(link);
-        l.createTime = new Date();
-        saveOrUpdateLink(l, false);
-        waiting.put(link, l);
-        return l;
-    }
-
-    public boolean isLinkManaged(String link) {
-        if (processed.containsKey(link) || processing.containsKey(link) || waiting.containsKey(link) || error.containsKey(link)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * is this link waiting to be processed
-     * @return
-     */
-    public boolean isLinkProcessing(String link) {
-        return processing.containsKey(link);
-    }
-
-    private static int Counter = 0;
-    private long lastLinkListCheckTime = new Date().getTime();
-
-    public synchronized Link nextLink() {
-        Counter++;
-        if (Counter % 5 == 0) {
-            updateSuggestedRefreshRate();
-            Date now = new Date();
-            if (now.getTime() - lastLinkListCheckTime > Constants.INTERVAL_CHECK_LINK_LIST) {
-                lastLinkListCheckTime = now.getTime();
-                logger.info("Returning next watched link ");
-                return nextWatchedLink();
-            }
-        }
-
-        if (waiting.size() > 0) {
-            String url;
-            if (Counter % 2 == 0)
-                url = waiting.keySet().iterator().next();
-            else
-                url = ((Link) waiting.values().iterator().next()).url;
-
-            Link link = waiting.remove(url);
-            link.startTime = new Date();
-            processing.put(url, link);
-            return link;
-        }
-
-        if (error.size() > 0) {
-            // should not try too much of error links
-            String url = error.keySet().iterator().next();
-            Link link = error.remove(url);
-            link.startTime = new Date();
-            processing.put(url, link);
-            return link;
-        }
-        return nextWatchedLink();
-    }
-
-    public synchronized Link linkError(String url, String msg) {
-        Link link = processing.get(url);
-        if (link == null) {
-            //TODO: should pay special attention in production. Link is in finished but not in our queue, somebody hacking.            
-            return null;
-        }
-        link.tryCount++;
-        processing.remove(url);
-        link.isError = 1;
-        link.startTime = null;
-        if (link.tryCount < Constants.LINK_MAX_TRY) {
-            // ok, keep trying 
-            error.put(url, link);
-        } else {
-            // tried to much, giving up            
-            link.processTime = new Date();
-            link.errorMsg = msg;
-            processed.put(url, link);
-        }
-        saveOrUpdateLink(link, true);
-        return link;
-    }
-
-    public synchronized Link linkFinished(String url) {
-        Link link = processing.get(url);
-        if (link == null) {
-            //TODO: should pay special attention in production. Link is in finished but not in our queue, somebody hacking. 
-            return null;
-        }
-        link.tryCount++;
-        link.processTime = new Date();
-        link.startTime = null;
-        link.isError = 0;
-        saveOrUpdateLink(link, true);
-        processing.remove(url);
-        processed.put(url, link);
-        return link;
-    }
-
-    /**
-     * links without processTime is waiting to be processed.
-     * otherwise processed.
-     */
-    public synchronized void loadFromDb() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        logger.debug("Going to load links from database...");
-        List list = session.createQuery("from Link as link where link.createTime > ? and link.tryCount < ? and link.isError<>1 order by link.id desc").setDate(0,
-                CommonUtil.msecefore(Constants.LINK_LOAD_BEFORE)).setInteger(1, Constants.LINK_MAX_TRY).list();
-        for (int i = 0, len = list.size(); i < len; i++) {
-            Link link = (Link) list.get(i);
-            if (link.processTime == null) {
-                waiting.put(link.url, link);
-            } else {
-                processed.put(link.url, link);
-            }
-        }
-        tx.commit();
-        logger.info("Loaded links from database :");
-        logger.info(snapshot());
-    }
-
-    private void saveOrUpdateLink(Link link, boolean isUpdate) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        if (isUpdate)
-            session.update(link);
-        else
-            session.save(link);
-        tx.commit();
-    }
-
-    public List<String> getAllLinks() {
-        return new ArrayList(processed.values());
-    }
-
-    public void deleteAllLinks() {
-        final String deleteAll = "delete from Link";
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        int r = session.createQuery(deleteAll).executeUpdate();
-        session.getTransaction().commit();
-        clearCache();
     }
 
     public void clearCache() {
-        waiting.clear();
-        processed.clear();
-        processing.clear();
-        error.clear();
-    }
-
-    public Collection getWaiting() {
-        return waiting.values();
-    }
-
-    public Collection getProcessed() {
-        return processed.values();
-    }
-
-    public Collection getProcessing() {
-        return processing.values();
-    }
-
-    public Collection getError() {
-        return error.values();
-    }
-
-    private int watchedLinkIndex = -1;
-
-    private Link nextWatchedLink() {
-        if (Constants.WATCH_LIST.length == 0) {
-            return IdlePageUrl;
+        for (LinkStore store : linkStoreList) {
+            store.clearCache();
         }
-        synchronized (this) {
-            watchedLinkIndex = (watchedLinkIndex + 1) % Constants.WATCH_LIST.length;
-            return Constants.WATCH_LIST[watchedLinkIndex];
+    }
+
+    public void cleanAll() {
+        clearCache();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        session.createQuery("delete from Link").executeUpdate();
+        tx.commit();
+    }
+
+    public int[] getAllQueueSize() {
+        int[] sum = new int[] { 0, 0, 0, 0 };
+        for (LinkStore store : linkStoreList) {
+            int sizes[] = store.getAllQueueSize();
+            sum[0] += sizes[0];
+            sum[1] += sizes[1];
+            sum[2] += sizes[2];
+            sum[3] += sizes[3];
         }
+        return sum;
     }
 
     public String snapshot() {
+        int[] sum = getAllQueueSize();
         StringBuffer buf = new StringBuffer();
-        buf.append("suggestedRefreshTime :" + suggestedLinkRefreshTime);
+        buf.append("suggestedRefreshTime :" + suggestedLinkRefreshInterval);
         buf.append("\n");
-        buf.append("waiting    :" + waiting.size());
+        buf.append("waiting    :" + sum[1]);
         buf.append("\n");
-        buf.append("processing :" + processing.size());
+        buf.append("processing :" + sum[0]);
         buf.append("\n");
-        buf.append("processed  :" + processed.size());
+        buf.append("processed  :" + sum[2]);
         buf.append("\n");
-        buf.append("error      :" + error.size());
+        buf.append("error      :" + sum[3]);
         return buf.toString();
     }
 
@@ -284,23 +230,23 @@ public class LinkManager {
      *    if any link has been processed for long than Constants.LINK_PROCESSING_EXPIRE, it will 
      *    mark this link as error.
      *    
-     * ## every Constants.LINK_LOAD_BEFORE * 0.2, it will go through all the links, then release
-     *    the links that is older than Constants.LINK_LOAD_BEFORE.
+     * ## every Constants.LINK_FLUSH_CYCLE_LENGTH, it will release all the processed and error links that is older than Constants.LINK_LOAD_BEFORE.
      *
      */
     class LinkMonitorThread extends Thread {
-        private long lastLinkFlushTime;
+        private long lastFlushOldProssedAndErrorTime, lastCleanOldProcessingLinkTime;
 
         public LinkMonitorThread() {
             super("LinkMonitorThread - " + (new Date()).toString());
-            lastLinkFlushTime = (new Date()).getTime();
+            Date now = new Date();
+            lastFlushOldProssedAndErrorTime = now.getTime();
+            lastCleanOldProcessingLinkTime = now.getTime();
         }
 
         private boolean shouldStop;
 
         public void startMonitor() {
             shouldStop = false;
-            //TODO: potential bug, can be started twice
             this.start();
         }
 
@@ -310,64 +256,33 @@ public class LinkManager {
         }
 
         private void clean() {
-            cleanOutdatedProcessingLink();
-            flushOldProssedLinks();
+            long now = new Date().getTime();
+            if (now - lastCleanOldProcessingLinkTime > Constants.LINK_PROCESSING_EXPIRE) {
+                cleanOutdatedProcessingLink();
+            }
+            if (now - lastFlushOldProssedAndErrorTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
+                flushOldProssedAndErrorLinks();
+            }
         }
 
-        private void flushOldProssedLinks() {
-            long now = new Date().getTime();
-            if (now - lastLinkFlushTime > Constants.LINK_FLUSH_CYCLE_LENGTH) {
-                int processedCount = 0;
-                HashMap<String, Link> p;
-
-                synchronized (processed) {
-                    p = (HashMap<String, Link>) processed.clone();
+        private void flushOldProssedAndErrorLinks() {
+            for (LinkStore store : linkStoreList) {
+                try {
+                    store.purgeProcessedAndError();
+                } catch (Exception e) {
+                    logger.error("Error while purgeProcessedAndError for LinkStore " + store, e);
                 }
-                processedCount = purgeExpiredLinks(p, now);
-                synchronized (processed) {
-                    processed.clear();
-                    processed = p;
-                }
-                p = null;
-                logger.info("Flushed " + processedCount + " old processed link.");
             }
         }
 
         private void cleanOutdatedProcessingLink() {
-            long now = new Date().getTime();
-            int count = 0;
-            if (processing.size() != 0) {
-                HashMap<String, Link> ps;
-                synchronized (processing) {
-                    ps = (HashMap<String, Link>) processing.clone();
-                }
-                for (Link link : ps.values()) {
-                    Date start = link.startTime;
-                    if (start == null) {
-                        continue;
-                    }
-                    if (now - start.getTime() > Constants.LINK_PROCESSING_EXPIRE) {
-                        count++;
-                        linkError(link.url, "Url has been processed for too long, expired. First started on " + start.toString());
-                    }
+            for (LinkStore store : linkStoreList) {
+                try {
+                    store.cleanExpiredProcessing();
+                } catch (Exception e) {
+                    logger.error("Error while cleanExpiredProcessing for LinkStore " + store, e);
                 }
             }
-            logger.info("End cleaning outdated processing link, cleaned " + count + " links.");
-
-        }
-
-        private int purgeExpiredLinks(HashMap<String, Link> p, long now) {
-            int count = 0;
-            ArrayList<Link> links = new ArrayList<Link>(p.values());
-            for (int i = links.size() - 1; i > -1; i--) {
-                Link link = links.get(i);
-                Date time = link.processTime;
-                if (now - time.getTime() > Constants.LINK_LOAD_BEFORE) {
-                    p.remove(link.url);
-                    count++;
-                }
-            }
-            return count;
         }
 
         @Override
@@ -388,4 +303,5 @@ public class LinkManager {
             logger.info("Link manager stopped");
         }
     }
+
 }

@@ -27,6 +27,7 @@ public class TestObjectQuery extends TestCase {
     @Override
     protected void setUp() throws Exception {
         assertTrue(ATestUtil.clearServerData());
+        ATestUtil.stopReturningWatchedLink();
     }
 
     public void testQueryObject() throws Exception {

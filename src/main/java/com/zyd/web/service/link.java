@@ -60,15 +60,14 @@ public class link extends ServiceBase {
         }
 
         if ("list".equals(action)) {
-            // TODO: count is ignored
-            setResponseType("text", resp);
-            s = Utils.stringToFlatList(linkManager.getAllLinks());
+            // TODO: clean this, this should not be used
+            throw new UnsupportedOperationException("Not supported anymore");            
         } else if ("get".equals(action)) {
             setResponseType("js", resp);
-            s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.nextLink().url });
+            s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.next().url });
         } else if ("redirect".equals(action)) {
             setResponseType("html", resp);
-            String l = linkManager.nextLink().url;
+            String l = linkManager.next().url;
             ArrayList<String> p = new ArrayList<String>();
             p.add(l);
             s = templateManager.getTemplate("redirect", p);
@@ -97,7 +96,7 @@ public class link extends ServiceBase {
         try {
             JSONArray arr = new JSONArray(data);
             for (int i = 0; i < arr.length(); i++) {
-                if (linkManager.addLink(arr.getString(i)) != null) {
+                if (linkManager.add(arr.getString(i)) != null) {
                     count++;
                 }
             }

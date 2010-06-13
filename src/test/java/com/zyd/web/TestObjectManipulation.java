@@ -29,6 +29,7 @@ public class TestObjectManipulation extends TestCase {
     @Override
     protected void setUp() throws Exception {
         assertTrue(ATestUtil.clearServerData());
+        ATestUtil.stopReturningWatchedLink();
     }
 
     public void testCreateDuplicatesHouses() throws Exception {
@@ -77,12 +78,11 @@ public class TestObjectManipulation extends TestCase {
         assertEquals(0, nodes.getLength());
     }
 
+    
     public void testCreateObjectFail() throws Exception {
-        {
-            Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
-            map.remove(House.Columns.Address);
-            assertFalse(ATestUtil.createObject(map));
-        }
+        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
+        map.remove(House.Columns.Address);
+        assertTrue(ATestUtil.createObject(map)); // not anymore
     }
 
     public static void testCreateCustomObject() throws Exception {

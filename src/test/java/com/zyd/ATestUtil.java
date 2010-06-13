@@ -27,6 +27,13 @@ public class ATestUtil {
         }
     }
 
+    public static void stopReturningWatchedLink() throws Exception {
+        HashMap<String, String> config = new HashMap<String, String>();
+        ATestUtil.reststoreServerConfigure();
+        config.put("INTERVAL_CHECK_LINK_LIST", Integer.toString(100000000));
+        ATestUtil.updateServerConfigure(config);
+    }
+
     public static boolean clearServerData() throws Exception {
         String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData", null);
         JSONObject o = new JSONObject(s);
@@ -111,6 +118,11 @@ public class ATestUtil {
      */
     public static boolean createObject(Map v, String referer) throws Exception {
         createLink(referer);
+        try {
+            Thread.sleep(10);
+        } catch (Exception e) {
+
+        }
         String l = getNextLink();
         String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v, l);
         JSONObject obj = new JSONObject(r);
@@ -168,7 +180,7 @@ public class ATestUtil {
         params.put("data", arr.toString());
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
-        if (1 != o.getInt("result")) {
+        if (1 != o.getInt("result")) {            
             return false;
         }
         return true;

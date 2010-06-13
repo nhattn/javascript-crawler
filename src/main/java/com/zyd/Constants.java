@@ -148,7 +148,7 @@ public class Constants {
     }
 
     private static void initValues() {
-        LINK_FLUSH_CYCLE_LENGTH = (int) (LINK_LOAD_BEFORE * 0.2);
+        LINK_FLUSH_CYCLE_LENGTH = (int) (LINK_LOAD_BEFORE * 0.3);
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
     }

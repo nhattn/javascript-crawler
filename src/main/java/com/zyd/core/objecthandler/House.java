@@ -24,7 +24,7 @@ import com.zyd.core.util.Ocr;
 public class House extends Handler {
     public final static String name = "House";
     private static Logger logger = Logger.getLogger(House.class);
-    private final static String[] requiredColumns = new String[] { Columns.Tel, Columns.Address, Columns.Referer };
+    private final static String[] requiredColumns = new String[] { Columns.Referer };
     private final static HashSet CDataColumns = new HashSet();
     private static HashMap<String, DatabaseColumnInfo> meta = null;
 
@@ -65,23 +65,21 @@ public class House extends Handler {
             logger.warn("Can not add House, missing required paramter - " + missing);
             return false;
         }
+        String tel = (String) values.get(Columns.Tel);
+        if (tel.length() > 100) {
+            String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
+            values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
+        }
+        ObjectHelper.nomorlizedParameters(values, meta);
 
         if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
             values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
         } else {
             values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_NO);
         }
-
-        String tel = (String) values.get(Columns.Tel);
-        if (tel.length() > 100) {
-            String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
-            values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
-        }
-        Utils.castValues(values, Columns.Lat, Double.class);
-        Utils.castValues(values, Columns.Long, Double.class);
-        Utils.castValues(values, Columns.IsAgent, Integer.class);
-        Utils.castValues(values, Columns.Price, Double.class);
-        values.put(Columns.CreateTime, new Date());
+        Date now = new Date();
+        values.put(Columns.CreateTime, now);
+        values.put(Columns.UpdateTime, now);
         return true;
     }
 
@@ -150,7 +148,7 @@ public class House extends Handler {
                 separator = "/";
             }
             qparams.put(column, ObjectHelper.parseRangeObject(p, info.type, separator));
-//            System.out.println(ObjectHelper.parseRangeObject(p, info.type, separator)[0] + ":" + ObjectHelper.parseRangeObject(p, info.type, separator)[1]);
+            //            System.out.println(ObjectHelper.parseRangeObject(p, info.type, separator)[0] + ":" + ObjectHelper.parseRangeObject(p, info.type, separator)[1]);
         }
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();

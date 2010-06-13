@@ -1,198 +1,215 @@
 package com.zyd.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import junit.framework.TestCase;
-
-import org.springframework.context.ApplicationContext;
 
 import com.zyd.ATestUtil;
 import com.zyd.Constants;
 import com.zyd.core.busi.LinkManager;
 import com.zyd.core.dom.Link;
+import com.zyd.core.util.SpringContext;
 
 public class TestLinkManager extends TestCase {
-    LinkManager linkMan;
-    ArrayList<String> allLinks;
+    int linkSize = 1000;
+    String[] domains = new String[] { "domain_1.com", "domain_2.com", "domain_3.com", "domain_4.com" };
+    HashSet<String> domainSet;
+    ArrayList<String> links;
+    LinkManager linkMan = null;;
+    int totalLinkCount;
 
     @Override
     protected void setUp() throws Exception {
-        Constants.WATCH_LIST = new Link[0];
-        ApplicationContext context = ATestUtil.setUpSpring();
-        linkMan = (LinkManager) context.getBean("linkManager");
-        linkMan.deleteAllLinks();
-        allLinks = new ArrayList<String>();
-        for (int i = 0; i < 100; i++) {
-            allLinks.add("http://link.com/link_" + i);
+        ATestUtil.setUpSpring();
+        linkMan = (LinkManager) SpringContext.getContext().getBean("linkManager");
+        linkMan.cleanAll();
+        links = new ArrayList<String>();
+        for (String domain : domains) {
+            for (int i = 0; i < linkSize; i++) {
+                String link = "http://" + domain + "/link_" + i;
+                links.add(link);
+            }
         }
-        for (int i = 100; i < 200; i++) {
-            allLinks.add("http://link.com/link_" + i);
+        domainSet = new HashSet<String>();
+        for (String s : domains) {
+            domainSet.add(s);
         }
-        for (String s : allLinks) {
-            linkMan.addLink(s);
-        }
+        totalLinkCount = linkSize * domains.length;
+        linkMan.cleanAll();
     }
 
-    public void testStoreAndLoad() throws Exception {
+    public void testAdd() throws Exception {
+        // add link from different domain, 
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
+        }
+        checkSize(new int[] { 0, links.size(), 0, 0 }, linkMan.getAllQueueSize());
+        // make sure it stores correctly and loaded again correctly
         linkMan.clearCache();
         linkMan.loadFromDb();
-        assertEquals(200, linkMan.getWaiting().size());
-        assertEquals(0, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
+        checkSize(new int[] { 0, links.size(), 0, 0 }, linkMan.getAllQueueSize());
+        linkMan.cleanAll();
     }
 
-    public void testProcessingAndWaiting() {
-        ArrayList<Link> list = new ArrayList<Link>();
-        for (int i = 0; i < 50; i++) {
-            list.add(linkMan.nextLink());
+    public void testNextLink() {
+        // make sure it returns link from different domain
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
         }
-        // make sure waiting and processing adds up
-        assertEquals(150, linkMan.getWaiting().size());
-        assertEquals(0, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(50, linkMan.getProcessing().size());
+        HashMap<String, Integer> count = new HashMap<String, Integer>();
+        String pdomain = null;
+        for (int i = 0; i < 2000; i++) {
+            Link link = linkMan.next();
+            String domain = Utils.getShortestDomain(link.url);
+            Integer num = count.get(domain);
+            if (num == null) {
+                num = 0;
+            }
+            count.put(domain, (num + 1));
+            assertTrue(domain.equals(pdomain) == false);
+            assertTrue(domain + ":" + domainSet.toString(), domainSet.contains(domain));
+            pdomain = domain;
+        }
+        assertEquals(domains.length, count.size());
+        int average = 2000 / domains.length;
+        for (Integer i : count.values()) {
+            assertTrue(Math.abs(average - i) < 5);
+        }
 
-        // when storing to db, processing should become waiting
+        // make sure it's not returning watched link until all added link is finished
+
+        linkMan.cleanAll();
+    }
+
+    public void testNextLinkExhausted() {
+        int count = 0, extra = 100;
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
+        }
+        for (int i = 0; i < extra; i++) {
+            linkMan.add("http://" + domains[0] + "/link_xyz_" + i);
+        }
+        for (int i = 0; i < extra; i++) {
+            linkMan.add("http://" + domains[2] + "/link_xyz_" + i);
+        }
+        while (true) {
+            Link link = linkMan.next();
+            String url = link.url;
+            if (domainSet.contains(Utils.getShortestDomain(url)) == false) {
+                break;
+            }
+            count++;
+        }
+        assertEquals(domains.length * linkSize + extra * 2, count);
+        linkMan.cleanAll();
+    }
+
+    public void testLinkProcessingAndFinishing() {
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
+        }
+        // make sure link being processed is calcuated correctly
+        int count = 583;
+        HashSet<Link> links = new HashSet<Link>();
+        for (int i = 0; i < count; i++) {
+            links.add(linkMan.next());
+        }
+
+        checkSize(new int[] { count, totalLinkCount - count, 0, 0 }, linkMan.getAllQueueSize());
+        // make sure link being processed is treated as waiting when interrupted and loaded again
         linkMan.clearCache();
         linkMan.loadFromDb();
-        assertEquals(200, linkMan.getWaiting().size());
-        assertEquals(0, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
+        checkSize(new int[] { 0, totalLinkCount, 0, 0 }, linkMan.getAllQueueSize());
+
+        // make sure link is finished correctly and store correctly
+        links = new HashSet<Link>();
+        for (int i = 0; i < count; i++) {
+            links.add(linkMan.next());
+        }
+
+        for (Link link : links) {
+            linkMan.linkFinished(link.url);
+        }
+        checkSize(new int[] { 0, totalLinkCount - count, count, 0 }, linkMan.getAllQueueSize());
+        linkMan.clearCache();
+        linkMan.loadFromDb();
+        checkSize(new int[] { 0, totalLinkCount - count, count, 0 }, linkMan.getAllQueueSize());
+        linkMan.cleanAll();
     }
 
     public void testLinkError() {
-        Constants.LINK_MAX_TRY = 3;
-        ArrayList<Link> errorList = new ArrayList<Link>();
-        ArrayList<Link> rightList = new ArrayList<Link>();
-        for (int i = 0; i < 25; i++) {
-            errorList.add(linkMan.nextLink());
-        }
-        for (int i = 0; i < 25; i++) {
-            rightList.add(linkMan.nextLink());
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
         }
 
-        for (Link link : errorList) {
-            linkMan.linkError(link.url, "error " + link.url);
+        // make sure link  with an error is stored correctly
+        int old = Constants.LINK_MAX_TRY;
+        Constants.LINK_MAX_TRY = 1;
+        int count = totalLinkCount / 2;
+        HashSet<Link> mlinks = new HashSet<Link>();
+        for (int i = 0; i < count; i++) {
+            mlinks.add(linkMan.next());
         }
-        //make sure waiting and error and processing adds up
-        assertEquals(150, linkMan.getWaiting().size());
-        assertEquals(0, linkMan.getProcessed().size());
-        assertEquals(25, linkMan.getError().size());
-        assertEquals(25, linkMan.getProcessing().size());
-
-        for (Link link : errorList) {
-            assertEquals(link.tryCount, 1);
+        for (Link link : mlinks) {
+            linkMan.linkError(link.url, "error");
         }
-
-        for (Link link : rightList) {
-            linkMan.linkFinished(link.url);
-        }
-
-        // make sure waiting and processed and error adds up
-        assertEquals(150, linkMan.getWaiting().size());
-        assertEquals(25, linkMan.getProcessed().size());
-        assertEquals(25, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
-
-        for (Link link : rightList) {
-            assertEquals(link.tryCount, 1);
-        }
-
-        // make sure try count is correct for error links
-        ArrayList<Link> allLinkList = new ArrayList<Link>();
-        int i = 0;
-        while (true) {
-            i++;
-            Link link = linkMan.nextLink();
-            if (link.equals(LinkManager.IdlePageUrl)) {
-                break;
-            }
-            allLinkList.add(link);
-            linkMan.linkFinished(link.url);
-        }
-
-        for (Link link : errorList) {
-            assertEquals(link.tryCount, 2);
-        }
-        assertEquals(0, linkMan.getWaiting().size());
-        assertEquals(200, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
-
-        //store it, then load
+        checkSize(new int[] { 0, totalLinkCount - count, 0, count }, linkMan.getAllQueueSize());
         linkMan.clearCache();
         linkMan.loadFromDb();
-        assertEquals(0, linkMan.getProcessing().size());
-        assertEquals(200, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
-        // there should be 25 links with try count 2
-        int count = 0;
-        for (Object objs : linkMan.getProcessed()) {
-            Link link = (Link) objs;
-            if (link.tryCount == 2) {
-                count++;
-            }
-        }
+        checkSize(new int[] { 0, totalLinkCount - count, 0, count }, linkMan.getAllQueueSize());
 
-        assertEquals(25, count);
+        // make sure link with error less than maxtry is put back in waiting list
+        Constants.LINK_MAX_TRY = 2;
+        linkMan.cleanAll();
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
+        }
+        mlinks.clear();
+        for (int i = 0; i < count; i++) {
+            mlinks.add(linkMan.next());
+        }
+        for (Link link : mlinks) {
+            linkMan.linkError(link.url, "error");
+        }
+        checkSize(new int[] { 0, totalLinkCount, 0, 0 }, linkMan.getAllQueueSize());
+        Constants.LINK_MAX_TRY = old;
+        linkMan.cleanAll();
     }
 
-    /**
-     * test when link is given up
-     */
+    public void testDuplicates() {
+        for (String link : links) {
+            assertNotNull(linkMan.add(link));
+        }
+        // check link that is finished can not be duplicated
+        Link link = linkMan.next();
+        String url = link.url;
+        linkMan.linkFinished(url);
+        assertTrue(linkMan.add(url) == null);
 
-    public void testLinkError2() {
+        // check same for errors
+        int old = Constants.LINK_MAX_TRY;
         Constants.LINK_MAX_TRY = 1;
-        ArrayList<Link> errorList = new ArrayList<Link>();
-        ArrayList<Link> rightList = new ArrayList<Link>();
-        for (int i = 0; i < 25; i++) {
-            errorList.add(linkMan.nextLink());
-        }
-        for (int i = 0; i < 25; i++) {
-            rightList.add(linkMan.nextLink());
-        }
-
-        for (Link link : errorList) {
-            linkMan.linkError(link.url, "error " + link.url);
-        }
-        //make sure waiting and error and processing adds up
-        assertEquals(150, linkMan.getWaiting().size());
-        assertEquals(25, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(25, linkMan.getProcessing().size());
-
-        for (Link link : errorList) {
-            assertEquals(link.tryCount, 1);
-            assertNotNull(link.processTime);
-            assertEquals(link.isError, 1);
-            assertTrue(link.startTime == null);
-        }
-
-        for (Link link : rightList) {
-            linkMan.linkFinished(link.url);
-            assertEquals(link.tryCount, 1);
-            assertNotNull(link.processTime);
-            assertEquals(link.isError, 0);
-            assertTrue(link.startTime == null);
-        }
-
-        // make sure waiting and processed and error adds up
-        assertEquals(150, linkMan.getWaiting().size());
-        assertEquals(50, linkMan.getProcessed().size());
-        assertEquals(0, linkMan.getError().size());
-        assertEquals(0, linkMan.getProcessing().size());
-
-        for (Link link : rightList) {
-            assertEquals(link.tryCount, 1);
-        }
+        link = linkMan.next();
+        url = link.url;
+        linkMan.linkError(url, "error");
+        assertTrue(linkMan.add(url) == null);
+        Constants.LINK_MAX_TRY = old;
+        // check same for processing
+        link = linkMan.next();
+        url = link.url;
+        assertTrue(linkMan.add(url) == null);
+        linkMan.cleanAll();
     }
 
-    public void testShowSomeLinks() {
-        for (int i = 0; i < 200; i++) {
-            System.out.println(linkMan.nextLink());
-        }
+    private void checkSize(int[] sizes, int[] actual) {
+        assertEquals(sizes.length, actual.length);
+        assertEquals("processing", sizes[0], actual[0]);
+        assertEquals("waiting", sizes[1], actual[1]);
+        assertEquals("processed", sizes[2], actual[2]);
+        assertEquals("error", sizes[3], actual[3]);
+
     }
+
 }

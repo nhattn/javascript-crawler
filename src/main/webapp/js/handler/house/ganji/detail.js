@@ -1,10 +1,10 @@
 function handlerProcess() {
     CrUtil.removeElementsByTagName('script');
-    var s1 = CrUtil.removeNewLine(XPath.single(document, "/html/body/div[@id='wrapper2']/div[1]/div[1]").textContent).replace('(', ' (').replace('（',
-            ' (').replace('）', ')').replace('function', '    \nfunction');
-    s1 = CrUtil.deleteTokens(s1, [ '短信发送至手机', '收藏该房源' ]);
-    var fangType = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /.+\.ganji.com\/(fang[0-9]+)\/.*/)
+    var s1 = CrUtil.removeNewLine(XPath.single(document, "//div[@class='mainbox']").textContent).replace('(', ' (').replace('（', ' (').replace('）',
+            ')').replace('function', '    \nfunction');
+    s1 = CrUtil.deleteAfter(s1, '短信发送至手机');
 
+    var fangType = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /.+\.ganji.com\/(fang[0-9]+)\/.*/)
     var objInfo = [ {
         name : 'size',
         op : 'xpath.text.regex',
@@ -37,8 +37,9 @@ function handlerProcess() {
         param2 : /装修:\s*(\S*)/
     }, {
         name : 'contact',
-        op : 'xpath.textcontent.regex',
-        param1 : "/html/body/div[@id='wrapper2']/div[1]/div[3]//span[1]"
+        op : 'xpath.textcontent.regex.any',
+        param1 : "//div[@class='manager_div']//p[1]",
+        param2 : "//div[@class='mainbox']//span[@class='Dname']"
     }, {
         name : 'description1',
         op : 'xpath.textcontent.regex',
@@ -147,7 +148,7 @@ function handlerProcess() {
     }
     var txt = buf.join(' ');
     if (!txt || txt.trim().length == 0) {
-        txt = XPath.single(document, "/html/body/div[@id='wrapper2']/div[@id='content']/div[2]//div[@class='tuiguang_text']").textContent;
+        txt = XPath.single(document, "//div[@class='detail_box']//div[@class='tuiguang_text']").textContent;
     }
     obj.description2 = txt;
 
@@ -179,9 +180,10 @@ function handlerProcess() {
 
     obj.rentalType = rentalTypeMap[fangType];
     var s = HandlerHelper.getRegGroupFirstValue(window.location.toString(), /http:\/\/([a-z]+)\.ganji\.com/);
-    obj.city = cityMap[s];        
+    obj.city = cityMap[s];
+
     CrUtil.trimAttributes(obj);
-    
+
     if (!parseFloat(obj.price)) {
         delete obj.price;
     }
@@ -194,21 +196,28 @@ function handlerProcess() {
     if (!parseInt(obj.totalFloor)) {
         delete obj.totalFloor;
     }
-    
+
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 
     // tel
-    xpath = "/html/body/div[@id='wrapper2']/div[1]/div[2]/ul/li[2]";
+    xpath = "//img[contains(@src,'/tel/')]";
     var node = XPath.single(document, xpath), tel = '';
-    if (node.children && node.children.length != 0) {
-        CrUtil.encodeImage2(node.children[0], function(r) {
+    if (node && node.src) {
+        CrUtil.encodeImage2(node, function(r) {
             obj.tel = r;
-            obj.telImageName = node.children[0].src;
+            obj.telImageName = node.src;
             handlerProcess2(obj);
         });
     } else {
-        obj.tel = node.textContent;
-        handlerProcess2(obj);
+        xpath = "//div[contains(@class, 'tel_number')]"
+        node = XPath.single(document, xpath);
+        if (node && node.textContent && node.textContent.trim().length != 0) {
+            obj.tel = node.textContent.trim();
+            handlerProcess2(obj);
+        } else {
+            Crawler.attention('Failed to process house from Ganji.com, no tel can be found');
+            Crawler.nextLink();
+        }
     }
 }
 

@@ -7,7 +7,7 @@ Crawler = {
 
     clog : function(txt) {
         if (CrGlobal.RemoteLogging) {
-            Crawler.remoteLog('clog', txt);
+            Crawler.remoteLog('Clog', txt);
         } else {
             if (window.console)
                 window.console.log(txt);
@@ -16,18 +16,36 @@ Crawler = {
 
     log : function(txt) {
         if (CrGlobal.RemoteLogging) {
-            Crawler.remoteLog('log', txt);
+            Crawler.remoteLog('Log', txt);
         } else {
             Crawler.clog(txt);
         }
     },
 
+    warn : function(txt) {
+        if (CrGlobal.RemoteLogging) {
+            Crawler.remoteLog('Warn', txt);
+        } else {
+            Crawler.clog(txt);
+        }
+    },
+    
     error : function(txt) {
         CrGlobal.doAction = false;
         if (CrGlobal.RemoteLogging) {
-            Crawler.remoteLog('error', txt);
+            Crawler.remoteLog('Error', txt);
         } else {
             Crawler.clog('Error: ' + txt);
+            alert(txt);
+        }
+    },
+
+    attention : function(txt) {
+        CrGlobal.doAction = false;
+        if (CrGlobal.RemoteLogging) {
+            Crawler.remoteLog('Attention', txt);
+        } else {
+            Crawler.clog('Attention: ' + txt);
             alert(txt);
         }
     },

@@ -10,7 +10,7 @@ XPath = {
         try {
             nodes = XPath.iterator(node, path);
         } catch (e) {
-            Crawler.error('Wrong xpath:' + e + ':' + path);
+//            Crawler.warn('Wrong xpath:' + e + ':' + path);
             return null;
         }
         if (nodes) {
@@ -33,7 +33,7 @@ XPath = {
         try {
             r = document.evaluate(path, node, null, type, null);
         } catch (e) {
-            Crawler.error('Wrong xpath:' + e + ':' + path);
+//            Crawler.warn('Wrong xpath:' + e + ':' + path);
             return null;
         }
         if (r) {
@@ -43,7 +43,7 @@ XPath = {
                 return r;
             }
         }
-        Crawler.error('Wrong xpath:' + path);
+//        Crawler.warn('Wrong xpath:' + path);
         return null;
     },
 

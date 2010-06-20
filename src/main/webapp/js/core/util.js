@@ -251,6 +251,16 @@ CrUtil = {
         }
         return s;
     },
+    /*
+     * delete anything that is after token.
+     */
+    deleteAfter : function(s, token) {
+        var i = s.indexOf(token);
+        if (i != -1) {
+            return s.substring(0, i);
+        }
+        return s;
+    },
     /**
      * requesting a service from the extension,
      * config is an object like this 

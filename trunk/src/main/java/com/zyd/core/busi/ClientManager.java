@@ -1,5 +1,8 @@
 package com.zyd.core.busi;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -29,6 +32,12 @@ public class ClientManager {
 
     public String getClientReport() {
         StringBuffer buf = new StringBuffer();
+        ArrayList<Client> list = new ArrayList<Client>(clients.values());
+        Collections.sort(list, new Comparator<Client>() {
+            public int compare(Client o1, Client o2) {
+                return o1.lastAccess.compareTo(o2.lastAccess);
+            }
+        });
         for (Client c : clients.values()) {
             buf.append(c.toString());
             buf.append("\n");

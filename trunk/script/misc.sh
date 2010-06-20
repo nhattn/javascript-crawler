@@ -16,8 +16,11 @@ tail -f /tomcat/zuiyidong/logs/catalina.out &
 mysql -uroot -proot -e "select count(*) from crawler.House"
 mysql -uroot -proot -e "select count(*) from crawler.PHouse"
 mysql -uroot -proot -e "select count(*) from crawler.Link"
+mysql -uroot -proot -e "select count( distinct hash) from crawler.Link"
 mysql -uroot -proot -e "select count(*) from crawler.Link where url like '%koubei%'"
 mysql -uroot -proot -e "select * from crawler.Link  where errorMsg is not null limit 20"
+
+
 
 ## to local
 mysqldump -uroot -proot crawler > /root/crawler.sql 
@@ -70,3 +73,16 @@ select district5 from House where district5 like '%>%';
 
 select address from House where address like '%<%';
 select address from House where address like '%>%';
+
+
+
+
+
+select count(*) from House where referer like '%koubei%';
+select count(*) from Link where url like '%koubei%';
+
+select tel from House  where tel like '%Z%';
+update House set tel = replace(tel, 'z', '2') where tel like '%z%';
+update House set tel = replace(tel, 'Z', '2') where tel like '%Z%';
+
+select str(tel) from 

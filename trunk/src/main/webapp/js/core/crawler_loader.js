@@ -1,4 +1,5 @@
 //CrConfig.doAction=false;
+//CrConfig.RemoteLogging = false;
 CrGlobal = {
     handlerPath : '/js/handler',
     restartInterval : 50,

@@ -41,5 +41,6 @@ public class Test {
         System.out.println(gps2m2(39.054385, 116.076736, 39.084771,116.158791));
 
 //        System.out.println(d2[0] + "," + d2[1]);
+        System.out.println(Integer.parseInt("2592000000"));
     }
 }

@@ -50,7 +50,7 @@ public class Constants {
     /**
      * when starting, how long ago should system load the links.
      */
-    public static int LINK_LOAD_BEFORE;
+    public static long LINK_LOAD_BEFORE;
 
     /**
      * How many time should try, before giving up a link.
@@ -82,7 +82,7 @@ public class Constants {
     /**
      * how soon to check if links should be checked and flushed out of memory.
      */
-    public static int LINK_FLUSH_CYCLE_LENGTH;
+    public static long LINK_FLUSH_CYCLE_LENGTH;
 
     public static int INTERVAL_CHECK_LINK_LIST = 8 * 60 * 1000;
 
@@ -95,14 +95,12 @@ public class Constants {
     // the full server url starting with http://www.domaon.com:port/context
     public static String ServerUrl;
     public static String IdlePageUrl;
-    
-    
+
     /***
      * These are system wide comment variables, should never be changed or reassigned
      */
-    
+
     public final static Object[] ZERO_OBJECT_LIST = new Object[0];
-    
 
     static {
         loadValues();
@@ -148,7 +146,7 @@ public class Constants {
     }
 
     private static void initValues() {
-        LINK_FLUSH_CYCLE_LENGTH = (int) (LINK_LOAD_BEFORE * 0.3);
+        LINK_FLUSH_CYCLE_LENGTH = (long) (LINK_LOAD_BEFORE * 0.3);
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
     }

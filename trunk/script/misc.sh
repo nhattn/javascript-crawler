@@ -10,7 +10,7 @@ scp -i /y/work/ec2/yangkey.pem root@184.73.171.54:/root/tomcatlog.gz /tmp/
 emacs /tomcat/zuiyidong/webapps/ROOT/js/core/crawler_loader.js 
 
 tail -f /tomcat/zuiyidong/logs/catalina.out &
-
+ 
 ## mysql 
 
 mysql -uroot -proot -e "select count(*) from crawler.House"
@@ -23,10 +23,14 @@ mysql -uroot -proot -e "select * from crawler.Link  where errorMsg is not null l
 
 
 ## to local
+rm /root/crawler.sql  /root/db.gz
 mysqldump -uroot -proot crawler > /root/crawler.sql 
 gzip -c -9 /root/crawler.sql > /root/db.gz
-scp -i /y/work/ec2/yangkey.pem root@184.73.171.54:/root/db.gz /y/workspace/webcrawl/tmp/
+scp -i /y/work/ec2/yangkey.pem root@zuiyidong.com:/root/db.gz /y/workspace/webcrawl/db-2010-06-20.gz
 gunzip  /y/workspace/webcrawl/tmp/db.gz
+
+## to usf        
+scp -i yangkey.pem root@zuiyidong.com:/root/db.gz db-2010-06-20.gz
         
 ## import on local
 mysql -uroot -proot crawler < /y/workspace/webcrawl/backup/house.db.backup-2009-06-06
@@ -73,7 +77,6 @@ select district5 from House where district5 like '%>%';
 
 select address from House where address like '%<%';
 select address from House where address like '%>%';
-
 
 
 

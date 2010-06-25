@@ -1,12 +1,10 @@
 <html>
-<head>
-    <script>
-    	function go(){
-        	window.location = '$p0$';
-        }
-        setTimeout(go, 100);
-    </script>
-</head>
 <body>
+<a id='nl' rel=noreferrer href='$p0$'>next</a>
+<script>
+var e = document.createEvent('MouseEvents');
+e.initEvent('click', true, false)
+document.getElementById('nl').dispatchEvent(e);
+</script>
 </body>
 </html>

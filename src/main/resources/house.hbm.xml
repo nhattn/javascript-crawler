@@ -61,4 +61,38 @@
 		<property name="ip" column="ip" type="string" />
 		<property name="createTime" column="createTime" type="timestamp" />
 	</class>
+
+	<class name="com.zyd.core.dom.bus.Bus">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="name" type="string" />
+		<property name="city" column="city" type="string" />
+		<property name="description" column="description" type="string" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+		<property name="url" column="url" type="string" />
+	</class>
+
+	<class name="com.zyd.core.dom.bus.BusStop">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" column="name" type="string" />
+		<property name="city" column="city" type="string" />
+		<property name="lo" column="lo" type="double" />
+		<property name="la" column="la" type="double" />
+		<property name="busList" column="busList" type="string" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+	</class>
+
+	<class name="com.zyd.core.dom.bus.BusLine">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="seq" column="seq" type="integer" />
+		<property name="busId" column="busId" type="long" />
+		<property name="stopId" column="stopId" type="long" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+	</class>
+
 </hibernate-mapping>

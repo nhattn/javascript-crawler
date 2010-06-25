@@ -25,7 +25,7 @@ HandlerHelper = {
         var callback = function(r, suc) {
             try {
                 var obj = Ext.util.JSON.decode(r.responseText);
-                if (obj.result == 0) {
+                if (obj.result == 0 || !nextAction) {
                     Crawler.nextLink();
                 } else {
                     Crawler.action(nextAction);
@@ -52,7 +52,7 @@ HandlerHelper = {
             }
             try {
                 r = Ext.util.JSON.decode(r.responseText);
-                if (r.result) {
+                if (r.result && nextAction) {
                     Crawler.action(nextAction);
                 } else {
                     Crawler.nextLink();

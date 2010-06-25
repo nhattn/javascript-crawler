@@ -7,7 +7,7 @@ Crawler = {
 
     clog : function(txt) {
         if (CrGlobal.RemoteLogging) {
-            Crawler.remoteLog('Clog', txt);
+            /*Crawler.remoteLog('Clog', txt);*/
         } else {
             if (window.console)
                 window.console.log(txt);
@@ -16,7 +16,7 @@ Crawler = {
 
     log : function(txt) {
         if (CrGlobal.RemoteLogging) {
-            Crawler.remoteLog('Log', txt);
+            /*Crawler.remoteLog('Log', txt);*/
         } else {
             Crawler.clog(txt);
         }
@@ -29,7 +29,7 @@ Crawler = {
             Crawler.clog(txt);
         }
     },
-    
+
     error : function(txt) {
         CrGlobal.doAction = false;
         if (CrGlobal.RemoteLogging) {
@@ -102,19 +102,37 @@ Crawler = {
             break;
         }
         case 'Goto.Next.Link': {
-            var url = Crawler.serverUrl + '/service/link?action=redirect';
             var pc = document.getElementById('crawler_page_counter');
             if (pc && (parseInt(pc.value) % CrGlobal.restartInterval == 0)) {
                 setTimeout(function() {
-                    CrUtil.restartBrowser(url);
+                    CrUtil.restartBrowser(Crawler.serverUrl + '/service/link?action=redirect');
                 }, CrGlobal.NextLinkWaitTime);
             } else {
+                var nextLink = CrUtil.getRequest(Crawler.serverUrl + '/service/link?action=get');
+                if (nextLink) {
+                    try {
+                        nextLink = JSON.parse(nextLink).result;
+                    } catch (e) {
+                        Crawler.error('Server returned wrong response for next link ' + nextLink);
+                        nextLink = Crawler.serverUrl + '/service/link?action=redirect';
+                    }
+                } else {
+                    nextLink = Crawler.serverUrl + '/service/link?action=redirect';
+                }
                 setTimeout(function() {
-                    window.location = url;
+                    window.location = nextLink;
                 }, CrGlobal.NextLinkWaitTime);
             }
             /* must return here, or there will be loops. */
             return;
+        }
+        case 'Run.Function': {
+            try {
+                obj.param1();
+                processed = true;
+            } catch (e) {
+                Crawler.log('Error while runing function: ' + e);
+            }
         }
         case 'No.Action': {
             break;

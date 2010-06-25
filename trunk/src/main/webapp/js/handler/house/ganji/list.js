@@ -10,7 +10,7 @@ function handlerProcess() {
         dataUrl : Crawler.serverUrl + '/service/link',
         path : "/html/body/div[@id='wrapper']/div[@id='content']/div[3]/dl/dt/a",
         nextPagePath: "/html/body/div[@id='wrapper']/div[@id='content']/div[3]/div/ul/li/a[@class='c']/parent::*//following-sibling::*[1]/a",
-        regex : new RegExp('http://sh\.ganji\.com/fang[0-9]+', 'i')
+        regex : new RegExp('http://.+\.ganji\.com/fang[0-9]+', 'i')
     };    
     
     var links = HandlerHelper.getMatchLinks(info.path, info.regex);

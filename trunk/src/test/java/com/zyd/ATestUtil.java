@@ -180,7 +180,7 @@ public class ATestUtil {
         params.put("data", arr.toString());
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
-        if (1 != o.getInt("result")) {            
+        if (1 != o.getInt("result")) {
             return false;
         }
         return true;
@@ -197,24 +197,12 @@ public class ATestUtil {
 
     public static String getNextLink() throws Exception {
         String s = null;
-        s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/link?action=redirect", null);
+        s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/link?action=get", null);
         if (s == null) {
             throw new Exception("Can not get next link");
         }
-        int i = s.indexOf("window.location");
-        if (i == -1) {
-            throw new Exception("Can not get next link: " + s);
-        }
-        i = s.indexOf("\'", i + 1);
-
-        if (i == -1) {
-            throw new Exception("Can not get next link: " + s);
-        }
-        int j = s.indexOf("\'", i + 1);
-        if (j == -1) {
-            throw new Exception("Can not get next link: " + s);
-        }
-        return s.substring(i + 1, j);
+        JSONObject r = new JSONObject(s);
+        return r.getString("result");
     }
 
 }

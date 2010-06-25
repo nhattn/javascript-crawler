@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.AssertionFailure;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -59,10 +58,7 @@ public class link extends ServiceBase {
                 counts = "1";
         }
 
-        if ("list".equals(action)) {
-            // TODO: clean this, this should not be used
-            throw new UnsupportedOperationException("Not supported anymore");            
-        } else if ("get".equals(action)) {
+        if ("get".equals(action)) {
             setResponseType("js", resp);
             s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.next().url });
         } else if ("redirect".equals(action)) {

@@ -69,7 +69,7 @@ from House where ok=1 order by id desc;
 create table Link(
 	id					bigint NOT NULL AUTO_INCREMENT,
 	hash                varchar(20),
-	url					varchar(300),	
+	url					varchar(800),	
 	createTime          datetime,
 	processTime		    datetime,
 	tryCount			integer,
@@ -88,7 +88,48 @@ create table AppLog(
     PRIMARY KEY (id)
 );
 
+
+create table Bus(
+    id                  bigint NOT NULL AUTO_INCREMENT,
+    name                varchar(100),
+    city                varchar(20),
+    updateTime          datetime,
+    description         varchar(500),
+    url                 varchar(800),
+    PRIMARY KEY (id)    
+);
+
+
+create table BusStop(
+    id                  bigint NOT NULL AUTO_INCREMENT,
+    name                varchar(50),
+    city                varchar(20),
+    lo                  double,
+    la                  double,
+    busList             varchar(1000),
+    updateTime          datetime,
+    PRIMARY KEY (id)    
+);
+
+create table BusLine(
+    id                  bigint NOT NULL AUTO_INCREMENT,
+    seq                 int,
+    busId               bigint,
+    stopId              bigint,
+    updateTime          datetime,    
+    PRIMARY KEY (id)    
+);
+
+
+create view BusRoute as 
+    select BusLine.id ,BusLine.seq, Bus.name as busName, Bus.city as City, BusStop.name as stopName, BusStop.lo, BusStop.la, Bus.url
+        from Bus, BusLine, BusStop 
+        where Bus.id = BusLine.busId and BusStop.id = BusLine.stopId order by BusLine.id;
+        
+        
 ALTER TABLE Link AUTO_INCREMENT = 100000000000000;
 ALTER TABLE House AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;
-
+ALTER TABLE Bus AUTO_INCREMENT = 100000000000000;
+ALTER TABLE BusStop AUTO_INCREMENT = 100000000000000;
+ALTER TABLE BusLine AUTO_INCREMENT = 100000000000000;        

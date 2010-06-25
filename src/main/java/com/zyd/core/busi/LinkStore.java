@@ -247,10 +247,10 @@ public class LinkStore {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         logger.info("Going to load links from database for LinkStore - " + domain);
-        // must have the two like here to previous domains with common suffix/prefix  domain.com, adomain.com, domain.com.cn
+        // must have the two like here to prevent domains with common suffix/prefix  domain.com, adomain.com, domain.com.cn
         //TODO: this has to be better, how to deal with subdomains , need a different model.
         List list = session.createQuery("from Link as link where link.createTime > ? and (link.url like ? or link.url like ?) order by link.id desc").setDate(0,
-                CommonUtil.msecefore(Constants.LINK_LOAD_BEFORE)).setString(1, "%." + domain + "/%").setString(2, "%/" + domain + "/%").list();
+                CommonUtil.msecefore(Constants.LINK_LOAD_BEFORE)).setString(1, "%www." + domain + "/%").setString(2, "%/" + domain + "/%").list();
         tx.commit();
         for (int i = 0, len = list.size(); i < len; i++) {
             Link link = (Link) list.get(i);

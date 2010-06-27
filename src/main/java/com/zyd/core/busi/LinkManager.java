@@ -1,6 +1,7 @@
 package com.zyd.core.busi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -21,7 +22,6 @@ public class LinkManager {
     private static Logger logger = Logger.getLogger(LinkManager.class);
     private HashMap<String, LinkStore> linkStoreMap;
     private ArrayList<LinkStore> linkStoreList;
-    private int storeSize = 0;
     private LinkMonitorThread monitor;
 
     public LinkManager() {
@@ -40,7 +40,9 @@ public class LinkManager {
             store = new LinkStore(domain);
             linkStoreMap.put(domain, store);
             linkStoreList.add(store);
-            storeSize++;
+            synchronized (this) {
+                Collections.shuffle(linkStoreList);
+            }
         }
         return store.addLink(link);
     }
@@ -57,7 +59,7 @@ public class LinkManager {
         }
         // starting from lastStoreIndex, check to see if any have links to crawl. if do , return it.
         synchronized (this) {
-            for (int i = 0; i < storeSize; i++) {
+            for (int i = 0, storeSize = linkStoreList.size(); i < storeSize; i++) {
                 LinkStore store = linkStoreList.get((lastStoreIndex + i) % storeSize);
                 Link link = store.next();
                 if (link != null) {
@@ -96,7 +98,7 @@ public class LinkManager {
 
     private void updateSuggestedRefreshInterval() {
         int n = 0;
-        for (int i = 0; i < storeSize; i++) {
+        for (int i = 0, storeSize = linkStoreList.size(); i < storeSize; i++) {
             n = n + linkStoreList.get(i).getWaitingSize();
         }
 

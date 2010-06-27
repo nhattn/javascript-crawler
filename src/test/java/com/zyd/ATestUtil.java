@@ -180,7 +180,7 @@ public class ATestUtil {
         params.put("data", arr.toString());
         String s = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_LINK_URL, params);
         JSONObject o = new JSONObject(s);
-        if (1 != o.getInt("result")) {
+        if (o.has("result") == false || 1 != o.getInt("result")) {
             return false;
         }
         return true;

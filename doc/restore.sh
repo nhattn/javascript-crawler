@@ -2,7 +2,7 @@
 #amazon ec2 tomcat user password  jyang20012001
 
 tasksel install lamp-server
-apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk apache2 tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk mysql-server xfsprogs emacs openssh-server subversion maven2
+apt-get install tesseract-ocr tesseract-ocr-eng imagemagick openjdk-6-jdk tomcat6 tomcat6-admin tomcat6-user libapache2-mod-jk xfsprogs emacs  subversion maven2
 
 /etc/init.d/tomcat6 stop
 /etc/init.d/apache2 stop

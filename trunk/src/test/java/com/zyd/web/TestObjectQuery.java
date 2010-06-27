@@ -174,4 +174,35 @@ public class TestObjectQuery extends TestCase {
         assertEquals(description.length, total);
     }
 
+    public void testQueryByLikeEnglish() throws Exception {
+        HashMap<String, String> values = new HashMap<String, String>();
+        HashMap map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1, Constants.Encoding_DEFAULT_SYSTEM);
+        String[] description = new String[] { "abcdefghigkl", "mnopqrst", "uvwxyz123", "452871-4z" };
+        for (String s : description) {
+            HashMap m = (HashMap) map.clone();
+            m.put(Columns.Description2, s);
+            ATestUtil.createObject(m);
+        }
+        HashMap<String, String> p = new HashMap<String, String>();
+        int total = 0;
+        for (int i = 0; i < description.length; i++) {
+            p.clear();
+            p.put("objectid", "House");
+            p.put(House.Columns.Description2, URLEncoder.encode("%" + description[i].substring(3, 5) + "%", "UTF-8"));
+            p.put(Handler.Parameter.PARAMETER_COUNT, "1000");
+            String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL, p);
+            assertNotNull(s);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(s));
+            Document docx = db.parse(is);
+            NodeList nodes = docx.getElementsByTagName("object");
+            int length = nodes.getLength();
+            assertTrue(length > 0);
+            total = total + length;
+        }
+        assertEquals(description.length, total);
+    }
+
 }

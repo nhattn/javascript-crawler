@@ -58,7 +58,16 @@ public class LinkStore {
         }
         String hash = Utils.stringHash(url);
         Link link = new Link(url, new Date(), hash);
-        saveOrUpdateLink(link, false);
+        try {
+            saveOrUpdateLink(link, false);
+        } catch (Exception e) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            if (session.isOpen()) {
+                session.getTransaction().rollback();
+            }
+            logger.error("Can not add link:" + url, e);
+            return null;
+        }
         waiting.put(url, link);
         return link;
     }

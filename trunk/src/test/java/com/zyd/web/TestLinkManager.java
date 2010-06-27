@@ -203,4 +203,17 @@ public class TestLinkManager extends TestCase {
         }
     }
 
+    /**
+     * make sure adding a very long link won't crash the system.
+     * @throws Exception
+     */
+    public void testLongLinkError() throws Exception {
+        StringBuffer buf = new StringBuffer("http://www.test.com/a");
+        for (int i = 0; i < 10000; i++) {
+            buf.append("a");
+        }
+        assertFalse(ATestUtil.createLink(buf.toString()));
+        ATestUtil.createSomeLinks();
+    }
+
 }

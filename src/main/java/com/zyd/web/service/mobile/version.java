@@ -15,8 +15,8 @@ public class version extends ServiceBase {
         String name = req.getParameter("app");
         String r = "";
         if ("HouseLoc".equals(name)) {
-            r = "version=1.0\nname=租房通\nnumber=1\nurl=" + Constants.ServerUrl + "/releases/HouseLoc_Current.apk";
-        }else{
+            r = "version=3.0\nname=我居\nnumber=3\nurl=" + Constants.ServerUrl + "/releases/HouseLoc_Current.apk";
+        } else {
             r = "wrong parameter";
         }
         setResponseType("text", resp);

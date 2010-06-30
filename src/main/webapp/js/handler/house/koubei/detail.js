@@ -140,7 +140,7 @@ function handlerProcess() {
 
     }
     CrUtil.trimAttributes(obj);
-    
+
     if (!parseFloat(obj.price)) {
         delete obj.price;
     }
@@ -153,7 +153,7 @@ function handlerProcess() {
     if (!parseInt(obj.totalFloor)) {
         delete obj.totalFloor;
     }
-    
+
     obj[CrGlobal.ParameterName_ObjectId] = CrGlobal.HouseObjectId;
 
     var telImg = XPath.single(document, "//div[@id='houseBaseInfo']//span//img");
@@ -177,7 +177,8 @@ function handlerProcess2(obj) {
 
 var cityMap = {
     'shanghai' : '上海',
-    'shenzhen' : '深圳'
+    'shenzhen' : '深圳',
+    'beijing' : '北京'
 }
 
 var rentalTypeMap = {

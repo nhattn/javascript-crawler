@@ -178,7 +178,9 @@ function handlerProcess2(obj) {
 var cityMap = {
     'shanghai' : '上海',
     'shenzhen' : '深圳',
-    'beijing' : '北京'
+    'beijing' : '北京',
+    'tianjin' : '天津',
+    'suzhou' : '苏州'
 }
 
 var rentalTypeMap = {

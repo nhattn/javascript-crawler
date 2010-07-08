@@ -17,7 +17,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 import com.zyd.Constants;
 import com.zyd.core.db.HibernateUtil;

@@ -23,37 +23,28 @@ function handlerProcess() {
 }
 
 
-function isTimeExpired(){
-	var rHour = /([0-9]+)小时/;
-	var rMinutes = /([0-9]+)分钟/;
-	var rDay = /([0-9]+)天/;
-	
-	var arr = XPath.array(document, "//p[@class='subInfo']//span");
-	var now = new Date(), odate = new Date();	
-	var maxDifference = CrGlobal.HouseListMaxDifference[CrUtil.getShortestDomain(window.location.host)];
-	var difference = 0;
-	for(var i=0;i<arr.length;i++){
-	    var text = arr[i].textContent;
-	    var s = HandlerHelper.getRegGroupFirstValue(text, rMinutes);
-	    if(!s || s.length == 0){
-	       s = HandlerHelper.getRegGroupFirstValue(text, rHour);
-	       if(!s || s.length == 0){
-               s = HandlerHelper.getRegGroupFirstValue(text, rDay);
-               if(!s || s.length == 0){
-                   continue;
-               }else{
-                   s = parseInt(s) * 24 * 3600 * 1000;
-               }
-           }else{
-               s = parseInt(s) * 3600 * 1000;
-           }
-        
-	    }else{
-	       s = parseInt(s) * 60 * 1000;
-	    }	    
-	    if(s>maxDifference){
-	       return true;
-	    }	    	   
-	}
-	return false;
+
+
+function isTimeExpired() {  
+    var arr = XPath.array(document, "//p[@class='subInfo']//span"), now = new Date();    
+    var maxDifference = CrGlobal.HouseListMaxDifference[CrUtil.getShortestDomain(window.location.host)];
+    var errorCount = 0;
+    for ( var i = 0; i < arr.length; i++) {
+        var s = arr[i].textContent;
+        if (!s || s.trim().length == 0) {
+            continue;
+        }        
+        var oDate = CrUtil.guessTime(s.trim());
+        if (!oDate) {
+            errorCount++;
+            if (errorCount > 10) {
+                Crawler.attention('Too many error times in list, the last one is: ' + s);
+                return true;
+            }
+        }
+        if ((now.getTime() - oDate.getTime()) > maxDifference) {
+            return true;
+        }        
+    }
+    return false;
 }

@@ -367,5 +367,68 @@ CrUtil = {
     },
     randomString : function() {
         return 'sid' + new Date().getTime();
+    },
+    guessTime : function(ts) {
+        var d = new Date(), s;
+        /* 06-23 17:23:23 */
+        s = ts.match(/([0-9][0-9])-([0-9][0-9]) ([0-9][0-9]):([0-9][0-9]):([0-9][0-9])/);
+        if (s && s.length == 6) {
+            d.setMonth(parseInt(s[1], 10) - 1);
+            d.setDate(parseInt(s[2], 10));
+            d.setHours(parseInt(s[3], 10));
+            d.setMinutes(parseInt(s[4], 10));
+            d.setSeconds(parseInt(s[5], 10))
+            return d;
+        }
+
+        /* 06-23 17:23 */
+        s = ts.match(/([0-9][0-9])-([0-9][0-9]) ([0-9][0-9]):([0-9][0-9])/);
+        if (s && s.length == 5) {
+            d.setMonth(parseInt(s[1], 10) - 1);
+            d.setDate(parseInt(s[2], 10));
+            d.setHours(parseInt(s[3], 10));
+            d.setMinutes(parseInt(s[4], 10));
+            return d;
+        }
+
+        /* 06-23 */
+        s = ts.match(/([0-9][0-9])-([0-9][0-9])/);
+        if (s && s.length == 3) {
+            d.setMonth(parseInt(s[1], 10) - 1);
+            d.setDate(parseInt(s[2], 10));
+            return d;
+        }
+
+        /* 1分钟前 */
+        var minBefore = 0, hasMinMatch = false;
+        s = ts.match(/([0-9]+)分钟前/);
+        if (s && s.length == 2) {
+            minBefore = parseInt(s[1], 10);
+            hasMinMatch = true;
+        }
+
+        s = ts.match(/([0-9]+)小时前/);
+        if (s && s.length == 2) {
+            minBefore = parseInt(s[1], 10) * 60;            
+            hasMinMatch = true;
+        }
+
+        s = ts.match(/([0-9]+)天前/);
+        if (s && s.length == 2) {
+            minBefore = parseInt(s[1], 10) * 1440;
+            hasMinMatch = true;
+        }
+        if (hasMinMatch) {            
+            d.setMinutes(d.getMinutes() - minBefore);
+            return d;
+        }
+        return null;
+    },
+    testGuessTime : function() {
+        var s = [ '06-23 17:23:23', '06-23 17:23', '06-23', '1分钟前', '1小时前', '1天前' ];
+        for ( var i = 0; i < s.length; i++) {
+            alert(CrUtil.guessTime(s[i]));
+        }
     }
+
 }

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.zyd.core.Utils;
+import com.zyd.core.dom.XmlParcel;
 import com.zyd.core.objecthandler.SearchResult;
 
 public class ServiceBase {
@@ -108,38 +109,43 @@ public class ServiceBase {
         StringBuffer buf = new StringBuffer();
         buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         buf.append("<objects start=\"" + result.start + "\" count=\"" + result.count + "\" total=\"" + result.totalResult + "\">");
-        Set cdataColumns = result.cdataColumns;
-        if (cdataColumns == null) {
-            cdataColumns = new HashSet(0);
-        }
-        for (int i = 0, len = list.size(); i < len; i++) {
-            buf.append("<object>");
-            HashMap map = (HashMap) list.get(i);
-            String objectId = (String) map.remove("$type$");
-            buf.append("<type>");
-            buf.append(objectId);
-            buf.append("</type>");
-            Set keys = map.keySet();
-            for (Object k : keys) {
-                buf.append('<');
-                buf.append(k);
-                buf.append('>');
-                Object o = map.get(k);
-                if (o == null) {
-                    o = "";
+        if (list != null && list.size() > 0) {
+            if (list.get(0) instanceof XmlParcel) {
+                for (Object p : list) {
+                    buf.append(((XmlParcel) p).toXml());
                 }
-                if (cdataColumns.contains(k)) {
-                    buf.append("<![CDATA[");
-                    buf.append(o.toString());
-                    buf.append("]]>");
-                } else {
-                    buf.append(o.toString());
+            } else {
+                Set cdataColumns = result.cdataColumns;
+                for (int i = 0, len = list.size(); i < len; i++) {
+                    buf.append("<object>");
+                    HashMap map = (HashMap) list.get(i);
+                    String objectId = (String) map.remove("$type$");
+                    buf.append("<type>");
+                    buf.append(objectId);
+                    buf.append("</type>");
+                    Set keys = map.keySet();
+                    for (Object k : keys) {
+                        buf.append('<');
+                        buf.append(k);
+                        buf.append('>');
+                        Object o = map.get(k);
+                        if (o == null) {
+                            o = "";
+                        }
+                        if (cdataColumns != null && cdataColumns.contains(k)) {
+                            buf.append("<![CDATA[");
+                            buf.append(o.toString());
+                            buf.append("]]>");
+                        } else {
+                            buf.append(o.toString());
+                        }
+                        buf.append("</");
+                        buf.append(k);
+                        buf.append('>');
+                    }
+                    buf.append("</object>");
                 }
-                buf.append("</");
-                buf.append(k);
-                buf.append('>');
             }
-            buf.append("</object>");
         }
         buf.append("</objects>");
         return buf.toString();

@@ -1,5 +1,11 @@
 package com.zyd.core;
 
+import org.hibernate.Criteria;
+import org.hibernate.classic.Session;
+
+import com.zyd.ATestUtil;
+import com.zyd.core.db.HibernateUtil;
+
 import junit.framework.TestCase;
 
 public class MiscTest extends TestCase {
@@ -22,5 +28,15 @@ public class MiscTest extends TestCase {
             assertEquals(domains[i + 1], Utils.getShortestDomain(domains[i]));
             i++;
         }
+    }
+    public void testHibernateContainsEntity()throws Exception{
+        ATestUtil.setUpSpring();
+        System.out.println(HibernateUtil.getSessionFactory().getClassMetadata("Restaurant"));
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        
+        Criteria c = session.createCriteria("Restaurant");
+        c.setMaxResults(10);
+        System.out.println(c.list());                
     }
 }

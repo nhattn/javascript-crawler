@@ -1,7 +1,5 @@
 package com.zyd.core.objecthandler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.jdbc.Work;
 
 import com.tj.common.CommonUtil;
 import com.zyd.core.Utils;
@@ -29,27 +26,11 @@ public class House extends Handler {
     private static HashMap<String, DatabaseColumnInfo> meta = null;
 
     static {
-        CDataColumns.add(Columns.Description1);
-        CDataColumns.add(Columns.Description2);
-        try {
-            initTableMetaData();
-        } catch (Exception e) {
-            logger.error("Can not retrieving table metadata for House, error is:", e);
-        }
+        meta = ObjectHelper.getTableMetaData(name);
     }
 
     public String getName() {
         return name;
-    }
-
-    private static void initTableMetaData() throws Exception {
-        HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
-        HibernateUtil.getSessionFactory().getCurrentSession().doWork(new Work() {
-            public void execute(Connection connection) throws SQLException {
-                meta = ObjectHelper.getTableMetaData(name, connection);
-            }
-        });
-        HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();
     }
 
     public Object create(HashMap values) {
@@ -148,7 +129,6 @@ public class House extends Handler {
                 separator = "/";
             }
             qparams.put(column, ObjectHelper.parseRangeObject(p, info.type, separator));
-            //            System.out.println(ObjectHelper.parseRangeObject(p, info.type, separator)[0] + ":" + ObjectHelper.parseRangeObject(p, info.type, separator)[1]);
         }
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();

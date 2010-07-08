@@ -35,6 +35,8 @@ create table House(
  	hash                varchar(50),
  	PRIMARY KEY (id)
 );
+create index House_Index_lo  on House(lo);
+create index House_Index_la  on House(la);
 
  
 create view PHouse as select 
@@ -98,7 +100,7 @@ create table Bus(
     url                 varchar(800),
     PRIMARY KEY (id)    
 );
-
+create index Bus_Index_id  on Bus(id);
 
 create table BusStop(
     id                  bigint NOT NULL AUTO_INCREMENT,
@@ -110,6 +112,7 @@ create table BusStop(
     updateTime          datetime,
     PRIMARY KEY (id)    
 );
+create index BusStop_Index_id  on BusStop(id);
 
 create table BusLine(
     id                  bigint NOT NULL AUTO_INCREMENT,
@@ -119,17 +122,19 @@ create table BusLine(
     updateTime          datetime,    
     PRIMARY KEY (id)    
 );
+create index BusLine_Index_id  on BusLine(id);
+create index BusLine_Index_busId  on BusLine(busId);
+create index BusLine_Index_stopId  on BusLine(stopId);
 
-
-create view BusRoute as 
-    select BusLine.id ,BusLine.seq, Bus.name as busName, Bus.city as City, BusStop.name as stopName, BusStop.lo, BusStop.la, Bus.url
+create view Object_BusStation as 
+    select BusLine.id ,BusLine.seq, Bus.id as busId, Bus.name as busName, Bus.city, BusStop.name as stopName, BusStop.lo, BusStop.la, Bus.description,Bus.url
         from Bus, BusLine, BusStop 
-        where Bus.id = BusLine.busId and BusStop.id = BusLine.stopId order by BusLine.id;
-        
-        
+    where Bus.id = BusLine.busId and BusStop.id = BusLine.stopId 
+    order by BusLine.id;    
+
 ALTER TABLE Link AUTO_INCREMENT = 100000000000000;
 ALTER TABLE House AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;
 ALTER TABLE Bus AUTO_INCREMENT = 100000000000000;
 ALTER TABLE BusStop AUTO_INCREMENT = 100000000000000;
-ALTER TABLE BusLine AUTO_INCREMENT = 100000000000000;        
+ALTER TABLE BusLine AUTO_INCREMENT = 100000000000000;

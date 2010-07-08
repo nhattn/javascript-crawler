@@ -27,11 +27,11 @@
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">false</property>
 
-		<!-- Drop and re-create the database schema on startup -->
+		<!-- 
+        -->
 		<property name="hbm2ddl.auto">validate</property>
-
 		<!--  mapping resource="com/zyd/core/dom/mapping.hbm.xml" / -->
-		<mapping resource="house.hbm.xml" />
+		<mapping resource="objects.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

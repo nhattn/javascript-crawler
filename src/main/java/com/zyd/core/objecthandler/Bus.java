@@ -6,13 +6,22 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
 
+import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.db.helper.BusHelper;
+import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.dom.bus.BusLine;
 import com.zyd.core.dom.bus.BusStop;
+import com.zyd.core.objecthandler.Handler.Parameter;
 
 public class Bus extends Handler {
     private static Logger logger = Logger.getLogger(Bus.class);
+    private static HashMap<String, DatabaseColumnInfo> meta = null;
+    public final static String name = "Bus";
+    static {
+        meta = ObjectHelper.getTableMetaData(name);
+    }
 
     /**
      * values contains:
@@ -107,8 +116,8 @@ public class Bus extends Handler {
 
     @Override
     public SearchResult query(HashMap params) {
-        // TODO Auto-generated method stub
-        return null;
+        HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
+        return ObjectHelper.defaultQuery(qparams, name, meta);
     }
 
     public final static class Columns extends Handler.Columns {

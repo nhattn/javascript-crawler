@@ -9,13 +9,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.jdbc.Work;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 import com.zyd.Constants;
+import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.objecthandler.Handler.Columns;
 import com.zyd.core.objecthandler.Handler.Parameter;
@@ -24,15 +29,23 @@ import com.zyd.core.objecthandler.Handler.Parameter;
 public class ObjectHelper {
     private static Logger logger = Logger.getLogger(ObjectHelper.class);
 
-    public static HashMap<String, DatabaseColumnInfo> getTableMetaData(String tableName, Connection connection) throws SQLException {
-        ResultSetMetaData meta = connection.createStatement().executeQuery("select * from " + tableName + " where 0>1").getMetaData();
-        HashMap<String, DatabaseColumnInfo> r = new HashMap<String, DatabaseColumnInfo>();
-        int columnCount = meta.getColumnCount();
-        for (int i = 0; i < columnCount; i++) {
-            String name = meta.getColumnName(i + 1);
-            r.put(name, new DatabaseColumnInfo(name, meta.getColumnType(i + 1), meta.getColumnDisplaySize(i + 1)));
-        }
-        return r;
+    public static HashMap<String, DatabaseColumnInfo> getTableMetaData(final String tableName) {
+        final Object[] holder = new Object[1];
+        HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
+        HibernateUtil.getSessionFactory().getCurrentSession().doWork(new Work() {
+            public void execute(Connection connection) throws SQLException {
+                ResultSetMetaData meta = connection.createStatement().executeQuery("select * from " + tableName + " where 0>1").getMetaData();
+                HashMap<String, DatabaseColumnInfo> r = new HashMap<String, DatabaseColumnInfo>();
+                int columnCount = meta.getColumnCount();
+                for (int i = 0; i < columnCount; i++) {
+                    String name = meta.getColumnName(i + 1);
+                    r.put(name, new DatabaseColumnInfo(name, meta.getColumnType(i + 1), meta.getColumnDisplaySize(i + 1)));
+                }
+                holder[0] = r;
+            }
+        });
+        HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();
+        return (HashMap<String, DatabaseColumnInfo>) holder[0];
     }
 
     public static void parseCommonQueryParameters(Criteria c, HashMap params) {
@@ -257,6 +270,34 @@ public class ObjectHelper {
                 values.remove(key);
             }
         }
+    }
 
+    public static SearchResult defaultQuery(HashMap params, String objectName, HashMap<String, DatabaseColumnInfo> meta) {
+        HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
+        for (Object o : params.keySet()) {
+            String column = (String) o;
+            DatabaseColumnInfo info = meta.get(column);
+            if (info == null) {
+                continue;
+            }
+            String p = (String) params.get(column);
+            String separator = "-";
+            int type = info.type;
+            if (type == Types.TIME || type == Types.TIMESTAMP || type == Types.DATE) {
+                separator = "/";
+            }
+            qparams.put(column, ObjectHelper.parseRangeObject(p, info.type, separator));
+        }
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Criteria c = session.createCriteria(objectName);
+        ObjectHelper.buildHibernateCriteria(c, qparams);
+        ObjectHelper.parseCommonQueryParameters(c, params);
+        List list = c.list();
+        session.getTransaction().commit();
+        SearchResult result = new SearchResult(list, -1, params.get(Handler.Parameter.PARAMETER_START) == null ? 0 : Integer.parseInt((String) params.get(Handler.Parameter.PARAMETER_START)), list
+                .size());
+        return result;
     }
 }

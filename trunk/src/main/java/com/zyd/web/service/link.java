@@ -62,15 +62,11 @@ public class link extends ServiceBase {
             setResponseType("js", resp);
             s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.next().url });
         } else if ("redirect".equals(action)) {
-            String referer = req.getHeader("referer");
-            if (referer == null || referer.length() < 5) {                
-            } else {
-                setResponseType("html", resp);
-                String l = linkManager.next().url;
-                ArrayList<String> p = new ArrayList<String>();
-                p.add(l);
-                s = templateManager.getTemplate("redirect", p);
-            }
+            setResponseType("html", resp);
+            String l = linkManager.next().url;
+            ArrayList<String> p = new ArrayList<String>();
+            p.add(l);
+            s = templateManager.getTemplate("redirect", p);
         } else {
             s = "No action specified";
         }

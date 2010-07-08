@@ -3,7 +3,10 @@
 <title>Crawler</title>
 <script>	
 	function go(){
-		setTimeout("window.location = '/service/link?action=redirect'", 3000);
+		setTimeout("window.location = '"+getLink()+"'", 3000);
+	}
+	function getLink(){
+	   return "/service/link?"+""+"action=redirect"
 	}
 </script>
 </head>

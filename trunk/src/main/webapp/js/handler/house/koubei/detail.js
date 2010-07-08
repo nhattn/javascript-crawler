@@ -180,7 +180,9 @@ var cityMap = {
     'shenzhen' : '深圳',
     'beijing' : '北京',
     'tianjin' : '天津',
-    'suzhou' : '苏州'
+    'suzhou' : '苏州',
+    'chengdu' : '成都',
+    'wuhan' : '武汉'    
 }
 
 var rentalTypeMap = {

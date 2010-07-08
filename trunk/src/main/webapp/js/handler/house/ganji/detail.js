@@ -233,7 +233,9 @@ var cityMap = {
     'sz' : '深圳',
     'bj' : '北京',
     'tj' : '天津',
-    'su' : '苏州'
+    'su' : '苏州',
+    'cd' : '成都',
+    'wh' : '武汉'
 }
 
 var rentalTypeMap = {

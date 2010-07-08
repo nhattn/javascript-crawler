@@ -6,7 +6,11 @@
 		setTimeout("window.location = '"+getLink()+"'", 3000);
 	}
 	function getLink(){
-	   return "/service/link?"+""+"action=redirect"
+	   if(window.location){
+	       return "/service/link?"+""+"action=redirect"
+	   }else{
+	       return '/fuckyou.html';
+	   }
 	}
 </script>
 </head>

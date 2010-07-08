@@ -102,12 +102,8 @@ public class LinkManager {
             n = n + linkStoreList.get(i).getWaitingSize();
         }
 
-        if (n > 50) {
-            suggestedLinkRefreshInterval = 2;
-        } else if (n > 20) {
-            suggestedLinkRefreshInterval = 20;
-        } else if (n > 5) {
-            suggestedLinkRefreshInterval = 30;
+        if (n > 2) {
+            suggestedLinkRefreshInterval = 0;
         } else {
             suggestedLinkRefreshInterval = 60;
         }
@@ -115,7 +111,6 @@ public class LinkManager {
             logger.info("Updated suggestedLinkRefreshInterval from " + lastCrawlerRefreshInterval + " to " + suggestedLinkRefreshInterval + ", current size of wating list " + n);
             lastCrawlerRefreshInterval = suggestedLinkRefreshInterval;
         }
-
     }
 
     public Link getProcessingLink(String link) {

@@ -2,7 +2,9 @@ package com.zyd.core.dom.bus;
 
 import java.util.Date;
 
-public class Bus {
+import com.zyd.core.dom.XmlParcel;
+
+public class Bus implements XmlParcel {
     public long id;
     public String name;
     public String city;
@@ -58,4 +60,23 @@ public class Bus {
     }
 
     public Date updateTime;
+
+    public String toXml() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<object>");
+        buf.append("<id>");
+        buf.append(id);
+        buf.append("</id>");
+        buf.append("<name>");
+        buf.append(name);
+        buf.append("</name>");
+        buf.append("<city>");
+        buf.append(city);
+        buf.append("</city>");
+        buf.append("<description><![CDATA[");
+        buf.append(description);
+        buf.append("]]></description>");
+        buf.append("</object>");
+        return buf.toString();
+    }
 }

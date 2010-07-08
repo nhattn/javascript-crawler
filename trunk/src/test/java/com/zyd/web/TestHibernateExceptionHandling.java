@@ -1,7 +1,6 @@
 package com.zyd.web;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;

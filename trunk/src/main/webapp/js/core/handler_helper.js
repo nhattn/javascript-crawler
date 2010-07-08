@@ -218,10 +218,10 @@ HandlerHelper = {
         if (arr && arr.length > 1)
             return arr[1];
         else {
-            // Crawler.log('HandlerHelper: getRegGroupFirstValue:Can not
-    // match:'+s+':'+r);
-    // return 'Can not match:'+s+':'+r;
-    return '';
-}
-}
+            /* Crawler.log('HandlerHelper: getRegGroupFirstValue:Can not
+            match:'+s+':'+r);
+            return 'Can not match:'+s+':'+r;*/
+            return '';
+        }
+    }
 }

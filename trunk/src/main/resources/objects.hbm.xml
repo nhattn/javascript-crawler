@@ -95,4 +95,33 @@
 		<property name="updateTime" column="updateTime" type="timestamp" />
 	</class>
 
+    <class entity-name="Restaurant" table="Object_Restaurant">
+        <id name="id" type="long" column="id">
+            <generator class="native" />
+        </id>
+        <property name="address" type="string" />
+        <property name="shopName" type="string" />
+        <property name="shopName2" type="string" />
+        <property name="city" type="string" />
+        <property name="areaCode" type="string" />
+        <property name="categoryList" type="string" />
+        <property name="region" type="string" />        
+        <property name="shopType" type="string" />
+        <property name="nearBy" type="string" />        
+        <property name="la" type="double" />
+        <property name="lo" type="double" />
+        <property name="tel" type="string" />
+        <property name="tel2" type="string" />
+    </class>
+
+	<class entity-name="BusStation" table="Object_BusStation">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="seq" type="integer" />
+		<property name="busId" type="long" />
+		<property name="stopName" type="string" />
+		<property name="la" type="double" />
+		<property name="lo" type="double" />
+	</class>	
 </hibernate-mapping>

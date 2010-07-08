@@ -103,7 +103,7 @@ public class LinkManager {
         }
 
         if (n > 2) {
-            suggestedLinkRefreshInterval = 0;
+            suggestedLinkRefreshInterval = 2;
         } else {
             suggestedLinkRefreshInterval = 60;
         }

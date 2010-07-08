@@ -54,7 +54,10 @@ public class ObjectHelper {
         }
         s = (String) params.get(Parameter.PARAMETER_COUNT);
         if (s != null) {
-            c.setMaxResults(Integer.parseInt(s));
+            int size = Integer.parseInt(s);
+            if (size > 20)
+                size = 20;
+            c.setMaxResults(size);
         } else {
             c.setMaxResults(Constants.LENGTH_PAGE_SIZE);
         }

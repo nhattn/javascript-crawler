@@ -182,7 +182,13 @@ var cityMap = {
     'tianjin' : '天津',
     'suzhou' : '苏州',
     'chengdu' : '成都',
-    'wuhan' : '武汉'    
+    'wuhan' : '武汉',
+    'guangzhou' : '广州',
+    'hangzhou' : '杭州',
+    'xian' : '西安',
+    'chongqing' : '重庆',
+    'nanjing' : '南京',
+    'fuzhou' : '福州'
 }
 
 var rentalTypeMap = {

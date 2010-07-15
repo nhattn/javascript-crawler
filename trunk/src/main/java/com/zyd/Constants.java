@@ -29,6 +29,7 @@ public class Constants {
      * how many records to return by default
      */
     public static int LENGTH_PAGE_SIZE;
+    public static int MAX_PAGE_SIZE;
 
     /**
      * the encoding all outgoing content will be using, including xml/js/html 

@@ -43,7 +43,7 @@ function handlerProcess() {
     }, {
         name : 'description1',
         op : 'xpath.textcontent.regex',
-        param1 : "//div[@class='detail_title']/h1"
+        param1 : "//div[@class='detail_title']/h1/text()[1]"
     } ];
 
     if (fangType == 'fang1' || fangType == 'fang3') {

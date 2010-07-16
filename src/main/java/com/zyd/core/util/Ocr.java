@@ -46,7 +46,7 @@ public class Ocr {
                 buf.append('1');
             } else if (c == 'z' || c == 'Z') {
                 buf.append('2');
-            } else if (c == 'g') {
+            } else if (c == 'g' || c == 'q') {
                 buf.append('9');
             } else if (c == 'S' || c == 's' || c == 'B') {
                 buf.append('8');

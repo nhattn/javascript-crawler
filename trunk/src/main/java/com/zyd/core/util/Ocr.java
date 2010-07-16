@@ -42,16 +42,16 @@ public class Ocr {
             }
             if (c == 'o' || c == 'O') {
                 buf.append('0');
-            } else if (c == 'l' || c == 'L') {
+            } else if (c == 'l' || c == 'L' || c == 'I' || c == 'i') {
                 buf.append('1');
             } else if (c == 'z' || c == 'Z') {
                 buf.append('2');
             } else if (c == 'g') {
                 buf.append('9');
-            } else if (c == 'S' || c == 's') {
+            } else if (c == 'S' || c == 's' || c == 'B') {
                 buf.append('8');
-            } else if (c == 'I' || c == 'i') {
-                buf.append(1);
+            } else if (c == 'b') {
+                buf.append('6');
             } else {
                 buf.append(c);
             }

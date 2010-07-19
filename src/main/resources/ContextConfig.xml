@@ -29,10 +29,12 @@
 	<bean id="clientManager" class="com.zyd.core.busi.ClientManager">
 	</bean>
 
+	<bean id="siteRegisterManager" class="com.zyd.core.busi.userreg.SiteRegisterManager">
+	</bean>
+
 	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
 		<property name="linkManager" ref="linkManager" />
 		<property name="objectManager" ref="objectManager" />
 	</bean>
-
 </beans>
     

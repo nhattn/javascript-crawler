@@ -62,7 +62,7 @@
 		<property name="createTime" column="createTime" type="timestamp" />
 	</class>
 
-	<class name="com.zyd.core.dom.bus.Bus">
+	<class name="com.zyd.core.dom.bus.Bus" entity-name="Bus">
 		<id name="id" type="long" column="id">
 			<generator class="native" />
 		</id>
@@ -95,24 +95,24 @@
 		<property name="updateTime" column="updateTime" type="timestamp" />
 	</class>
 
-    <class entity-name="Restaurant" table="Object_Restaurant">
-        <id name="id" type="long" column="id">
-            <generator class="native" />
-        </id>
-        <property name="address" type="string" />
-        <property name="shopName" type="string" />
-        <property name="shopName2" type="string" />
-        <property name="city" type="string" />
-        <property name="areaCode" type="string" />
-        <property name="categoryList" type="string" />
-        <property name="region" type="string" />        
-        <property name="shopType" type="string" />
-        <property name="nearBy" type="string" />        
-        <property name="la" type="double" />
-        <property name="lo" type="double" />
-        <property name="tel" type="string" />
-        <property name="tel2" type="string" />
-    </class>
+	<class entity-name="Restaurant" table="Object_Restaurant">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="address" type="string" />
+		<property name="shopName" type="string" />
+		<property name="shopName2" type="string" />
+		<property name="city" type="string" />
+		<property name="areaCode" type="string" />
+		<property name="categoryList" type="string" />
+		<property name="region" type="string" />
+		<property name="shopType" type="string" />
+		<property name="nearBy" type="string" />
+		<property name="la" type="double" />
+		<property name="lo" type="double" />
+		<property name="tel" type="string" />
+		<property name="tel2" type="string" />
+	</class>
 
 	<class entity-name="BusStation" table="Object_BusStation">
 		<id name="id" type="long" column="id">
@@ -120,8 +120,28 @@
 		</id>
 		<property name="seq" type="integer" />
 		<property name="busId" type="long" />
+		<property name="busName" type="string" />
 		<property name="stopName" type="string" />
 		<property name="la" type="double" />
 		<property name="lo" type="double" />
-	</class>	
+	</class>
+
+	<class entity-name="RegisterUser" table="RegisterUser">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" />
+		<property name="count" type="integer" />
+	</class>
+
+
+	<class entity-name="SiteUser" table="SiteUser">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" />
+		<property name="count" type="integer" />
+		<property name="site" type="string" />
+		<property name="email" type="string" />
+	</class>
 </hibernate-mapping>

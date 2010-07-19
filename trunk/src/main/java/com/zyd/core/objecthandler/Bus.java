@@ -116,8 +116,7 @@ public class Bus extends Handler {
 
     @Override
     public SearchResult query(HashMap params) {
-        HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
-        return ObjectHelper.defaultQuery(qparams, name, meta);
+        return ObjectHelper.defaultQuery(params, name, meta);
     }
 
     public final static class Columns extends Handler.Columns {

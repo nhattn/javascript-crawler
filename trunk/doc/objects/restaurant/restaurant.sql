@@ -52,11 +52,38 @@ create table RShop(
 ALTER TABLE RShop AUTO_INCREMENT = 100000000000000;
 
 
+/**
+does not use view, create a table directly 
+
 create view Object_Restaurant as     
     select id, address, shopName, cityName as city, cityAreaCode as areaCode, categoryList, RegionList as region, AltName as shopName2, GLat as la, GLng as lo, PhoneNo2 as tel2, PhoneNo as tel, shopType as shopType, crossRoad as nearBy            
-    from RShop order by ShopPower desc, Score desc;
+    from RShop where ShopType='美食' order by ShopPower desc, Score desc;
+**/
+
+create table Object_Restaurant (
+        id                 bigint,
+        address            varchar(300), 
+        shopName           varchar(300), 
+        city               varchar(30), 
+        areaCode           varchar(10), 
+        categoryList       varchar(300),            
+        region             varchar(300),
+        shopName2          varchar(300),
+        la                 double,
+        lo                 double,
+        tel                varchar(300),
+        tel2               varchar(300),
+        ShopType           varchar(50),
+        nearBy             varchar(300)
+);
+                                 
         
-        
+INSERT INTO Object_Restaurant  
+    select id, address, shopName, cityName as city, cityAreaCode as areaCode, categoryList, RegionList as region, AltName as shopName2, GLat as la, GLng as lo, PhoneNo2 as tel2, PhoneNo as tel, shopType as shopType, crossRoad as nearBy            
+    from RShop where ShopType='美食' order by ShopPower desc, Score desc;
+    
+    
+            
 create index Index_RShop_ShopPower  on RShop(ShopPower);
 create index Index_RShop_Score  on RShop(Score);
 create index Index_RShop_GLat  on RShop(GLat);

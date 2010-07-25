@@ -36,7 +36,6 @@ Crawler = {
             Crawler.remoteLog('Error', txt);
         } else {
             Crawler.clog('Error: ' + txt);
-            alert(txt);
         }
     },
 
@@ -46,7 +45,6 @@ Crawler = {
             Crawler.remoteLog('Attention', txt);
         } else {
             Crawler.clog('Attention: ' + txt);
-            alert(txt);
         }
     },
 

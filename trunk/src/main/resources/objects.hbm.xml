@@ -144,4 +144,26 @@
 		<property name="site" type="string" />
 		<property name="email" type="string" />
 	</class>
+
+
+	<class entity-name="GroupBuy" table="GroupBuy">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="lo" type="double" />
+		<property name="la" type="double" />
+		<property name="price" type="double" />
+		<property name="oldPrice" type="double" />
+		<property name="address" type="string" />
+		<property name="city" type="string" />
+		<property name="tel" type="string" />
+		<property name="description" type="string" />
+		<property name="url" type="string" />
+		<property name="createTime" column="createTime" type="timestamp" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+		<property name="website" type="string" />
+		<property name="websiteUrl" type="string" />
+		<property name="title" type="string" />
+		<property name="shopName" type="string" />
+	</class>
 </hibernate-mapping>

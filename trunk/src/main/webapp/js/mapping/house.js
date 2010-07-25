@@ -60,4 +60,21 @@ CrGlobal.handlerMapping = [
 {
     pattern : 'bus\.aibang\.com/bus/[a-z]+/line_.+',
     file : 'bus/aibang/list'
-} ];
+},
+
+/*****************************************************
+ *   Groupon
+ ******************************************************/
+
+/* http://www.tuan800.com/beijing */
+{
+    pattern : 'tuan800\.com/[a-z]+$',
+    file : 'groupon/tuan800/list'
+},
+/** http://www.tuan800.com/deal/beijingjin_5413 */
+{
+    pattern : 'tuan800\.com/deal/*',
+    file : 'groupon/tuan800/detail'
+}
+
+];

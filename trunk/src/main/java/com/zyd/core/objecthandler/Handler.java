@@ -2,8 +2,11 @@ package com.zyd.core.objecthandler;
 
 import java.util.HashMap;
 
+import com.zyd.core.dom.DatabaseColumnInfo;
+
 @SuppressWarnings("unchecked")
 public abstract class Handler {
+
     public abstract String getName();
 
     public abstract Object create(HashMap values);
@@ -25,6 +28,17 @@ public abstract class Handler {
         return null;
     }
 
+    private final static HashMap<String, HashMap<String, DatabaseColumnInfo>> metaMapping = new HashMap<String, HashMap<String, DatabaseColumnInfo>>();
+
+    public static HashMap<String, DatabaseColumnInfo> getTableMetaInfo(String tableName) {
+        HashMap<String, DatabaseColumnInfo> meta = metaMapping.get(tableName);
+        if (meta == null) {
+            meta = ObjectHelper.getTableMetaData(tableName);
+            metaMapping.put(tableName, meta);
+        }
+        return meta;
+    }
+
     public final static class Parameter {
         /**
          * start of the record
@@ -35,6 +49,7 @@ public abstract class Handler {
          */
         public final static String PARAMETER_COUNT = "count";
         public final static String PARAMETER_ORDER_BY = "orderBy";
+        public final static String PARAMETER_SKIP_URL_CHECK = "skipUrlCheck";
         public final static String PARAMETER_ORDER = "order";
         public final static String PARAMETER_VALUE_ORDER_ASC = "asc";
         public final static String PARAMETER_VALUE_ORDER_DESC = "desc";
@@ -50,5 +65,7 @@ public abstract class Handler {
         public final static String Lat = "la";
         public final static String OK = "ok";
         public final static String Referer = "referer";
+        public final static String CreateTime = "createTime";
+        public final static String UpdateTime = "updateTime";
     }
 }

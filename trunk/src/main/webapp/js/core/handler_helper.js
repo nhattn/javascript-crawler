@@ -118,6 +118,11 @@ HandlerHelper = {
      * 
      *                4 assign.value, this will simply assign the value of param1 to the
      *                    [name] attribute
+     *                
+     *                5 get.in.between, extract a text between two strings
+     *                  param1 the text
+     *                  param2 start text
+     *                  param3 end text
      */
     parseObject : function(mapping) {
         var obj = {};
@@ -143,6 +148,9 @@ HandlerHelper = {
                 case 'assign.value':
                     obj[m.name] = m.param1;
                     break;
+                case 'get.in.between':
+                    obj[m.name] = HandlerHelper.getInBetween.apply(HandlerHelper, HandlerHelper._getParams(m)).trim();
+                    break;
                 default:
                     Crawler.error('wrong op' + m.op);
                 }
@@ -152,7 +160,9 @@ HandlerHelper = {
         }
         return obj;
     },
-
+    getInBetween : function(s, start, end) {
+        return CrUtil.getBetween(s, start, end);
+    },
     extractFromXpathNodeTextAny : function() {
         var paths = arguments;
         for ( var i = 0; i < paths.length; i++) {
@@ -184,7 +194,12 @@ HandlerHelper = {
     },
 
     extractFromXpathNodeText : function(xp, reg) {
-        var r = XPath.single(null, xp).textContent;
+        var r = XPath.single(null, xp);
+        if (!r) {
+            Crawler.warn('Can not get xpath node :' + xp);
+            return;
+        }
+        r = r.textContent;
         if (typeof reg == 'object') {
             r = HandlerHelper.getRegGroupFirstValue(r, reg);
         }

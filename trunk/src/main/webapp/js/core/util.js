@@ -164,19 +164,28 @@ CrUtil = {
     /**
      * extract a string that is inside s, between start and end, excluding both.
      * s= 'aabbccddeeffgg', start = 'aa', end = 'ff' will return 'bbccddee'.
+     * if startIndex is provided, will search from a specific index
      */
-    getBetween : function(s, start, end) {
+    getBetween : function(s, start, end, startIndex) {
         if (!s || s.length == 0) {
             return '';
         }
-        var i = s.indexOf(start);
+        var i = -1;
+        if (startIndex) {
+            i = s.indexOf(start, startIndex);
+        } else {
+            i = s.indexOf(start);
+        }
         if (i == -1)
             return '';
         i = i + start.length;
 
-        var j = s.indexOf(end, i + 1);
-        if (j == -1)
-            return '';
+        var j = s.length;
+        if (end) {
+            j = s.indexOf(end, i + 1);
+            if (j == -1)
+                return '';
+        }
         return s.substring(i, j);
     },
 
@@ -199,10 +208,34 @@ CrUtil = {
     trimAttributes : function(obj) {
         for ( var p in obj) {
             if (obj[p] && obj[p].trim) {
-                obj[p] = obj[p].trim();
+                obj[p] = CrUtil.normalizeValue(obj[p].trim());
             }
         }
     },
+
+    normalizeValue : function(s) {
+        if (!s)
+            return s;
+        if (typeof s != 'string')
+            return s;
+        return s.replace(/[ \f\t\v\u00A0\u2028\u2029&<>]+/g, ' ');
+    },
+
+    extractNumber : function(s) {
+        if (!s)
+            return '';
+        if (typeof s != 'string')
+            return '';
+        var r = '';
+        for ( var i = 0; i < s.length; i++) {
+            var c = s[i];
+            if ((c <= '9' && c >= '0') || c == '.') {
+                r = r + c;
+            }
+        }
+        return r;
+    },
+
     /**
      * shanghai.koubei.com -> koubei.com www.ganji.com -> ganji.com
      */
@@ -409,7 +442,7 @@ CrUtil = {
 
         s = ts.match(/([0-9]+)小时前/);
         if (s && s.length == 2) {
-            minBefore = parseInt(s[1], 10) * 60;            
+            minBefore = parseInt(s[1], 10) * 60;
             hasMinMatch = true;
         }
 
@@ -418,7 +451,7 @@ CrUtil = {
             minBefore = parseInt(s[1], 10) * 1440;
             hasMinMatch = true;
         }
-        if (hasMinMatch) {            
+        if (hasMinMatch) {
             d.setMinutes(d.getMinutes() - minBefore);
             return d;
         }

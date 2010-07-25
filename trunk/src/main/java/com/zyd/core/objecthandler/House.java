@@ -82,11 +82,9 @@ public class House extends Handler {
         } catch (Exception e) {
             if (session != null)
                 session.getTransaction().rollback();
-            logger.error("Exception when saving object in handler.House.");
             logger.error(e);
             logger.debug("Values trying to save are:");
             logger.debug(values);
-            logger.debug("Thread is " + Thread.currentThread().getName() + " - " + Thread.currentThread().getId());
         }
         return r;
     }
@@ -184,8 +182,6 @@ public class House extends Handler {
         public final static String PriceUit = "priceUit";
         public final static String Size = "size";
         public final static String HouseType = "houseType";
-        public final static String CreateTime = "createTime";
-        public final static String UpdateTime = "updateTime";
         public final static String Address = "address";
         public final static String District1 = "district1";
         public final static String District3 = "district3";

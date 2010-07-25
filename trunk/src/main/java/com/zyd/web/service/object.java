@@ -46,14 +46,19 @@ public class object extends ServiceBase {
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
         String referer = req.getHeader("Referer");
-        if (referer == null || linkManager.getProcessingLink(referer) == null) {
+        boolean doRequest = true;
+        if ("true".equals(req.getParameter(Handler.Parameter.PARAMETER_SKIP_URL_CHECK))) {
+        } else if (referer == null || linkManager.getProcessingLink(referer) == null) {
             if (referer == null) {
                 logger.warn("Can not process link, no refeerer");
             } else {
                 logger.warn("Can not process link, link is not in processing list:" + referer);
             }
             output(RESULT_NO_CHANGE, resp);
-        } else {
+            doRequest = false;
+        }
+
+        if (doRequest) {
             HashMap values = requestParameterToMap(req);
             values.put(Handler.Columns.Referer, referer);
             boolean result = (Boolean) objectManager.create(values);

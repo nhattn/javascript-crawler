@@ -24,7 +24,7 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.0</version>
 				<configuration>
-					<url>http://www.zuiyidong.com/manager</url>
+					<url>http://crawler.zuiyidong.com/manager</url>
 					<server>t410</server>
 					<uriEncoding>utf8</uriEncoding>
 					<path>/</path>

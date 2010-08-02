@@ -31,6 +31,9 @@
 
 	<bean id="siteRegisterManager" class="com.zyd.core.busi.userreg.SiteRegisterManager">
 	</bean>
+	
+    <bean id="apiHandler" class="com.zyd.core.busi.api.ApiHandler">
+    </bean>
 
 	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
 		<property name="linkManager" ref="linkManager" />

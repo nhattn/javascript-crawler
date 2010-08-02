@@ -72,6 +72,11 @@ public class ServiceBase {
         writer.close();
     }
 
+    protected void setStatus(int code, String message, HttpServletResponse response) throws IOException {
+        response.setStatus(code);
+        response.getWriter().write(message);
+    }
+
     protected void output(String s, HttpServletResponse response) throws IOException {
         output(s, "GBK", response);
     }

@@ -278,7 +278,7 @@ public class Utils {
         return h;
     }
 
-    public static String stringHash(String s) {        
+    public static String stringHash(String s) {
         long h = 0;
         int off = 0;
         char val[] = s.toCharArray();
@@ -287,6 +287,10 @@ public class Utils {
             h = 63 * h + val[off++];
         }
         return Long.toString(h);
+    }
+
+    public static String xmlString(String s) {
+        return s.replaceAll("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
     }
 
     public static void main(String[] args) {

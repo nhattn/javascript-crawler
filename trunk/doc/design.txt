@@ -1,0 +1,68 @@
+1. How links are stored. 
+
+The biggest value a signed long can take is 9223372036854775807. That is 19 digits.
+Take the first 7 digits as the table id section. The last 12 digits as entry id section.
+ie, take this number : 9223372036854775807, 9223372 identifies the table,  036854775807 identifies the unique id inside that table.
+
+  1) When a link is added, it takes several process. 
+      a) The link is mapped to a unique string, identifies which link table should be used to store link.
+      b) Get the link store based on the string. 
+      c) Use that store, check if that link is already been processed.
+      d) If it's already processed, do nothing. 
+         If it's not already processed, add it. 
+      
+      if on step b), there is no link store found, create a new link store for that unique string. with the starting id set to 
+      10000000+ [current number of link tables] + 000000000000, set the id to auto_increment  
+      
+  2) When trying to locate a link from the store, with an link id
+      a) get the first 7 digits of the link. finding the matching table based on the link nomaclature.
+  
+  3) How to test if a link is beening processed or not. 
+     Follow same step as 1), only do a selection.
+     
+  4) How to create a link table.
+     a) create table, alter auto_increment index, create index 
+     
+  
+  5) how to get next unprocessed link from a specific link store. 
+     order by id, asc, where processed is false
+  
+   
+      
+
+
+link_nnnnnnn
+id bigint
+url varchar(1000)
+createTime timestamp
+finishTime timestamp
+tryCount tinyint
+state  tinyint        // 0 for not tried, 1 for finished ok, 2 for error
+
+
+linktablemap
+
+id integer,  tableid integer, suid varchar(200)
+
+
+
+create table LinkTableMap(
+    id integer   NOT NULL AUTO_INCREMENT, 
+    uid varchar(200),
+    PRIMARY KEY (id)    
+);
+
+ALTER TABLE LinkTableMap AUTO_INCREMENT = 1000000;
+
+
+
+
+
+
+
+
+
+
+
+
+create table $TableName$ (id bigint NOT NULL AUTO_INCREMENT,url varchar(1000),createTime timestamp,finishTime timestamp,tryCount tinyint, state tinyint, PRIMARY KEY (id));

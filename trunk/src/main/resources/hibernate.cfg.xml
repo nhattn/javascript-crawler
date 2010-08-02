@@ -3,35 +3,33 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<!-- Database connection settings -->
+
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="connection.url">jdbc:mysql://localhost/crawler</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">root</property>
-		<!--
-			<property name="connection.useUnicode">true</property> <property
-			name="connection.charactorEncoding">UTF8</property>
-		-->
-		<!-- JDBC connection pool (use the built-in) -->
+
+
 		<property name="connection.pool_size">1</property>
 
-		<!-- SQL dialect -->
+
 		<property name="dialect">org.hibernate.dialect.MySQLDialect </property>
 
-		<!-- Enable Hibernate's automatic session context management -->
+
 		<property name="current_session_context_class">thread</property>
 
-		<!-- Disable the second-level cache  -->
+
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
-		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">false</property>
 
 		<!-- 
 		<property name="hbm2ddl.auto">validate</property>
         -->
-		<!--  mapping resource="com/zyd/core/dom/mapping.hbm.xml" / -->
-		<mapping resource="objects.hbm.xml" />
+
+
+		<mapping resource="hbm/objects.hbm.xml" />
+		<mapping resource="hbm/com_zyd_layer_restaurant.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

@@ -3,14 +3,13 @@ package com.zyd.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import junit.framework.TestCase;
+
 import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
 import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
 import com.zyd.core.busi.api.ApiHandler;
-import com.zyd.web.service.api;
-
-import junit.framework.TestCase;
 
 public class TestApiHandler extends TestCase {
     @Override
@@ -69,7 +68,7 @@ class TestThread implements Runnable {
         params.put("lat", "0,90");
         params.put("start", Integer.toString(CommonTestUtil.nextInt(10)));
         params.put("count", Integer.toString(CommonTestUtil.nextInt(20)));
-        String s = HttpTestUtil.httpGetForString(ATestConstants.SERVER_URL + "/service/api", params);
+        String s = HttpTestUtil.httpGetForString("http://192.168.1.107:8080" + "/service/api", params);
         if (s.indexOf("xml") <= 0) {
             System.err.println("error :  " + s);
         }

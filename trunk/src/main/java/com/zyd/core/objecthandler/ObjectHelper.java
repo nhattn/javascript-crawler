@@ -274,7 +274,7 @@ public class ObjectHelper {
         }
     }
 
-    public static SearchResult defaultQuery(HashMap params, String objectName, HashMap<String, DatabaseColumnInfo> meta) {
+    public static SearchResult defaultQuery(HashMap params, String objectName, HashMap<String, DatabaseColumnInfo> meta, String separator) {
         HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
         for (Object o : params.keySet()) {
             String column = (String) o;
@@ -283,7 +283,6 @@ public class ObjectHelper {
                 continue;
             }
             String p = (String) params.get(column);
-            String separator = "-";
             int type = info.type;
             if (type == Types.TIME || type == Types.TIMESTAMP || type == Types.DATE) {
                 separator = "/";

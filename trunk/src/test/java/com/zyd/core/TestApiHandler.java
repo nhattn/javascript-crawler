@@ -7,19 +7,12 @@ import junit.framework.TestCase;
 
 import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
-import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
-import com.zyd.core.busi.api.ApiHandler;
 
 public class TestApiHandler extends TestCase {
     @Override
     protected void setUp() throws Exception {
         ATestUtil.setUpSpring();
-    }
-
-    public void atestList() {
-        ApiHandler handler = new ApiHandler();
-        System.out.println(handler.query("com.zuiyidong.layer.restaurant", 0, 200, 0, 200, 100, 0, null, null));
     }
 
     public void testPerformance() throws Exception {
@@ -37,7 +30,7 @@ public class TestApiHandler extends TestCase {
                 for (TestThread ts : tr) {
                     total = ts.count + total;
                 }
-                System.out.println("request/second = " + (total / ((System.currentTimeMillis() - start) / 1000))+", total request "+total );
+                System.out.println("request/second = " + (total / ((System.currentTimeMillis() - start) / 1000)) + ", total request " + total);
             } catch (Exception e) {
             }
         }

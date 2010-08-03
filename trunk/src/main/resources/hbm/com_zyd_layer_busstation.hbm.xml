@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="com.zuiyidong.layer.busstation" table="layer_com_zuiyidong_layer_busstation">
+		<id name="id" type="long" column="id" />
+		<property name="lng" type="double" />
+		<property name="lat" type="double" />
+		<property name="busId" type="long" />
+		<property name="seq" type="integer" />
+		<property name="busName" type="string" />		
+		<property name="city" type="string" />
+		<property name="stopName" type="string" />
+		<property name="description" type="string" />		
+	</class>
+</hibernate-mapping>

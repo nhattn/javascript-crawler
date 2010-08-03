@@ -13,8 +13,6 @@ import com.zyd.core.dom.DatabaseColumnInfo;
 public class DefaultHandler extends Handler {
     private static Logger logger = Logger.getLogger(DefaultHandler.class);
 
-    private static HashMap<String, HashMap<String, DatabaseColumnInfo>> metaMapping = new HashMap<String, HashMap<String, DatabaseColumnInfo>>();
-
     /**
      * If you are using this one to create object, note that you have to put object name the same as the table name,
      * into request parameter, Parameter.PARAMETER_OBJECT_ID. 
@@ -74,22 +72,13 @@ public class DefaultHandler extends Handler {
         throw new UnsupportedOperationException("getName not supported yet");
     }
 
-    private synchronized static HashMap<String, DatabaseColumnInfo> getTableMetaData(String tableName) {
-        HashMap<String, DatabaseColumnInfo> meta = metaMapping.get(tableName);
-        if (meta == null) {
-            meta = ObjectHelper.getTableMetaData(tableName);
-            metaMapping.put(tableName, meta);
-        }
-        return meta;
-    }
-
     @Override
     public SearchResult query(HashMap params) {
         String objectName = (String) params.get(Parameter.PARAMETER_OBJECT_ID);
         //TODO: this may not work
         String tableName = ((SingleTableEntityPersister) HibernateUtil.getSessionFactory().getClassMetadata(objectName)).getTableName();
-        HashMap<String, DatabaseColumnInfo> meta = getTableMetaData(tableName);
-        return ObjectHelper.defaultQuery(params, objectName, meta);
+        HashMap<String, DatabaseColumnInfo> meta = HibernateUtil.getTableMetaData(tableName);
+        return ObjectHelper.defaultQuery(params, objectName, meta, "-");
     }
 
 }

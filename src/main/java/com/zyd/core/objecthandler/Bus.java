@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
 
-import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.db.helper.BusHelper;
 import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.dom.bus.BusLine;
 import com.zyd.core.dom.bus.BusStop;
-import com.zyd.core.objecthandler.Handler.Parameter;
 
 public class Bus extends Handler {
     private static Logger logger = Logger.getLogger(Bus.class);
@@ -116,7 +113,7 @@ public class Bus extends Handler {
 
     @Override
     public SearchResult query(HashMap params) {
-        return ObjectHelper.defaultQuery(params, name, meta);
+        return ObjectHelper.defaultQuery(params, name, meta, "-");
     }
 
     public final static class Columns extends Handler.Columns {

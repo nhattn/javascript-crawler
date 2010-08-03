@@ -82,7 +82,7 @@ public class ServiceBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected static HashMap<String, String> requestParameterToMap(HttpServletRequest req) {
+    public static HashMap<String, String> requestParameterToMap(HttpServletRequest req) {
         HashMap<String, String> values = new HashMap<String, String>();
         Enumeration<String> names = req.getParameterNames();
         while (names.hasMoreElements()) {

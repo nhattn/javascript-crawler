@@ -28,17 +28,6 @@ public abstract class Handler {
         return null;
     }
 
-    private final static HashMap<String, HashMap<String, DatabaseColumnInfo>> metaMapping = new HashMap<String, HashMap<String, DatabaseColumnInfo>>();
-
-    public static HashMap<String, DatabaseColumnInfo> getTableMetaInfo(String tableName) {
-        HashMap<String, DatabaseColumnInfo> meta = metaMapping.get(tableName);
-        if (meta == null) {
-            meta = ObjectHelper.getTableMetaData(tableName);
-            metaMapping.put(tableName, meta);
-        }
-        return meta;
-    }
-
     public final static class Parameter {
         /**
          * start of the record

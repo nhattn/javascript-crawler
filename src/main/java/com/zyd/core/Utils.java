@@ -291,6 +291,7 @@ public class Utils {
 
     public static String xmlString(String s) {
         return s.replaceAll("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+//        return s;
     }
 
     public static void main(String[] args) {

@@ -30,6 +30,7 @@
 
 		<mapping resource="hbm/objects.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_restaurant.hbm.xml" />
+		<mapping resource="hbm/com_zyd_layer_busstation.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

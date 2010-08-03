@@ -1,16 +1,24 @@
 package com.zyd.core;
 
+import java.io.InputStream;
+import java.util.Properties;
+
+import junit.framework.TestCase;
+
 import org.hibernate.Criteria;
 import org.hibernate.classic.Session;
 
 import com.zyd.ATestUtil;
+import com.zyd.Constants;
+import com.zyd.core.busi.api.ParameterController;
 import com.zyd.core.db.HibernateUtil;
-
-import junit.framework.TestCase;
 
 public class MiscTest extends TestCase {
 
-    public void testUtil() {
+    public void testRead() throws Exception{
+        System.out.println(ParameterController.isParameterAllowed("busId2", "com.zuiyidong.layer.busstation"));
+    }
+    public void atestUtil() {
         String[] domains = new String[] { 
                 "http://www.abc.com", "abc.com",
                 "http://www.abc.com.cn", "abc.com.cn",
@@ -29,7 +37,7 @@ public class MiscTest extends TestCase {
             i++;
         }
     }
-    public void testHibernateContainsEntity()throws Exception{
+    public void atestHibernateContainsEntity()throws Exception{
         ATestUtil.setUpSpring();
         System.out.println(HibernateUtil.getSessionFactory().getClassMetadata("Restaurant"));
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();

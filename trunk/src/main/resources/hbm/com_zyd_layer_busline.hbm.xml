@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="com.zuiyidong.layer.busline" table="layer_com_zuiyidong_layer_busline">
+		<id name="id" type="long" column="id" />
+		<property name="name" type="string" />
+		<property name="city" type="string" />
+		<property name="updateTime" type="timestamp" />
+		<property name="description" type="string" />
+	</class>
+</hibernate-mapping>

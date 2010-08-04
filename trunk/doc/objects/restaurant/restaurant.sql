@@ -77,14 +77,13 @@ create table Object_Restaurant (
         nearBy             varchar(300)
 );
                                  
+
+create index Index_Object_Restaurant_ShopName  on Object_Restaurant(shopName);
+create index Index_Object_Restaurant_lo  on Object_Restaurant(lo);
+create index Index_Object_Restaurant_la  on Object_Restaurant(la);
         
 INSERT INTO Object_Restaurant  
     select id, address, shopName, cityName as city, cityAreaCode as areaCode, categoryList, RegionList as region, AltName as shopName2, GLat as la, GLng as lo, PhoneNo2 as tel2, PhoneNo as tel, shopType as shopType, crossRoad as nearBy            
     from RShop where ShopType='美食' order by ShopPower desc, Score desc;
     
-    
-            
-create index Index_RShop_ShopPower  on RShop(ShopPower);
-create index Index_RShop_Score  on RShop(Score);
-create index Index_RShop_GLat  on RShop(GLat);
-create index Index_RShop_GLng  on RShop(GLng);
+

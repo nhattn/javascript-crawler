@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="Restaurant" table="Object_Restaurant">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="address" type="string" />
+		<property name="shopName" type="string" />
+		<property name="shopName2" type="string" />
+		<property name="city" type="string" />
+		<property name="areaCode" type="string" />
+		<property name="categoryList" type="string" />
+		<property name="region" type="string" />
+		<property name="shopType" type="string" />
+		<property name="nearBy" type="string" />
+		<property name="la" type="double" />
+		<property name="lo" type="double" />
+		<property name="tel" type="string" />
+		<property name="tel2" type="string" />
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="House"  table="House">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="lo" column="lo" type="double" />
+		<property name="la" column="la" type="double" />
+		<property name="rentalType" column="rentaltype" type="string" />
+		<property name="subRentalType" column="subRentalType" type="string" />
+		<property name="price" column="price" type="double" />
+		<property name="paymentType" column="paymentType" type="string" />
+		<property name="priceUnit" column="priceUnit" type="string" />
+		<property name="size" column="size" type="double" />
+		<property name="houseType" column="houseType" type="string" />
+		<property name="address" column="address" type="string" />
+		<property name="city" column="city" type="string" />
+		<property name="district1" column="district1" type="string" />
+		<property name="district3" column="district3" type="string" />
+		<property name="district5" column="district5" type="string" />
+		<property name="tel" column="tel" type="string" />
+		<property name="contact" column="contact" type="string" />
+		<property name="photo" column="photo" type="string" />
+		<property name="description1" column="description1" type="string" />
+		<property name="description2" column="description2" type="string" />
+		<property name="floor" column="floor" type="integer" />
+		<property name="totalFloor" column="totalFloor" type="integer" />
+		<property name="isAgent" column="isAgent" type="int" />
+		<property name="equipment" column="equipment" type="string" />
+		<property name="decoration" column="decoration" type="string" />
+		<property name="createTime" column="createTime" type="timestamp" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+		<property name="referer" column="referer" type="string" />
+		<property name="hash" column="hash" type="string" />
+		<property name="ok" column="ok" type="int" />
+	</class>
+</hibernate-mapping>

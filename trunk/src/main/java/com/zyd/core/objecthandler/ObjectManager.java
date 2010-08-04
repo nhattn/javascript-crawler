@@ -63,7 +63,7 @@ public class ObjectManager {
                     String className = PACKAGE_NAME + "." + name.substring(0, 1).toUpperCase() + name.substring(1, name.length());
                     service = (Handler) Class.forName(className).newInstance();
                 } catch (Exception e) {
-                    if (isObjectManaged(name)) {
+                    if (HibernateUtil.getTableName(name) != null) {
                         service = defaultObjectHandler;
                     }
                 }
@@ -81,15 +81,11 @@ public class ObjectManager {
         return service;
     }
 
-    private boolean isObjectManaged(String objectId) {
-        return HibernateUtil.getSessionFactory().getClassMetadata(objectId) != null;
-    }
-
     public void deleteAllObjects() {
         //TODO: have to auto load every thing, can't hard code here.
         (new House()).deleteAll();
         (new AppLog()).deleteAll();
-        (new Bus()).deleteAll();
+//        (new Bus()).deleteAll();
     }
 
 }

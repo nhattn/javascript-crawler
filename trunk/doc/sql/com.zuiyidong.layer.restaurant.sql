@@ -20,11 +20,14 @@ create table layer_com_zuiyidong_layer_restaurant (
 
 create index layer_restaurant_lng  on layer_com_zuiyidong_layer_restaurant(lng);
 create index layer_restaurant_lat  on layer_com_zuiyidong_layer_restaurant(lat);
+create index layer_restaurant_shopName  on layer_com_zuiyidong_layer_restaurant(shopName);
 
+/*
 insert into layer_com_zuiyidong_layer_restaurant (id, lng, lat, shopName, shopName2, city, address, tel, tel2, areaCode, categoryList, nearBy) 
     select id , GLng as lng, GLat as lat, shopName, AltName as shopName2, cityName as city, address, PhoneNo as tel, PhoneNo2 as tel2, cityAreaCode as areaCode, categoryList, crossRoad as nearBy            
     from RShop where ShopType='美食' order by ShopPower desc, Score desc;
 
+*/
     
     
     

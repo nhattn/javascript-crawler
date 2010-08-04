@@ -5,14 +5,12 @@ import java.util.HashSet;
 
 import junit.framework.TestCase;
 
-import com.tj.common.util.test.CommonTestUtil;
 import com.zyd.ATestUtil;
-import com.zyd.Constants;
 import com.zyd.linkmanager.Link;
 import com.zyd.linkmanager.LinkManager;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
 
-public class TestNewLinkManager extends TestCase {
+public class NotTestNewLinkManager extends TestCase {
 
     LinkManager man;
 

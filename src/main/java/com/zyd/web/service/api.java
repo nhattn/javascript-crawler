@@ -51,9 +51,11 @@ public class api extends ServiceBase {
         SearchResult r = ObjectHelper.defaultQuery(params, layer, meta, ",");
         String format = req.getParameter("format");
         if (format == null || "xml".equals(format)) {
+            setResponseType("xml", resp);
             resp.getWriter().write(StringUtil.toXmlString(r.result));
         } else {
             try {
+                setResponseType("js", resp);
                 resp.getWriter().write(StringUtil.toJsonString(r.result));
             } catch (JSONException e) {
                 e.printStackTrace();

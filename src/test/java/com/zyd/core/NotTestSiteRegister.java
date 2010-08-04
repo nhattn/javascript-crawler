@@ -5,7 +5,7 @@ import com.zyd.core.busi.userreg.SiteRegisterManager;
 
 import junit.framework.TestCase;
 
-public class TestSiteRegister extends TestCase {
+public class NotTestSiteRegister extends TestCase {
     SiteRegisterManager m;
 
     @Override

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="GroupBuy" table="GroupBuy">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="lo" type="double" />
+		<property name="la" type="double" />
+		<property name="price" type="double" />
+		<property name="oldPrice" type="double" />
+		<property name="address" type="string" />
+		<property name="city" type="string" />
+		<property name="tel" type="string" />
+		<property name="description" type="string" />
+		<property name="url" type="string" />
+		<property name="createTime" column="createTime" type="timestamp" />
+		<property name="updateTime" column="updateTime" type="timestamp" />
+		<property name="website" type="string" />
+		<property name="websiteUrl" type="string" />
+		<property name="title" type="string" />
+		<property name="shopName" type="string" />
+	</class>
+</hibernate-mapping>

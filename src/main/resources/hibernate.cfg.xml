@@ -18,19 +18,22 @@
 
 		<property name="current_session_context_class">thread</property>
 
-
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
 		<property name="show_sql">false</property>
 
 		<!-- 
-		<property name="hbm2ddl.auto">validate</property>
         -->
+		<property name="hbm2ddl.auto">validate</property>
 
-
-		<mapping resource="hbm/objects.hbm.xml" />
+		<mapping resource="hbm/base.hbm.xml" />
+		<mapping resource="hbm/house.hbm.xml" />
+		<mapping resource="hbm/busstation.hbm.xml" />
+		<mapping resource="hbm/groupbuy.hbm.xml" />
+		<mapping resource="hbm/restaurant.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_restaurant.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_busstation.hbm.xml" />
+		<mapping resource="hbm/com_zyd_layer_busline.hbm.xml" />
+		<mapping resource="hbm/com_zyd_layer_wifi.hbm.xml" />
 	</session-factory>
-
 </hibernate-configuration>

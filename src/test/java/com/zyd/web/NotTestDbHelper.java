@@ -11,7 +11,7 @@ import com.zyd.ATestUtil;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.linkmanager.mysql.DbHelper;
 
-public class TestDbHelper extends TestCase {
+public class NotTestDbHelper extends TestCase {
     @Override
     protected void setUp() throws Exception {
         ATestUtil.setUpSpring();

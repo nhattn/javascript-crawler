@@ -8,8 +8,7 @@ import com.zyd.Constants;
 import com.zyd.core.busi.TemplateManager;
 
 public class MiscTest extends TestCase {
-    public static void main(String[] args) {
-        // testLoadConstants();
+    public static void main(String[] args) {        
         System.out.println(System.getProperty("java.lib.path"));
         System.out.println(Charset.defaultCharset());
     }

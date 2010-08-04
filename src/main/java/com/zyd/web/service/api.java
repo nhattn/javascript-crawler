@@ -37,7 +37,7 @@ public class api extends ServiceBase {
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String layer = req.getParameter("layer");
-        if (layer == null && ParameterController.isLayerAllowed(layer) == false) {
+        if (layer == null || ParameterController.isLayerAllowed(layer) == false) {
             setStatus(HttpServletResponse.SC_BAD_REQUEST, "Invalid layer - " + layer, resp);
             return;
         }

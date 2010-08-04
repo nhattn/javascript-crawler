@@ -1,4 +1,4 @@
-package com.zyd.core;
+package com.zyd.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,16 +9,16 @@ import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
 import com.zyd.ATestUtil;
 
-public class TestApiHandler extends TestCase {
+public class NotTestApiCall extends TestCase {
     @Override
     protected void setUp() throws Exception {
         ATestUtil.setUpSpring();
     }
 
-    public void testPerformance() throws Exception {
-        ArrayList<TestThread> tr = new ArrayList<TestThread>();
+    public void nottestPerformance() throws Exception {
+        ArrayList<NotTestThread> tr = new ArrayList<NotTestThread>();
         for (int i = 0; i < 20; i++) {
-            TestThread s = new TestThread();
+            NotTestThread s = new NotTestThread();
             tr.add(s);
             new Thread(s).start();
         }
@@ -27,7 +27,7 @@ public class TestApiHandler extends TestCase {
             try {
                 Thread.sleep(1000);
                 int total = 0;
-                for (TestThread ts : tr) {
+                for (NotTestThread ts : tr) {
                     total = ts.count + total;
                 }
                 System.out.println("request/second = " + (total / ((System.currentTimeMillis() - start) / 1000)) + ", total request " + total);
@@ -38,7 +38,7 @@ public class TestApiHandler extends TestCase {
 
 }
 
-class TestThread implements Runnable {
+class NotTestThread implements Runnable {
     public int count = 0;
 
     public void run() {

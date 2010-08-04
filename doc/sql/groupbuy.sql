@@ -1,3 +1,4 @@
+use crawler;
 create table GroupBuy(
     id                  bigint NOT NULL AUTO_INCREMENT,
     lo                  double,

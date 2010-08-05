@@ -2,4 +2,5 @@
 function handlerProcess(){
     Crawler.clog("Nothing to do for this url");
     Crawler.clog(window.location);
+    Crawler.nextLink();
 }

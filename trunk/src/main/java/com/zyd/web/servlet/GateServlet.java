@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.zyd.core.busi.AccessController;
+import com.zyd.core.util.IpCounter;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class GateServlet extends HttpServlet {
@@ -19,6 +22,13 @@ public class GateServlet extends HttpServlet {
     private final static String ServicePackage = "com.zyd.web.";
     private final static ServiceBase defaultService = new ServiceBase();
     private static HashMap<String, ServiceBase> serviceMap = new HashMap<String, ServiceBase>();
+    private IpCounter ipCounter;
+    private AccessController accessController;
+
+    public GateServlet() {
+        ipCounter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
+        accessController = (AccessController) SpringContext.getContext().getBean("accessController");
+    }
 
     /**
      * Looking up services in com.zyd.web.service directory, based on the urls
@@ -57,23 +67,42 @@ public class GateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (accessController.isIpBlocked(req.getRemoteAddr()) && req.getParameter("accessCheck") == null) {
+            logger.warn("blocked access from " + req.getRemoteAddr());
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
         service.get(req, resp);
+        ipCounter.logAccess(req.getRemoteAddr());
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (accessController.isIpBlocked(req.getRemoteAddr()) && req.getParameter("accessCheck") == null) {
+            logger.warn("blocked access from " + req.getRemoteAddr());
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
         service.put(req, resp);
+        ipCounter.logAccess(req.getRemoteAddr());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (accessController.isIpBlocked(req.getRemoteAddr()) && req.getParameter("accessCheck") == null) {
+            logger.warn("blocked access from " + req.getRemoteAddr());
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         ServiceBase service = lookupService(req);
         allowCrossDomain(resp);
         service.post(req, resp);
+        ipCounter.logAccess(req.getRemoteAddr());
     }
 
     @Override

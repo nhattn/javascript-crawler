@@ -97,14 +97,23 @@ public class Constants {
     public static String ServerUrl;
     public static String IdlePageUrl;
 
-        
     /***
      * These are system wide comment variables, should never be changed or reassigned
      */
 
     public final static Object[] ZERO_OBJECT_LIST = new Object[0];
     public final static String ALLOWED_API_QUERY_PARAMETER_CONFIG_FILE = "allowed.prop";
-    
+
+    public final static int AccessControllerSleepInterval = 5 * 60 * 1000;
+    public final static int IpBlockerMaxAccessPerInterval = 60;
+    public final static int IpBlockerSleepInterval = 3 * 60 * 1000;
+
+    /*
+    public final static int AccessControllerSleepInterval = 5 * 1000;
+    public final static int IpBlockerMaxAccessPerInterval = 10;
+    public final static int IpBlockerSleepInterval = 6 * 1000;
+     */
+
     static {
         loadValues();
     }

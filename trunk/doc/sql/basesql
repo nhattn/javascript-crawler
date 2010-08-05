@@ -24,5 +24,14 @@ create table AppLog(
     PRIMARY KEY (id)
 );
 
+create table IpBlockList(
+    id                  bigint not null auto_increment,
+    ip                  varchar(20),
+    createTime          datetime,
+    lastAffendTime      dateTime,
+    PRIMARY KEY (id)       
+);
+
+ALTER TABLE IpBlockList AUTO_INCREMENT = 100000000000000;
 ALTER TABLE Link AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;

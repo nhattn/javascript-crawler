@@ -1,8 +1,10 @@
 package com.zyd.core.db;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
@@ -54,4 +56,35 @@ public class HibernateUtil {
         return meta;
     }
 
+    /**
+     * 
+     * @param objectid an entity id in hibernate mapping file
+     * @param values an array like name1, value1, name2, value2 etc..
+     */
+    public static void saveObject(String objectid, Object... values) {
+        HashMap v = new HashMap();
+        for (int i = 0; i < values.length; i++) {
+            v.put(values[i++], values[i]);
+        }
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.save(objectid, v);
+            session.getTransaction().commit();
+        } catch (Error e) {
+            logger.error("Can not save object "+ objectid, e);
+            session.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+    public static List loadObject(String objectid) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        try {
+            return session.createQuery("from " + objectid).list();
+        } finally {
+            session.getTransaction().commit();
+        }
+    }
 }

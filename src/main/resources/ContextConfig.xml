@@ -14,24 +14,14 @@
 		<property name="validationQuery" value="select now()" />
 	</bean>
 
-	<bean id="contextBean" class="com.zyd.core.util.SpringContext">
-	</bean>
-
-	<bean id="objectManager" class="com.zyd.core.objecthandler.ObjectManager">
-	</bean>
-
-	<bean id="linkManager" class="com.zyd.core.busi.LinkManager">
-	</bean>
-
-	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager">
-	</bean>
-
-	<bean id="clientManager" class="com.zyd.core.busi.ClientManager">
-	</bean>
-
-	<bean id="siteRegisterManager" class="com.zyd.core.busi.userreg.SiteRegisterManager">
-	</bean>
-
+	<bean id="contextBean" class="com.zyd.core.util.SpringContext" />
+	<bean id="objectManager" class="com.zyd.core.objecthandler.ObjectManager" />
+	<bean id="linkManager" class="com.zyd.core.busi.LinkManager" />
+	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager" />
+	<bean id="clientManager" class="com.zyd.core.busi.ClientManager" />
+	<bean id="siteRegisterManager" class="com.zyd.core.busi.userreg.SiteRegisterManager" />
+	<bean id="ipCounter" class="com.zyd.core.util.IpCounter" />
+	<bean id="accessController" class="com.zyd.core.busi.AccessController" />
 	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
 		<property name="linkManager" ref="linkManager" />
 		<property name="objectManager" ref="objectManager" />

@@ -23,8 +23,8 @@
 		<property name="show_sql">false</property>
 
 		<!-- 
-        -->
 		<property name="hbm2ddl.auto">validate</property>
+        -->
 
 		<mapping resource="hbm/base.hbm.xml" />
 		<mapping resource="hbm/house.hbm.xml" />

@@ -35,4 +35,8 @@ public class MiscTest extends TestCase {
         c.setMaxResults(10);
         System.out.println(c.list());
     }
+
+    public void atestHibernateQuery() {
+        System.out.println(HibernateUtil.loadObject("GroupBuy"));
+    }
 }

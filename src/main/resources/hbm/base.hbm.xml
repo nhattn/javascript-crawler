@@ -26,4 +26,13 @@
 		<property name="ip" column="ip" type="string" />
 		<property name="createTime" column="createTime" type="timestamp" />
 	</class>
+
+	<class entity-name="BlockedIp" table="IpBlockList">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="ip" type="string" />
+		<property name="createTime" type="timestamp" />
+		<property name="lastAffendTime" type="timestamp" />
+	</class>
 </hibernate-mapping>

@@ -78,7 +78,7 @@ public class DefaultHandler extends Handler {
         //TODO: this may not work
         String tableName = ((SingleTableEntityPersister) HibernateUtil.getSessionFactory().getClassMetadata(objectName)).getTableName();
         HashMap<String, DatabaseColumnInfo> meta = HibernateUtil.getTableMetaData(tableName);
-        return ObjectHelper.defaultQuery(params, objectName, meta, "-");
+        return ObjectHelper.defaultQuery(params, objectName, meta);
     }
 
 }

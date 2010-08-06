@@ -113,7 +113,7 @@ public class Bus extends Handler {
 
     @Override
     public SearchResult query(HashMap params) {
-        return ObjectHelper.defaultQuery(params, name, meta, "-");
+        return ObjectHelper.defaultQuery(params, name, meta);
     }
 
     public final static class Columns extends Handler.Columns {

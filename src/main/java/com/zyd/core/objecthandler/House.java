@@ -1,6 +1,5 @@
 package com.zyd.core.objecthandler;
 
-import java.sql.Types;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -114,6 +113,10 @@ public class House extends Handler {
 
     public SearchResult query(HashMap params) {
         HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
+        String separator = (String) params.get("separator");
+        if (separator == null) {
+            separator = "-";
+        }
         for (Object o : params.keySet()) {
             String column = (String) o;
             DatabaseColumnInfo info = meta.get(column);
@@ -121,11 +124,6 @@ public class House extends Handler {
                 continue;
             }
             String p = (String) params.get(column);
-            String separator = "-";
-            int type = info.type;
-            if (type == Types.TIME || type == Types.TIMESTAMP || type == Types.DATE) {
-                separator = "/";
-            }
             qparams.put(column, ObjectHelper.parseRangeObject(p, info.type, separator));
         }
 

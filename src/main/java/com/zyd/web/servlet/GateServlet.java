@@ -67,15 +67,22 @@ public class GateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (accessController.isIpBlocked(req.getRemoteAddr()) && req.getParameter("accessCheck") == null) {
-            logger.warn("blocked access from " + req.getRemoteAddr());
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+        try {
+            if (accessController.isIpBlocked(req.getRemoteAddr()) && req.getParameter("accessCheck") == null) {
+                logger.warn("blocked access from " + req.getRemoteAddr());
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            ServiceBase service = lookupService(req);
+            allowCrossDomain(resp);
+            service.get(req, resp);
+            ipCounter.logAccess(req.getRemoteAddr());
+        } catch (Exception e) {
+            logger.error("Error happened while serving request ", e);
+            resp.setContentType("text/plain;charset=UTF-8");
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write(e.toString());
         }
-        ServiceBase service = lookupService(req);
-        allowCrossDomain(resp);
-        service.get(req, resp);
-        ipCounter.logAccess(req.getRemoteAddr());
     }
 
     @Override

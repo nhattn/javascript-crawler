@@ -274,20 +274,20 @@ public class ObjectHelper {
         }
     }
 
-    public static SearchResult defaultQuery(HashMap params, String objectName, HashMap<String, DatabaseColumnInfo> meta, String separator) {
+    public static SearchResult defaultQuery(HashMap params, String objectName, HashMap<String, DatabaseColumnInfo> meta) {
         HashMap<String, Object[]> qparams = new HashMap<String, Object[]>();
+        String separator = (String) params.get(Handler.Parameter.PARAMETER_SEPARATOR);
+        if (separator == null) {
+            separator = Handler.Parameter.PARAMETER_SEPARATOR_DEFAULT_VALUE;
+        }
         for (Object o : params.keySet()) {
-            String column = (String) o;
-            DatabaseColumnInfo info = meta.get(column);
+            String columnName = (String) o;
+            DatabaseColumnInfo info = meta.get(columnName);
             if (info == null) {
                 continue;
             }
-            String p = (String) params.get(column);
-            int type = info.type;
-            if (type == Types.TIME || type == Types.TIMESTAMP || type == Types.DATE) {
-                separator = "/";
-            }
-            qparams.put(column, ObjectHelper.parseRangeObject(p, info.type, separator));
+            String p = (String) params.get(columnName);
+            qparams.put(columnName, ObjectHelper.parseRangeObject(p, info.type, separator));
         }
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();

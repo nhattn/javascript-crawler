@@ -13,6 +13,7 @@ import com.zyd.core.StringUtil;
 import com.zyd.core.busi.api.ParameterController;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
+import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.ObjectHelper;
 import com.zyd.core.objecthandler.SearchResult;
 import com.zyd.web.ServiceBase;
@@ -31,7 +32,7 @@ import com.zyd.web.ServiceBase;
  * start - optional. The start index of the first result, default to 0.
  * key   - optinal. keyword to filter the result. Which columns to filter depends on the layer.
  * format - optional. json or xml. default to xml. 
- * 
+ * separater - optional, how to separate the range object. Default to ','
  */
 public class api extends ServiceBase {
     @Override
@@ -48,7 +49,10 @@ public class api extends ServiceBase {
         }
         String tableName = HibernateUtil.getTableName(layer);
         HashMap<String, DatabaseColumnInfo> meta = HibernateUtil.getTableMetaData(tableName);
-        SearchResult r = ObjectHelper.defaultQuery(params, layer, meta, ",");
+        if (params.get(Handler.Parameter.PARAMETER_SEPARATOR) == null) {
+            params.put(Handler.Parameter.PARAMETER_SEPARATOR, ",");
+        }
+        SearchResult r = ObjectHelper.defaultQuery(params, layer, meta);
         String format = req.getParameter("format");
         if (format == null || "xml".equals(format)) {
             setResponseType("xml", resp);

@@ -2,8 +2,6 @@ package com.zyd.core.objecthandler;
 
 import java.util.HashMap;
 
-import com.zyd.core.dom.DatabaseColumnInfo;
-
 @SuppressWarnings("unchecked")
 public abstract class Handler {
 
@@ -43,6 +41,8 @@ public abstract class Handler {
         public final static String PARAMETER_VALUE_ORDER_ASC = "asc";
         public final static String PARAMETER_VALUE_ORDER_DESC = "desc";
         public final static String PARAMETER_OBJECT_ID = "objectid";
+        public final static String PARAMETER_SEPARATOR = "separator";
+        public final static String PARAMETER_SEPARATOR_DEFAULT_VALUE = "-";
 
         protected final static Integer PARAMETER_VALUE_OK_YES = new Integer(1);
         protected final static Integer PARAMETER_VALUE_OK_NO = new Integer(0);

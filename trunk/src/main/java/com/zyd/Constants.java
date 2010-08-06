@@ -104,9 +104,19 @@ public class Constants {
     public final static Object[] ZERO_OBJECT_LIST = new Object[0];
     public final static String ALLOWED_API_QUERY_PARAMETER_CONFIG_FILE = "allowed.prop";
 
+    /**
+     * how long will access controller pull out data from ipblocker and update it's block list
+     */
     public final static int AccessControllerSleepInterval = 5 * 60 * 1000;
-    public final static int IpBlockerMaxAccessPerInterval = 60;
+
+    /**
+     * The cycle length that ipblocker counts the request from each client and decide which one to block. 
+     */
     public final static int IpBlockerSleepInterval = 3 * 60 * 1000;
+    /**
+     * the maximum request allowed from each ip address per IpBlockerSleepInterval.
+     */
+    public final static int IpBlockerMaxAccessPerInterval = 60;
 
     /*
     public final static int AccessControllerSleepInterval = 5 * 1000;

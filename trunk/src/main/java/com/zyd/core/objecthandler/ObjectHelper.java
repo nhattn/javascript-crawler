@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -108,7 +110,7 @@ public class ObjectHelper {
      * return a object array converted to that type.
      *  
      * time/timestamp/date should be in this format:
-     * 2009-12-01 13:59:59
+     * 2009-12-01 13:59:59.122
      * 
      * @param s
      * @param type  java.Sql.Types
@@ -130,15 +132,28 @@ public class ObjectHelper {
             return Constants.ZERO_OBJECT_LIST;
         }
 
-        String[] values = s.split(separator);
+        String[] stringValues;// = s.split(separator);
 
-        if (values.length > 2) {
+        int separatorIndex = s.indexOf(separator);
+        if (separatorIndex != -1 && s.indexOf(separator, separatorIndex + 1) != -1) {
             logger.debug("Wrong parameter value, should be contains one separator, value is " + s);
             return Constants.ZERO_OBJECT_LIST;
         }
+
+        int separatorLength = separator.length(), stringLength = s.length();
+        if (separatorIndex == -1) {
+            stringValues = new String[] { s };
+        } else if (separatorIndex == 0) {
+            stringValues = new String[] { null, s.substring(separatorLength) };
+        } else if (separatorIndex + separatorLength == stringLength) {
+            stringValues = new String[] { s.substring(0, separatorIndex), null };
+        } else {
+            stringValues = new String[] { s.substring(0, separatorIndex), s.substring(separatorIndex + separatorLength) };
+        }
+
         boolean valid = false;
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] != null && values[i].length() != 0) {
+        for (int i = 0; i < stringValues.length; i++) {
+            if (stringValues[i] != null && stringValues[i].length() != 0) {
                 valid = true;
                 break;
             }
@@ -146,18 +161,23 @@ public class ObjectHelper {
         if (valid == false) {
             return Constants.ZERO_OBJECT_LIST;
         }
-        int startIndex, arrayLength;
-        if (s.startsWith(separator)) {
+
+        int startIndex, endIndex, arrayLength;
+        if (separatorIndex == 0) {
             startIndex = 1;
+            endIndex = 2;
             arrayLength = 2;
-        } else if (s.endsWith(separator)) {
+        } else if (separatorIndex + separatorLength == stringLength) {
             startIndex = 0;
+            endIndex = 1;
             arrayLength = 2;
-        } else if (s.indexOf(separator) == -1) {
+        } else if (separatorIndex == -1) {
             startIndex = 0;
+            endIndex = 1;
             arrayLength = 1;
         } else {
             startIndex = 0;
+            endIndex = 2;
             arrayLength = 2;
         }
 
@@ -165,25 +185,25 @@ public class ObjectHelper {
 
         switch (type) {
         case Types.BIGINT:
-            for (; startIndex < values.length; startIndex++) {
-                r[startIndex] = Long.parseLong(values[startIndex]);
+            for (; startIndex < endIndex; startIndex++) {
+                r[startIndex] = Long.parseLong(stringValues[startIndex]);
             }
             break;
         case Types.INTEGER:
-            for (; startIndex < values.length; startIndex++) {
-                r[startIndex] = Integer.parseInt(values[startIndex]);
+            for (; startIndex < endIndex; startIndex++) {
+                r[startIndex] = Integer.parseInt(stringValues[startIndex]);
             }
             break;
         case Types.CHAR:
         case Types.VARCHAR:
-            for (; startIndex < values.length; startIndex++) {
-                r[startIndex] = values[startIndex];
+            for (; startIndex < endIndex; startIndex++) {
+                r[startIndex] = stringValues[startIndex];
             }
             break;
         case Types.TIME:
-            for (; startIndex < values.length; startIndex++) {
+            for (; startIndex < endIndex; startIndex++) {
                 try {
-                    r[startIndex] = time.parse(values[startIndex]);
+                    r[startIndex] = time.parse(stringValues[startIndex]);
                 } catch (ParseException e) {
                     logger.warn("Wrong Time format " + s);
                     r = Constants.ZERO_OBJECT_LIST;
@@ -192,9 +212,9 @@ public class ObjectHelper {
             }
             break;
         case Types.TIMESTAMP:
-            for (; startIndex < values.length; startIndex++) {
+            for (; startIndex < endIndex; startIndex++) {
                 try {
-                    r[startIndex] = timestamp.parse(values[startIndex]);
+                    r[startIndex] = timestamp.parse(stringValues[startIndex]);
                 } catch (ParseException e) {
                     logger.warn("Wrong Timestamp format " + s);
                     r = Constants.ZERO_OBJECT_LIST;
@@ -203,9 +223,9 @@ public class ObjectHelper {
             }
             break;
         case Types.DATE:
-            for (; startIndex < values.length; startIndex++) {
+            for (; startIndex < endIndex; startIndex++) {
                 try {
-                    r[startIndex] = date.parse(values[startIndex]);
+                    r[startIndex] = date.parse(stringValues[startIndex]);
                 } catch (ParseException e) {
                     logger.warn("Wrong Date format " + s);
                     r = Constants.ZERO_OBJECT_LIST;
@@ -214,13 +234,13 @@ public class ObjectHelper {
             }
             break;
         case Types.DOUBLE:
-            for (; startIndex < values.length; startIndex++) {
-                r[startIndex] = Double.parseDouble(values[startIndex]);
+            for (; startIndex < endIndex; startIndex++) {
+                r[startIndex] = Double.parseDouble(stringValues[startIndex]);
             }
             break;
         case Types.FLOAT:
-            for (; startIndex < values.length; startIndex++) {
-                r[startIndex] = Float.parseFloat(values[startIndex]);
+            for (; startIndex < endIndex; startIndex++) {
+                r[startIndex] = Float.parseFloat(stringValues[startIndex]);
             }
             break;
         default:

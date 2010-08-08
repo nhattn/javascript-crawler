@@ -1,4 +1,4 @@
-package com.zyd.core.util;
+package com.zyd.core.access;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,26 +9,22 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 import com.zyd.Constants;
+import com.zyd.core.dom.Counter;
 
-public class IpCounter {
+/**
+ * count access from each ip address, then group it periodically and determins which ones should be blocked.
+ */
+public class IpCounter implements com.zyd.core.busi.WorkerThread.Job {
     private static Logger logger = Logger.getLogger(IpCounter.class);
     private HashSet<String> blocked = new HashSet<String>();
     protected ArrayList<String> iplist, iplist1, iplist2;
-    CheckerThread checkerThread;
+    private long lastCheckTime;
 
     public IpCounter() {
         iplist1 = new ArrayList<String>(5000);
         iplist2 = new ArrayList<String>(5000);
         iplist = iplist1;
-        checkerThread = new CheckerThread();
-    }
-
-    public void start() {
-        checkerThread.startChecker();
-    }
-
-    public void stop() {
-        checkerThread.stopChecker();
+        lastCheckTime = System.currentTimeMillis();
     }
 
     public void logAccess(String ip) {
@@ -42,17 +38,19 @@ public class IpCounter {
     private void checkIp() {
         if (iplist.size() == 0)
             return;
-        ArrayList<String> oldList = iplist;
+        logger.info("Start checking ip in ip counter");
+        ArrayList<String> oldList;
 
+        oldList = iplist;
         if (iplist.equals(iplist1)) {
-            iplist = iplist1;
+            iplist = iplist2;
         } else {
             iplist = iplist1;
         }
 
-        long time = System.currentTimeMillis();
-        HashMap<String, Counter> mapping = new HashMap();
-        for (String ip : oldList) {
+        HashMap<String, Counter> mapping = new HashMap<String, Counter>();
+        for (int i = 0, len = oldList.size(); i < len; i++) {
+            String ip = oldList.get(i);
             Counter c = mapping.get(ip);
             if (c == null) {
                 c = new Counter();
@@ -64,51 +62,14 @@ public class IpCounter {
 
         Set<Entry<String, Counter>> entries = mapping.entrySet();
         for (Entry<String, Counter> e : entries) {
-            if (e.getValue().total > Constants.IpBlockerMaxAccessPerInterval) {
+            if (e.getValue().total > Constants.IpBlockerMaxAccessPerIntervalCycle) {
                 logger.warn("ip accessing to much :" + e.getValue().total + ", " + e.getKey() + ", added to block list.");
+                logger.debug("Added ip to block list :" + e.getKey());
                 blocked.add(e.getKey());
             }
         }
         oldList.clear();
-    }
-
-    class Counter {
-        long total = 1;
-    }
-
-    class CheckerThread extends Thread {
-        public CheckerThread() {
-            super("Ip counter - checker");
-        }
-
-        private boolean shouldStop = false;
-
-        public void run() {
-            logger.info("IpCounter thread started");
-            while (shouldStop == false) {
-                try {
-                    checkIp();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } catch (Error e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(Constants.IpBlockerSleepInterval);
-                } catch (Exception e) {
-                }
-            }
-            logger.info("IpCounter thread stopped");
-        }
-
-        public void startChecker() {
-            this.start();
-        }
-
-        public void stopChecker() {
-            shouldStop = true;
-            interrupt();
-        }
+        logger.info("Done checking ip in ip counter");
     }
 
     public void reset() {
@@ -129,6 +90,18 @@ public class IpCounter {
 
     public void clearBlockedList() {
         blocked.clear();
+    }
+
+    public void doJob() {
+        try {
+            checkIp();
+        } finally {
+            lastCheckTime = System.currentTimeMillis();
+        }
+    }
+
+    public boolean shouldRun() {
+        return (System.currentTimeMillis() - lastCheckTime) > Constants.IpCounterExecuteInterval;
     }
 
 }

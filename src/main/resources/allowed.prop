@@ -1,4 +1,4 @@
-# by default, all of the layers include these parameters : start, count, lng, lat, layer
+# by default, all of the layers include these parameters : start, count, lng, lat, layer, clientId
  
 com.zuiyidong.layer.busstation=busId,seq
 com.zuiyidong.layer.busline=name,id,city

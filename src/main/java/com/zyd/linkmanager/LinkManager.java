@@ -23,17 +23,10 @@ public interface LinkManager {
     public Link roundRobinNextLink();
 
     /**
-     * simply returns next unprocessed Link;
-     * @return
-     */
-    public Link nextUnprocessedLink();
-
-    /**
      * finished processing the link
      * @param url
      * @return
      */
     public Link linkFinished(String url);
 
-    public void cleanAll();
 }

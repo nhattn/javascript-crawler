@@ -6,7 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.classic.Session;
 
 import com.zyd.ATestUtil;
-import com.zyd.core.busi.api.ParameterController;
+import com.zyd.core.access.ParameterController;
 import com.zyd.core.db.HibernateUtil;
 
 public class MiscTest extends TestCase {

@@ -11,7 +11,7 @@ import com.zyd.linkmanager.LinkManager;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
 
 public class NotTestNewLinkManager extends TestCase {
-
+/*
     LinkManager man;
 
     HashSet<String> domains;
@@ -101,4 +101,5 @@ public class NotTestNewLinkManager extends TestCase {
         }
         assertTrue(ATestUtil.reststoreServerConfigure());
     }
+    */
 }

@@ -1,4 +1,4 @@
-package com.zyd.core.busi.api;
+package com.zyd.core.access;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +12,15 @@ import org.apache.log4j.Logger;
 import com.tj.common.CommonUtil;
 import com.zyd.Constants;
 
+/**
+ * Controlls which parameters are open for query.
+ * By default, all parameters can be queried, buy some is disabled for performance and security reasons.  
+ * Access definition is taken from a file called "allowed.prop" under class path.
+ * 
+ */
 public class ParameterController {
     private static Logger logger = Logger.getLogger(ParameterController.class);
-    private static String[] defaultAllowed = new String[] { "start", "count", "lng", "lat", "layer", "format" };
+    private static String[] defaultAllowed = new String[] { "start", "count", "lng", "lat", "layer", "format", "clientId" };
 
     private static HashMap<String, HashSet<String>> mapping = new HashMap<String, HashSet<String>>();
 

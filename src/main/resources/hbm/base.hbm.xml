@@ -35,4 +35,21 @@
 		<property name="createTime" type="timestamp" />
 		<property name="lastAffendTime" type="timestamp" />
 	</class>
+
+	<class name="com.zyd.core.dom.access.ClientInfo" table="ClientInfo">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="clientkey" type="string" />
+		<property name="clientId" type="string" />
+		<property name="email" type="string" />
+		<property name="companyName" type="string" />
+		<property name="level" type="int" />
+		<property name="total" type="long" />
+		<property name="totalSinceLastCycle" type="long" />
+		<property name="createTime" type="timestamp" />
+	</class>
+
+
+
 </hibernate-mapping>

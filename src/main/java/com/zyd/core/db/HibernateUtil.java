@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -72,7 +73,33 @@ public class HibernateUtil {
             session.save(objectid, v);
             session.getTransaction().commit();
         } catch (Error e) {
-            logger.error("Can not save object "+ objectid, e);
+            logger.error("Can not save object " + objectid, e);
+            session.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+    public static void saveObject(Object object) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.save(object);
+            session.getTransaction().commit();
+        } catch (Error e) {
+            logger.error("Can not save object " + object, e);
+            session.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+    public static void updateObject(Object object) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.update(object);
+            session.getTransaction().commit();
+        } catch (Error e) {
+            logger.error("Can not save object " + object, e);
             session.getTransaction().rollback();
             throw e;
         }
@@ -86,5 +113,20 @@ public class HibernateUtil {
         } finally {
             session.getTransaction().commit();
         }
+    }
+
+    public static int deleteAllObject(String objectid) {
+        int r = 0;
+        final String deleteAll = "delete from " + objectid;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        try {
+            r = session.createQuery(deleteAll).executeUpdate();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            throw e;
+        }
+        return r;
     }
 }

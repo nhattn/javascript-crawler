@@ -143,12 +143,7 @@ public class House extends Handler {
 
     @Override
     public int deleteAll() {
-        final String deleteAll = "delete from " + getName();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        int r = session.createQuery(deleteAll).executeUpdate();
-        session.getTransaction().commit();
-        return r;
+        return HibernateUtil.deleteAllObject(getName());
     }
 
     private static boolean isSameAddress(String addr1, String addr2) {

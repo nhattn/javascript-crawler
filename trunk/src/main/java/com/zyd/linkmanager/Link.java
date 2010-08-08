@@ -6,6 +6,7 @@ public class Link {
     public final static int STATE_NOT_PROCESSED = 0;
     public final static int STATE_FINISHED_OK = 1;
     public final static int STATE_FINISHED_ERROR = 2;
+    public final static int STATE_PROCESSING = 9;
 
     private String url;
     private long id;

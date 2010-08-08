@@ -107,17 +107,23 @@ public class Constants {
     /**
      * how long will access controller pull out data from ipblocker and update it's block list
      */
-    public final static int AccessControllerSleepInterval = 5 * 60 * 1000;
+    public static int AccessControllerExecuteInterval = 5 * 60 * 1000;
 
     /**
      * The cycle length that ipblocker counts the request from each client and decide which one to block. 
      */
-    public final static int IpBlockerSleepInterval = 3 * 60 * 1000;
+    public static int IpCounterExecuteInterval = 3 * 60 * 1000;
     /**
      * the maximum request allowed from each ip address per IpBlockerSleepInterval.
      */
-    public final static int IpBlockerMaxAccessPerInterval = 60;
+    public static int IpBlockerMaxAccessPerIntervalCycle = 60;
 
+    /**
+     * How long will access controller purge ip address that is not used.
+     */
+    public static int AuthorizationControllerPurgeInterval = 20 * 60 * 1000;
+
+    public static int WorkerThreadSleepInterval = 3 * 60 * 100;
     /*
     public final static int AccessControllerSleepInterval = 5 * 1000;
     public final static int IpBlockerMaxAccessPerInterval = 10;

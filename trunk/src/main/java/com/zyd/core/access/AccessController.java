@@ -1,4 +1,4 @@
-package com.zyd.core.busi;
+package com.zyd.core.access;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -9,36 +9,35 @@ import org.apache.log4j.Logger;
 
 import com.zyd.Constants;
 import com.zyd.core.db.HibernateUtil;
-import com.zyd.core.util.IpCounter;
 import com.zyd.core.util.SpringContext;
 
-public class AccessController extends Thread {
+/**
+ * stops crawler.
+ * Takes blocked ip address from IpCounter, grants access.
+ *
+ */
+public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
+    public final static String HibernateEntityName = "BlockedIp";
+    public final static String TableName = "IpBlockList";
+
     private static Logger logger = Logger.getLogger(AccessController.class);
 
     private HashSet<String> blocked = new HashSet<String>();
-    private boolean shouldStop = false;
     private IpCounter ipCounter;
+    private long lastCheckTime;
 
     public AccessController() {
-        super("Access Blocker");
+        loadedBlockedListFromDb();
         ipCounter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
+        lastCheckTime = System.currentTimeMillis();
     }
 
     public boolean isIpBlocked(String ip) {
         return blocked.contains(ip);
     }
 
-    public void startAccessBlocker() {
-        this.start();
-    }
-
-    public void stopAccessBlocker() {
-        this.shouldStop = true;
-        this.interrupt();
-    }
-
     public void loadedBlockedListFromDb() {
-        List list = HibernateUtil.loadObject("BlockedIp");
+        List list = HibernateUtil.loadObject(HibernateEntityName);
         for (Object o : list) {
             blocked.add(((Map) o).get("ip").toString());
         }
@@ -47,32 +46,30 @@ public class AccessController extends Thread {
     }
 
     private void checkBlockList() {
+        logger.info("Start checking blocked list");
+        int counter = 0;
         HashSet<String> blockList = ipCounter.getBlockedList();
         for (String ip : blockList) {
             if (blocked.contains(ip) == false) {
-                logger.info("writting ip to block list table " + blockList);
+                logger.info("writting ip to block list table " + ip);
                 HibernateUtil.saveObject("BlockedIp", "ip", ip, "createTime", new Date());
                 blocked.add(ip);
+                counter++;
             }
         }
         ipCounter.clearBlockedList();
+        logger.info("Done checking blocked list, added new ip :" + counter);
     }
 
-    @Override
-    public void run() {
-        logger.info("Access blocker thread started.");
-        loadedBlockedListFromDb();
-        while (shouldStop == false) {
-            try {
-                checkBlockList();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(Constants.AccessControllerSleepInterval);
-            } catch (Exception e) {
-            }
+    public void doJob() {
+        try {
+            checkBlockList();
+        } finally {
+            lastCheckTime = System.currentTimeMillis();
         }
-        logger.info("Access blocker thread stopped.");
+    }
+
+    public boolean shouldRun() {
+        return (System.currentTimeMillis() - lastCheckTime) > Constants.AccessControllerExecuteInterval;
     }
 }

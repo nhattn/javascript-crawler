@@ -28,10 +28,32 @@ create table IpBlockList(
     id                  bigint not null auto_increment,
     ip                  varchar(20),
     createTime          datetime,
-    lastAffendTime      dateTime,
+    lastAffendTime      datetime,
     PRIMARY KEY (id)       
 );
 
+
+create table ClientInfo(
+    id                  bigint not null auto_increment,
+    clientkey           varchar(100),
+    clientId            varchar(10),
+    email               varchar(100),
+    companyName         varchar(100),
+    level               int,    
+    total               bigint,
+    totalSinceLastCycle bigint,   
+    createTime          datetime,  
+    PRIMARY KEY (id)       
+);
+
+create table LinkTableMap(
+    id integer   NOT NULL AUTO_INCREMENT, 
+    uid varchar(200),
+    tableId integer,
+    PRIMARY KEY (id)    
+);
+
+ALTER TABLE LinkTableMap AUTO_INCREMENT = 1000000;
 ALTER TABLE IpBlockList AUTO_INCREMENT = 100000000000000;
 ALTER TABLE Link AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;

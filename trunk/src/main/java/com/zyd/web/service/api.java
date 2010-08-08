@@ -7,15 +7,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 
 import com.zyd.core.StringUtil;
-import com.zyd.core.busi.api.ParameterController;
+import com.zyd.core.access.AccessController;
+import com.zyd.core.access.AuthorizationController;
+import com.zyd.core.access.IpCounter;
+import com.zyd.core.access.ParameterController;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.ObjectHelper;
 import com.zyd.core.objecthandler.SearchResult;
+import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 /**
@@ -35,8 +40,43 @@ import com.zyd.web.ServiceBase;
  * separater - optional, how to separate the range object. Default to ','
  */
 public class api extends ServiceBase {
+    private static Logger logger = Logger.getLogger(object.class);
+    private IpCounter ipCounter;
+    private AccessController accessController;
+    private AuthorizationController authorizationController;
+
+    public api() {
+        ipCounter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
+        accessController = (AccessController) SpringContext.getContext().getBean("accessController");
+        authorizationController = (AuthorizationController) SpringContext.getContext().getBean("authorizationController");
+
+    }
+
     @Override
-    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {        
+        String ip = req.getRemoteAddr();
+        if (accessController.isIpBlocked(ip) && req.getParameter("accessCheck") == null) {
+            logger.warn("blocked access from " + ip);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        String clientId = req.getParameter("clientId");
+        if (clientId == null) {
+            logger.warn("Tyring to access without client id, blocked access from " + ip);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        if (authorizationController.logAccess(clientId, ip) == false) {
+            logger.warn("Tyring to access without invalid  clientId, blocked access from " + ip + ", clientid " + clientId);
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        //TODO: this is stupid, it's logged twice!!!!!!!!!!!!!!! fix this
+        ipCounter.logAccess(ip);
+        
+        /************** code above should be optimized *******************/
+
         String layer = req.getParameter("layer");
         if (layer == null || ParameterController.isLayerAllowed(layer) == false) {
             setStatus(HttpServletResponse.SC_BAD_REQUEST, "Invalid layer - " + layer, resp);

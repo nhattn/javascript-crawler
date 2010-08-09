@@ -70,6 +70,6 @@ public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
     }
 
     public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastCheckTime) > Constants.AccessControllerExecuteInterval;
+        return (System.currentTimeMillis() - lastCheckTime) > Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL;
     }
 }

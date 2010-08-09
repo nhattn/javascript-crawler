@@ -14,9 +14,11 @@ import org.json.JSONException;
 
 import com.zyd.core.Utils;
 import com.zyd.core.busi.ClientManager;
-import com.zyd.core.busi.LinkManager;
 import com.zyd.core.busi.TemplateManager;
 import com.zyd.core.util.SpringContext;
+import com.zyd.linkmanager.Link;
+import com.zyd.linkmanager.LinkManager;
+import com.zyd.linkmanager.WatchListManager;
 import com.zyd.web.ServiceBase;
 
 public class link extends ServiceBase {
@@ -60,17 +62,24 @@ public class link extends ServiceBase {
 
         if ("get".equals(action)) {
             setResponseType("js", resp);
-            s = Utils.stringArrayToJsonString(new String[] { "result", linkManager.next().url });
+
+            s = Utils.stringArrayToJsonString(new String[] { "result", nextLink() });
         } else if ("redirect".equals(action)) {
             setResponseType("html", resp);
-            String l = linkManager.next().url;
             ArrayList<String> p = new ArrayList<String>();
-            p.add(l);
+            p.add(nextLink());
             s = templateManager.getTemplate("redirect", p);
         } else {
             s = "No action specified";
         }
         output(s, resp);
+    }
+
+    private String nextLink() {
+        Link link = linkManager.roundRobinNextLink();
+        if (link == null)
+            return WatchListManager.nextWatchedLink().url;
+        return link.url;
     }
 
     /**
@@ -92,7 +101,7 @@ public class link extends ServiceBase {
         try {
             JSONArray arr = new JSONArray(data);
             for (int i = 0; i < arr.length(); i++) {
-                if (linkManager.add(arr.getString(i)) != null) {
+                if (linkManager.addLink(arr.getString(i)) != null) {
                     count++;
                 }
             }

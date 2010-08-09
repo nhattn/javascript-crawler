@@ -1,9 +1,9 @@
 package com.zyd.core.access;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -92,13 +92,12 @@ public class AuthorizationController implements com.zyd.core.busi.WorkerThread.J
      * remove inactive client from cache
      */
     private void purgeInactiveClient() {
-        logger.info("Start purging inactive client authorization info");
-        Set<String> keys = authorizedClient.keySet();
+        ArrayList<String> keys = new ArrayList<String>(authorizedClient.keySet());
         long now = System.currentTimeMillis();
         int counter = 0;
         for (String clientId : keys) {
             ClientInfo clientInfo = authorizedClient.get(clientId);
-            if (now - clientInfo.lastAccessTime > Constants.AuthorizationControllerPurgeInterval) {
+            if (now - clientInfo.lastAccessTime > Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL) {
                 HibernateUtil.updateObject(clientInfo);
                 authorizedClient.remove(clientId);
                 counter++;
@@ -129,6 +128,7 @@ public class AuthorizationController implements com.zyd.core.busi.WorkerThread.J
             }
         }
         session.getTransaction().commit();
+        logger.info("Write client accessed infomation to database, total client:" + counter);
     }
 
     public void doJob() {
@@ -141,7 +141,7 @@ public class AuthorizationController implements com.zyd.core.busi.WorkerThread.J
     }
 
     public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastPurgeTime) > Constants.AuthorizationControllerPurgeInterval;
+        return (System.currentTimeMillis() - lastPurgeTime) > Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL;
     }
 
 }

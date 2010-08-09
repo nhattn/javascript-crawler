@@ -42,9 +42,9 @@ public class TestIpCounter extends TestCase {
     public void testWorkeThreadRunInTime() {
         ATestUtil.setUpSpring();
         counter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
-        Constants.IpCounterExecuteInterval = 4 * 1000;
-        Constants.IpBlockerMaxAccessPerIntervalCycle = 6;
-        Constants.WorkerThreadSleepInterval = 2 * 1000;
+        Constants.IPCOUNTER_CHECK_INTERVAL = 4 * 1000;
+        Constants.IPCOUNTER_MAX_ACCESS_PER_CYCLE = 6;
+        Constants.WORKER_THREAD_EXECUTION_INTERVAL = 2 * 1000;
 
         ArrayList<TestIpAccessThread> ip1 = new ArrayList<TestIpAccessThread>(), ip2 = new ArrayList<TestIpAccessThread>();
         for (int i = 0; i < 15; i++) {
@@ -55,8 +55,7 @@ public class TestIpCounter extends TestCase {
             ip2.add(new TestIpAccessThread("iplong" + (i + 1000), (i + 1000)));
         }
 
-        ATestUtil.setUpSpring();
-        Constants.WorkerThreadSleepInterval = 1 * 1000;
+        Constants.WORKER_THREAD_EXECUTION_INTERVAL = 1 * 1000;
         WorkerThread wt = (WorkerThread) SpringContext.getContext().getBean("workerThread");
         wt.registerWork(counter);
         wt.start();
@@ -78,5 +77,5 @@ public class TestIpCounter extends TestCase {
             assertFalse(blocked.contains(ip2.get(i).ip));
         }
     }
-     
+
 }

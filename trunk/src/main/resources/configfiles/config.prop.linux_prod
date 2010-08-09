@@ -5,15 +5,19 @@ ENCODING_DB=UTF8
 LENGTH_PAGE_SIZE=20
 ENCODING_OUT_GOING_CONTENT=UTF8
 ENCODING_INCOMING_CONTENT=UTF8
-THRESHOLD_GPS_LOCATION_DIFF=100
 LINUX_OCR_DIR=/dev/shm
-# when starting, system will load previous stored links, how long before should it go, default to 90 days. 
-LINK_LOAD_BEFORE=7776000000
-# How many times should try before giving up a link
-LINK_MAX_TRY=1
-#if a link is processed for too long, it will be treated as an error, this defined how long this will happen, default to 20 mintues
-LINK_PROCESSING_EXPIRE=1200000
-#How long will link manager sleep for each cycle, default to 15 mintues
-LINK_MONITOR_SLEEP=900000
-#max page size
 MAX_PAGE_SIZE=50
+LINK_MAX_TRY=1
+# 20 min
+LINK_PROCESSING_EXPIRE=1200000
+# 15 min
+LINK_MONITOR_SCAN_INTERVAL=900000
+# 5 min
+ACCESS_CONTROLLER_EXECUTION_INTERVAL=300000
+# 5 min
+IPCOUNTER_CHECK_INTERVAL=300000
+IPCOUNTER_MAX_ACCESS_PER_CYCLE=60
+#20 min
+AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL=1200000
+#3 min
+WORKER_THREAD_EXECUTION_INTERVAL=180000

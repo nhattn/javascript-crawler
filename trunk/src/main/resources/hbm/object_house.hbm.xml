@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="House" table="Object_House">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="lng" type="double" />
+		<property name="lat" type="double" />
+		<property name="rentalType" type="string" />
+		<property name="subRentalType" type="string" />
+		<property name="price" type="double" />
+		<property name="paymentType" type="string" />
+		<property name="priceUnit" type="string" />
+		<property name="size" type="double" />
+		<property name="houseType" type="string" />
+		<property name="address" type="string" />
+		<property name="city" type="string" />
+		<property name="district1" type="string" />
+		<property name="district3" type="string" />
+		<property name="district5" type="string" />
+		<property name="tel" type="string" />
+		<property name="contact" type="string" />
+		<property name="photo" type="string" />
+		<property name="description1" type="string" />
+		<property name="description2" type="string" />
+		<property name="floor" type="integer" />
+		<property name="totalFloor" type="integer" />
+		<property name="isAgent" type="int" />
+		<property name="equipment" type="string" />
+		<property name="decoration" type="string" />
+		<property name="createTime" type="timestamp" />
+		<property name="updateTime" type="timestamp" />
+		<property name="link" type="long" />
+		<property name="ok" column="ok" type="int" />
+	</class>
+</hibernate-mapping>

@@ -16,7 +16,9 @@
 
 	<bean id="contextBean" class="com.zyd.core.util.SpringContext" />
 	<bean id="objectManager" class="com.zyd.core.objecthandler.ObjectManager" />
-	<bean id="linkManager" class="com.zyd.core.busi.LinkManager" />
+	<!--
+		<bean id="linkManager" class="com.zyd.core.busi.LinkManager" />
+	-->
 	<bean id="templateManager" class="com.zyd.core.busi.TemplateManager" />
 	<bean id="clientManager" class="com.zyd.core.busi.ClientManager" />
 	<bean id="siteRegisterManager" class="com.zyd.core.busi.userreg.SiteRegisterManager" />
@@ -24,9 +26,6 @@
 	<bean id="accessController" class="com.zyd.core.access.AccessController" />
 	<bean id="authorizationController" class="com.zyd.core.access.AuthorizationController" />
 	<bean id="workerThread" class="com.zyd.core.busi.WorkerThread" />
-	<bean id="crawlerManager" class="com.zyd.core.busi.CrawlerManager">
-		<property name="linkManager" ref="linkManager" />
-		<property name="objectManager" ref="objectManager" />
-	</bean>
+	<bean id="linkManager" class="com.zyd.linkmanager.mysql.MysqlLinkManager" />
 </beans>
     

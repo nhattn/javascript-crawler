@@ -1,11 +1,9 @@
-drop database if EXISTS crawler;
-create database crawler;
 use crawler;
 
-create table House(
+create table Object_House(
 	id					bigint NOT NULL AUTO_INCREMENT,
-	lo					double,
-	la					double,
+	lng					double,
+	lat					double,
 	rentalType 			varchar(5),
 	subRentalType       varchar(10),
 	price		        double,
@@ -28,14 +26,13 @@ create table House(
 	isAgent				integer,
 	equipment			varchar(100),
 	decoration			varchar(20),
-    ok					integer DEFAULT 0,
-	referer             varchar(300),
  	createTime          datetime,
- 	updateTime          datetime,
- 	hash                varchar(50),
+ 	updateTime          datetime, 	
+    ok					integer default 0,
+    link                bigint,	
  	PRIMARY KEY (id)
 );
-create index House_Index_lo  on House(lo);
-create index House_Index_la  on House(la); 
-ALTER TABLE House AUTO_INCREMENT = 100000000000000;
+create index House_Index_lo  on Object_House(lng);
+create index House_Index_la  on Object_House(lat); 
+ALTER TABLE Object_House AUTO_INCREMENT = 100000000000000;
   

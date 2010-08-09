@@ -6,14 +6,26 @@ public class Link {
     public final static int STATE_NOT_PROCESSED = 0;
     public final static int STATE_FINISHED_OK = 1;
     public final static int STATE_FINISHED_ERROR = 2;
+    public final static int STATE_FINISHED_TIME_OUT = 4;
     public final static int STATE_PROCESSING = 9;
 
-    private String url;
+    public String url;
     private long id;
     private Date createTime;
     private Date finishTime;
     private int tryCount;
-    private int state;
+    public int state;
+
+    /** not persistent, only a marker **/
+    public long processStartTime;
+
+    public Link() {
+
+    }
+
+    public Link(String url) {
+        this.url = url;
+    }
 
     public String getUrl() {
         return url;

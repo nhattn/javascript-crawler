@@ -2,18 +2,6 @@ drop database if EXISTS crawler;
 create database crawler;
 use crawler;
 
-create table Link(
-	id					bigint NOT NULL AUTO_INCREMENT,
-	hash                varchar(20),
-	url					varchar(800),	
-	createTime          datetime,
-	processTime		    datetime,
-	tryCount			integer,
-	errorMsg            varchar(300),
-	isError             integer,	
-	PRIMARY KEY (id)
-);
-
 create table AppLog(
     id                  bigint not null auto_increment,
     app                 varchar(50),
@@ -35,7 +23,7 @@ create table IpBlockList(
 
 create table ClientInfo(
     id                  bigint not null auto_increment,
-    clientkey           varchar(100),
+    clientKey           varchar(100),
     clientId            varchar(10),
     email               varchar(100),
     companyName         varchar(100),
@@ -55,5 +43,6 @@ create table LinkTableMap(
 
 ALTER TABLE LinkTableMap AUTO_INCREMENT = 1000000;
 ALTER TABLE IpBlockList AUTO_INCREMENT = 100000000000000;
-ALTER TABLE Link AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;
+
+insert into ClientInfo(clientKey, clientId, level, total, totalSinceLastCycle) values('test','test', 1,0,0);

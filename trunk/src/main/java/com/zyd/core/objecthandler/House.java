@@ -15,18 +15,14 @@ import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.util.Ocr;
+import com.zyd.linkmanager.Link;
 
 @SuppressWarnings("unchecked")
 public class House extends Handler {
     public final static String name = "House";
     private static Logger logger = Logger.getLogger(House.class);
-    private final static String[] requiredColumns = new String[] { Columns.Referer };
     private final static HashSet CDataColumns = new HashSet();
-    private static HashMap<String, DatabaseColumnInfo> meta = null;
-
-    static {
-        meta = ObjectHelper.getTableMetaData(name);
-    }
+    private static HashMap<String, DatabaseColumnInfo> tableMetaData = HibernateUtil.getTableMetaData(name);
 
     public String getName() {
         return name;
@@ -36,21 +32,26 @@ public class House extends Handler {
         if (normalizeValeus(values) == false) {
             return false;
         }
-        return doSave(values);
+        try {
+            HibernateUtil.saveObject(name, values);
+        } catch (Throwable e) {
+            logger.error(e);
+            logger.debug("Values trying to save are:");
+            logger.debug(values);
+            return false;
+        }
+        return true;
     }
 
     private static boolean normalizeValeus(HashMap values) {
-        String missing = checkColumnExistence(requiredColumns, values);
-        if (missing != null) {
-            logger.warn("Can not add House, missing required paramter - " + missing);
-            return false;
-        }
+        // ocr tel number
         String tel = (String) values.get(Columns.Tel);
         if (tel.length() > 100) {
             String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
             values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
         }
-        ObjectHelper.nomorlizedParameters(values, meta);
+
+        ObjectHelper.nomorlizedParameters(values, tableMetaData);
 
         if (values.get(Columns.Lat) != null && values.get(Columns.Long) != null) {
             values.put(Columns.OK, Parameter.PARAMETER_VALUE_OK_YES);
@@ -60,55 +61,10 @@ public class House extends Handler {
         Date now = new Date();
         values.put(Columns.CreateTime, now);
         values.put(Columns.UpdateTime, now);
+        Link link = (Link) values.remove(Columns.Link);
+        if (link != null)
+            values.put(Columns.Link, link.getId());
         return true;
-    }
-
-    private static boolean doSave(HashMap values) {
-        Session session = null;
-        boolean r = false;
-        try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            long oid = isUniqueByHashValue(session, values);
-            if (oid != -1) {
-                logger.debug("House is duplicate, id:" + oid);
-                return false;
-            } else {
-                session.save(name, values);
-                r = true;
-            }
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            if (session != null)
-                session.getTransaction().rollback();
-            logger.error(e);
-            logger.debug("Values trying to save are:");
-            logger.debug(values);
-        }
-        return r;
-    }
-
-    /**
-     * trying to look for the house has the same url, if found, return the id of the entry,
-     * if not, return -1
-     * @param session
-     * @param values
-     * @return
-     */
-    private static long isUniqueByHashValue(Session session, HashMap values) {
-        String url = (String) values.get(Columns.Referer);
-        String hash = Integer.toString(url.hashCode());
-        List houses = session.createQuery("from " + name + " as a where a." + Columns.Hash + " = ?").setString(0, hash).list();
-        if (houses.size() != 0) {
-            for (int len = houses.size(), i = 0; i < len; i++) {
-                HashMap e = (HashMap) houses.get(i);
-                if (url.equals(e.get(Columns.Referer))) {
-                    return Long.parseLong(e.get(Columns.ID).toString());
-                }
-            }
-        }
-        values.put(Columns.Hash, hash);
-        return -1;
     }
 
     public SearchResult query(HashMap params) {
@@ -119,7 +75,7 @@ public class House extends Handler {
         }
         for (Object o : params.keySet()) {
             String column = (String) o;
-            DatabaseColumnInfo info = meta.get(column);
+            DatabaseColumnInfo info = tableMetaData.get(column);
             if (info == null) {
                 continue;
             }
@@ -146,27 +102,6 @@ public class House extends Handler {
         return HibernateUtil.deleteAllObject(getName());
     }
 
-    private static boolean isSameAddress(String addr1, String addr2) {
-        return Utils.extractNumbers(addr1).equals(Utils.extractNumbers(addr2));
-    }
-
-    private static boolean isUniqueByTelAddress(Session session, HashMap values) {
-        String tel = (String) values.get(Columns.Tel);
-        List houses = session.createQuery("from " + name + " as a where a." + Columns.Tel + " = ?").setString(0, tel).list();
-        if (houses.size() == 0) {
-            return true;
-        }
-        String addressNum = Utils.extractNumbers((String) values.get(Columns.Address));
-        for (int i = 0, len = houses.size(); i < len; i++) {
-            HashMap obj = (HashMap) houses.get(i);
-            if (addressNum.equals(Utils.extractNumbers((String) obj.get(Columns.Address)))) {
-                logger.warn("Address is not unique:" + obj.get(Columns.Address));
-                return false;
-            }
-        }
-        return true;
-    }
-
     public final static class Columns extends Handler.Columns {
         public final static String RentalType = "rentalType";
         public final static String SubRentalType = "subRentalType";
@@ -190,6 +125,6 @@ public class House extends Handler {
         public final static String Equipment = "equipment";
         public final static String Decoration = "decoration";
         public final static String TelImageName = "telImageName";
-        public final static String Hash = "hash";
+
     }
 }

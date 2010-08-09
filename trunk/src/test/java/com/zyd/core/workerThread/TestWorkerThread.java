@@ -24,7 +24,7 @@ public class TestWorkerThread extends TestCase {
 
     public void testWorkeThreadRunInTime() {
         ATestUtil.setUpSpring();
-        Constants.WorkerThreadSleepInterval = 1 * 1000;
+        Constants.WORKER_THREAD_EXECUTION_INTERVAL = 1 * 1000;
         WorkerThread wt = (WorkerThread) SpringContext.getContext().getBean("workerThread");
 
         TestJob job1 = new TestJob(), job2 = new TestJob(), job3 = new TestJob();

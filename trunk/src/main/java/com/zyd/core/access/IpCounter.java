@@ -62,7 +62,7 @@ public class IpCounter implements com.zyd.core.busi.WorkerThread.Job {
 
         Set<Entry<String, Counter>> entries = mapping.entrySet();
         for (Entry<String, Counter> e : entries) {
-            if (e.getValue().total > Constants.IpBlockerMaxAccessPerIntervalCycle) {
+            if (e.getValue().total > Constants.IPCOUNTER_MAX_ACCESS_PER_CYCLE) {
                 logger.warn("ip accessing to much :" + e.getValue().total + ", " + e.getKey() + ", added to block list.");
                 logger.debug("Added ip to block list :" + e.getKey());
                 blocked.add(e.getKey());
@@ -101,7 +101,7 @@ public class IpCounter implements com.zyd.core.busi.WorkerThread.Job {
     }
 
     public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastCheckTime) > Constants.IpCounterExecuteInterval;
+        return (System.currentTimeMillis() - lastCheckTime) > Constants.IPCOUNTER_CHECK_INTERVAL;
     }
 
 }

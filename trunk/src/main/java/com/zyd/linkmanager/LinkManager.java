@@ -1,13 +1,11 @@
 package com.zyd.linkmanager;
 
-public interface LinkManager {
+public interface LinkManager extends com.zyd.core.busi.WorkerThread.Job {
     /**
-     * based on the url, the the Link object.
-     * returns null if the url is not stored
      * @param url
-     * @return
+     * @return a link in the processing queue based on it's url
      */
-    public Link getLink(String url);
+    public Link getProcessingLink(String url);
 
     /**
      * add a new link to store. returns the Link added, will have an assigned id.
@@ -29,4 +27,26 @@ public interface LinkManager {
      */
     public Link linkFinished(String url);
 
+    public Link getLink(String url);
+
+    /**
+     * If link is finished with an error.
+     * @param url
+     * @param state
+     * @param msg
+     * @return
+     */
+    public Link linkFinishedError(String url, int state, String msg);
+
+    /**
+     * if a link is in the processing queue for too long, mark it as failed.
+     * @return
+     */
+    public int cleanExpiredProcessingLink();
+    
+    /**
+     * depending on how many links is left unprocessed, return link refresh interval for client
+     * @return
+     */
+    public int getSuggestedLinkRefreshInterval();
 }

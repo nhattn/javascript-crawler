@@ -16,8 +16,8 @@
 		<property name="region" type="string" />
 		<property name="shopType" type="string" />
 		<property name="nearBy" type="string" />
-		<property name="la" type="double" />
-		<property name="lo" type="double" />
+		<property name="lat" type="double" />
+		<property name="lng" type="double" />
 		<property name="tel" type="string" />
 		<property name="tel2" type="string" />
 	</class>

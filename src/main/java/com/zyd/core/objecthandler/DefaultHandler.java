@@ -9,43 +9,38 @@ import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
+import com.zyd.linkmanager.Link;
 
 public class DefaultHandler extends Handler {
     private static Logger logger = Logger.getLogger(DefaultHandler.class);
 
     /**
-     * If you are using this one to create object, note that you have to put object name the same as the table name,
+     * If you are using this one to create object, note that you have to put object name the same as the entity name in hibernate mapping
      * into request parameter, Parameter.PARAMETER_OBJECT_ID. 
      * That's how they get matched.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object create(HashMap values) {
-        String tableName = (String) values.get(Parameter.PARAMETER_OBJECT_ID);
-        HashMap<String, DatabaseColumnInfo> meta = ObjectHelper.getTableMetaData((String) values.get(Parameter.PARAMETER_OBJECT_ID));
-        ObjectHelper.nomorlizedParameters(values, meta);
+        String entityName = (String) values.get(Parameter.PARAMETER_OBJECT_ID);
+        HashMap<String, DatabaseColumnInfo> tableMetaData = ObjectHelper.getTableMetaData((String) values.get(Parameter.PARAMETER_OBJECT_ID));
+        ObjectHelper.nomorlizedParameters(values, tableMetaData);
         Date now = new Date();
         values.put(Columns.CreateTime, now);
         values.put(Columns.UpdateTime, now);
-
-        Session session = null;
-        boolean r = false;
+        Link link = (Link) values.remove(Columns.Link);
+        if (link != null) {
+            values.put(Columns.Link, link.url);
+        }
         try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            session.save(tableName, values);
-            session.getTransaction().commit();
-            r = true;
+            HibernateUtil.saveObject(entityName, values);
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            if (session != null)
-                session.getTransaction().rollback();
-            logger.error("Exception when saving object to table" + tableName);
-            logger.error(e);
+            logger.error("Exception when saving entity" + entityName, e);
             logger.debug("Values trying to save are:");
             logger.debug(values);
+            return false;
         }
-        return r;
-
     }
 
     @Override
@@ -75,7 +70,7 @@ public class DefaultHandler extends Handler {
     @Override
     public SearchResult query(HashMap params) {
         String objectName = (String) params.get(Parameter.PARAMETER_OBJECT_ID);
-        //TODO: this may not work
+        //TODO: this may not work, calling hibernate internal?        
         String tableName = ((SingleTableEntityPersister) HibernateUtil.getSessionFactory().getClassMetadata(objectName)).getTableName();
         HashMap<String, DatabaseColumnInfo> meta = HibernateUtil.getTableMetaData(tableName);
         return ObjectHelper.defaultQuery(params, objectName, meta);

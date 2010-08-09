@@ -19,15 +19,15 @@ public class TestController extends TestCase {
         // restore first, some other test may have changed default configuration.
 
         ATestUtil.reststoreServerConfigure();
-        assertEquals(Constants.LINK_MONITOR_SLEEP, Integer.parseInt(oldConfigure.get("LINK_MONITOR_SLEEP")));
+        assertEquals(Constants.LINK_MONITOR_SCAN_INTERVAL, Integer.parseInt(oldConfigure.get("LINK_MONITOR_SLEEP")));
         assertEquals(Constants.LINK_PROCESSING_EXPIRE, Integer.parseInt(oldConfigure.get("LINK_PROCESSING_EXPIRE")));
 
-        newConfigure.put("LINK_MONITOR_SLEEP", Integer.toString(Constants.LINK_MONITOR_SLEEP * 2));
+        newConfigure.put("LINK_MONITOR_SLEEP", Integer.toString(Constants.LINK_MONITOR_SCAN_INTERVAL * 2));
         newConfigure.put("LINK_PROCESSING_EXPIRE", Integer.toString(Constants.LINK_PROCESSING_EXPIRE * 2));
         ATestUtil.updateServerConfigure(newConfigure);
 
         oldConfigureChanged = ATestUtil.getServerConfigure();
-        assertEquals(oldConfigureChanged.get("LINK_MONITOR_SLEEP"), Integer.toString(Constants.LINK_MONITOR_SLEEP * 2));
+        assertEquals(oldConfigureChanged.get("LINK_MONITOR_SLEEP"), Integer.toString(Constants.LINK_MONITOR_SCAN_INTERVAL * 2));
         assertEquals(oldConfigureChanged.get("LINK_PROCESSING_EXPIRE"), Integer.toString(Constants.LINK_PROCESSING_EXPIRE * 2));
 
         ATestUtil.reststoreServerConfigure();

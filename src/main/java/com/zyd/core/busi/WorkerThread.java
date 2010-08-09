@@ -30,11 +30,15 @@ public class WorkerThread implements Runnable {
         workerThread.interrupt();
     }
 
+    public void wakeUp() {
+        workerThread.interrupt();
+    }
+
     /**
      * if should stop is set to be true, then it will finish the current job, and stop working on any of the unfinished jobs.
      */
     public void run() {
-        logger.info("WorkerThread started, execute every " + Constants.WorkerThreadSleepInterval / 1000 + " seconds.");
+        logger.info("WorkerThread started, execute every " + Constants.WORKER_THREAD_EXECUTION_INTERVAL / 1000 + " seconds.");
         while (shouldStop == false) {
             for (Job job : jobs) {
                 try {
@@ -50,10 +54,10 @@ public class WorkerThread implements Runnable {
                 if (shouldStop == true)
                     break;
             }
-            try{
-                Thread.sleep(Constants.WorkerThreadSleepInterval);
-            }catch(Exception e){
-                
+            try {
+                Thread.sleep(Constants.WORKER_THREAD_EXECUTION_INTERVAL);
+            } catch (Exception e) {
+
             }
         }
         logger.info("WorkerThread stopped");

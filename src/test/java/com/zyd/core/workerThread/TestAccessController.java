@@ -48,10 +48,10 @@ public class TestAccessController extends TestCase {
         counter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
         accessController = (AccessController) SpringContext.getContext().getBean("accessController");
         
-        Constants.IpCounterExecuteInterval = 4 * 1000;
-        Constants.IpBlockerMaxAccessPerIntervalCycle = 6;
-        Constants.WorkerThreadSleepInterval = 2 * 1000;
-        Constants.AccessControllerExecuteInterval = 2 * 1000;
+        Constants.IPCOUNTER_CHECK_INTERVAL = 4 * 1000;
+        Constants.IPCOUNTER_MAX_ACCESS_PER_CYCLE = 6;
+        Constants.WORKER_THREAD_EXECUTION_INTERVAL = 2 * 1000;
+        Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL = 2 * 1000;
 
         ArrayList<TestIpAccessThread> ip1 = new ArrayList<TestIpAccessThread>();
         for (int i = 0; i < 15; i++) {

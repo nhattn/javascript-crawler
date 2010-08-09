@@ -16,42 +16,44 @@ import org.apache.log4j.Logger;
 
 import com.tj.common.CommonUtil;
 import com.tj.common.OSHelper;
-import com.zyd.core.dom.Link;
+import com.zyd.linkmanager.Link;
 
 @SuppressWarnings("unchecked")
 public class Constants {
     private static Logger logger = Logger.getLogger(Constants.class);
+
     public static String SERVER_DOMAIN;
     public static String APPLICATION_CONTEXT;
     public static String ENCODING_DB;
 
+    /*
+     * the name of the running instance, prod, dev etc.
+     */
+    public static String INSTANCE_NAME;
+
     /**
-     * how many records to return by default
+     * How many records to return by default when querying
      */
     public static int LENGTH_PAGE_SIZE;
+    /**
+     * Max allowed page size
+     */
     public static int MAX_PAGE_SIZE;
 
     /**
-     * the encoding all outgoing content will be using, including xml/js/html 
+     * the encoding all outgoing content will be using, for xml/js/html 
      */
     public static String ENCODING_OUT_GOING_CONTENT;
 
     /**
-     * if incoming request doesn't specify an encoding.
+     * if incoming request doesn't specify an encoding, what to use .
      */
     public static String ENCODING_INCOMING_CONTENT;
 
     /**
-     * if two gps point differs more than this number, in meters, it will be treated as two location.
+     * Where to put temp ocr files, only works in linux system 
      */
-    public static int THRESHOLD_GPS_LOCATION_DIFF;
-
     public static String LINUX_OCR_DIR;
-
-    /**
-     * when starting, how long ago should system load the links.
-     */
-    public static long LINK_LOAD_BEFORE;
 
     /**
      * How many time should try, before giving up a link.
@@ -64,71 +66,54 @@ public class Constants {
     public static int LINK_PROCESSING_EXPIRE;
 
     /**
-     * how long will link manager sleep for each cycle
+     * how soon will link manager scan links and outdate expried processing links.
      */
-    public static int LINK_MONITOR_SLEEP;
-
-    /**
-     * the name of the running instance, prod, dev etc.
-     */
-    public static String INSTANCE_NAME;
-    /**
-     * These fields are fixed, derived from system
-     */
-    public static String Encoding_DEFAULT_SYSTEM = Charset.defaultCharset().toString();
-    public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
-    public static String FILENAME_LINK_WATCH_LIST = "watch.list";
-    public static Link[] WATCH_LIST = new Link[0];
-
-    /**
-     * how soon to check if links should be checked and flushed out of memory.
-     */
-    public static long LINK_FLUSH_CYCLE_LENGTH;
-
-    public static int INTERVAL_CHECK_LINK_LIST = 8 * 60 * 1000;
-
-    public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
-
-    /***
-     * These fields are derived, don't put any values
-     */
-
-    // the full server url starting with http://www.domaon.com:port/context
-    public static String ServerUrl;
-    public static String IdlePageUrl;
-
-    /***
-     * These are system wide comment variables, should never be changed or reassigned
-     */
-
-    public final static Object[] ZERO_OBJECT_LIST = new Object[0];
-    public final static String ALLOWED_API_QUERY_PARAMETER_CONFIG_FILE = "allowed.prop";
+    public static int LINK_MONITOR_SCAN_INTERVAL;
 
     /**
      * how long will access controller pull out data from ipblocker and update it's block list
      */
-    public static int AccessControllerExecuteInterval = 5 * 60 * 1000;
+    public static int ACCESS_CONTROLLER_EXECUTION_INTERVAL;
 
     /**
      * The cycle length that ipblocker counts the request from each client and decide which one to block. 
      */
-    public static int IpCounterExecuteInterval = 3 * 60 * 1000;
+    public static int IPCOUNTER_CHECK_INTERVAL;
     /**
-     * the maximum request allowed from each ip address per IpBlockerSleepInterval.
+     * the maximum request allowed from each ip address per IPCOUNTER_CHECK_INTERVAL.
      */
-    public static int IpBlockerMaxAccessPerIntervalCycle = 60;
+    public static int IPCOUNTER_MAX_ACCESS_PER_CYCLE;
 
     /**
      * How long will access controller purge ip address that is not used.
      */
-    public static int AuthorizationControllerPurgeInterval = 20 * 60 * 1000;
+    public static int AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL;
 
-    public static int WorkerThreadSleepInterval = 3 * 60 * 100;
+    public static int WORKER_THREAD_EXECUTION_INTERVAL;
+
     /*
-    public final static int AccessControllerSleepInterval = 5 * 1000;
-    public final static int IpBlockerMaxAccessPerInterval = 10;
-    public final static int IpBlockerSleepInterval = 6 * 1000;
+     * These fields are derived from other values, don't put any values
      */
+
+    /* the full server url starting with http://www.domaon.com:port/context */
+    public static String ServerUrl;
+    public static String IdlePageUrl;
+
+    /*
+     * These fields are fixed, derived from system
+     */
+
+    public static String Encoding_DEFAULT_SYSTEM = Charset.defaultCharset().toString();
+    public static SimpleDateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
+    public static String FILENAME_LINK_WATCH_LIST = "watch.list";
+    public static Link[] WATCH_LIST = new Link[0];
+    public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
+
+    /*
+     * These are system wide comment variables, should never be changed or reassigned
+     */
+    public final static Object[] ZERO_OBJECT_LIST = new Object[0];
+    public final static String ALLOWED_API_QUERY_PARAMETER_CONFIG_FILE = "allowed.prop";
 
     static {
         loadValues();
@@ -174,7 +159,6 @@ public class Constants {
     }
 
     private static void initValues() {
-        LINK_FLUSH_CYCLE_LENGTH = (long) (LINK_LOAD_BEFORE * 0.3);
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
     }
@@ -212,27 +196,18 @@ public class Constants {
             writer.write("LENGTH_PAGE_SIZE : " + LENGTH_PAGE_SIZE);
             writer.newLine();
 
-            writer.write("THRESHOLD_GPS_LOCATION_DIFF : " + THRESHOLD_GPS_LOCATION_DIFF);
-            writer.newLine();
-
-            writer.write("LINK_LOAD_BEFORE : " + LINK_LOAD_BEFORE);
-            writer.newLine();
-
             writer.write("LINK_PROCESSING_EXPIRE : " + LINK_PROCESSING_EXPIRE);
             writer.newLine();
 
-            writer.write("LINK_MONITOR_SLEEP : " + LINK_MONITOR_SLEEP);
-            writer.newLine();
-
-            writer.write("LINK_FLUSH_CYCLE_LENGTH : " + LINK_FLUSH_CYCLE_LENGTH);
+            writer.write("LINK_MONITOR_SLEEP : " + LINK_MONITOR_SCAN_INTERVAL);
             writer.newLine();
 
             if (OSHelper.isLinux()) {
                 writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
                 writer.newLine();
             }
-
-            if (WATCH_LIST != null && WATCH_LIST.length != 0) {
+            /*
+            if (false && WATCH_LIST != null && WATCH_LIST.length != 0) {
                 writer.newLine();
                 writer.write("URLs to watch :");
                 writer.newLine();
@@ -240,7 +215,7 @@ public class Constants {
                     writer.write(WATCH_LIST[i].url);
                     writer.newLine();
                 }
-            }
+            }*/
             writer.write("--------------------End Server Configuration Snapshot-------------------------------------");
             writer.newLine();
             writer.close();
@@ -255,9 +230,9 @@ public class Constants {
         InputStream ins = null;
         InputStreamReader reader = null;
         try {
-            ins = Constants.class.getClassLoader().getResourceAsStream(FILENAME_LINK_WATCH_LIST);
+            ins = Constants.class.getClassLoader().getResourceAsStream("watch.list");
             if (ins == null) {
-                logger.error("Can not load watch list from file :" + FILENAME_LINK_WATCH_LIST);
+                logger.error("Can not load watch list from file watch.list under classpath");
                 return;
             }
             reader = new InputStreamReader(ins, Encoding_DEFAULT_SYSTEM);

@@ -124,20 +124,28 @@ public class DbHelper {
         return link;
     }
 
-    public final static ArrayList<Link> loadUnprocessedLink(final String tableName, final int count) {
+    public final static ArrayList<Link> loadUnprocessedLink(String tableName, int count) {
+        return loadLinkByState(tableName, Link.STATE_NOT_PROCESSED, count);
+    }
+
+    public final static ArrayList<Link> loadLinkByState(final String tableName, final int state, final int count) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction trx = session.beginTransaction();
         final ArrayList<Link> r = new ArrayList<Link>();
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    ResultSet rset = connection.createStatement().executeQuery("select id, url, createTime from " + tableName + " where state = 0 limit " + count);
+                    ResultSet rset = connection.createStatement().executeQuery("select id, url, createTime,finishTime, tryCount from " + tableName + " where state = " + state + " limit " + count);
                     while (rset.next()) {
                         Link link = new Link();
                         link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
                         link.setId(rset.getLong("id"));
                         link.setUrl(rset.getString("url"));
-                        link.setState(Link.STATE_NOT_PROCESSED);
+                        link.setState(state);
+                        Timestamp finishTime = rset.getTimestamp("finishTime");
+                        if (finishTime != null)
+                            link.setFinishTime(new Date(finishTime.getTime()));
+                        link.setTryCount(rset.getInt("tryCount"));
                         r.add(link);
                     }
                 }
@@ -148,6 +156,38 @@ public class DbHelper {
         }
         trx.commit();
         return r;
+    }
+
+    public final static Link getLinkByUrl(final String url, final String tableName) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction trx = session.beginTransaction();
+        final Link link = new Link();
+        try {
+            session.doWork(new Work() {
+                public void execute(Connection connection) throws SQLException {
+                    PreparedStatement stmt = connection.prepareStatement("select id, state, url, createTime,finishTime, tryCount from " + tableName + " where url=?");
+                    stmt.setString(1, url);
+                    ResultSet rset = stmt.executeQuery();
+                    if (rset.next()) {
+                        link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
+                        link.setId(rset.getLong("id"));
+                        link.setUrl(rset.getString("url"));
+                        link.setState(rset.getInt("state"));
+                        Timestamp finishTime = rset.getTimestamp("finishTime");
+                        if (finishTime != null)
+                            link.setFinishTime(new Date(finishTime.getTime()));
+                        link.setTryCount(rset.getInt("tryCount"));
+                    }
+                }
+            });
+        } catch (HibernateException e) {
+            trx.rollback();
+            throw e;
+        }
+        trx.commit();
+        if (link.getId() > 0)
+            return link;
+        return null;
     }
 
     public static void clearAllLinkTable(Connection con) throws SQLException {
@@ -166,6 +206,24 @@ public class DbHelper {
             }
         }
         executeSql("delete from LinkTableMap", con);
+    }
+
+    public static void clearAllLinkTable() {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction trx = session.beginTransaction();
+        final Counter counter = new Counter();
+        counter.total = 0;
+        try {
+            session.doWork(new Work() {
+                public void execute(Connection connection) throws SQLException {
+                    DbHelper.clearAllLinkTable(connection);
+                }
+            });
+        } catch (HibernateException e) {
+            trx.rollback();
+            throw e;
+        }
+        trx.commit();
     }
 
     public static boolean containsLink(final String url, final String tableName) {
@@ -282,12 +340,32 @@ public class DbHelper {
         return true;
     }
 
+    public static int updateLinkState(final int oldState, final int newState, final String tableName) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction trx = session.beginTransaction();
+        final Counter counter = new Counter();
+        counter.total = 0;
+        try {
+            session.doWork(new Work() {
+                public void execute(Connection connection) throws SQLException {
+                    counter.total = connection.createStatement().executeUpdate("update " + tableName + " set state= " + newState + " where state=" + oldState);
+                }
+            });
+        } catch (HibernateException e) {
+            trx.rollback();
+            throw e;
+        }
+        trx.commit();
+        return (int) counter.total;
+    }
+
     private static void executeSql(String sql, Connection con) throws SQLException {
         con.createStatement().execute(sql);
     }
 
     private static void createLinkTable(String tableName, Connection con) throws SQLException {
-        String sql = "create table " + tableName + "(id bigint NOT NULL AUTO_INCREMENT,url varchar(1000),createTime timestamp,finishTime timestamp,tryCount tinyint, state tinyint, PRIMARY KEY (id))";
+        String sql = "create table " + tableName
+                + "(id bigint NOT NULL AUTO_INCREMENT,url varchar(1000),createTime timestamp,finishTime TIMESTAMP NULL DEFAULT NULL,tryCount tinyint, state tinyint, PRIMARY KEY (id))";
         executeSql(sql, con);
     }
 

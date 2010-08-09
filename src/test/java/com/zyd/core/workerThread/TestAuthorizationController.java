@@ -48,8 +48,8 @@ public class TestAuthorizationController extends TestCase {
         HibernateUtil.deleteAllObject(AuthorizationController.HibernateEntityName);
         ATestUtil.setUpSpring();
         ac = (AuthorizationController) SpringContext.getContext().getBean("authorizationController");
-        Constants.WorkerThreadSleepInterval = 2 * 1000;
-        Constants.AuthorizationControllerPurgeInterval = 3 * 1000;
+        Constants.WORKER_THREAD_EXECUTION_INTERVAL = 2 * 1000;
+        Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL = 3 * 1000;
 
         ArrayList<TestAccessThread> clientGroup1 = new ArrayList<TestAccessThread>();
         for (int i = 0; i < 15; i++) {
@@ -78,7 +78,7 @@ public class TestAuthorizationController extends TestCase {
 
         try {
             System.out.println("Wait 5seconds");
-            Thread.sleep(6 * 1000);
+            Thread.sleep(5 * 1000);
         } catch (Exception e) {
         }
 
@@ -90,10 +90,9 @@ public class TestAuthorizationController extends TestCase {
 
         try {
             System.out.println("Wait 5seconds");
-            Thread.sleep(2 * 1000);
+            Thread.sleep(5 * 1000);            
         } catch (Exception e) {
         }
-
         wt.stop();
         for (TestAccessThread tc : clientGroup1) {
             tc.shouldStop = true;

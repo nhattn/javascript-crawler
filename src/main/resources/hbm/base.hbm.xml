@@ -3,19 +3,6 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.zyd.core.dom.Link" table="Link">
-		<id name="id" type="long" column="id">
-			<generator class="native" />
-		</id>
-		<property name="url" column="url" type="string" />
-		<property name="hash" column="hash" type="string" />
-		<property name="createTime" column="createTime" type="timestamp" />
-		<property name="processTime" column="processTime" type="timestamp" />
-		<property name="tryCount" column="tryCount" type="int" />
-		<property name="errorMsg" column="errorMsg" type="string" />
-		<property name="isError" column="isError" type="integer" />
-	</class>
-
 	<class entity-name="AppLog">
 		<id name="id" type="long" column="id">
 			<generator class="native" />
@@ -49,7 +36,4 @@
 		<property name="totalSinceLastCycle" type="long" />
 		<property name="createTime" type="timestamp" />
 	</class>
-
-
-
 </hibernate-mapping>

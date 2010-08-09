@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
-import com.zyd.core.busi.CrawlerManager;
-import com.zyd.core.busi.LinkManager;
+import com.zyd.core.busi.WorkerThread;
+import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.util.SpringContext;
+import com.zyd.linkmanager.mysql.DbHelper;
 import com.zyd.web.ServiceBase;
 
 public class controller extends ServiceBase {
@@ -33,13 +34,13 @@ public class controller extends ServiceBase {
         String action = req.getParameter("action");
         if ("ClearAllData".equals(action)) {
             setResponseType("js", resp);
-            ((CrawlerManager) SpringContext.getContext().getBean("crawlerManager")).clearAll();
+            this.cleanAllData();
             output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
             return;
         } else if ("LinkSnapshot".equals(action)) {
             setResponseType("text", resp);
-            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).snapshot(), resp);
-            return;
+            //            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).snapshot(), resp);
+            throw new UnsupportedOperationException();
         } else if ("ConfigureSnapshot".equals(action)) {
             setResponseType("text", resp);
             output(Constants.snapShotValues(), resp);
@@ -47,11 +48,15 @@ public class controller extends ServiceBase {
         }
         setResponseType("text", resp);
         output("Invalid request:" + req.getRequestURI(), resp);
+    }
 
+    private void cleanAllData() {
+        DbHelper.clearAllLinkTable();
+        ((ObjectManager) (SpringContext.getContext().getBean("objectManager"))).deleteAllObjects();
     }
 
     private void wakeUpThreads() {
-        ((Thread) ((LinkManager) SpringContext.getContext().getBean("linkManager")).getLinkMonitorThread()).interrupt();
+        ((WorkerThread) SpringContext.getContext().getBean("workerThread")).wakeUp();
     }
 
     /**

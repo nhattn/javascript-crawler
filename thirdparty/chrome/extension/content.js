@@ -1,5 +1,5 @@
 var Content = {
-    MaxWaitTime : 60 * 1000,
+    MaxWaitTime : 60 *1000 * 1000,
     WatcherInterval : 500,
     service : chrome.extension.sendRequest,
     /**

@@ -40,6 +40,10 @@ public class LinkStore {
         DbHelper.updateLinkStatus(link.getId(), link.getState(), link.getFinishTime(), tableName);
     }
 
+    public Link getLinkByUrl(String url) {
+        return DbHelper.getLinkByUrl(url, tableName);
+    }
+
     public synchronized Link nextUnprocessedLink() {
         if (cachedUnprocessedLink.size() == 0) {
             ArrayList<Link> links = DbHelper.loadUnprocessedLink(tableName, 20);
@@ -52,5 +56,13 @@ public class LinkStore {
         Link r = cachedUnprocessedLink.remove(cachedUnprocessedLink.size() - 1);
         DbHelper.updateLinkStatus(r, Link.STATE_PROCESSING, tableName);
         return r;
+    }
+
+    /**
+     * this method should be called the first time a link store is initialized, eg. after a shutdown. 
+     * It will reset all processing links that is left as processing in link store.
+     */
+    public int resetProcessingLinkToUnprocessed() {
+        return DbHelper.updateLinkState(Link.STATE_PROCESSING, Link.STATE_NOT_PROCESSED, tableName);
     }
 }

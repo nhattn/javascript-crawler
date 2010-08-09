@@ -9,15 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.zyd.core.access.AccessController;
-import com.zyd.core.access.AuthorizationController;
-import com.zyd.core.access.IpCounter;
 import com.zyd.core.busi.ClientManager;
-import com.zyd.core.busi.LinkManager;
 import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.ObjectManager;
 import com.zyd.core.objecthandler.SearchResult;
+import com.zyd.core.objecthandler.House.Columns;
 import com.zyd.core.util.SpringContext;
+import com.zyd.linkmanager.Link;
+import com.zyd.linkmanager.LinkManager;
 import com.zyd.web.ServiceBase;
 
 @SuppressWarnings("unchecked")
@@ -50,8 +49,10 @@ public class object extends ServiceBase {
         setResponseType("js", resp);
         String referer = req.getHeader("Referer");
         boolean doRequest = true;
+        Link link = linkManager.getProcessingLink(referer);
+
         if ("true".equals(req.getParameter(Handler.Parameter.PARAMETER_SKIP_URL_CHECK))) {
-        } else if (referer == null || linkManager.getProcessingLink(referer) == null) {
+        } else if (referer == null || link == null) {
             if (referer == null) {
                 logger.warn("Can not process link, no refeerer");
             } else {
@@ -63,7 +64,7 @@ public class object extends ServiceBase {
 
         if (doRequest) {
             HashMap values = requestParameterToMap(req);
-            values.put(Handler.Columns.Referer, referer);
+            values.put(Columns.Link, link);
             boolean result = (Boolean) objectManager.create(values);
             linkManager.linkFinished(referer);
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);

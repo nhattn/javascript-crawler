@@ -12,6 +12,7 @@ import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.dom.bus.BusLine;
 import com.zyd.core.dom.bus.BusStop;
 
+@Deprecated
 public class Bus extends Handler {
     private static Logger logger = Logger.getLogger(Bus.class);
     private static HashMap<String, DatabaseColumnInfo> meta = null;
@@ -31,7 +32,7 @@ public class Bus extends Handler {
         com.zyd.core.dom.bus.Bus bus = new com.zyd.core.dom.bus.Bus();
         bus.name = (String) values.get(Columns.Name);
         bus.city = (String) values.get(Columns.City);
-        bus.url = (String) values.get(Columns.Referer);
+//        bus.url = (String) values.get(Columns.Referer);
         com.zyd.core.dom.bus.Bus oldBus = BusHelper.getBusByName(bus);
         try {
             if (oldBus == null) {

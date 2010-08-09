@@ -16,7 +16,6 @@ import com.zyd.core.objecthandler.ObjectHelper;
 public class HibernateUtil {
     private static Logger logger = Logger.getLogger(HibernateUtil.class);
     private static final SessionFactory sessionFactory = buildSessionFactory();
-
     private final static HashMap<String, String> entityMapping = new HashMap<String, String>();
 
     private static SessionFactory buildSessionFactory() {
@@ -25,6 +24,7 @@ public class HibernateUtil {
         } catch (Throwable ex) {
             logger.fatal("Initial SessionFactory creation failed.");
             logger.fatal(ex);
+            ex.printStackTrace();
             throw new ExceptionInInitializerError(ex);
         }
     }
@@ -74,6 +74,19 @@ public class HibernateUtil {
             session.getTransaction().commit();
         } catch (Error e) {
             logger.error("Can not save object " + objectid, e);
+            session.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+    public static void saveObject(String entityName, HashMap values) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.save(entityName, values);
+            session.getTransaction().commit();
+        } catch (Error e) {
+            logger.error("Can not save object " + entityName, e);
             session.getTransaction().rollback();
             throw e;
         }

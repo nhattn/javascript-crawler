@@ -50,11 +50,12 @@ public abstract class Handler {
 
     public static class Columns {
         public final static String ID = "id";
-        public final static String Long = "lo";
-        public final static String Lat = "la";
+        public final static String Long = "lng";
+        public final static String Lat = "lat";
         public final static String OK = "ok";
-        public final static String Referer = "referer";
+        public final static String Link = "link";
         public final static String CreateTime = "createTime";
         public final static String UpdateTime = "updateTime";
+
     }
 }

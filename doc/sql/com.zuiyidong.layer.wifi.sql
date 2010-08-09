@@ -17,6 +17,7 @@ create index layer_wifi_lng  on layer_com_zuiyidong_layer_wifi(lng);
 create index layer_wifi_lat  on layer_com_zuiyidong_layer_wifi(lat);    
 
 
+/*
 create table wifiok (
         id                 bigint NOT NULL AUTO_INCREMENT,
         oid                integer,
@@ -31,7 +32,8 @@ create table wifiok (
         name               varchar(200),                
         PRIMARY KEY (id)
 ); 
-/*
+
 insert into layer_com_zuiyidong_layer_wifi(id,lng,lat,type,description,city,province,address,isp,name) 
 select id,lng,lat,type,description,city,province,address,isp,name from wifiok;
+
 */

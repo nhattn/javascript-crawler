@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Constants;
-import com.zyd.core.busi.LinkManager;
 import com.zyd.core.busi.TemplateManager;
 import com.zyd.core.util.SpringContext;
+import com.zyd.linkmanager.LinkManager;
 import com.zyd.web.ServiceBase;
 
 public class crawlerconfig extends ServiceBase {

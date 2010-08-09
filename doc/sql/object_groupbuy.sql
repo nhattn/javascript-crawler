@@ -1,8 +1,8 @@
 use crawler;
-create table GroupBuy(
+create table Object_GroupBuy(
     id                  bigint NOT NULL AUTO_INCREMENT,
-    lo                  double,
-    la                  double,    
+    lng                 double,
+    lat                 double,    
     title               varchar(200),
     shopName            varchar(100),
     description         varchar(5000),    
@@ -19,4 +19,4 @@ create table GroupBuy(
     PRIMARY KEY (id)
 );
 
-ALTER TABLE GroupBuy AUTO_INCREMENT = 100000000000000;
+ALTER TABLE Object_GroupBuy AUTO_INCREMENT = 100000000000000;

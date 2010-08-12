@@ -27,7 +27,6 @@ function normalizeLinks() {
         a.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     }
 }
-normalizeLinks();
 function cleanText(s) {
     if (!s || s == '')
         return '';
@@ -80,7 +79,7 @@ function getPossibleMatchingDiv() {
 
 }
 
-getPossibleMatchingDiv();
+
 
 function showDivInfo(div) {
     var el = new Ext.Element(div);

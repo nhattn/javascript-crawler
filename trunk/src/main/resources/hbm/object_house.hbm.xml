@@ -34,6 +34,5 @@
 		<property name="createTime" type="timestamp" />
 		<property name="updateTime" type="timestamp" />
 		<property name="link" type="long" />
-		<property name="ok" column="ok" type="int" />
 	</class>
 </hibernate-mapping>

@@ -28,7 +28,6 @@ create table Object_House(
 	decoration			varchar(20),
  	createTime          datetime,
  	updateTime          datetime, 	
-    ok					integer default 0,
     link                bigint,	
  	PRIMARY KEY (id)
 );

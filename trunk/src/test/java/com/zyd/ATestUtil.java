@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,7 +19,7 @@ import com.tj.common.util.test.CommonTestUtil;
 import com.tj.common.util.test.HttpTestUtil;
 import com.zyd.core.objecthandler.House;
 import com.zyd.core.objecthandler.House.Columns;
-import com.zyd.web.TestObjectManipulation;
+import com.zyd.web.house.TestObjectManipulation;
 
 @SuppressWarnings("unchecked")
 public class ATestUtil {
@@ -27,16 +28,15 @@ public class ATestUtil {
         }
     }
 
-    public static void stopReturningWatchedLink() throws Exception {
-        HashMap<String, String> config = new HashMap<String, String>();
-        ATestUtil.reststoreServerConfigure();
-        config.put("INTERVAL_CHECK_LINK_LIST", Integer.toString(100000000));
-        ATestUtil.updateServerConfigure(config);
-    }
-
-    public static boolean clearServerData() throws Exception {
-        String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData", null);
-        JSONObject o = new JSONObject(s);
+    public static boolean clearServerData(String entityName) throws Exception {
+        String s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=ClearAllData&entity=" + entityName, null);
+        JSONObject o;
+        try {
+            o = new JSONObject(s);
+        } catch (JSONException e) {
+            System.err.println("Can not parse json :" + s);
+            throw e;
+        }
         return o.getBoolean("result");
     }
 
@@ -117,13 +117,8 @@ public class ATestUtil {
      * @throws Exception
      */
     public static boolean createObject(Map v, String referer) throws Exception {
-        createLink(referer);
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-
-        }
         String l = getNextLink();
+        v.put("skipUrlCheck", "true");
         String r = HttpTestUtil.httpPostForString(ATestConstants.SERVICE_OBJECT_URL, v, l);
         JSONObject obj = new JSONObject(r);
         return obj.getBoolean("result");
@@ -155,7 +150,7 @@ public class ATestUtil {
                 }
             }
             nv.put(House.Columns.Price, (1000 + i) + "");
-            nv.put(House.Columns.Long, i + "");
+            nv.put(House.Columns.Lng, i + "");
             nv.put(House.Columns.Lat, i + "");
             nv.put(House.Columns.RentalType, new String[] { "出租", "出售", "合租", "短租" }[i % 4]);
             String referer = ATestConstants.OBJECT_REFERER_PREFIX + i;

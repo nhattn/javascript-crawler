@@ -1,4 +1,4 @@
-package com.zyd.core;
+package com.zyd.core.components;
 
 import java.util.Date;
 

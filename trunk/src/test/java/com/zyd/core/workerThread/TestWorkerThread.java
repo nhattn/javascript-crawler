@@ -44,5 +44,6 @@ public class TestWorkerThread extends TestCase {
         assertTrue(job1.counter > 5);
         assertTrue(job2.counter > 5);
         assertTrue(job3.counter == 0);
+        wt.stop();
     }
 }

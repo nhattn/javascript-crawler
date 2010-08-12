@@ -1,4 +1,4 @@
-package com.zyd.web;
+package com.zyd.web.house;
 
 import java.io.StringReader;
 import java.net.URLEncoder;
@@ -26,15 +26,15 @@ import com.zyd.core.objecthandler.House.Columns;
 public class TestObjectQuery extends TestCase {
     @Override
     protected void setUp() throws Exception {
-        assertTrue(ATestUtil.clearServerData());
-        ATestUtil.stopReturningWatchedLink();
+        assertTrue(ATestUtil.clearServerData("House"));
+        assertTrue(ATestUtil.clearServerData("Link"));
     }
 
     public void testQueryObject() throws Exception {
         ATestUtil.createSomeObject();
         HashMap<String, String> p = new HashMap<String, String>();
-        p.put("lo", "0-18");
-        p.put("la", "0-18");
+        p.put(Handler.Columns.Lat, "0-18");
+        p.put(Handler.Columns.Lng, "0-18");
         p.put("objectid", "House");
         String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL, p);
         assertNotNull(s);
@@ -53,7 +53,7 @@ public class TestObjectQuery extends TestCase {
         int pageSize = 5, start = 0;
         p.put("objectid", "House");
         p.put("count", "" + pageSize);
-        p.put(Handler.Parameter.PARAMETER_ORDER_BY, House.Columns.Long);
+        p.put(Handler.Parameter.PARAMETER_ORDER_BY, House.Columns.Lng);
         p.put(Handler.Parameter.PARAMETER_ORDER, Handler.Parameter.PARAMETER_VALUE_ORDER_ASC);
 
         int totalPage = (int) (ATestConstants.TEST_OBJECT_COUNT / pageSize) + (ATestConstants.TEST_OBJECT_COUNT % pageSize == 0 ? 0 : 1);
@@ -69,7 +69,7 @@ public class TestObjectQuery extends TestCase {
             Document docx = db.parse(is);
             NodeList nodes = docx.getElementsByTagName("object");
             assertTrue((nodes.getLength() == pageSize) || (nodes.getLength() == ATestConstants.TEST_OBJECT_COUNT % pageSize));
-            NodeList longs = docx.getElementsByTagName(House.Columns.Long);
+            NodeList longs = docx.getElementsByTagName(House.Columns.Lng);
             Double ld = -1d;
             for (int y = 0; y < longs.getLength(); y++) {
                 Node n = longs.item(y);

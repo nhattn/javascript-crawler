@@ -3,29 +3,82 @@ function handlerProcess() {
 
 }
 
-function cleanUp() {
-    var script = XPath.array(null, '//script');
-    for ( var i = script.length - 1; i > -1; i--) {
-        var s = script[i];
-        s.parentNode.removeChild(s);
-    }
-    script = XPath.array(null, '//style');
-    for ( var i = script.length - 1; i > -1; i--) {
-        var s = script[i];
-        s.parentNode.removeChild(s);
-    }
-    script = XPath.array(null, '//comment()')
-    for ( var i = script.length - 1; i > -1; i--) {
-        var s = script[i];
-        s.parentNode.removeChild(s);
-    }
-    
-    script = XPath.array(null, '//img')
+function removeXPathNode(xpath) {
+    var script = XPath.array(null, xpath);
     for ( var i = script.length - 1; i > -1; i--) {
         var s = script[i];
         s.parentNode.removeChild(s);
     }
 }
+function cleanUp() {
+    removeXPathNode('//script');
+    removeXPathNode('//style');
+    removeXPathNode('//comment');
+    removeXPathNode('//img');
+//    removeXPathNode('//a');    
+}
+
+function normalizeLinks(){
+    var obj = XPath.array(null, '//a');
+    for ( var i = obj.length - 1; i > -1; i--) {
+        var a = obj[i];
+        a.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+}
+normalizeLinks();
+function cleanText(s) {
+    if (!s || s == '')
+        return '';
+    s = CrUtil.removeNewLine(s);
+    return CrUtil.killSpace(s);
+}
+
+function countSeperator(s) {
+    if (!s)
+        return 0;
+    var tokens = [ ',', '\\.', '。', '，' ];
+    var total = 0;
+    for ( var i = 0; i < tokens.length; i++) {
+        total = total + countChar(s, tokens[i])
+    }
+    return total;
+}
+
+function countChar(s, c) {
+    var r = s.match(new RegExp(c, 'g'));
+    if (r)
+        return r.length;
+    return 0;
+}
+
+function getPossibleMatchingDiv() {
+    cleanUp();
+    var sort = function(a, b) {
+        return a.txtRatio - b.txtRatio;
+    }
+    var divs = document.getElementsByTagName('div'), arr = [];
+    for ( var i = 0; i < divs.length; i++) {
+        var div = divs[i], el = new Ext.Element(div);
+        var w = el.getWidth(), h = el.getHeight(), txt = cleanText(div.textContent);
+        var sep = countSeperator(txt), size = w * h;
+        var txtRatio = txt.length / size;
+        if (sep > 15 && w > 200 && h > 200) {
+            arr.push( {
+                txtRatio : txtRatio,
+                div : div
+            });
+        }
+    }
+    arr.sort(sort);
+    for(var i=0;i<arr.length;i++){
+        console.log(arr[i].txtRatio);
+        console.log(arr[i].div);
+//        console.log(arr[i].div.textContent);        
+    }
+        
+}
+
+getPossibleMatchingDiv();
 
 function showDivInfo(div) {
     var el = new Ext.Element(div);
@@ -47,8 +100,7 @@ function showDivInfo(div) {
     s[s.length] = 'htmlLength:';
     s[s.length] = div.innerHTML.length;
     s[s.length] = ', ';
-    
-    
+
     s[s.length] = 'char_per_unit:';
     s[s.length] = tx.length / (el.getWidth() * el.getHeight());
     s[s.length] = ', ';
@@ -57,7 +109,6 @@ function showDivInfo(div) {
     s[s.length] = tx.length / div.innerHTML.length;
     s[s.length] = ', ';
 
-    
     s[s.length] = 'width:';
     s[s.length] = el.getWidth();
     s[s.length] = ', ';
@@ -92,7 +143,7 @@ function showDivInfo(div) {
     s[s.length] = ', ';
 
     console.log(s.join(' '));
-    console.log(div);
+    console.log(div.txtContent);
 }
 
 function getLeafDiv() {
@@ -138,23 +189,3 @@ function getPossibleMatch(div) {
     }
     return r;
 }
-
-function countSeperator(s) {
-    if (!s)
-        return 0;
-    var tokens = [ ',', '\\.', '。', '，' ];
-    var total = 0;
-    for ( var i = 0; i < tokens.length; i++) {
-        total = total + countChar(s, tokens[i])
-    }
-    return total;
-}
-
-function countChar(s, c) {
-    var r = s.match(new RegExp(c, 'g'));
-    if (r)
-        return r.length;
-    return 0;
-}
-cleanUp();
-getLeafDiv();

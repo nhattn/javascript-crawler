@@ -32,7 +32,7 @@ public class Bus extends Handler {
         com.zyd.core.dom.bus.Bus bus = new com.zyd.core.dom.bus.Bus();
         bus.name = (String) values.get(Columns.Name);
         bus.city = (String) values.get(Columns.City);
-//        bus.url = (String) values.get(Columns.Referer);
+        //        bus.url = (String) values.get(Columns.Referer);
         com.zyd.core.dom.bus.Bus oldBus = BusHelper.getBusByName(bus);
         try {
             if (oldBus == null) {
@@ -103,12 +103,7 @@ public class Bus extends Handler {
     }
 
     @Override
-    public int deleteAll() {
-        return BusHelper.deleteAll();
-    }
-
-    @Override
-    public String getName() {
+    public String getEntityName() {
         return null;
     }
 
@@ -127,6 +122,12 @@ public class Bus extends Handler {
         public final static String BusId = "busId";
         public final static String StopId = "stopId";
         public final static String Stops = "stops";
+    }
+
+    @Override
+    protected boolean beforeCreate(HashMap values) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

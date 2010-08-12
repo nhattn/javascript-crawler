@@ -1,9 +1,15 @@
 package com.zyd.linkmanager.mysql;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import org.apache.log4j.Logger;
+
+import com.zyd.Constants;
 import com.zyd.linkmanager.Link;
 
 public class LinkStore {
+    Logger logger = org.apache.log4j.Logger.getLogger(LinkStore.class);
     private String tableName;
     private String tableStringUid;
     private ArrayList<Link> cachedUnprocessedLink = new ArrayList<Link>();
@@ -19,11 +25,13 @@ public class LinkStore {
     }
 
     public Link addLink(String url) {
+        if (url == null || url.length() > Constants.URL_MAX_LENGTH) {
+            logger.warn("Link to long or is null, ignored : " + url);
+            return null;
+        }
         Link link = DbHelper.addNewLinkToTable(tableName, url);
-        synchronized (this) {
-            if (cachedUnprocessedLink.size() < 100) {
-                cachedUnprocessedLink.add(link);
-            }
+        if (cachedUnprocessedLink.size() < 100) {
+            cachedUnprocessedLink.add(link);
         }
         return link;
     }
@@ -44,7 +52,7 @@ public class LinkStore {
         return DbHelper.getLinkByUrl(url, tableName);
     }
 
-    public synchronized Link nextUnprocessedLink() {
+    public Link nextUnprocessedLink() {
         if (cachedUnprocessedLink.size() == 0) {
             ArrayList<Link> links = DbHelper.loadUnprocessedLink(tableName, 20);
             if (links.size() == 0) {
@@ -54,9 +62,16 @@ public class LinkStore {
             cachedUnprocessedLink.addAll(links);
         }
         Link r = cachedUnprocessedLink.remove(cachedUnprocessedLink.size() - 1);
+        if (links.add(r.getUrl()) == false) {
+            Link link = DbHelper.getLinkByUrl(r.getUrl(), tableName);
+            System.out.println("Error-----------------------------" + r.getUrl());
+            System.err.println("Loaded from database: " + link.getState());
+        }
         DbHelper.updateLinkStatus(r, Link.STATE_PROCESSING, tableName);
         return r;
     }
+
+    private HashSet<String> links = new HashSet<String>();
 
     /**
      * this method should be called the first time a link store is initialized, eg. after a shutdown. 

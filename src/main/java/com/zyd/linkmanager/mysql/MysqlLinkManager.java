@@ -18,6 +18,10 @@ public class MysqlLinkManager implements LinkManager {
     private final ArrayList<LinkStore> storeList = new ArrayList<LinkStore>();
     private long lastExecuteTime;
     private boolean hasMore = true;
+    /* how many are processed so far */
+    private long processedLinkCount = 0;
+    /* how many are added so far */
+    private long addedLinkCount = 0;
 
     public MysqlLinkManager() {
         lastExecuteTime = System.currentTimeMillis();
@@ -33,13 +37,17 @@ public class MysqlLinkManager implements LinkManager {
         hasMore = true;
         if (store == null) {
             store = createStore(storeUid, true);
-            return store.addLink(url);
         }
 
         if (store.isLinkManaged(url) == true) {
             return null;
         } else {
-            return store.addLink(url);
+            Link r = store.addLink(url);
+            if (r != null) {
+                hasMore = true;
+                addedLinkCount++;
+            }
+            return r;
         }
     }
 
@@ -71,6 +79,7 @@ public class MysqlLinkManager implements LinkManager {
     }
 
     private synchronized Link linkFinished(String url, int state, String msg) {
+        processedLinkCount++;
         Link link = processingLinkMap.get(url);
         if (link == null) {
             return null;
@@ -94,10 +103,25 @@ public class MysqlLinkManager implements LinkManager {
         for (Link link : links) {
             if (now - link.processStartTime > Constants.LINK_PROCESSING_EXPIRE) {
                 linkFinishedError(link.getUrl(), Link.STATE_FINISHED_TIME_OUT, null);
+                System.out.println(link.getUrl());
                 counter++;
             }
         }
         logger.info("Cleaned expried processing link:" + counter);
+        return counter;
+    }
+
+    public synchronized int cleanExpiredLinkStore() {
+        int counter = 0;
+        for (int i = storeList.size() - 1; i > -1; i--) {
+            LinkStore store = storeList.get(i);
+            if (store.isInActiveForTooLong() == true) {
+                storeList.remove(i);
+                storeMap.remove(store.getStringUid());
+                counter++;
+            }
+        }
+        logger.info("Cleaned inactive store : " + counter);
         return counter;
     }
 
@@ -126,10 +150,11 @@ public class MysqlLinkManager implements LinkManager {
 
     public void doJob() {
         cleanExpiredProcessingLink();
+        cleanExpiredLinkStore();
         lastExecuteTime = System.currentTimeMillis();
     }
 
-    public boolean shouldRun() {
+    public boolean shouldRun() {        
         return (System.currentTimeMillis() - lastExecuteTime) > Constants.LINK_MONITOR_SCAN_INTERVAL;
     }
 
@@ -142,9 +167,11 @@ public class MysqlLinkManager implements LinkManager {
     }
 
     public int getSuggestedLinkRefreshInterval() {
-        if (hasMore)
-            return 1000;
-        return 55 * 1000;
+        if (hasMore) {
+            return 1;
+        } else {
+            return 30;
+        }
     }
 
     public void clearAllCache() {
@@ -152,5 +179,24 @@ public class MysqlLinkManager implements LinkManager {
         storeList.clear();
         lastStoreIndex = 0;
         processingLinkMap.clear();
+    }
+
+    public String linkSnapShot() {
+        int total = 0;
+        for (int i = storeList.size() - 1; i > -1; i--) {
+            total += storeList.get(i).getCachedSize();
+        }
+        StringBuffer buf = new StringBuffer();
+        buf.append("Processing Link : " + processingLinkMap.size());
+        buf.append("\n");
+        buf.append("Cached Link : " + total);
+        buf.append("\n");
+        buf.append("Processed Link :" + processedLinkCount);
+        buf.append("\n");
+        buf.append("Added Link :" + addedLinkCount);
+        buf.append("\n");
+        buf.append("Active Store  : " + storeList.size());
+        buf.append("\n");
+        return buf.toString();
     }
 }

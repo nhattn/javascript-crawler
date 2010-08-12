@@ -48,18 +48,16 @@ public class controller extends ServiceBase {
                 }
                 output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
             }
-            return;
         } else if ("LinkSnapshot".equals(action)) {
             setResponseType("text", resp);
-            //            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).snapshot(), resp);
-            throw new UnsupportedOperationException();
+            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).linkSnapShot(), resp);
         } else if ("ConfigureSnapshot".equals(action)) {
             setResponseType("text", resp);
             output(Constants.snapShotValues(), resp);
-            return;
+        } else {
+            setResponseType("text", resp);
+            output("Invalid request:" + req.getRequestURI(), resp);
         }
-        setResponseType("text", resp);
-        output("Invalid request:" + req.getRequestURI(), resp);
     }
 
     private void wakeUpThreads() {

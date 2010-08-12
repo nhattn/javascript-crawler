@@ -46,7 +46,6 @@ public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
     }
 
     private void checkBlockList() {
-        logger.info("Start checking blocked list");
         int counter = 0;
         HashSet<String> blockList = ipCounter.getBlockedList();
         for (String ip : blockList) {

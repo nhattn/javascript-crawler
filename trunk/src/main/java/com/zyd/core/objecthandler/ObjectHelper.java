@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -256,7 +255,7 @@ public class ObjectHelper {
      */
     public static void nomorlizedParameters(HashMap values, HashMap<String, DatabaseColumnInfo> meta) {
         ArrayList<String> keySet = new ArrayList<String>(values.keySet());
-        for(String key: keySet){            
+        for (String key : keySet) {
             DatabaseColumnInfo info = meta.get(key);
             if (info == null)
                 continue;

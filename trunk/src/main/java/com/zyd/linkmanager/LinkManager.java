@@ -43,15 +43,17 @@ public interface LinkManager extends com.zyd.core.busi.WorkerThread.Job {
      * @return
      */
     public int cleanExpiredProcessingLink();
-    
+
     /**
      * depending on how many links is left unprocessed, return link refresh interval for client
      * @return
      */
     public int getSuggestedLinkRefreshInterval();
-    
+
     /**
      * Only for testing, clear all data cached locally, clear all stores cached locally. Wont clearn the data though.
      */
     public void clearAllCache();
+
+    public String linkSnapShot();
 }

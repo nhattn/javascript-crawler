@@ -1,7 +1,6 @@
 package com.zyd.linkmanager.mysql;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
@@ -14,6 +13,7 @@ public class LinkStore {
     private String tableStringUid;
     private ArrayList<Link> cachedUnprocessedLink = new ArrayList<Link>();
     public boolean hasMoreUnprocessed = true;
+    private long lastAccessTime = System.currentTimeMillis();
 
     /**
      * @param tableName name of the table in db, in the format of LinkTable_xxx
@@ -29,10 +29,12 @@ public class LinkStore {
             logger.warn("Link to long or is null, ignored : " + url);
             return null;
         }
+
         Link link = DbHelper.addNewLinkToTable(tableName, url);
         if (cachedUnprocessedLink.size() < 100) {
             cachedUnprocessedLink.add(link);
         }
+        hasMoreUnprocessed = true;
         return link;
     }
 
@@ -62,16 +64,10 @@ public class LinkStore {
             cachedUnprocessedLink.addAll(links);
         }
         Link r = cachedUnprocessedLink.remove(cachedUnprocessedLink.size() - 1);
-        if (links.add(r.getUrl()) == false) {
-            Link link = DbHelper.getLinkByUrl(r.getUrl(), tableName);
-            System.out.println("Error-----------------------------" + r.getUrl());
-            System.err.println("Loaded from database: " + link.getState());
-        }
         DbHelper.updateLinkStatus(r, Link.STATE_PROCESSING, tableName);
+        lastAccessTime = System.currentTimeMillis();
         return r;
     }
-
-    private HashSet<String> links = new HashSet<String>();
 
     /**
      * this method should be called the first time a link store is initialized, eg. after a shutdown. 
@@ -79,5 +75,20 @@ public class LinkStore {
      */
     public int resetProcessingLinkToUnprocessed() {
         return DbHelper.updateLinkState(Link.STATE_PROCESSING, Link.STATE_NOT_PROCESSED, tableName);
+    }
+
+    public String getStringUid() {
+        return tableStringUid;
+    }
+
+    public int getCachedSize() {
+        return cachedUnprocessedLink.size();
+    }
+
+    public boolean isInActiveForTooLong() {
+        if (hasMoreUnprocessed == false && (System.currentTimeMillis() - lastAccessTime) > Constants.LINK_STORE_MAX_INACTIVE_INTERVAL) {
+            return true;
+        }
+        return false;
     }
 }

@@ -62,7 +62,6 @@ public class link extends ServiceBase {
 
         if ("get".equals(action)) {
             setResponseType("js", resp);
-
             s = Utils.stringArrayToJsonString(new String[] { "result", nextLink() });
         } else if ("redirect".equals(action)) {
             setResponseType("html", resp);
@@ -73,13 +72,6 @@ public class link extends ServiceBase {
             s = "No action specified";
         }
         output(s, resp);
-    }
-
-    private String nextLink() {
-        Link link = linkManager.roundRobinNextLink();
-        if (link == null)
-            return WatchListManager.nextWatchedLink().url;
-        return link.url;
     }
 
     /**
@@ -114,5 +106,18 @@ public class link extends ServiceBase {
         String s = Utils.stringArrayToJsonString(new String[] { "result", Integer.toString(count) });
         output(s, resp);
         clientManager.logRequest(req);
+    }
+
+    private int linkCounter = 0;
+
+    private String nextLink() {
+        if (linkCounter++ % 100 == 0) {
+            return WatchListManager.nextWatchedLink().url;
+        }
+
+        Link link = linkManager.roundRobinNextLink();
+        if (link == null)
+            return WatchListManager.nextWatchedLink().url;
+        return link.url;
     }
 }

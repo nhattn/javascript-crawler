@@ -111,6 +111,7 @@ public class Constants {
      */
     public final static Object[] ZERO_OBJECT_LIST = new Object[0];
     public final static String ALLOWED_API_QUERY_PARAMETER_CONFIG_FILE = "allowed.prop";
+    public final static int LINK_STORE_MAX_INACTIVE_INTERVAL = 60 * 60 * 1000;
 
     static {
         loadValues();

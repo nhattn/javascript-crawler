@@ -25,13 +25,12 @@ public class TestEncoding extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        ATestUtil.stopReturningWatchedLink();
-        ATestUtil.clearServerData();
+        ATestUtil.clearServerData("House");
         params = new HashMap<String, String>();
         params.put(House.Columns.Description1, "你应该看到这段中文文");
-        params.put(Handler.Parameter.PARAMETER_OBJECT_ID, House.name);
+        params.put(Handler.Parameter.PARAMETER_OBJECT_ID, House.EntityName);
         params.put(House.Columns.Lat, "11.11");
-        params.put(House.Columns.Long, "22.22");
+        params.put(House.Columns.Lng, "22.22");
         params.put(House.Columns.Tel, "2222");
         params.put(House.Columns.Address, "2222");
     }
@@ -58,7 +57,6 @@ public class TestEncoding extends TestCase {
         method.addRequestHeader(new Header("Content-Type", contentType + "; charset=" + charset));
         NameValuePair[] ps = new NameValuePair[params.size()];
         int counter = 0;
-        System.out.println(params);
         for (Object sk : params.keySet()) {
             String k = (String) sk;
             if (charset == null) {
@@ -79,6 +77,4 @@ public class TestEncoding extends TestCase {
         method.releaseConnection();
         return r;
     }
-
-    //"Content-Type: text/html; charset=UTF-8"
 }

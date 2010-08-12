@@ -1,4 +1,4 @@
-package com.zyd.web;
+package com.zyd.web.house;
 
 import java.util.Date;
 import java.util.Map;
@@ -21,11 +21,11 @@ public class TestHibernateExceptionHandling extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        ApplicationContext ctx = ATestUtil.setUpSpring();
+        ApplicationContext ctx = ATestUtil.setUpSpring();        
         om = (ObjectManager) ctx.getBean("objectManager");
-        ATestUtil.stopReturningWatchedLink();
-        ATestUtil.clearServerData();
-        
+        assertTrue(ATestUtil.clearServerData("Link"));
+        ATestUtil.clearServerData("House");
+
     }
 
     public void testSingleThread() throws Exception {
@@ -56,7 +56,7 @@ public class TestHibernateExceptionHandling extends TestCase {
         assertEquals(0, errorCount);
     }
 
-    public void testMultiThread() throws Exception {
+    public void nottestMultiThread() throws Exception {
         Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, "house1.prop", Constants.Encoding_DEFAULT_SYSTEM);
         map.put(com.zyd.core.objecthandler.Handler.Parameter.PARAMETER_OBJECT_ID, "House");
         map.put(com.zyd.core.objecthandler.House.Columns.Contact, "this is a very long string it should over flow");
@@ -113,7 +113,7 @@ public class TestHibernateExceptionHandling extends TestCase {
                     try {
                         Thread.sleep(100);
                     } catch (Exception e) {
-                    }                    
+                    }
                 }
             } catch (Exception e) {
                 errorCount++;

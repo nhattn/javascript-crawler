@@ -1,4 +1,4 @@
-package com.zyd.web;
+package com.zyd.linkmanager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,27 +7,33 @@ import java.util.HashSet;
 import junit.framework.TestCase;
 
 import com.tj.common.util.test.CommonTestUtil;
-import com.tj.common.util.test.HttpTestUtil;
+import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
-import com.zyd.Constants;
 import com.zyd.core.Utils;
+import com.zyd.linkmanager.Link;
+import com.zyd.linkmanager.mysql.DbHelper;
+import com.zyd.linkmanager.mysql.LinkTableInfo;
 
 public class TestLinkManager extends TestCase {
-    int expire = 5 * 1000;
-    int sleep = 5 * 1000;
+    int expire = 3 * 1000;
+    int sleep = 2 * 1000;
 
     @Override
     protected void setUp() throws Exception {
-        assertTrue(ATestUtil.clearServerData());
-        ATestUtil.stopReturningWatchedLink();
+        assertTrue(ATestUtil.clearServerData("Link"));
     }
 
+    /**
+     * Make sure when link is processed fro too long, it's treated as timeout.
+     * this only works when testing and server is running on the same machine.
+     * @throws Exception
+     */
     public void testFlushExpiredLink() throws Exception {
         ATestUtil.createSomeLinks();
         HashMap<String, String> config = new HashMap<String, String>();
         config.put("LINK_PROCESSING_EXPIRE", Integer.toString(expire));
-        config.put("LINK_MONITOR_SLEEP", Integer.toString(expire));
-        config.put("LINK_MAX_TRY", Integer.toString(1));
+        config.put("WORKER_THREAD_EXECUTION_INTERVAL", Integer.toString(sleep));
+        config.put("LINK_MONITOR_SCAN_INTERVAL", Integer.toString(sleep));
 
         String s = null;
         ATestUtil.updateServerConfigure(config);
@@ -35,46 +41,22 @@ public class TestLinkManager extends TestCase {
             ATestUtil.getNextLink();
         }
         try {
-            System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
+            System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles, sleep for " + sleep * 3 / 1000 + "seconds");
             Thread.sleep(sleep * 3);
         } catch (Exception e) {
         }
-        s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
-        assertNotNull(s);
-        s = s.replaceAll(" ", "");
-        assertTrue(s, s.indexOf("error:5") > 0);
+        LinkTableInfo info = DbHelper.getLinkTableInfoByUid(Utils.getShortestDomain(ATestConstants.OBJECT_REFERER_PREFIX));
+        ArrayList<Link> links = DbHelper.loadLinkByState(info.getTableName(), Link.STATE_FINISHED_TIME_OUT, 10000);
+        assertEquals(5, links.size());
         assertTrue(ATestUtil.reststoreServerConfigure());
-        ATestUtil.clearServerData();
+        ATestUtil.clearServerData("Link");
     }
 
     /**
-     * 
+     * Make sure duplicate links won't be accepted,
+     * links that is not processed, processing, processed, will be counted
      * @throws Exception
      */
-    public void testLinkManagerPurgeLinks() throws Exception {
-        String s = null;
-        assertTrue(ATestUtil.createSomeObject() > 0);
-        HashMap<String, String> configure = new HashMap<String, String>();
-        configure.put("LINK_MONITOR_SLEEP", sleep + "");
-        configure.put("LINK_LOAD_BEFORE", "1");
-        ATestUtil.updateServerConfigure(configure);
-
-        try {
-            System.err.println("Wait for thread sleep, make sure LinkManager is going through enough cycles");
-            Thread.sleep(sleep * 3);
-        } catch (Exception e) {
-        }
-        s = HttpTestUtil.httpGetForString(Constants.ServerUrl + "/service/controller?action=LinkSnapshot", null);
-        assertNotNull(s);
-        s = s.replaceAll(" ", "");
-        assertTrue(s, s.indexOf("processed:0") != -1);
-        assertTrue(s, s.indexOf("error:0") != -1);
-        assertTrue(s, s.indexOf("processing:0") != -1);
-        assertTrue(s, s.indexOf("waiting:0") != -1);
-        assertTrue(ATestUtil.reststoreServerConfigure());
-        ATestUtil.clearServerData();
-    }
-
     public void testDuplicateLinks() throws Exception {
         for (int i = 0; i < 100; i++) {
             String link = "http://www.test.com/link_" + i;
@@ -107,7 +89,7 @@ public class TestLinkManager extends TestCase {
             assertFalse(ATestUtil.createLink(l));
         }
         assertTrue(ATestUtil.reststoreServerConfigure());
-        ATestUtil.clearServerData();
+        ATestUtil.clearServerData("Link");
     }
 
     public void testDifferentDomain() throws Exception {
@@ -154,7 +136,7 @@ public class TestLinkManager extends TestCase {
         String domainHeader = "xdomain.com";
         HashSet<String> domains = new HashSet<String>();
         int total = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             domains.add(i + domainHeader);
         }
 

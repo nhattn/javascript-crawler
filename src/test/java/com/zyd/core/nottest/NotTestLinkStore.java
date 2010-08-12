@@ -1,4 +1,4 @@
-package com.zyd.core;
+package com.zyd.core.nottest;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import com.zyd.ATestUtil;
 import com.zyd.Constants;
 import com.zyd.core.dom.Link;
 
-public class TestLinkStore extends TestCase {
+public class NotTestLinkStore extends TestCase {
     /*
     String url = "http://www.aaa.com/href/";
     ArrayList<String> links = new ArrayList<String>();

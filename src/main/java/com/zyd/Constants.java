@@ -1,11 +1,8 @@
 package com.zyd;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -100,7 +97,7 @@ public class Constants {
     public static String IdlePageUrl;
 
     /*
-     * These fields are fixed, derived from system
+     * These fields are fixed or derived from system
      */
 
     public static String Encoding_DEFAULT_SYSTEM = Charset.defaultCharset().toString();
@@ -108,7 +105,7 @@ public class Constants {
     public static String FILENAME_LINK_WATCH_LIST = "watch.list";
     public static Link[] WATCH_LIST = new Link[0];
     public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
-
+    public static int URL_MAX_LENGTH = 1000;
     /*
      * These are system wide comment variables, should never be changed or reassigned
      */
@@ -165,61 +162,7 @@ public class Constants {
 
     public static String snapShotValues() {
         try {
-            ByteArrayOutputStream bou = new ByteArrayOutputStream();
-            BufferedWriter writer = new BufferedWriter(new PrintWriter(bou));
-            writer.write("--------------------Server Configuration Snapshot-------------------------------------");
-            writer.newLine();
-            writer.write("SERVER_DOMAIN : " + SERVER_DOMAIN);
-            writer.newLine();
-
-            writer.write("APPLICATION_CONTEXT : " + APPLICATION_CONTEXT);
-            writer.newLine();
-
-            writer.write("ServerUrl : " + ServerUrl);
-            writer.newLine();
-
-            writer.write("INSTANCE_NAME : " + INSTANCE_NAME);
-            writer.newLine();
-
-            writer.write("IdlePageUrl : " + IdlePageUrl);
-            writer.newLine();
-
-            writer.write("ENCODING_DB : " + ENCODING_DB);
-            writer.newLine();
-
-            writer.write("ENCODING_OUT_GOING_CONTENT : " + ENCODING_OUT_GOING_CONTENT);
-            writer.newLine();
-
-            writer.write("Encoding_DEFAULT_SYSTEM : " + Encoding_DEFAULT_SYSTEM);
-            writer.newLine();
-
-            writer.write("LENGTH_PAGE_SIZE : " + LENGTH_PAGE_SIZE);
-            writer.newLine();
-
-            writer.write("LINK_PROCESSING_EXPIRE : " + LINK_PROCESSING_EXPIRE);
-            writer.newLine();
-
-            writer.write("LINK_MONITOR_SLEEP : " + LINK_MONITOR_SCAN_INTERVAL);
-            writer.newLine();
-
-            if (OSHelper.isLinux()) {
-                writer.write("LINUX_OCR_DIR : " + LINUX_OCR_DIR);
-                writer.newLine();
-            }
-            /*
-            if (false && WATCH_LIST != null && WATCH_LIST.length != 0) {
-                writer.newLine();
-                writer.write("URLs to watch :");
-                writer.newLine();
-                for (int i = 0; i < WATCH_LIST.length; i++) {
-                    writer.write(WATCH_LIST[i].url);
-                    writer.newLine();
-                }
-            }*/
-            writer.write("--------------------End Server Configuration Snapshot-------------------------------------");
-            writer.newLine();
-            writer.close();
-            return bou.toString();
+            return CommonUtil.dumpStaticPropertyFromClass(Constants.class);
         } catch (Exception e) {
             logger.error(e);
             return null;
@@ -251,5 +194,11 @@ public class Constants {
             CommonUtil.closeStream(reader);
             CommonUtil.closeStream(ins);
         }
+    }
+
+    public static void main(String[] args) {
+        String[] s = new String[0];
+        System.out.println(s instanceof Object[]);
+        System.out.println(CommonUtil.dumpStaticPropertyFromClass(Constants.class));
     }
 }

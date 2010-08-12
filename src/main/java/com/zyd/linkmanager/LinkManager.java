@@ -49,4 +49,9 @@ public interface LinkManager extends com.zyd.core.busi.WorkerThread.Job {
      * @return
      */
     public int getSuggestedLinkRefreshInterval();
+    
+    /**
+     * Only for testing, clear all data cached locally, clear all stores cached locally. Wont clearn the data though.
+     */
+    public void clearAllCache();
 }

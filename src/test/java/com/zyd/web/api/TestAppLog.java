@@ -1,4 +1,4 @@
-package com.zyd.web;
+package com.zyd.web.api;
 
 import java.io.StringReader;
 import java.net.HttpURLConnection;
@@ -27,7 +27,7 @@ import com.zyd.core.objecthandler.Handler;
 public class TestAppLog extends TestCase {
     @Override
     protected void setUp() throws Exception {
-        assertTrue(ATestUtil.clearServerData());
+        assertTrue(ATestUtil.clearServerData("AppLog"));
     }
 
     public static String httpPut(String urls, Map params, String referer) throws Exception {
@@ -52,7 +52,7 @@ public class TestAppLog extends TestCase {
         String s = httpPut(ATestConstants.APPLOG_URL, values, null);//HttpTestUtil.httpPutForString(ATestConstants.APPLOG_URL, values, null);
         assertEquals("ok", s.trim());
         values = new HashMap();
-        values.put(Handler.Parameter.PARAMETER_OBJECT_ID, AppLog.name);
+        values.put(Handler.Parameter.PARAMETER_OBJECT_ID, AppLog.entityName);
         s = HttpTestUtil.httpGetForString(ATestConstants.APPLOG_URL, values);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();

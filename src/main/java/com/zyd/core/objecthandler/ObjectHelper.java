@@ -7,6 +7,7 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -254,18 +255,22 @@ public class ObjectHelper {
      * @param meta
      */
     public static void nomorlizedParameters(HashMap values, HashMap<String, DatabaseColumnInfo> meta) {
-        Iterator iter = values.keySet().iterator();
-        while (iter.hasNext()) {
-            String key = (String) iter.next();
+        ArrayList<String> keySet = new ArrayList<String>(values.keySet());
+        for(String key: keySet){            
             DatabaseColumnInfo info = meta.get(key);
             if (info == null)
                 continue;
             String value = null;
+            Object obj = null;
             try {
-                value = (String) values.get(key);
-                if (value == null) {
+                obj = values.get(key);
+                if (obj == null) {
                     values.remove(key);
                 }
+                if ((obj instanceof String) == false) {
+                    continue;
+                }
+                value = (String) obj;
                 switch (info.type) {
                 case Types.INTEGER:
                     values.put(key, Integer.parseInt(value));

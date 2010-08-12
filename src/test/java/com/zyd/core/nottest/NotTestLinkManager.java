@@ -1,18 +1,8 @@
-package com.zyd.core;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+package com.zyd.core.nottest;
 
 import junit.framework.TestCase;
 
-import com.zyd.ATestUtil;
-import com.zyd.Constants;
-
-import com.zyd.core.dom.Link;
-import com.zyd.core.util.SpringContext;
-
-public class TestLinkManager extends TestCase {
+public class NotTestLinkManager extends TestCase {
     /*
     int linkSize = 1000;
     String[] domains = new String[] { "domain_1.com", "domain_2.com", "domain_3.com", "domain_4.com" };

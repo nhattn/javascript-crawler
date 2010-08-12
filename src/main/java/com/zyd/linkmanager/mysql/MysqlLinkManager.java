@@ -25,11 +25,12 @@ public class MysqlLinkManager implements LinkManager {
 
     /**
      * returns null if this link is already managed.
+     * TODO: synchronization can be moved further down to store level.
      */
-    public Link addLink(String url) {
+    public synchronized Link addLink(String url) {
         String storeUid = LinkTableMapper.mapUrl(url);
         LinkStore store = storeMap.get(storeUid);
-
+        hasMore = true;
         if (store == null) {
             store = createStore(storeUid, true);
             return store.addLink(url);
@@ -42,18 +43,15 @@ public class MysqlLinkManager implements LinkManager {
         }
     }
 
-    public Link roundRobinNextLink() {
-        synchronized (this) {
-            for (int i = 0, storeSize = storeList.size(); i < storeSize; i++) {
-                com.zyd.linkmanager.mysql.LinkStore store = storeList.get((lastStoreIndex + i) % storeSize);
-                Link link = store.nextUnprocessedLink();
-                if (link != null) {
-                    lastStoreIndex = (lastStoreIndex + i + 1) % storeSize;
-                    processingLinkMap.put(link.getUrl(), link);
-                    link.processStartTime = System.currentTimeMillis();
-                    hasMore = true;
-                    return link;
-                }
+    public synchronized Link roundRobinNextLink() {
+        for (int i = 0, storeSize = storeList.size(); i < storeSize; i++) {
+            LinkStore store = storeList.get((lastStoreIndex + i) % storeSize);
+            Link link = store.nextUnprocessedLink();
+            if (link != null) {
+                lastStoreIndex = (lastStoreIndex + i + 1) % storeSize;
+                processingLinkMap.put(link.getUrl(), link);
+                link.processStartTime = System.currentTimeMillis();
+                return link;
             }
         }
         hasMore = false;
@@ -72,7 +70,7 @@ public class MysqlLinkManager implements LinkManager {
         return linkFinished(url, state, msg);
     }
 
-    private Link linkFinished(String url, int state, String msg) {
+    private synchronized Link linkFinished(String url, int state, String msg) {
         Link link = processingLinkMap.get(url);
         if (link == null) {
             return null;
@@ -91,7 +89,7 @@ public class MysqlLinkManager implements LinkManager {
             return 0;
         int counter = 0;
         long now = System.currentTimeMillis();
-
+        // make a copy, not synchronized
         ArrayList<Link> links = new ArrayList<Link>(processingLinkMap.values());
         for (Link link : links) {
             if (now - link.processStartTime > Constants.LINK_PROCESSING_EXPIRE) {
@@ -121,6 +119,8 @@ public class MysqlLinkManager implements LinkManager {
         storeList.add(store);
         // only runs once when store is first initialized
         store.resetProcessingLinkToUnprocessed();
+        // there may be unprocessed links in store.
+        hasMore = true;
         return store;
     }
 
@@ -145,5 +145,12 @@ public class MysqlLinkManager implements LinkManager {
         if (hasMore)
             return 1000;
         return 55 * 1000;
+    }
+
+    public void clearAllCache() {
+        storeMap.clear();
+        storeList.clear();
+        lastStoreIndex = 0;
+        processingLinkMap.clear();
     }
 }

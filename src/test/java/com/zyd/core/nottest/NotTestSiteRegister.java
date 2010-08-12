@@ -1,4 +1,4 @@
-package com.zyd.core;
+package com.zyd.core.nottest;
 
 import com.zyd.ATestUtil;
 import com.zyd.core.busi.userreg.SiteRegisterManager;

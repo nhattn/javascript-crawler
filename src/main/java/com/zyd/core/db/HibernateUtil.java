@@ -85,7 +85,7 @@ public class HibernateUtil {
             session.beginTransaction();
             session.save(entityName, values);
             session.getTransaction().commit();
-        } catch (Error e) {
+        } catch (HibernateException e) {
             logger.error("Can not save object " + entityName, e);
             session.getTransaction().rollback();
             throw e;

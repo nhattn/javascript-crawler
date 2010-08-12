@@ -1,4 +1,4 @@
-package com.zyd.core;
+package com.zyd.core.components;
 
 import java.util.HashMap;
 
@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import com.tj.common.util.test.CommonTestUtil;
 import com.zyd.ATestUtil;
+import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.objecthandler.DefaultHandler;
 import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.SearchResult;
@@ -17,7 +18,7 @@ public class TestObjectManager extends TestCase {
     protected void setUp() throws Exception {
         ATestUtil.setUpSpring();
         hanlder = new DefaultHandler();
-        DefaultHandler.deleteAll("GroupBuy");
+       HibernateUtil.deleteAllObject("GroupBuy");
     }
 
     public void testDefaultCreate() throws Exception {

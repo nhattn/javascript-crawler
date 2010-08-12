@@ -19,16 +19,16 @@ public class TestController extends TestCase {
         // restore first, some other test may have changed default configuration.
 
         ATestUtil.reststoreServerConfigure();
-        assertEquals(Constants.LINK_MONITOR_SCAN_INTERVAL, Integer.parseInt(oldConfigure.get("LINK_MONITOR_SLEEP")));
-        assertEquals(Constants.LINK_PROCESSING_EXPIRE, Integer.parseInt(oldConfigure.get("LINK_PROCESSING_EXPIRE")));
+        assertEquals(Constants.LENGTH_PAGE_SIZE, Integer.parseInt(oldConfigure.get("LENGTH_PAGE_SIZE")));
+        assertEquals(Constants.MAX_PAGE_SIZE, Integer.parseInt(oldConfigure.get("MAX_PAGE_SIZE")));
 
-        newConfigure.put("LINK_MONITOR_SLEEP", Integer.toString(Constants.LINK_MONITOR_SCAN_INTERVAL * 2));
-        newConfigure.put("LINK_PROCESSING_EXPIRE", Integer.toString(Constants.LINK_PROCESSING_EXPIRE * 2));
+        newConfigure.put("LENGTH_PAGE_SIZE", Integer.toString(Constants.LENGTH_PAGE_SIZE * 2));
+        newConfigure.put("MAX_PAGE_SIZE", Integer.toString(Constants.MAX_PAGE_SIZE * 2));
         ATestUtil.updateServerConfigure(newConfigure);
 
         oldConfigureChanged = ATestUtil.getServerConfigure();
-        assertEquals(oldConfigureChanged.get("LINK_MONITOR_SLEEP"), Integer.toString(Constants.LINK_MONITOR_SCAN_INTERVAL * 2));
-        assertEquals(oldConfigureChanged.get("LINK_PROCESSING_EXPIRE"), Integer.toString(Constants.LINK_PROCESSING_EXPIRE * 2));
+        assertEquals(oldConfigureChanged.get("LENGTH_PAGE_SIZE"), Integer.toString(Constants.LENGTH_PAGE_SIZE * 2));
+        assertEquals(oldConfigureChanged.get("MAX_PAGE_SIZE"), Integer.toString(Constants.MAX_PAGE_SIZE * 2));
 
         ATestUtil.reststoreServerConfigure();
     }

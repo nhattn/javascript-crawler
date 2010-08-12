@@ -1,4 +1,4 @@
-package com.zyd.web;
+package com.zyd.web.house;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -28,8 +28,8 @@ public class TestObjectManipulation extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        assertTrue(ATestUtil.clearServerData());
-        ATestUtil.stopReturningWatchedLink();
+        assertTrue(ATestUtil.clearServerData("House"));
+        assertTrue(ATestUtil.clearServerData("Link"));
     }
 
     public void testCreateDuplicatesHouses() throws Exception {
@@ -55,30 +55,8 @@ public class TestObjectManipulation extends TestCase {
         assertTrue(ATestUtil.createObject(map));
     }
 
-    public void testCreateObjectWithoutLongLat() throws Exception {
-        {
-            Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
-            map.remove(House.Columns.Lat);
-            assertTrue(ATestUtil.createObject(map));
-        }
-        {
-            Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile1, Constants.Encoding_DEFAULT_SYSTEM);
-            map.remove(House.Columns.Long);
-            assertTrue(ATestUtil.createObject(map));
-        }
-        // make sure object without log/lat is not returned
-        String s = HttpTestUtil.httpGetForString(ATestConstants.SERVICE_OBJECT_URL + "?objectid=House", null);
-        assertNotNull(s);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        InputSource is = new InputSource();
-        is.setCharacterStream(new StringReader(s));
-        Document docx = db.parse(is);
-        NodeList nodes = docx.getElementsByTagName("object");
-        assertEquals(0, nodes.getLength());
-    }
+ 
 
-    
     public void testCreateObjectFail() throws Exception {
         Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, testFile2, Constants.Encoding_DEFAULT_SYSTEM);
         map.remove(House.Columns.Address);
@@ -105,7 +83,7 @@ public class TestObjectManipulation extends TestCase {
     private static HashMap getHouseConfig() {
         HashMap val = new HashMap();
         val.put(House.Columns.Tel, "13911212");
-        val.put(House.Columns.Long, "31.111");
+        val.put(House.Columns.Lng, "31.111");
         val.put(House.Columns.Lat, "31.111");
         val.put(House.Columns.Address, "上海市陆家嘴路七号八单元201");
         val.put(Handler.Parameter.PARAMETER_OBJECT_ID, "House");

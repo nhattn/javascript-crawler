@@ -21,11 +21,11 @@ public class HibernateUtil {
     private static SessionFactory buildSessionFactory() {
         try {
             return new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
+        } catch (HibernateException ex) {
             logger.fatal("Initial SessionFactory creation failed.");
             logger.fatal(ex);
             ex.printStackTrace();
-            throw new ExceptionInInitializerError(ex);
+            throw ex;
         }
     }
 
@@ -72,7 +72,7 @@ public class HibernateUtil {
             session.beginTransaction();
             session.save(objectid, v);
             session.getTransaction().commit();
-        } catch (Error e) {
+        } catch (HibernateException e) {
             logger.error("Can not save object " + objectid, e);
             session.getTransaction().rollback();
             throw e;
@@ -98,7 +98,7 @@ public class HibernateUtil {
             session.beginTransaction();
             session.save(object);
             session.getTransaction().commit();
-        } catch (Error e) {
+        } catch (HibernateException e) {
             logger.error("Can not save object " + object, e);
             session.getTransaction().rollback();
             throw e;
@@ -111,7 +111,7 @@ public class HibernateUtil {
             session.beginTransaction();
             session.update(object);
             session.getTransaction().commit();
-        } catch (Error e) {
+        } catch (HibernateException e) {
             logger.error("Can not save object " + object, e);
             session.getTransaction().rollback();
             throw e;
@@ -122,9 +122,12 @@ public class HibernateUtil {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         try {
-            return session.createQuery("from " + objectid).list();
-        } finally {
+            List r = session.createQuery("from " + objectid).list();
             session.getTransaction().commit();
+            return r;
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            return null;
         }
     }
 

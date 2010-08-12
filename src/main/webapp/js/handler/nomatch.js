@@ -1,6 +1,8 @@
 // called when there is no match for url
 function handlerProcess() {
-
+    Crawler.clog("Nothing to do for this url");
+    Crawler.clog(window.location);
+    Crawler.nextLink();
 }
 
 function removeXPathNode(xpath) {
@@ -15,14 +17,14 @@ function cleanUp() {
     removeXPathNode('//style');
     removeXPathNode('//comment');
     removeXPathNode('//img');
-//    removeXPathNode('//a');    
+    //    removeXPathNode('//a');    
 }
 
-function normalizeLinks(){
+function normalizeLinks() {
     var obj = XPath.array(null, '//a');
     for ( var i = obj.length - 1; i > -1; i--) {
         var a = obj[i];
-        a.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        a.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     }
 }
 normalizeLinks();
@@ -70,12 +72,12 @@ function getPossibleMatchingDiv() {
         }
     }
     arr.sort(sort);
-    for(var i=0;i<arr.length;i++){
+    for ( var i = 0; i < arr.length; i++) {
         console.log(arr[i].txtRatio);
         console.log(arr[i].div);
-//        console.log(arr[i].div.textContent);        
+        //        console.log(arr[i].div.textContent);        
     }
-        
+
 }
 
 getPossibleMatchingDiv();

@@ -104,6 +104,7 @@ public class link extends ServiceBase {
             count = 0;
         }
         String s = Utils.stringArrayToJsonString(new String[] { "result", Integer.toString(count) });
+        //        System.out.println(s);
         output(s, resp);
         clientManager.logRequest(req);
     }
@@ -116,6 +117,7 @@ public class link extends ServiceBase {
         }
 
         Link link = linkManager.roundRobinNextLink();
+
         if (link == null)
             return WatchListManager.nextWatchedLink().url;
         return link.url;

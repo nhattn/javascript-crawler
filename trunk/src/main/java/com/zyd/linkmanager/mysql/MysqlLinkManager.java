@@ -93,7 +93,7 @@ public class MysqlLinkManager implements LinkManager {
         return link;
     }
 
-    public int cleanExpiredProcessingLink() {
+    public synchronized int cleanExpiredProcessingLink() {
         if (processingLinkMap.size() == 0)
             return 0;
         int counter = 0;
@@ -103,7 +103,6 @@ public class MysqlLinkManager implements LinkManager {
         for (Link link : links) {
             if (now - link.processStartTime > Constants.LINK_PROCESSING_EXPIRE) {
                 linkFinishedError(link.getUrl(), Link.STATE_FINISHED_TIME_OUT, null);
-                System.out.println(link.getUrl());
                 counter++;
             }
         }
@@ -154,7 +153,7 @@ public class MysqlLinkManager implements LinkManager {
         lastExecuteTime = System.currentTimeMillis();
     }
 
-    public boolean shouldRun() {        
+    public boolean shouldRun() {
         return (System.currentTimeMillis() - lastExecuteTime) > Constants.LINK_MONITOR_SCAN_INTERVAL;
     }
 

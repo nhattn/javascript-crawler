@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,15 +76,24 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    PreparedStatement pstm = connection.prepareStatement("select id, tableId from LinkTableMap where uid=?");
-                    pstm.setString(1, tableStringUid);
-                    ResultSet rset = pstm.executeQuery();
-                    if (rset.next() != false) {
-                        r.tableStringUid = tableStringUid;
-                        r.id = rset.getInt(1);
-                        r.tableId = rset.getInt(2);
+                    PreparedStatement pstm = null;
+                    ResultSet rset = null;
+                    try {
+                        pstm = connection.prepareStatement("select id, tableId from LinkTableMap where uid=?");
+                        pstm.setString(1, tableStringUid);
+                        rset = pstm.executeQuery();
+                        if (rset.next() != false) {
+                            r.tableStringUid = tableStringUid;
+                            r.id = rset.getInt(1);
+                            r.tableId = rset.getInt(2);
+                        }
+                    } finally {
+                        if (rset != null)
+                            rset.close();
+                        if (pstm != null)
+                            pstm.close();
                     }
-                    rset.close();
+
                 }
             });
         } catch (HibernateException e) {
@@ -103,17 +113,26 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    PreparedStatement pst = connection.prepareStatement("insert into " + tableName + "(url, createTime, tryCount, state) values(?,?,0,0)", java.sql.Statement.RETURN_GENERATED_KEYS);
-                    Date now = new Date();
-                    link.setCreateTime(now);
-                    link.setState(Link.STATE_NOT_PROCESSED);
-                    link.setUrl(url);
-                    pst.setString(1, url);
-                    pst.setTimestamp(2, new Timestamp(now.getTime()));
-                    pst.executeUpdate();
-                    ResultSet r = pst.getGeneratedKeys();
-                    r.next();
-                    link.setId(r.getLong(1));
+                    PreparedStatement pst = null;
+                    ResultSet r = null;
+                    try {
+                        pst = connection.prepareStatement("insert into " + tableName + "(url, createTime, tryCount, state) values(?,?,0,0)", java.sql.Statement.RETURN_GENERATED_KEYS);
+                        Date now = new Date();
+                        link.setCreateTime(now);
+                        link.setState(Link.STATE_NOT_PROCESSED);
+                        link.setUrl(url);
+                        pst.setString(1, url);
+                        pst.setTimestamp(2, new Timestamp(now.getTime()));
+                        pst.executeUpdate();
+                        r = pst.getGeneratedKeys();
+                        r.next();
+                        link.setId(r.getLong(1));
+                    } finally {
+                        if (r != null)
+                            r.close();
+                        if (pst != null)
+                            pst.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -135,18 +154,25 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    ResultSet rset = connection.createStatement().executeQuery("select id, url, createTime,finishTime, tryCount from " + tableName + " where state = " + state + " limit " + count);
-                    while (rset.next()) {
-                        Link link = new Link();
-                        link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
-                        link.setId(rset.getLong("id"));
-                        link.setUrl(rset.getString("url"));
-                        link.setState(state);
-                        Timestamp finishTime = rset.getTimestamp("finishTime");
-                        if (finishTime != null)
-                            link.setFinishTime(new Date(finishTime.getTime()));
-                        link.setTryCount(rset.getInt("tryCount"));
-                        r.add(link);
+                    Statement stmt = connection.createStatement();
+                    ResultSet rset = null;
+                    try {
+                        rset = stmt.executeQuery("select id, url, createTime,finishTime, tryCount from " + tableName + " where state = " + state + " limit " + count);
+                        while (rset.next()) {
+                            Link link = new Link();
+                            link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
+                            link.setId(rset.getLong("id"));
+                            link.setUrl(rset.getString("url"));
+                            link.setState(state);
+                            Timestamp finishTime = rset.getTimestamp("finishTime");
+                            if (finishTime != null)
+                                link.setFinishTime(new Date(finishTime.getTime()));
+                            link.setTryCount(rset.getInt("tryCount"));
+                            r.add(link);
+                        }
+                    } finally {
+                        rset.close();
+                        stmt.close();
                     }
                 }
             });
@@ -165,18 +191,27 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    PreparedStatement stmt = connection.prepareStatement("select id, state, url, createTime,finishTime, tryCount from " + tableName + " where url=?");
-                    stmt.setString(1, url);
-                    ResultSet rset = stmt.executeQuery();
-                    if (rset.next()) {
-                        link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
-                        link.setId(rset.getLong("id"));
-                        link.setUrl(rset.getString("url"));
-                        link.setState(rset.getInt("state"));
-                        Timestamp finishTime = rset.getTimestamp("finishTime");
-                        if (finishTime != null)
-                            link.setFinishTime(new Date(finishTime.getTime()));
-                        link.setTryCount(rset.getInt("tryCount"));
+                    PreparedStatement stmt = null;
+                    ResultSet rset = null;
+                    try {
+                        stmt = connection.prepareStatement("select id, state, url, createTime,finishTime, tryCount from " + tableName + " where url=?");
+                        rset = stmt.executeQuery();
+                        stmt.setString(1, url);
+                        if (rset.next()) {
+                            link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
+                            link.setId(rset.getLong("id"));
+                            link.setUrl(rset.getString("url"));
+                            link.setState(rset.getInt("state"));
+                            Timestamp finishTime = rset.getTimestamp("finishTime");
+                            if (finishTime != null)
+                                link.setFinishTime(new Date(finishTime.getTime()));
+                            link.setTryCount(rset.getInt("tryCount"));
+                        }
+                    } finally {
+                        if (rset != null)
+                            rset.close();
+                        if (stmt != null)
+                            stmt.close();
                     }
                 }
             });
@@ -191,12 +226,22 @@ public class DbHelper {
     }
 
     public static void clearAllLinkTable(Connection con) throws SQLException {
+        Statement stmt = null;
         ArrayList<Integer> ids = new ArrayList<Integer>();
-        ResultSet r = con.createStatement().executeQuery("select id, uid from LinkTableMap");
-        while (r.next()) {
-            ids.add(r.getInt(1));
+        ResultSet r = null;
+        try {
+            stmt = con.createStatement();
+            r = stmt.executeQuery("select id, uid from LinkTableMap");
+            while (r.next()) {
+                ids.add(r.getInt(1));
+            }
+            r.close();
+        } finally {
+            if (r != null)
+                r.close();
+            if (stmt != null)
+                stmt.close();
         }
-        r.close();
         for (Integer i : ids) {
             String tableName = LinkTablePrefix + i.intValue();
             try {
@@ -234,11 +279,20 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    PreparedStatement stmt = connection.prepareStatement("select url from " + tableName + " where url = ? limit 1");
-                    stmt.setString(1, url);
-                    ResultSet rset = stmt.executeQuery();
-                    if (rset.next())
-                        counter.total++;
+                    PreparedStatement stmt = null;
+                    ResultSet rset = null;
+                    try {
+                        stmt = connection.prepareStatement("select url from " + tableName + " where url = ? limit 1");
+                        stmt.setString(1, url);
+                        rset = stmt.executeQuery();
+                        if (rset.next())
+                            counter.total++;
+                    } finally {
+                        if (rset != null)
+                            rset.close();
+                        if (stmt != null)
+                            stmt.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -257,11 +311,17 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    PreparedStatement stmt = connection.prepareStatement("update " + tableName + " set state=?, finishtime=?, trycount=(trycount+1) where id=?");
-                    stmt.setInt(1, state);
-                    stmt.setTimestamp(2, new Timestamp(finishedTime.getTime()));
-                    stmt.setLong(3, linkId);
-                    counter.total = stmt.executeUpdate();
+                    PreparedStatement stmt = null;
+                    try {
+                        stmt = connection.prepareStatement("update " + tableName + " set state=?, finishtime=?, trycount=(trycount+1) where id=?");
+                        stmt.setInt(1, state);
+                        stmt.setTimestamp(2, new Timestamp(finishedTime.getTime()));
+                        stmt.setLong(3, linkId);
+                        counter.total = stmt.executeUpdate();
+                    } finally {
+                        if (stmt != null)
+                            stmt.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -291,7 +351,15 @@ public class DbHelper {
                     }
                     buf.deleteCharAt(buf.length() - 1);
                     buf.append(')');
-                    counter.total = connection.createStatement().executeUpdate(buf.toString());
+                    Statement stmt = null;
+                    try {
+                        stmt = connection.createStatement();
+                        counter.total = stmt.executeUpdate(buf.toString());
+                    } finally {
+                        if (stmt != null)
+                            stmt.close();
+                    }
+
                 }
             });
         } catch (HibernateException e) {
@@ -310,7 +378,14 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    counter.total = connection.createStatement().executeUpdate("update " + tableName + " set state=" + state + " where id=" + link.getId());
+                    Statement stmt = null;
+                    try {
+                        stmt = connection.createStatement();
+                        counter.total = stmt.executeUpdate("update " + tableName + " set state=" + state + " where id=" + link.getId());
+                    } finally {
+                        if (stmt != null)
+                            stmt.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -329,7 +404,14 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    connection.createStatement().executeQuery("select 1>2 from " + tableName);
+                    Statement stmt = null;
+                    try {
+                        stmt = connection.createStatement();
+                        stmt.executeQuery("select 1>2 from " + tableName);
+                    } finally {
+                        if (stmt != null)
+                            stmt.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -348,7 +430,13 @@ public class DbHelper {
         try {
             session.doWork(new Work() {
                 public void execute(Connection connection) throws SQLException {
-                    counter.total = connection.createStatement().executeUpdate("update " + tableName + " set state= " + newState + " where state=" + oldState);
+                    Statement stmt = null;
+                    stmt = connection.createStatement();
+                    try {
+                        counter.total = stmt.executeUpdate("update " + tableName + " set state= " + newState + " where state=" + oldState);
+                    } finally {
+                        stmt.close();
+                    }
                 }
             });
         } catch (HibernateException e) {
@@ -360,7 +448,14 @@ public class DbHelper {
     }
 
     private static void executeSql(String sql, Connection con) throws SQLException {
-        con.createStatement().execute(sql);
+        Statement stmt = null;
+        try {
+            stmt = con.createStatement();
+            stmt.execute(sql);
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
     }
 
     private static void createLinkTable(String tableName, Connection con) throws SQLException {
@@ -394,26 +489,34 @@ public class DbHelper {
      * @throws SQLException
      */
     private static LinkTableInfo addLinkTableInfo(LinkTableInfo info, Connection con) throws SQLException {
-        PreparedStatement pstm = con.prepareStatement("insert into LinkTableMap(uid) values(?)", java.sql.Statement.RETURN_GENERATED_KEYS);
-        pstm.setString(1, info.tableStringUid);
-        pstm.execute();
-        ResultSet rset = pstm.getGeneratedKeys();
-        rset.next();
-        int generatedId = rset.getInt(1);
-
-        pstm = con.prepareStatement("update LinkTableMap set tableId=? where id=?");
-        pstm.setInt(1, generatedId);
-        pstm.setInt(2, generatedId);
-        pstm.executeUpdate();
-        info.id = generatedId;
-        info.tableId = generatedId;
+        PreparedStatement pstm = null;
+        ResultSet rset = null;
+        int generatedId = -1;
+        try {
+            pstm = con.prepareStatement("insert into LinkTableMap(uid) values(?)", java.sql.Statement.RETURN_GENERATED_KEYS);
+            pstm.setString(1, info.tableStringUid);
+            pstm.execute();
+            rset = pstm.getGeneratedKeys();
+            rset.next();
+            generatedId = rset.getInt(1);
+        } finally {
+            if (rset != null)
+                rset.close();
+            if (pstm != null)
+                pstm.close();
+        }
+        try {
+            pstm = con.prepareStatement("update LinkTableMap set tableId=? where id=?");
+            pstm.setInt(1, generatedId);
+            pstm.setInt(2, generatedId);
+            pstm.executeUpdate();
+            info.id = generatedId;
+            info.tableId = generatedId;
+        } finally {
+            if (pstm != null)
+                pstm.close();
+        }
         return info;
-    }
-
-    private static void deleteLinkTableInfoById(int id, Connection con) throws SQLException {
-        PreparedStatement pstm = con.prepareStatement("delete from LinkTableMap where id=?");
-        pstm.setInt(1, id);
-        pstm.execute();
     }
 
     private static void alterAutoIncrementIndex(String tableName, long indexStart, Connection con) throws SQLException {
@@ -421,6 +524,13 @@ public class DbHelper {
         buf.append(tableName);
         buf.append(" AUTO_INCREMENT = ");
         buf.append(indexStart);
-        con.createStatement().execute(buf.toString());
+        Statement stmt = null;
+        try {
+            stmt = con.createStatement();
+            stmt.execute(buf.toString());
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
     }
 }

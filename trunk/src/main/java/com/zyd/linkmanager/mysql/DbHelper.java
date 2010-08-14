@@ -195,8 +195,8 @@ public class DbHelper {
                     ResultSet rset = null;
                     try {
                         stmt = connection.prepareStatement("select id, state, url, createTime,finishTime, tryCount from " + tableName + " where url=?");
-                        rset = stmt.executeQuery();
                         stmt.setString(1, url);
+                        rset = stmt.executeQuery();
                         if (rset.next()) {
                             link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
                             link.setId(rset.getLong("id"));

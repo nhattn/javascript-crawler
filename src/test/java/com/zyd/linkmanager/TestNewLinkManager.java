@@ -7,11 +7,11 @@ import junit.framework.TestCase;
 
 import com.zyd.ATestUtil;
 import com.zyd.Constants;
-import com.zyd.core.Utils;
 import com.zyd.core.busi.WorkerThread;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.mysql.DbHelper;
 import com.zyd.linkmanager.mysql.LinkTableInfo;
+import com.zyd.linkmanager.mysql.LinkTableMapper;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
 
 public class TestNewLinkManager extends TestCase {
@@ -53,8 +53,8 @@ public class TestNewLinkManager extends TestCase {
         for (int i = 0; i < totalLinkCount; i++) {
             Link link = linkMan.roundRobinNextLink();
             assertNotNull(link);
-            String domain = Utils.getShortestDomain(link.getUrl());
-            assertNotNull(domain, previousDomain);
+            String domain = LinkTableMapper.mapUrl(link.getUrl());
+            assertNotSame(domain, previousDomain);
             previousDomain = domain;
 
             assertTrue(link.getUrl(), linkUrls.remove(link.getUrl()));
@@ -121,14 +121,14 @@ public class TestNewLinkManager extends TestCase {
         }
         wt.stop();
 
-        LinkTableInfo info = DbHelper.getLinkTableInfoByUid(Utils.getShortestDomain("http://www.test.com"));
+        LinkTableInfo info = DbHelper.getLinkTableInfoByUid(LinkTableMapper.mapUrl("http://www.test.com"));
         ArrayList<Link> links = DbHelper.loadLinkByState(info.getTableName(), Link.STATE_FINISHED_TIME_OUT, 10000);
         assertTrue(links.size() > 0);
         for (Link link : links) {
             assertTrue(expiredLinks.remove(link.getUrl()));
         }
 
-        info = DbHelper.getLinkTableInfoByUid(Utils.getShortestDomain("http://www.test2.com"));
+        info = DbHelper.getLinkTableInfoByUid(LinkTableMapper.mapUrl("http://www.test2.com"));
         links = DbHelper.loadLinkByState(info.getTableName(), Link.STATE_FINISHED_TIME_OUT, 10000);
         assertTrue(links.size() > 0);
         for (Link link : links) {

@@ -1,8 +1,10 @@
 package com.zyd.core.objecthandler;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,14 +35,25 @@ public class ObjectHelper {
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
         HibernateUtil.getSessionFactory().getCurrentSession().doWork(new Work() {
             public void execute(Connection connection) throws SQLException {
-                ResultSetMetaData meta = connection.createStatement().executeQuery("select * from " + tableName + " where 0>1").getMetaData();
-                HashMap<String, DatabaseColumnInfo> r = new HashMap<String, DatabaseColumnInfo>();
-                int columnCount = meta.getColumnCount();
-                for (int i = 0; i < columnCount; i++) {
-                    String name = meta.getColumnName(i + 1);
-                    r.put(name, new DatabaseColumnInfo(name, meta.getColumnType(i + 1), meta.getColumnDisplaySize(i + 1)));
+                Statement stmt = null;
+                ResultSet rset = null;
+                try {
+                    stmt = connection.createStatement();
+                    rset = stmt.executeQuery("select * from " + tableName + " where 0>1");
+                    ResultSetMetaData meta = rset.getMetaData();
+                    HashMap<String, DatabaseColumnInfo> r = new HashMap<String, DatabaseColumnInfo>();
+                    int columnCount = meta.getColumnCount();
+                    for (int i = 0; i < columnCount; i++) {
+                        String name = meta.getColumnName(i + 1);
+                        r.put(name, new DatabaseColumnInfo(name, meta.getColumnType(i + 1), meta.getColumnDisplaySize(i + 1)));
+                    }
+                    holder[0] = r;
+                } finally {
+                    if (stmt != null)
+                        stmt.close();
+                    if (rset != null)
+                        rset.close();
                 }
-                holder[0] = r;
             }
         });
         HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().commit();

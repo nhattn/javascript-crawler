@@ -9,18 +9,25 @@ import junit.framework.TestCase;
 import com.tj.common.util.test.CommonTestUtil;
 import com.zyd.ATestConstants;
 import com.zyd.ATestUtil;
+import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.linkmanager.Link;
 import com.zyd.linkmanager.mysql.DbHelper;
 import com.zyd.linkmanager.mysql.LinkTableInfo;
+import com.zyd.linkmanager.mysql.LinkTableMapper;
 
 public class TestLinkManager extends TestCase {
     int expire = 3 * 1000;
     int sleep = 2 * 1000;
+    public static HashSet<String> watchedList;
 
     @Override
     protected void setUp() throws Exception {
         assertTrue(ATestUtil.clearServerData("Link"));
+        watchedList = new HashSet<String>();
+        for (Link link : Constants.WATCH_LIST) {
+            watchedList.add(link.getUrl());
+        }
     }
 
     /**
@@ -45,7 +52,7 @@ public class TestLinkManager extends TestCase {
             Thread.sleep(sleep * 3);
         } catch (Exception e) {
         }
-        LinkTableInfo info = DbHelper.getLinkTableInfoByUid(Utils.getShortestDomain(ATestConstants.OBJECT_REFERER_PREFIX));
+        LinkTableInfo info = DbHelper.getLinkTableInfoByUid(LinkTableMapper.mapUrl(ATestConstants.OBJECT_REFERER_PREFIX));
         ArrayList<Link> links = DbHelper.loadLinkByState(info.getTableName(), Link.STATE_FINISHED_TIME_OUT, 10000);
         assertEquals(5, links.size());
         assertTrue(ATestUtil.reststoreServerConfigure());
@@ -71,8 +78,10 @@ public class TestLinkManager extends TestCase {
         HashSet<String> processing = new HashSet<String>();
         for (int i = 0; i < 50; i++) {
             String link = ATestUtil.getNextLink();
+            if (watchedList.contains(link))
+                link = ATestUtil.getNextLink();
             assertNotNull(link);
-            assertTrue(link, "test.com".equals(Utils.getShortestDomain(link)));
+            assertTrue(link, "test.com".equals(Utils.getDomain(link)));
             processing.add(link);
         }
         // make sure processing link is counted
@@ -114,7 +123,10 @@ public class TestLinkManager extends TestCase {
         HashMap<String, Integer> count = new HashMap<String, Integer>();
         for (int i = 0; i < 1000; i++) {
             String s = ATestUtil.getNextLink();
-            String domain = Utils.getShortestDomain(s);
+            if (watchedList.contains(s)) {
+                s = ATestUtil.getNextLink();
+            }
+            String domain = Utils.getDomain(s);
             assertTrue(domain, domainSet.contains(domain));
             assertTrue(domain.equals(pdomain) == false);
             Integer num = count.get(domain);
@@ -152,11 +164,14 @@ public class TestLinkManager extends TestCase {
 
         for (int i = 0; i < total; i++) {
             String s = ATestUtil.getNextLink();
-            assertTrue(s, Utils.getShortestDomain(s).indexOf("xdomain.com") != -1);
+            if (watchedList.contains(s)) {
+                s = ATestUtil.getNextLink();
+            }
+            assertTrue(s, LinkTableMapper.mapUrl(s).indexOf("xdomain.com") != -1);
             assertTrue(set2.add(s));
         }
         String s = ATestUtil.getNextLink();
-        assertEquals(s, -1, Utils.getShortestDomain(s).indexOf("xdomain.com"));
+        assertEquals(s, -1, LinkTableMapper.mapUrl(s).indexOf("xdomain.com"));
         testDifferentDomain();
     }
 

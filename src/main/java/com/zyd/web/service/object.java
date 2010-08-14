@@ -47,7 +47,11 @@ public class object extends ServiceBase {
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setResponseType("js", resp);
-        String referer = req.getHeader("Referer");
+        String referer = req.getParameter("referer");
+        if (referer == null) {
+            referer = req.getHeader("Referer");
+        }
+
         boolean doRequest = true;
         Link link = linkManager.getProcessingLink(referer);
 

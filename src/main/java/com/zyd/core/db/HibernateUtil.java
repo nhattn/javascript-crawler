@@ -145,4 +145,9 @@ public class HibernateUtil {
         }
         return r;
     }
+
+    public static class EntityNames {
+        public final static String House = "House";
+        public final static String GroupBuy = "GroupBuy";
+    }
 }

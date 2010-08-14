@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import com.tj.common.util.test.CommonTestUtil;
 import com.zyd.ATestUtil;
+import com.zyd.Constants;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.objecthandler.DefaultHandler;
 import com.zyd.core.objecthandler.Handler;
@@ -22,7 +23,7 @@ public class TestObjectManager extends TestCase {
     }
 
     public void testDefaultCreate() throws Exception {
-        HashMap<String, String> values = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectHelper.class, "groupbuy.prop", "utf8");
+        HashMap<String, String> values = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectHelper.class, "groupbuy.prop", Constants.Encoding_DEFAULT_SYSTEM);
         assertEquals(Boolean.TRUE, hanlder.create(values));
     }
 

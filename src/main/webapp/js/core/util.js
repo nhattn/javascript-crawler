@@ -398,6 +398,22 @@ CrUtil = {
             url : homeurl
         });
     },
+
+    getPersistentValue : function(name, callback) {
+        CrUtil.requestService( {
+            action : 'getValue',
+            key : name
+        }, callback);
+    },
+
+    setPersistentValue : function(name, value, callback) {
+        CrUtil.requestService( {
+            action : 'storeValue',
+            key : name,
+            value : value
+        }, callback);
+    },
+
     randomString : function() {
         return 'sid' + new Date().getTime();
     },

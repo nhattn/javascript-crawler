@@ -10,6 +10,6 @@ public class LinkTableMapper {
      */
 
     public static String mapUrl(String url) {
-        return Utils.getShortestDomain(url);
+        return Utils.getDomain(url);
     }
 }

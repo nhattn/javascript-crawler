@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.tj.common.CommonUtil;
+import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.util.Ocr;
 
 @SuppressWarnings("unchecked")
 public class House extends Handler {
-    public final static String EntityName = "House";
+    public final static String EntityName = HibernateUtil.EntityNames.House;
     private final static HashSet CDataColumns = new HashSet();
 
     public String getEntityName() {
@@ -18,7 +19,7 @@ public class House extends Handler {
     @Override
     protected boolean beforeCreate(HashMap values) {
         String tel = (String) values.get(Columns.Tel);
-        if (tel.length() > 100) {
+        if (tel != null && tel.length() > 100) {
             String type = CommonUtil.getFileSuffix((String) values.get(Columns.TelImageName));
             values.put(Columns.Tel, Ocr.ocrImageNumber(tel, type));
         }

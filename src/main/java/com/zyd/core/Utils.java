@@ -1,7 +1,6 @@
 package com.zyd.core;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,13 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javassist.expr.NewArray;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.jms.listener.SubscriptionNameProvider;
 
 import com.zyd.Constants;
 
@@ -93,27 +89,57 @@ public class Utils {
         }
     }
 
+    private static HashSet<String> TopDomains = new HashSet<String>();
+    static {
+        TopDomains.add("com");
+        TopDomains.add("cn");
+        TopDomains.add("org");
+        TopDomains.add("info");
+        TopDomains.add("net");
+    }
+
+    /**
+     * Can not handle IP address
+     * @param s
+     * @return
+     */
     public static String getDomain(String s) {
         if (s == null)
             return null;
         if (s.startsWith("http://")) {
-            s = s.substring("http://".length());
+            s = s.substring(7);
         } else if (s.startsWith("https://")) {
-            s = s.substring("https://".length());
+            s = s.substring(8);
+        } else {
+            return null;
         }
+
         int i = s.indexOf("/");
         if (i != -1) {
             s = s.substring(0, i);
         }
-        i = s.lastIndexOf('.', s.length());
-        if (i == -1) {
-            i = 9 / 0;
-        }
-        i = s.lastIndexOf('.', i - 1);
+        i = s.indexOf(":");
         if (i != -1) {
-            s = s.substring(i + 1);
+            s = s.substring(0, i);
         }
-        return "www." + s;
+
+        StringBuffer buf = new StringBuffer();
+        String[] tokens = s.split("\\.");
+        if (tokens == null || tokens.length < 2) {
+            return null;
+        }
+        for (i = tokens.length - 1; i > -1; i--) {
+            if (TopDomains.contains(tokens[i])) {
+                buf.insert(0, tokens[i]);
+                buf.insert(0, '.');
+            } else {
+                buf.insert(0, tokens[i]);
+                buf.insert(0, '.');
+                break;
+            }
+        }
+        buf.deleteCharAt(0);
+        return buf.toString();
     }
 
     /**
@@ -291,7 +317,7 @@ public class Utils {
 
     public static String xmlString(String s) {
         return s.replaceAll("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
-//        return s;
+        //        return s;
     }
 
     public static void main(String[] args) {

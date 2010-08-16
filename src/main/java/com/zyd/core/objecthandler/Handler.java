@@ -1,5 +1,7 @@
 package com.zyd.core.objecthandler;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -7,11 +9,16 @@ import org.apache.log4j.Logger;
 
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
+import com.zyd.core.imagestore.ImageStore;
+import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.Link;
+import com.zyd.web.service.api;
 
 @SuppressWarnings("unchecked")
 public abstract class Handler {
-    Logger logger = Logger.getLogger(Handler.class);
+    private static Logger logger = Logger.getLogger(Handler.class);
+
+    private ImageStore imageStore;
 
     public abstract String getEntityName();
 
@@ -21,6 +28,10 @@ public abstract class Handler {
      * @return false if parameter check failed and should cancel creation.
      */
     protected abstract boolean beforeCreate(HashMap values);
+
+    public Handler() {
+        imageStore = (ImageStore) SpringContext.getContext().getBean("imageStore");
+    }
 
     /**
      * Creates an object, returns the created object.
@@ -40,9 +51,7 @@ public abstract class Handler {
      * What happens when calling this method is that the values are first normalized by calling normalizeValues(), where values are normalized 
      * from strings to various database format, like date, integer, long etc...
      * Then calling hibernate, with the provided values and "objectid", saving object into database.
-     * 
-     * 
-     *  
+     *
      * @return false if failed to create.
      */
     public Object create(HashMap values) {
@@ -58,6 +67,7 @@ public abstract class Handler {
         if (o != null) {
             values.put(Columns.Link, ((Link) o).getId());
         }
+        processImages(values);
         try {
             HibernateUtil.saveObject(entityName, values);
         } catch (Throwable e) {
@@ -66,6 +76,68 @@ public abstract class Handler {
             return false;
         }
         return true;
+    }
+
+    /**
+     * TODO: when error happened, should cancel and delete all created images
+     * @param values
+     */
+    private void processImages(HashMap values) {
+        String imageCount = (String) values.get(Parameter.PARAMETER_IMAGECOUNT), imageField = (String) values.get(Parameter.PARAMETER_IMAGEFIELD);
+        if (imageCount == null || imageField == null) {
+            logger.warn("Can not create image, imageField is null or imageCount is null");
+            return;
+        }
+        for (int i = 0, len = imageCount.length(); i < len; i++) {
+            if (Character.isDigit(imageCount.charAt(i)) == false) {
+                logger.warn("Client posted invalid imageCount :" + imageCount);
+                return;
+            }
+        }
+        int count = Integer.parseInt(imageCount);
+        if (count <= 0) {
+            return;
+        }
+        ArrayList<String> imageUids = new ArrayList<String>(count);
+        boolean hasError = false;
+        for (int i = 0; i < count; i++) {
+            String imageDataParameterName = Parameter.PARAMETER_IMAGE_DATA_PREFIX + i;
+            String imageSuffixParameterName = Parameter.PARAMETER_IMAGE_SUFFIX_PREFIX + i;
+            String imageData = (String) values.remove(imageDataParameterName);
+            String imageSuffix = (String) values.remove(imageSuffixParameterName);
+            if (imageData == null || imageSuffix == null) {
+                logger.warn("Can not upload image, imageData or imageSuffix is null, canceling");
+                hasError = true;
+                break;
+            }
+            try {
+                imageUids.add(imageStore.storeImage(imageData, imageSuffix));
+            } catch (IOException e) {
+                logger.warn("Can not upload image, total image count: " + count + ", current index: " + i + ", imageSuffix:" + imageSuffix + ", imageData:" + imageData.substring(0, 100));
+                e.printStackTrace();
+                hasError = true;
+                break;
+            }
+        }
+        if (hasError) {
+            for (String s : imageUids) {
+                ImageStore.deleteImageByName(s);
+            }
+        } else {
+            if (imageUids.size() != count) {
+                logger.warn("Can not create image, imageCount is not the same as passed imageCount: " + count + ":" + imageUids.size());
+                return;
+            }
+            StringBuffer buf = new StringBuffer();
+            for (String s : imageUids) {
+                buf.append(s);
+                buf.append(';');
+            }
+            if (buf.length() > 0) {
+                buf.deleteCharAt(buf.length() - 1);
+            }
+            values.put(imageField, buf.toString());
+        }
     }
 
     public SearchResult query(HashMap params) {
@@ -108,6 +180,11 @@ public abstract class Handler {
         public final static String PARAMETER_SEPARATOR_DEFAULT_VALUE = "-";
         protected final static Integer PARAMETER_VALUE_OK_YES = new Integer(1);
         protected final static Integer PARAMETER_VALUE_OK_NO = new Integer(0);
+
+        public final static String PARAMETER_IMAGECOUNT = "imageCount";
+        public final static String PARAMETER_IMAGEFIELD = "imageField";
+        public final static String PARAMETER_IMAGE_DATA_PREFIX = "imageData";
+        public final static String PARAMETER_IMAGE_SUFFIX_PREFIX = "imageSuffix";
     }
 
     /**

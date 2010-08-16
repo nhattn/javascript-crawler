@@ -40,20 +40,6 @@ CrUtil = {
         }
     },
 
-    /**
-     * encode a image as base64, image is an html image element get by
-     * document.getElementById
-     */
-    encodeImage : function(img) {
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL("image/png");
-        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    },
-
     postData : function(params, url, callback) {
         if (!callback)
             callback = Crawler.callback
@@ -346,6 +332,20 @@ CrUtil = {
             CrUtil.cr_message_callback(JSON.parse(serverReturnedValue));
         }
         CrUtil._clearService();
+    },
+
+    /**
+     * encode a image as base64, image is an html image element get by
+     * document.getElementById
+     */
+    encodeImage : function(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     },
 
     encodeImage2 : function(imgDom, callback) {

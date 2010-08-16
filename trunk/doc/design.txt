@@ -36,29 +36,62 @@ ie, take this number : 9223372036854775807, 9223372 identifies the table,  03685
       
 
 
-link_nnnnnnn
-id bigint
-url varchar(1000)
-createTime timestamp
-finishTime timestamp
-tryCount tinyint
-state  tinyint        // 0 for not tried, 1 for finished ok, 2 for error
+#link_nnnnnnn table structure
+    id bigint
+    url varchar(1000)
+    createTime timestamp
+    finishTime timestamp
+    tryCount tinyint
+    state  tinyint        // 0 for not tried, 1 for finished ok, 2 for error,  9 for processing
 
 
-linktablemap
+#linktablemap table structure
+    id integer,  tableid integer, uid varchar(200)
 
-id integer,  tableid integer, suid varchar(200)
+tableid is usally same as id, but there are wired cases as well
+================================================================================================================================================================================================
+
+2. How images are stored.
+
+Image is stored using ImageStore instance. 
+When storing an image, must provide an image type, and the binary content of the image. 
+Inside the image store, an uuid is generated for the image, the uuid plus the image suffix is the image name.
+
+Then the image is stored like this:
+An uuid is generated with java.util.UUID class. Then '-' in the uuid is replaced with 'o'.  Then the last 5 char of the uuid is taken out. 
+And each character is taken out and mapped to a directory with the same name. Then the file is stored there.
+
+for example, if you feed with the ImageSotre an binary image and a file suffix 'jpg'. And the store generate an uuid e1559f27oc22fo452foa0fco03c461b05383
+Then the last 5 digits of the uuid 05383 is taken out, and the image is stored in the folder [ImageStore_Root_Directory]/0/5/3/9/3/e1559f27oc22fo452foa0fco03c461b05383.jpg
+There is very little chance that there will be a duplicate of the same image, if there are, it is just ignored.
 
 
+3 How to create an object with image on it.
 
-create table LinkTableMap(
-    id integer   NOT NULL AUTO_INCREMENT, 
-    uid varchar(200),
-    PRIMARY KEY (id)    
-);
+To create an image, you need the following parameters:
+1. imageData[n], the base64 encoded binary data of the image.
+2. imageSuffix[n], the suffix of the image.
+3. imageCount, which should be used number the n above, indicates how many images are posted with this request.
+4. imageField, which field do you expect to get the image back. The images will be assinged a unique id, and stored sequntially in that field, separated 
+   with ';'.
 
-ALTER TABLE LinkTableMap AUTO_INCREMENT = 1000000;
+For example, if there is two images associated with this object, and the type is .jpg,  and you want to store the generated
+image unique ids to imageField, the request to create this image would be:
 
+    imageData1=binary_conetent_encoded_with_base64
+    imageSuffix1=jpg
+    imageData2=binary_conetent_encoded_with_base64
+    imageSuffix2=png
+    imageCount=2
+    imageField=image
+
+When requesting the object, you will get something like this:
+    imageField=uuidnnnnnnnnnnnn.jpg;uuidnnnnnnnnnnnn.png
+    
+based on these two uuids you will be able to retrieve the same image.
+
+
+    
 
 
 

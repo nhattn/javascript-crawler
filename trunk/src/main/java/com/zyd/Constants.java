@@ -88,6 +88,10 @@ public class Constants {
 
     public static int WORKER_THREAD_EXECUTION_INTERVAL;
 
+    /**
+     * Must end with a '/'
+     */
+    public static String IMAGE_FILE_STORE_ROOT;
     /*
      * These fields are derived from other values, don't put any values
      */

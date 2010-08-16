@@ -27,5 +27,6 @@
 	<bean id="authorizationController" class="com.zyd.core.access.AuthorizationController" />
 	<bean id="workerThread" class="com.zyd.core.busi.WorkerThread" />
 	<bean id="linkManager" class="com.zyd.linkmanager.mysql.MysqlLinkManager" />
+	<bean id="imageStore" class="com.zyd.core.imagestore.ImageStore" />
 </beans>
     

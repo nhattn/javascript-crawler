@@ -362,6 +362,35 @@ CrUtil = {
         }, callback);
     },
 
+    /**
+     * encode an array of images. 
+     * passing in the dom array of img element, and a call back function like 
+     * func(r){
+     *  // r is an array of base64 encoded string of image data
+     * }
+     * result is the array you want to hold, same as r. can be null.
+     */
+    encodeImageArray : function(imageDoms, callbackFunc, result) {
+        if (!result) {
+            result = [];
+        }
+
+        if (result.length == imageDoms.length) {
+            callbackFunc(result);
+            return;
+        }
+
+        var serviceCallback = function(data) {
+            result[result.length] = data;
+            CrUtil.encodeImageArray(imageDoms, callbackFunc, result);
+        };
+
+        setTimeout(function() {
+            CrUtil.encodeImage2(imageDoms[result.length], serviceCallback);
+        }, 1);
+
+    },
+
     ajax : function(config, callback) {
         var nconfig = {};
         Ext.apply(nconfig, config);

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +13,6 @@ import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.imagestore.ImageStore;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.Link;
-import com.zyd.web.service.api;
 
 @SuppressWarnings("unchecked")
 public abstract class Handler {
@@ -83,9 +83,8 @@ public abstract class Handler {
      * @param values
      */
     private void processImages(HashMap values) {
-        String imageCount = (String) values.get(Parameter.PARAMETER_IMAGECOUNT), imageField = (String) values.get(Parameter.PARAMETER_IMAGEFIELD);
-        if (imageCount == null || imageField == null) {
-            logger.warn("Can not create image, imageField is null or imageCount is null");
+        String imageCount = (String) values.get(Parameter.PARAMETER_IMAGECOUNT);
+        if (imageCount == null) {
             return;
         }
         for (int i = 0, len = imageCount.length(); i < len; i++) {
@@ -98,20 +97,34 @@ public abstract class Handler {
         if (count <= 0) {
             return;
         }
+        // image field - > ';' separated image uuids
+        HashMap<String, StringBuffer> imageFieldMap = new HashMap<String, StringBuffer>();
         ArrayList<String> imageUids = new ArrayList<String>(count);
         boolean hasError = false;
         for (int i = 0; i < count; i++) {
             String imageDataParameterName = Parameter.PARAMETER_IMAGE_DATA_PREFIX + i;
             String imageSuffixParameterName = Parameter.PARAMETER_IMAGE_SUFFIX_PREFIX + i;
+            String imageFieldParameterName = Parameter.PARAMETER_IMAGEFIELD_PREFIX + i;
+
             String imageData = (String) values.remove(imageDataParameterName);
             String imageSuffix = (String) values.remove(imageSuffixParameterName);
-            if (imageData == null || imageSuffix == null) {
-                logger.warn("Can not upload image, imageData or imageSuffix is null, canceling");
+            String imageField = (String) values.remove(imageFieldParameterName);
+
+            if (imageData == null || imageSuffix == null || imageField == null) {
+                logger.warn("Can not upload image, imageData or imageSuffix or imageField is null, canceling");
                 hasError = true;
                 break;
             }
             try {
-                imageUids.add(imageStore.storeImage(imageData, imageSuffix));
+                String imageUuid = imageStore.storeImage(imageData, imageSuffix);
+                imageUids.add(imageUuid);
+                StringBuffer uidBuffer = imageFieldMap.get(imageField);
+                if (uidBuffer == null) {
+                    uidBuffer = new StringBuffer();
+                    imageFieldMap.put(imageField, uidBuffer);
+                }
+                uidBuffer.append(imageUuid);
+                uidBuffer.append(';');
             } catch (IOException e) {
                 logger.warn("Can not upload image, total image count: " + count + ", current index: " + i + ", imageSuffix:" + imageSuffix + ", imageData:" + imageData.substring(0, 100));
                 e.printStackTrace();
@@ -123,20 +136,18 @@ public abstract class Handler {
             for (String s : imageUids) {
                 ImageStore.deleteImageByName(s);
             }
+            imageFieldMap.clear();
         } else {
             if (imageUids.size() != count) {
                 logger.warn("Can not create image, imageCount is not the same as passed imageCount: " + count + ":" + imageUids.size());
                 return;
             }
-            StringBuffer buf = new StringBuffer();
-            for (String s : imageUids) {
-                buf.append(s);
-                buf.append(';');
-            }
-            if (buf.length() > 0) {
+            Set<String> fields = imageFieldMap.keySet();
+            for (String imageField : fields) {
+                StringBuffer buf = imageFieldMap.get(imageField);
                 buf.deleteCharAt(buf.length() - 1);
+                values.put(imageField, buf.toString());
             }
-            values.put(imageField, buf.toString());
         }
     }
 
@@ -182,7 +193,7 @@ public abstract class Handler {
         protected final static Integer PARAMETER_VALUE_OK_NO = new Integer(0);
 
         public final static String PARAMETER_IMAGECOUNT = "imageCount";
-        public final static String PARAMETER_IMAGEFIELD = "imageField";
+        public final static String PARAMETER_IMAGEFIELD_PREFIX = "imageField";
         public final static String PARAMETER_IMAGE_DATA_PREFIX = "imageData";
         public final static String PARAMETER_IMAGE_SUFFIX_PREFIX = "imageSuffix";
     }

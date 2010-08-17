@@ -127,17 +127,16 @@ function handlerProcess() {
             var f = iframes[i];
             if (f.src && f.src.indexOf('centerx') > 0 && f.src.indexOf('centery') > 0) {
                 var url = f.src;
-                obj.lo = CrUtil.extractParameter(url, 'centerx');
-                obj.la = CrUtil.extractParameter(url, 'centery');
-                if (obj.lo && parseInt(obj.lo)) {
-                    obj.lo = parseInt(obj.lo) / 100000;
+                obj.lng = CrUtil.extractParameter(url, 'centerx');
+                obj.lat = CrUtil.extractParameter(url, 'centery');
+                if (obj.lng && parseInt(obj.lng)) {
+                    obj.lng = parseInt(obj.lng) / 100000;
                 }
-                if (obj.la && parseInt(obj.la)) {
-                    obj.la = parseInt(obj.la) / 100000;
+                if (obj.lat && parseInt(obj.lat)) {
+                    obj.lat = parseInt(obj.lat) / 100000;
                 }
             }
         }
-
     }
     CrUtil.trimAttributes(obj);
 
@@ -169,12 +168,49 @@ function handlerProcess() {
 }
 
 function handlerProcess2(obj) {
+    var houseImages = XPath.array(null, "//div[@id='picInfo']//img");
+    var agentImages = XPath.single(null, "//div[@class='person']//img");
+    if (!houseImages || houseImages.length == 0) {
+        houseImages = [];
+    }
+    if (agentImages) {
+        houseImages.push(agentImages);
+        obj.hasAgentImage = true;
+    }
+    if (!houseImages || houseImages.length == 0) {
+        createObject(obj);
+    } else {
+        processImage(obj, houseImages);
+    }
+}
+
+function processImage(obj, imgs) {
+    CrUtil.encodeImageArray(imgs, function(r) {
+        var houseImageLen = (obj.hasAgentImage) ? (r.length - 1) : (r.length);
+        for ( var i = 0; i < houseImageLen; i++) {
+            obj['imageData' + i] = r[i];
+            obj['imageField' + i] = 'photo';
+            obj['imageSuffix' + i] = 'jpg';
+        }
+        if (obj.hasAgentImage) {
+            delete obj.hasAgentImage;
+            var i = r.length - 1;
+            obj['imageData' + i] = r[i];
+            obj['imageField' + i] = 'agentPhoto';
+            obj['imageSuffix' + i] = 'jpg';
+        }
+        obj.imageCount = r.length;
+        createObject(obj);
+    });
+}
+
+
+function createObject(obj) {
     //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });
 }
-
 var cityMap = {
     'shanghai' : '上海',
     'shenzhen' : '深圳',

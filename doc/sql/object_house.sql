@@ -18,17 +18,18 @@ create table Object_House(
 	district5			varchar(20),
 	tel					varchar(20),
 	contact				varchar(20),
-	photo				varchar(200),
+	photo				varchar(1000),
 	description1		varchar(200),
 	description2		varchar(5000),
 	floor				integer,
     totalFloor			integer,
 	isAgent				integer,
+	agentPhoto          varchar(50),
 	equipment			varchar(100),
 	decoration			varchar(20),
  	createTime          datetime,
  	updateTime          datetime, 	
-    link                bigint,	
+    link                bigint,    
  	PRIMARY KEY (id)
 );
 create index House_Index_lo  on Object_House(lng);

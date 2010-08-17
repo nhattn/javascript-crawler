@@ -29,6 +29,7 @@
 		<property name="floor" type="integer" />
 		<property name="totalFloor" type="integer" />
 		<property name="isAgent" type="int" />
+		<property name="agentPhoto" type="string" />
 		<property name="equipment" type="string" />
 		<property name="decoration" type="string" />
 		<property name="createTime" type="timestamp" />

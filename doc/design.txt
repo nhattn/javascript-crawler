@@ -72,23 +72,29 @@ To create an image, you need the following parameters:
 1. imageData[n], the base64 encoded binary data of the image.
 2. imageSuffix[n], the suffix of the image.
 3. imageCount, which should be used number the n above, indicates how many images are posted with this request.
-4. imageField, which field do you expect to get the image back. The images will be assinged a unique id, and stored sequntially in that field, separated 
-   with ';'.
+4. imageField[n], for image[n], which field do you expect to get the image back. The images will be assinged a unique id, and stored in that field, 
+   if two or more images are stored in the same field, then these images will be separated with ';' and stored sequecially.
 
-For example, if there is two images associated with this object, and the type is .jpg,  and you want to store the generated
+For example, if there is 3 images associated with this object, and the type is .jpg,  and you want to store the generated
 image unique ids to imageField, the request to create this image would be:
 
+    imageData0=binary_conetent_encoded_with_base64
+    imageSuffix0=jpg
+    imageField0=houseImage
     imageData1=binary_conetent_encoded_with_base64
-    imageSuffix1=jpg
+    imageSuffix1=png
+    imageField1=houseImage
     imageData2=binary_conetent_encoded_with_base64
     imageSuffix2=png
-    imageCount=2
-    imageField=image
+    imageField1=yardImage    
+    imageCount=3
+    
 
 When requesting the object, you will get something like this:
-    imageField=uuidnnnnnnnnnnnn.jpg;uuidnnnnnnnnnnnn.png
+    field houseImage:  uuidnnnnnnnnnnnn.jpg;uuidnnnnnnnnnnnn.png,
+    filed yardImage:   uuidnnnnnnnnnnnn.jpg
     
-based on these two uuids you will be able to retrieve the same image.
+based on these 3 uuids you will be able to retrieve the same image.
 
 
     

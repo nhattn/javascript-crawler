@@ -167,14 +167,14 @@ function handlerProcess() {
         if (i != -1) {
             var j = lonlatUrl.indexOf('&', i);
             lonlatUrl = lonlatUrl.substring(i + 7, j).split(',');
-            obj.la = lonlatUrl[0];
-            obj.lo = lonlatUrl[1];
+            obj.lat = lonlatUrl[0];
+            obj.lng = lonlatUrl[1];
         } else {
             i = lonlatUrl.indexOf('lnglat=');
             var j = lonlatUrl.indexOf('&', i);
             lonlatUrl = lonlatUrl.substring(i + 7, j).split(',');
-            obj.lo = lonlatUrl[0];
-            obj.la = lonlatUrl[1];
+            obj.lng = lonlatUrl[0];
+            obj.lat = lonlatUrl[1];
         }
     }
 
@@ -222,6 +222,44 @@ function handlerProcess() {
 }
 
 function handlerProcess2(obj) {
+    var houseImages = XPath.array(null, "//ul[@class='detail_img']//img");
+    var agentImages = XPath.single(null, "//div[@class='manager_div']//img");
+    if (!houseImages || houseImages.length == 0) {
+        houseImages = [];
+    }
+    if (agentImages) {
+        houseImages.push(agentImages);
+        obj.hasAgentImage = true;
+    }
+    if (!houseImages || houseImages.length == 0) {
+        createObject(obj);
+    } else {
+        processImage(obj, houseImages);
+    }
+}
+
+function processImage(obj, imgs) {
+    CrUtil.encodeImageArray(imgs, function(r) {
+        var houseImageLen = (obj.hasAgentImage) ? (r.length - 1) : (r.length);
+        for ( var i = 0; i < houseImageLen; i++) {
+            obj['imageData' + i] = r[i];
+            obj['imageField' + i] = 'photo';
+            obj['imageSuffix' + i] = 'jpg';
+        }
+        if (obj.hasAgentImage) {
+            delete obj.hasAgentImage;
+            var i = r.length - 1;
+            obj['imageData' + i] = r[i];
+            obj['imageField' + i] = 'agentPhoto';
+            obj['imageSuffix' + i] = 'jpg';
+        }
+        obj.imageCount = r.length;
+        createObject(obj);
+    });
+}
+
+
+function createObject(obj) {
     //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'

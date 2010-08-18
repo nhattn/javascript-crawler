@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.zyd.core.Utils;
 import com.zyd.web.ServiceBase;
 
 public class GateServlet extends HttpServlet {
@@ -63,6 +64,9 @@ public class GateServlet extends HttpServlet {
             service.get(req, resp);
         } catch (Exception e) {
             logger.error("Error happened while serving request ", e);
+            logger.debug("###################################### request snapshot ############################");
+            logger.debug(Utils.snapshotHttpRequest(req));
+            logger.debug("################################### end request snapshot ############################");
             resp.setContentType("text/plain;charset=UTF-8");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(e.toString());

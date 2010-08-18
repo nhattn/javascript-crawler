@@ -2,11 +2,14 @@ package com.zyd.core;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -271,7 +274,6 @@ public class Utils {
 
         }
         return defaultValue;
-
     }
 
     /**
@@ -293,26 +295,20 @@ public class Utils {
         return buf.toString();
     }
 
-    public static long stringHash2(String s) {
-        long h = 0;
-        int off = 0;
-        char val[] = s.toCharArray();
-        int len = s.length();
-        for (int i = 0; i < len; i++) {
-            h = 63 * h + val[off++];
+    public final static String snapshotHttpRequest(HttpServletRequest req) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("Request came from ip address :");
+        buf.append(req.getRemoteAddr());
+        buf.append(Constants.LINE_SEPERATOR);
+        Enumeration<String> names = req.getParameterNames();        
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            buf.append(name);
+            buf.append('=');
+            buf.append(req.getParameter(name));
+            buf.append(Constants.LINE_SEPERATOR);
         }
-        return h;
-    }
-
-    public static String stringHash(String s) {
-        long h = 0;
-        int off = 0;
-        char val[] = s.toCharArray();
-        int len = s.length();
-        for (int i = 0; i < len; i++) {
-            h = 63 * h + val[off++];
-        }
-        return Long.toString(h);
+        return buf.toString();
     }
 
     public static String xmlString(String s) {

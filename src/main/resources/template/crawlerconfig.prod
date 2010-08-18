@@ -12,8 +12,7 @@ CrConfig = {
     HouseObjectId : 'House',
     BusObjectId : 'Bus',
     jsToLoad : [ 
-       '/js/ext/adapter/ext/ext-base.js',   
-       '/js/ext/ext-all.js', 
+       'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js', 
        '/js/core/md.js'     
     ]
 }

@@ -45,37 +45,45 @@ public class api extends ServiceBase {
     private AccessController accessController;
     private AuthorizationController authorizationController;
 
+    public final static boolean DoAuth = false;
+
     public api() {
         ipCounter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
         accessController = (AccessController) SpringContext.getContext().getBean("accessController");
         authorizationController = (AuthorizationController) SpringContext.getContext().getBean("authorizationController");
-
     }
 
-    @Override
-    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {        
+    private boolean doAuth(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String ip = req.getRemoteAddr();
         if (accessController.isIpBlocked(ip) && req.getParameter("accessCheck") == null) {
             logger.warn("blocked access from " + ip);
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return false;
         }
+
         String clientId = req.getParameter("clientId");
         if (clientId == null) {
             logger.warn("Tyring to access without client id, blocked access from " + ip);
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return false;
         }
 
         if (authorizationController.logAccess(clientId, ip) == false) {
             logger.warn("Tyring to access without invalid  clientId, blocked access from " + ip + ", clientid " + clientId);
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            return false;
         }
         //TODO: this is stupid, it's logged twice!!!!!!!!!!!!!!! fix this
         ipCounter.logAccess(ip);
-        
-        /************** code above should be optimized *******************/
+        return true;
+    }
+
+    @Override
+    public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (DoAuth) {
+            if (doAuth(req, resp) == false)
+                return;
+        }
 
         String layer = req.getParameter("layer");
         if (layer == null || ParameterController.isLayerAllowed(layer) == false) {

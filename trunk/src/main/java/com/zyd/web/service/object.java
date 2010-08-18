@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.zyd.core.Utils;
 import com.zyd.core.busi.ClientManager;
 import com.zyd.core.objecthandler.Handler;
 import com.zyd.core.objecthandler.ObjectManager;
@@ -74,6 +75,7 @@ public class object extends ServiceBase {
             output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
             if (result == false) {
                 logger.warn("Failed to handle url - " + referer);
+                logger.debug(Utils.snapshotHttpRequest(req));
             }
             clientManager.logRequest(req);
         }
@@ -85,7 +87,7 @@ public class object extends ServiceBase {
      */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/xml");
+        setResponseType("xml", resp);
         HashMap params = requestParameterToMap(req);
         SearchResult result = objectManager.query(params);
         resp.getWriter().write(toXmlString(result, null));

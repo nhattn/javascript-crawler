@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.zyd.Constants;
 import com.zyd.core.Utils;
 import com.zyd.core.dom.XmlParcel;
 import com.zyd.core.objecthandler.SearchResult;
@@ -101,12 +102,13 @@ public class ServiceBase {
     }
 
     private static Map<String, String> ResponseTypes;
+
     static {
         ResponseTypes = new HashMap<String, String>();
-        ResponseTypes.put("html", "text/html; charset=GBK");
-        ResponseTypes.put("xml", "application/xhtml+xml; charset=GBK");
-        ResponseTypes.put("js", "application/javascript; charset=GBK");
-        ResponseTypes.put("text", "text/plain; charset=GBK");
+        ResponseTypes.put("html", "text/html; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put("xml", "application/xhtml+xml; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put("js", "application/javascript; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put("text", "text/plain; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
     }
 
     public static String toXmlString(SearchResult result, String encoding) {

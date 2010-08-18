@@ -164,6 +164,9 @@ public class Constants {
     private static void initValues() {
         ServerUrl = "http://" + SERVER_DOMAIN + APPLICATION_CONTEXT;
         IdlePageUrl = ServerUrl + "/html/wait.html";
+        if (IMAGE_FILE_STORE_ROOT.endsWith("/") == false) {
+            IMAGE_FILE_STORE_ROOT = IMAGE_FILE_STORE_ROOT + "/";
+        }
     }
 
     public static String snapShotValues() {

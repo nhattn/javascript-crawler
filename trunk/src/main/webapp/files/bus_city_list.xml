@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities>
+	<city>
+		<id>1</id>
+		<firstChar>B</firstChar>
+		<name>北京</name>
+	</city>
+	<city>
+		<id>2</id>
+		<firstChar>S</firstChar>
+		<name>上海</name>
+	</city>
+	<city>
+		<id>3</id> 
+		<firstChar>H</firstChar>
+		<name>杭州</name>
+	</city>
+	<city>
+		<id>4</id>
+		<firstChar>C</firstChar>
+		<name>重庆</name>
+	</city>
+	<city>
+		<id>5</id>
+		<firstChar>D</firstChar>
+		<name>大连</name>
+	</city>
+</cities>

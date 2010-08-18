@@ -1,12 +1,6 @@
 package com.zyd.core.nottest;
 
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
-
-import com.zyd.ATestUtil;
-import com.zyd.Constants;
-import com.zyd.core.dom.Link;
 
 public class NotTestLinkStore extends TestCase {
     /*

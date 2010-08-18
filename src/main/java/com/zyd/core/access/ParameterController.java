@@ -20,7 +20,8 @@ import com.zyd.Constants;
  */
 public class ParameterController {
     private static Logger logger = Logger.getLogger(ParameterController.class);
-    private static String[] defaultAllowed = new String[] { "start", "count", "lng", "lat", "layer", "format", "clientId" };
+    //TODO: should or should not allow order?????????
+    private static String[] defaultAllowed = new String[] { "start", "count", "lng", "lat", "layer", "format", "clientId", "c", "separator", "orderBy", "order" };
 
     private static HashMap<String, HashSet<String>> mapping = new HashMap<String, HashSet<String>>();
 

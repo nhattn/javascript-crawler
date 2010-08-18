@@ -17,9 +17,6 @@ public class ImageStore {
     }
 
     private static void createRootDirectory() {
-        if (Constants.IMAGE_FILE_STORE_ROOT.endsWith("/") == false) {
-            Constants.IMAGE_FILE_STORE_ROOT = Constants.IMAGE_FILE_STORE_ROOT + "/";
-        }
         File file = new File(Constants.IMAGE_FILE_STORE_ROOT);
         if (file.isFile() == false) {
             if (file.isDirectory() == false) {

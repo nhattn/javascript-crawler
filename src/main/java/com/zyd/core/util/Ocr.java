@@ -123,7 +123,7 @@ public class Ocr {
             String txt = OSHelper.executeCommandForString("/bin/bash " + fileHandle + ".sh", new File(Constants.LINUX_OCR_DIR));
             return txt.trim();
         } catch (Exception e) {
-            logger.error("Can not peform ocr for input.");
+            logger.warn("Can not peform ocr for input, ", e);
             logger.debug("detailed info is: ");
             logger.debug(byteString);
             logger.debug(format);

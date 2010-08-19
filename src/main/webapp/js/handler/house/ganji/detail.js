@@ -244,7 +244,8 @@ function processImage(obj, imgs) {
         for ( var i = 0; i < houseImageLen; i++) {
             obj['imageData' + i] = r[i];
             obj['imageField' + i] = 'photo';
-            obj['imageSuffix' + i] = 'jpg';            
+            obj['imageSuffix' + i] = 'jpg';
+            imageCount++;
             if (i > 2) {
                 break;
             }
@@ -255,8 +256,9 @@ function processImage(obj, imgs) {
             obj['imageData' + i] = r[i];
             obj['imageField' + i] = 'agentPhoto';
             obj['imageSuffix' + i] = 'jpg';
+            imageCount++;
         }
-        obj.imageCount = r.length;
+        obj.imageCount = imageCount;
         createObject(obj);
     });
 }

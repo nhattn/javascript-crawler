@@ -193,16 +193,15 @@ function processImage(obj, imgs) {
             obj['imageField' + i] = 'photo';
             obj['imageSuffix' + i] = 'jpg';
             imageCount++;
-            if (i > 2) {
+            if (i >= 2) {
                 break;
             }
         }
         if (obj.hasAgentImage) {
             delete obj.hasAgentImage;
-            var i = r.length - 1;
-            obj['imageData' + i] = r[i];
-            obj['imageField' + i] = 'agentPhoto';
-            obj['imageSuffix' + i] = 'jpg';
+            obj['imageData' + imageCount] = r[r.length - 1];
+            obj['imageField' + imageCount] = 'agentPhoto';
+            obj['imageSuffix' + imageCount] = 'jpg';
             imageCount++;
         }
         obj.imageCount = imageCount;

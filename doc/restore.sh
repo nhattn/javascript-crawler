@@ -65,7 +65,7 @@ emacs /tomcat/zuiyidong/conf/server.xml
 **
 enable 8009 ajp
 and uri encoding
-<Connector port="8080" URIEncoding="UTF-8"/>
+<Connector port="8080" URIEncoding="UTF-8" maxPostSize="0"/>
 <Connector port="8009" protocol="AJP/1.3" URIEncoding="UTF-8"/>
 
 

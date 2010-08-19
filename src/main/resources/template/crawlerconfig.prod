@@ -3,6 +3,7 @@ CrConfig = {
     Version : '$p3$',
     RemoteLogging : true,
     doAction : true,
+    MaxImageSize : 2000000,
     NextLinkWaitTime : $p0$,
     HouseListMaxDifference : {
         'ganji.com' : '$p1$',

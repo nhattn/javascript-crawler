@@ -191,7 +191,6 @@ function processImage(obj, imgs) {
             obj['imageData' + i] = r[i];
             obj['imageField' + i] = 'photo';
             obj['imageSuffix' + i] = 'jpg';
-            totalSize = totalSize + r[i].length;
             if (i > 2) {
                 break;
             }

@@ -244,8 +244,7 @@ function processImage(obj, imgs) {
         for ( var i = 0; i < houseImageLen; i++) {
             obj['imageData' + i] = r[i];
             obj['imageField' + i] = 'photo';
-            obj['imageSuffix' + i] = 'jpg';
-            totalSize = totalSize + r[i].length;
+            obj['imageSuffix' + i] = 'jpg';            
             if (i > 2) {
                 break;
             }

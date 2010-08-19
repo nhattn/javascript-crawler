@@ -106,7 +106,7 @@ public class MysqlLinkManager implements LinkManager {
                 counter++;
             }
         }
-        logger.info("Cleaned expried processing link:" + counter);
+        logger.info("Cleaned expired processing link:" + counter);
         return counter;
     }
 

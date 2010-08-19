@@ -241,10 +241,15 @@ function handlerProcess2(obj) {
 function processImage(obj, imgs) {
     CrUtil.encodeImageArray(imgs, function(r) {
         var houseImageLen = (obj.hasAgentImage) ? (r.length - 1) : (r.length);
+        var totalSize = 0;        
         for ( var i = 0; i < houseImageLen; i++) {
             obj['imageData' + i] = r[i];
             obj['imageField' + i] = 'photo';
             obj['imageSuffix' + i] = 'jpg';
+            totalSize = totalSize + r[i].length;
+            if (totalSize > CrGlobal.MaxImageSize) {
+                break;
+            }            
         }
         if (obj.hasAgentImage) {
             delete obj.hasAgentImage;

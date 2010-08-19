@@ -112,7 +112,7 @@ public class link extends ServiceBase {
     private int linkCounter = 0;
 
     private String nextLink() {
-        if (linkCounter++ % 100 == 0) {
+        if (linkCounter++ % 50 == 0) {
             return WatchListManager.nextWatchedLink().url;
         }
 

@@ -203,7 +203,7 @@ function processImage(obj, imgs) {
         createObject(obj);
     });
 }
-
+Ext.Ajax.timeout = 60000;
 
 function createObject(obj) {
     //console.log(obj);

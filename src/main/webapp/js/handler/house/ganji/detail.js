@@ -98,7 +98,7 @@ function handlerProcess() {
             obj.district1 = district[0];
             obj.district3 = district[1];
         } else {
-            Crawler.error('house.detail - wrong number of parameter for distrit, raw text is : ' + t);
+            Crawler.error('house.detail - wrong number of parameter for distrit, raw text is : ' + district);
         }
     } else if (fangType == 'fang5') {
         var district = HandlerHelper.getRegGroupFirstValue(s1, /小区:\s*(.*)地址:/);
@@ -109,7 +109,7 @@ function handlerProcess() {
             obj.district3 = district[0];
             obj.district5 = district[1];
         } else {
-            Crawler.error('house.detail - wrong number of parameter for distrit, raw text is : ' + t);
+            Crawler.error('house.detail - wrong number of parameter for distrit, raw text is : ' + district);
         }
     }
 

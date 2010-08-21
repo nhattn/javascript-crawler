@@ -6,17 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
-import com.zyd.Constants;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.util.SpringContext;
 
 /**
  * stops crawler.
  * Takes blocked ip address from IpCounter, grants access.
- *
  */
-public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
+@SuppressWarnings("unchecked")
+public class AccessController implements Job {
     public final static String HibernateEntityName = "BlockedIp";
     public final static String TableName = "IpBlockList";
 
@@ -24,12 +26,10 @@ public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
 
     private HashSet<String> blocked = new HashSet<String>();
     private IpCounter ipCounter;
-    private long lastCheckTime;
 
     public AccessController() {
         loadedBlockedListFromDb();
         ipCounter = (IpCounter) SpringContext.getContext().getBean("ipCounter");
-        lastCheckTime = System.currentTimeMillis();
     }
 
     public boolean isIpBlocked(String ip) {
@@ -60,15 +60,7 @@ public class AccessController implements com.zyd.core.busi.WorkerThread.Job {
         logger.info("Done checking blocked list, added new ip :" + counter);
     }
 
-    public void doJob() {
-        try {
-            checkBlockList();
-        } finally {
-            lastCheckTime = System.currentTimeMillis();
-        }
-    }
-
-    public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastCheckTime) > Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL;
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        ((AccessController) SpringContext.getContext().getBean("accessController")).checkBlockList();
     }
 }

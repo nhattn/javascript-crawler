@@ -98,6 +98,36 @@ based on these 3 uuids you will be able to retrieve the same image.
 
 
     
+4 statistics
+
+Day Interval
+
+city, date,  numberOfSale, numberOfRent, totalSaleSize, totalSalePrice, averageSalePrice
+
+
+
+
+Day interval, special house
+city, date, cheap
+
+
+CityList
+cityid, cityname
+
+
+
+---------
+communityList
+city,  name,  numberOfSale, numberOfRent, totalSaleSize, totalSalePrice
+
+
+
+
+
+  
+
+
+
 
 
 

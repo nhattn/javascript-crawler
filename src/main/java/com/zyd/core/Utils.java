@@ -299,14 +299,14 @@ public class Utils {
         StringBuffer buf = new StringBuffer();
         buf.append("Request came from ip address :");
         buf.append(req.getRemoteAddr());
-        buf.append(Constants.LINE_SEPERATOR);
+        buf.append(Constants.LINE_SEPARATOR);
         Enumeration<String> names = req.getParameterNames();        
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             buf.append(name);
             buf.append('=');
             buf.append(req.getParameter(name));
-            buf.append(Constants.LINE_SEPERATOR);
+            buf.append(Constants.LINE_SEPARATOR);
         }
         return buf.toString();
     }

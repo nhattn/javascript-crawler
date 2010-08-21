@@ -110,7 +110,7 @@ public class Constants {
     public static Link[] WATCH_LIST = new Link[0];
     public static String VERSION_STRING = Long.toString(new Date().getTime()).substring(5);
     public static int URL_MAX_LENGTH = 1000;
-    public final static String LINE_SEPERATOR = System.getProperty("line.separator");
+    public final static String LINE_SEPARATOR = System.getProperty("line.separator");
     /*
      * These are system wide comment variables, should never be changed or reassigned
      */

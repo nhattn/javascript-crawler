@@ -7,24 +7,26 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import com.zyd.Constants;
 import com.zyd.core.dom.Counter;
+import com.zyd.core.util.SpringContext;
 
 /**
  * count access from each ip address, then group it periodically and determins which ones should be blocked.
  */
-public class IpCounter implements com.zyd.core.busi.WorkerThread.Job {
+public class IpCounter implements Job {
     private static Logger logger = Logger.getLogger(IpCounter.class);
     private HashSet<String> blocked = new HashSet<String>();
     protected ArrayList<String> iplist, iplist1, iplist2;
-    private long lastCheckTime;
 
     public IpCounter() {
         iplist1 = new ArrayList<String>(5000);
         iplist2 = new ArrayList<String>(5000);
         iplist = iplist1;
-        lastCheckTime = System.currentTimeMillis();
     }
 
     public void logAccess(String ip) {
@@ -92,16 +94,7 @@ public class IpCounter implements com.zyd.core.busi.WorkerThread.Job {
         blocked.clear();
     }
 
-    public void doJob() {
-        try {
-            checkIp();
-        } finally {
-            lastCheckTime = System.currentTimeMillis();
-        }
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        ((IpCounter) SpringContext.getContext().getBean("ipCounter")).checkIp();
     }
-
-    public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastCheckTime) > Constants.IPCOUNTER_CHECK_INTERVAL;
-    }
-
 }

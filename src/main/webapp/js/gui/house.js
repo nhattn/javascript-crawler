@@ -1,5 +1,5 @@
 var pageSize = 50;
-var columns = [  'lo', 'la', 'price', 'id','rentalType', 'subRentalType',  'paymentType', 'priceUnit', 'size', 'houseType', 'address', 'city',
+var columns = [  'lng', 'lat', 'price', 'id','rentalType', 'subRentalType',  'paymentType', 'priceUnit', 'size', 'houseType', 'address', 'city',
         'district1', 'district3', 'district5', 'tel', 'contact', 'photo', 'floor', 'totalFloor', 'isAgent', 'agentPhoto',
         'equipment', 'decoration', 'ok', 'referer', 'createTime', 'updateTime', 'hash' , 'description1', 'description2'];
 

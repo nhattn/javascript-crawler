@@ -8,15 +8,19 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import com.zyd.Constants;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.access.ClientInfo;
+import com.zyd.core.util.SpringContext;
 
 /**
  * control who can access the service, takes data from ClienInfo table.
  */
-public class AuthorizationController implements com.zyd.core.busi.WorkerThread.Job {
+public class AuthorizationController implements Job {
     public final static String HibernateEntityName = "ClientInfo";
     public final static String TableName = "ClientInfo";
 
@@ -25,10 +29,7 @@ public class AuthorizationController implements com.zyd.core.busi.WorkerThread.J
     // clientid -> clientInfo
     private HashMap<String, ClientInfo> authorizedClient = new HashMap<String, ClientInfo>();
 
-    private long lastPurgeTime;
-
     public AuthorizationController() {
-        lastPurgeTime = System.currentTimeMillis();
     }
 
     /*
@@ -131,17 +132,10 @@ public class AuthorizationController implements com.zyd.core.busi.WorkerThread.J
         logger.info("Write client accessed infomation to database, total client:" + counter);
     }
 
-    public void doJob() {
-        try {
-            writeDataToDb();
-            purgeInactiveClient();
-        } finally {
-            lastPurgeTime = System.currentTimeMillis();
-        }
-    }
-
-    public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastPurgeTime) > Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL;
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        AuthorizationController ac = ((AuthorizationController) SpringContext.getContext().getBean("authorizationController"));
+        ac.writeDataToDb();
+        ac.purgeInactiveClient();
     }
 
 }

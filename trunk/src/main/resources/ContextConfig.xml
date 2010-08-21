@@ -25,8 +25,10 @@
 	<bean id="ipCounter" class="com.zyd.core.access.IpCounter" />
 	<bean id="accessController" class="com.zyd.core.access.AccessController" />
 	<bean id="authorizationController" class="com.zyd.core.access.AuthorizationController" />
-	<bean id="workerThread" class="com.zyd.core.busi.WorkerThread" />
+	<bean id="jobManager" class="com.zyd.core.busi.JobManager" />
 	<bean id="linkManager" class="com.zyd.linkmanager.mysql.MysqlLinkManager" />
 	<bean id="imageStore" class="com.zyd.core.imagestore.ImageStore" />
+	<bean id="houseStatasticsManager" class="com.zyd.core.busi.house.HouseStatasticsManager" />
+
 </beans>
     

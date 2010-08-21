@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
-import com.zyd.core.busi.WorkerThread;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.LinkManager;
@@ -61,7 +60,7 @@ public class controller extends ServiceBase {
     }
 
     private void wakeUpThreads() {
-        ((WorkerThread) SpringContext.getContext().getBean("workerThread")).wakeUp();
+//        ((WorkerThread) SpringContext.getContext().getBean("workerThread")).wakeUp();
     }
 
     /**

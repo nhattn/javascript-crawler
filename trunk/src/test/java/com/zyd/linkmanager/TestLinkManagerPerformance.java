@@ -114,6 +114,7 @@ public class TestLinkManagerPerformance extends TestCase {
                     counter++;
                 } catch (Exception e) {
                     System.err.println("failed to create link: " + ("http://" + domain + "/link_" + i));
+                    e.printStackTrace();
                 }
                 try {
                     Thread.sleep(1);

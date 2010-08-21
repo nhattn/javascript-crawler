@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import com.zyd.Constants;
+import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.Link;
 import com.zyd.linkmanager.LinkManager;
 
@@ -16,7 +19,6 @@ public class MysqlLinkManager implements LinkManager {
     private final HashMap<String, LinkStore> storeMap = new HashMap<String, LinkStore>(100);
     private final HashMap<String, Link> processingLinkMap = new HashMap<String, Link>();
     private final ArrayList<LinkStore> storeList = new ArrayList<LinkStore>();
-    private long lastExecuteTime;
     private boolean hasMore = true;
     /* how many are processed so far */
     private long processedLinkCount = 0;
@@ -24,7 +26,6 @@ public class MysqlLinkManager implements LinkManager {
     private long addedLinkCount = 0;
 
     public MysqlLinkManager() {
-        lastExecuteTime = System.currentTimeMillis();
     }
 
     /**
@@ -147,16 +148,6 @@ public class MysqlLinkManager implements LinkManager {
         return store;
     }
 
-    public void doJob() {
-        cleanExpiredProcessingLink();
-        cleanExpiredLinkStore();
-        lastExecuteTime = System.currentTimeMillis();
-    }
-
-    public boolean shouldRun() {
-        return (System.currentTimeMillis() - lastExecuteTime) > Constants.LINK_MONITOR_SCAN_INTERVAL;
-    }
-
     public Link getLink(String url) {
         String storeUid = LinkTableMapper.mapUrl(url);
         LinkStore store = createStore(storeUid, false);
@@ -197,5 +188,11 @@ public class MysqlLinkManager implements LinkManager {
         buf.append("Active Store  : " + storeList.size());
         buf.append("\n");
         return buf.toString();
+    }
+
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        MysqlLinkManager linkManager = ((MysqlLinkManager) SpringContext.getContext().getBean("linkManager"));
+        linkManager.cleanExpiredProcessingLink();
+        linkManager.cleanExpiredLinkStore();
     }
 }

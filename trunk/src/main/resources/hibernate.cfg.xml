@@ -34,7 +34,6 @@
 		<mapping resource="hbm/com_zyd_layer_busline.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_wifi.hbm.xml" />
 		<!--
-
 			<mapping resource="hbm/busstation.hbm.xml" /> <mapping
 			resource="hbm/restaurant.hbm.xml" />
 		-->

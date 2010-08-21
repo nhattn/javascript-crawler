@@ -1,6 +1,8 @@
 package com.zyd.linkmanager;
 
-public interface LinkManager extends com.zyd.core.busi.WorkerThread.Job {
+import org.quartz.Job;
+
+public interface LinkManager extends Job {
     /**
      * @param url
      * @return a link in the processing queue based on it's url

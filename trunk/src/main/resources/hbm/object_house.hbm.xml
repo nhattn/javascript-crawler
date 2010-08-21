@@ -28,12 +28,33 @@
 		<property name="description2" type="string" />
 		<property name="floor" type="integer" />
 		<property name="totalFloor" type="integer" />
-		<property name="isAgent" type="int" />
+		<property name="isAgent" type="integer" />
 		<property name="agentPhoto" type="string" />
 		<property name="equipment" type="string" />
 		<property name="decoration" type="string" />
 		<property name="createTime" type="timestamp" />
 		<property name="updateTime" type="timestamp" />
 		<property name="link" type="long" />
+	</class>
+
+
+	<class entity-name="House_Data_Day" table="Object_House_Data_Day">
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="city" type="string" />
+		<property name="date" type="date" />
+		<property name="saleCount" type="integer" />
+		<property name="rentCount" type="integer" />
+		<property name="totalSaleSize" type="integer" />
+		<property name="totalSalePrice" type="integer" />
+		<property name="averageSalePrice" type="integer" />
+	</class>
+
+	<class entity-name="House_CityList" table="Object_House_CityList">
+		<id name="id" type="int">
+			<generator class="native" />
+		</id>
+		<property name="city" type="string" />
 	</class>
 </hibernate-mapping>

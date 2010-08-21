@@ -95,7 +95,7 @@ public class ATestUtil {
         return r;
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
 
         double lat1 = -122.200284;
         double lat2 = -122.200198;
@@ -199,5 +199,8 @@ public class ATestUtil {
         JSONObject r = new JSONObject(s);
         return r.getString("result");
     }
-
+    
+    public static void main(String[] args) throws Exception{
+        System.out.println(getNextLink());
+    }
 }

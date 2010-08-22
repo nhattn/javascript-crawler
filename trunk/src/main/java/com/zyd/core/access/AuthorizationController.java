@@ -20,7 +20,7 @@ import com.zyd.core.util.SpringContext;
 /**
  * control who can access the service, takes data from ClienInfo table.
  */
-public class AuthorizationController implements Job {
+public class AuthorizationController {
     public final static String HibernateEntityName = "ClientInfo";
     public final static String TableName = "ClientInfo";
 
@@ -104,7 +104,8 @@ public class AuthorizationController implements Job {
                 counter++;
             }
         }
-        logger.info("Purged " + counter + " inactive client");
+        if (counter > 0)
+            logger.info("Purged " + counter + " inactive client");
     }
 
     /**
@@ -129,13 +130,16 @@ public class AuthorizationController implements Job {
             }
         }
         session.getTransaction().commit();
-        logger.info("Write client accessed infomation to database, total client:" + counter);
+        if (counter > 0)
+            logger.info("Write client accessed infomation to database, total client:" + counter);
     }
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        AuthorizationController ac = ((AuthorizationController) SpringContext.getContext().getBean("authorizationController"));
-        ac.writeDataToDb();
-        ac.purgeInactiveClient();
+    public static class PeriodicalJob implements Job {
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            AuthorizationController ac = ((AuthorizationController) SpringContext.getContext().getBean("authorizationController"));
+            ac.writeDataToDb();
+            ac.purgeInactiveClient();
+        }
     }
 
 }

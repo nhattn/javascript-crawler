@@ -38,7 +38,7 @@
 	</class>
 
 
-	<class entity-name="House_Data_Day" table="Object_House_Data_Day">
+	<class entity-name="House_Data" table="Object_House_Data">
 		<id name="id" type="long">
 			<generator class="native" />
 		</id>
@@ -49,6 +49,7 @@
 		<property name="totalSaleSize" type="integer" />
 		<property name="totalSalePrice" type="integer" />
 		<property name="averageSalePrice" type="integer" />
+		<property name="type" type="integer" />
 	</class>
 
 	<class entity-name="House_CityList" table="Object_House_CityList">

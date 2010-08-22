@@ -18,7 +18,7 @@ import com.zyd.core.util.SpringContext;
 /**
  * count access from each ip address, then group it periodically and determins which ones should be blocked.
  */
-public class IpCounter implements Job {
+public class IpCounter {
     private static Logger logger = Logger.getLogger(IpCounter.class);
     private HashSet<String> blocked = new HashSet<String>();
     protected ArrayList<String> iplist, iplist1, iplist2;
@@ -94,7 +94,9 @@ public class IpCounter implements Job {
         blocked.clear();
     }
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        ((IpCounter) SpringContext.getContext().getBean("ipCounter")).checkIp();
+    public static class PeriodicalJob implements Job {
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            ((IpCounter) SpringContext.getContext().getBean("ipCounter")).checkIp();
+        }
     }
 }

@@ -149,7 +149,7 @@ public class HibernateUtil {
     public static class EntityNames {
         public final static String House = "House";
         public final static String House_CityList = "House_CityList";
-        public final static String House_Data_Day = "House_Data_Day";
+        public final static String House_Data_Day = "House_Data";
         public final static String GroupBuy = "GroupBuy";
     }
 }

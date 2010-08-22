@@ -45,19 +45,18 @@ create index Object_House_Index_price  on Object_House(price);
 ALTER TABLE Object_House AUTO_INCREMENT = 100000000000000;
 
 
+/**
+   ## get data for city list from the query below.
+   insert into Object_House_CityList(city) select distinct city from Object_House where city is not null;
+**/
+
 create table Object_House_CityList (
     id       integer NOT NULL AUTO_INCREMENT,
     city     varchar(100),
     PRIMARY KEY (id)    
 );
 
-/**
-
-   ## get data for city list from the query below.
-   insert into Object_House_CityList(city) select distinct city from Object_House where city is not null;
-**/
-
-create table Object_House_Data_Day(
+create table Object_House_Data(
     id                      bigint NOT NULL AUTO_INCREMENT,
     city                    varchar(10),
     date                    date,
@@ -66,21 +65,7 @@ create table Object_House_Data_Day(
     totalSaleSize           integer,
     totalSalePrice          integer,
     averageSalePrice        integer,
+    type                    integer,
     PRIMARY KEY (id)
 );
 
-
-create table Object_House_Data_By_Month(
-    id                      bigint NOT NULL AUTO_INCREMENT,
-    city                    varchar(10),
-    date                    date,
-    saleCount               integer,
-    rentCount               integer,
-    totalSaleSize           integer,
-    totalSalePrice          integer,
-    averageSalePrice        integer,
-    PRIMARY KEY (id)
-);
-
-
-  

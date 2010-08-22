@@ -38,7 +38,7 @@ public class ClientManager {
                 return o1.lastAccess.compareTo(o2.lastAccess);
             }
         });
-        for (Client c : clients.values()) {
+        for (Client c : list) {
             buf.append(c.toString());
             buf.append("\n");
         }

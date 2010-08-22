@@ -18,7 +18,7 @@ import com.zyd.core.util.SpringContext;
  * Takes blocked ip address from IpCounter, grants access.
  */
 @SuppressWarnings("unchecked")
-public class AccessController implements Job {
+public class AccessController {
     public final static String HibernateEntityName = "BlockedIp";
     public final static String TableName = "IpBlockList";
 
@@ -57,10 +57,13 @@ public class AccessController implements Job {
             }
         }
         ipCounter.clearBlockedList();
-        logger.info("Done checking blocked list, added new ip :" + counter);
+        if (counter > 0)
+            logger.info("Done checking blocked list, added new ip :" + counter);
     }
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        ((AccessController) SpringContext.getContext().getBean("accessController")).checkBlockList();
+    public static class PeriodicalJob implements Job {
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            ((AccessController) SpringContext.getContext().getBean("accessController")).checkBlockList();
+        }
     }
 }

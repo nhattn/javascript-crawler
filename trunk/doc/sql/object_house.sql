@@ -60,12 +60,12 @@ create table Object_House_Data(
     id                      bigint NOT NULL AUTO_INCREMENT,
     city                    varchar(10),
     date                    date,
-    saleCount               integer,
-    rentCount               integer,
-    totalSaleSize           integer,
-    totalSalePrice          integer,
-    averageSalePrice        integer,
-    type                    integer,
+    saleCount               bigint,
+    rentCount               bigint,
+    totalSaleSize           bigint,
+    totalSalePrice          bigint,
+    averageSalePrice        bigint,
+    type                    int,
     PRIMARY KEY (id)
 );
 create index Object_House_Data_index_city on Object_House_Data(city);

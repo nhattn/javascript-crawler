@@ -44,11 +44,11 @@
 		</id>
 		<property name="city" type="string" />
 		<property name="date" type="date" />
-		<property name="saleCount" type="integer" />
-		<property name="rentCount" type="integer" />
-		<property name="totalSaleSize" type="integer" />
-		<property name="totalSalePrice" type="integer" />
-		<property name="averageSalePrice" type="integer" />
+		<property name="saleCount" type="long" />
+		<property name="rentCount" type="long" />
+		<property name="totalSaleSize" type="long" />
+		<property name="totalSalePrice" type="long" />
+		<property name="averageSalePrice" type="long" />		
 		<property name="type" type="integer" />
 	</class>
 

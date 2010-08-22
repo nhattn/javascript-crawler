@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -107,7 +108,8 @@ public class MysqlLinkManager implements LinkManager {
                 counter++;
             }
         }
-        logger.info("Cleaned expired processing link:" + counter);
+        if (counter > 0)
+            logger.info("Cleaned expired processing link:" + counter);
         return counter;
     }
 
@@ -121,7 +123,8 @@ public class MysqlLinkManager implements LinkManager {
                 counter++;
             }
         }
-        logger.info("Cleaned inactive store : " + counter);
+        if (counter > 0)
+            logger.info("Cleaned inactive store : " + counter);
         return counter;
     }
 
@@ -187,12 +190,20 @@ public class MysqlLinkManager implements LinkManager {
         buf.append("\n");
         buf.append("Active Store  : " + storeList.size());
         buf.append("\n");
+        buf.append("processing list ---------\n");
+        ArrayList<String> processing = new ArrayList<String>(processingLinkMap.keySet());
+        for (String s : processing) {
+            buf.append(s);
+            buf.append("\n");
+        }
         return buf.toString();
     }
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        MysqlLinkManager linkManager = ((MysqlLinkManager) SpringContext.getContext().getBean("linkManager"));
-        linkManager.cleanExpiredProcessingLink();
-        linkManager.cleanExpiredLinkStore();
+    public static class CleanLinkJob implements Job {
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            MysqlLinkManager linkManager = ((MysqlLinkManager) SpringContext.getContext().getBean("linkManager"));
+            linkManager.cleanExpiredProcessingLink();
+            linkManager.cleanExpiredLinkStore();
+        }
     }
 }

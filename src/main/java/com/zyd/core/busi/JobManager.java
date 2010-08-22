@@ -1,5 +1,7 @@
 package com.zyd.core.busi;
 
+import java.text.ParseException;
+
 import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
@@ -40,6 +42,18 @@ public class JobManager {
     public void registerJob(Class jobClass, int interval) {
         SimpleTrigger trigger = new SimpleTrigger(jobClass.getCanonicalName(), SimpleTrigger.REPEAT_INDEFINITELY, interval);
         trigger.setMisfireInstruction(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        registerJob(jobClass, trigger);
+    }
+
+    public void registerCronJob(Class jobClass, String cronTriggerSpec, int misfirePolicy) {
+        CronTrigger trigger = null;
+        try {
+            trigger = new CronTrigger(jobClass.getCanonicalName(), null, cronTriggerSpec);
+        } catch (ParseException e) {
+            logger.fatal("Can not instiate cron trigger with specification: " + cronTriggerSpec, e);
+            return;
+        }
+        trigger.setMisfireInstruction(misfirePolicy);
         registerJob(jobClass, trigger);
     }
 

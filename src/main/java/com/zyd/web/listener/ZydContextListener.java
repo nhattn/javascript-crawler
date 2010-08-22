@@ -1,11 +1,8 @@
 package com.zyd.web.listener;
 
-import java.text.ParseException;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 
 import com.zyd.Constants;
@@ -16,10 +13,8 @@ import com.zyd.core.busi.JobManager;
 import com.zyd.core.busi.house.HouseStatasticsManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
-import com.zyd.web.service.zyd;
 
 public class ZydContextListener implements ServletContextListener {
-    private static Logger logger = Logger.getLogger(ZydContextListener.class);
 
     public ZydContextListener() {
     }
@@ -33,18 +28,13 @@ public class ZydContextListener implements ServletContextListener {
             // do nothing just to initialize 
         }
         JobManager jobMan = ((JobManager) SpringContext.getContext().getBean("jobManager"));
-        jobMan.registerJob(IpCounter.class, Constants.IPCOUNTER_CHECK_INTERVAL);
-        jobMan.registerJob(AccessController.class, Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL);
-        jobMan.registerJob(AuthorizationController.class, Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL);
-        jobMan.registerJob(MysqlLinkManager.class, Constants.LINK_MONITOR_SCAN_INTERVAL);
-        try {
-            // running every day at 1 seconds past 1
-            CronTrigger trigger = new CronTrigger(HouseStatasticsManager.class.getCanonicalName(), null, "1 0 0 * * ?");
-            trigger.setMisfireInstruction(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
-            jobMan.registerJob(HouseStatasticsManager.class, trigger);
-        } catch (ParseException e) {
-            logger.fatal("Can not register HouseStatisticsManager ", e);
-        }
+        jobMan.registerJob(IpCounter.PeriodicalJob.class, Constants.IPCOUNTER_CHECK_INTERVAL);
+        jobMan.registerJob(AccessController.PeriodicalJob.class, Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL);
+        jobMan.registerJob(AuthorizationController.PeriodicalJob.class, Constants.AUTHORIZATION_CONTROLLER_EXECUTION_INTERVAL);
+        jobMan.registerJob(MysqlLinkManager.CleanLinkJob.class, Constants.LINK_MONITOR_SCAN_INTERVAL);
+        jobMan.registerCronJob(HouseStatasticsManager.DailyHouseJob.class, "1 0 0 * * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(HouseStatasticsManager.WeeklyHouseJob.class, "1 0 0 ? * MON", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(HouseStatasticsManager.MonthlyHouseJob.class, "1 0 0 1 * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
         jobMan.startScheduler();
     }
 }

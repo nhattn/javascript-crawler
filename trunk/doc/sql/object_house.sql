@@ -68,4 +68,5 @@ create table Object_House_Data(
     type                    integer,
     PRIMARY KEY (id)
 );
+create index Object_House_Data_index_city on Object_House_Data(city);
 

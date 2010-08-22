@@ -34,6 +34,9 @@ public class HouseStatasticsManager {
         ArrayList<String> cityList = getCityList();
         for (String city : cityList) {
             HouseData h = getLastDayHouseData(city);
+            if (h == null) {
+                continue;
+            }
             if (saveHouseData(h) == false) {
                 return false;
             }
@@ -41,10 +44,12 @@ public class HouseStatasticsManager {
         return true;
     }
 
-    private boolean generateRangeData(Date[] dateRange) {
+    private boolean generateRangeData(Date[] dateRange, int type) {
         ArrayList<String> cityList = getCityList();
         for (String city : cityList) {
-            HouseData h = getRangeHouseData(city, dateRange[0], dateRange[1]);
+            HouseData h = getRangeHouseData(city, dateRange[0], dateRange[1], type);
+            if (h == null)
+                continue;
             if (saveHouseData(h) == false) {
                 return false;
             }
@@ -55,6 +60,9 @@ public class HouseStatasticsManager {
     private boolean saveHouseData(HouseData house) {
         HashMap values = new HashMap();
         values.put(Columns.City, house.city);
+        if (house.getAverageSaleUnitPrice() <= 0) {
+            System.out.println("error------------------------------------------------------------------------");
+        }
         values.put(Columns.AverageSalePrice, house.getAverageSaleUnitPrice());
         values.put(Columns.Date, house.date);
         values.put(Columns.RentCount, house.totalRentalCount);
@@ -104,9 +112,9 @@ public class HouseStatasticsManager {
             session.getTransaction().commit();
             return null;
         }
-        data.totalSaleCount = (int) ((Long) values[0]).longValue();
-        data.totalSalePrice = (int) (((Double) values[1]).doubleValue());
-        data.totalSaleSize = (int) (((Double) values[2]).doubleValue());
+        data.totalSaleCount = ((Long) values[0]).longValue();
+        data.totalSalePrice = (((Double) values[1]).longValue());
+        data.totalSaleSize = (((Double) values[2]).longValue());
 
         query = session.createQuery(lastDaySql2);
 
@@ -120,7 +128,7 @@ public class HouseStatasticsManager {
             session.getTransaction().commit();
             return null;
         }
-        data.totalRentalCount = (int) ((Long) obj).longValue();
+        data.totalRentalCount = ((Long) obj).longValue();
         session.getTransaction().commit();
         data.city = city;
         data.type = HouseData.TYPE_BY_DAY;
@@ -131,7 +139,7 @@ public class HouseStatasticsManager {
     private final static String rangeHouseDataSql = "select sum(saleCount), sum(totalSaleSize), sum(totalSalePrice), sum(rentCount)"
             + "from House_Data data where data.date between :startDate and :endDate and data.type=1 and data.city=:city";
 
-    private static HouseData getRangeHouseData(String city, Date start, Date end) {
+    private static HouseData getRangeHouseData(String city, Date start, Date end, int type) {
         HouseData data = new HouseData();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -146,11 +154,14 @@ public class HouseStatasticsManager {
             session.getTransaction().commit();
             return null;
         }
-        data.totalSaleCount = (int) ((Long) values[0]).longValue();
-        data.totalSalePrice = (int) (((Long) values[1]).doubleValue());
-        data.totalSaleSize = (int) (((Long) values[2]).doubleValue());
-        data.totalRentalCount = (int) ((Long) values[3]).longValue();
+        data.totalSaleCount = ((Long) values[0]).longValue();
+        data.totalSaleSize = (((Long) values[1]).longValue());
+        data.totalSalePrice = (((Long) values[2]).longValue());
+        data.totalRentalCount = ((Long) values[3]).longValue();
         session.getTransaction().commit();
+        data.city = city;
+        data.type = type;
+        data.date = end;
         return data;
     }
 
@@ -202,7 +213,7 @@ public class HouseStatasticsManager {
     public static class WeeklyHouseJob implements Job {
         public void execute(JobExecutionContext context) throws JobExecutionException {
             HouseStatasticsManager man = ((HouseStatasticsManager) SpringContext.getContext().getBean("houseStatasticsManager"));
-            man.generateRangeData(DateUtil.getLastWeekDateRange());
+            man.generateRangeData(DateUtil.getLastWeekDateRange(), HouseData.TYPE_BY_WEEK);
             logger.info("Successfully wrote weekly city data into database");
         }
     }
@@ -210,7 +221,7 @@ public class HouseStatasticsManager {
     public static class MonthlyHouseJob implements Job {
         public void execute(JobExecutionContext context) throws JobExecutionException {
             HouseStatasticsManager man = ((HouseStatasticsManager) SpringContext.getContext().getBean("houseStatasticsManager"));
-            man.generateRangeData(DateUtil.getLastMonthDateRange());
+            man.generateRangeData(DateUtil.getLastMonthDateRange(), HouseData.TYPE_BY_MONTH);
             logger.info("Successfully wrote monthly city data into database");
         }
     }
@@ -218,6 +229,7 @@ public class HouseStatasticsManager {
     public static void main(String[] args) {
         //        new HouseStatasticsManager().generateDataByDay();
         Date[] date = DateUtil.getLastWeekDateRange();
-        System.out.println(getRangeHouseData("北京", date[0], date[1]));
+        //        System.out.println(getRangeHouseData("北京", date[0], date[1]));
+        System.out.println(((257554l * 10000l / 120640l)));
     }
 }

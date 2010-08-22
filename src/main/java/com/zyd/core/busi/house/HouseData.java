@@ -9,17 +9,17 @@ public class HouseData {
     public final static int TYPE_BY_WEEK = 2;
     public final static int TYPE_BY_MONTH = 3;
 
-    public int totalRentalCount;
-    public int totalSaleCount;
-    public int totalSaleSize;
-    public int totalSalePrice;
+    public long totalRentalCount;
+    public long totalSaleCount;
+    public long totalSaleSize;
+    public long totalSalePrice;
     public int type;
     public String city;
     public Date date;
 
-    public int getAverageSaleUnitPrice() {
+    public long getAverageSaleUnitPrice() {
         if (totalSaleSize != 0) {
-            return (int) ((totalSalePrice * 10000 / totalSaleSize));
+            return ((totalSalePrice * 10000L / totalSaleSize));
         }
         return 0;
     }

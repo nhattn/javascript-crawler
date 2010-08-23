@@ -34,8 +34,19 @@ Ext.apply(zyd.api.Api.prototype, {
      * that will be put into google map info window
      */
     generateContentForInfoWindow : function(object) {
-
+        var r = [];
+        r[r.length] = '<table style="margin:20px;">';
+        for ( var i in object) {
+            r[r.length] = '<tr><td>';
+            r[r.length] = i;
+            r[r.length] = '</td><td>';
+            r[r.length] = object[i];
+            r[r.length] = '</tr>';
+        }
+        r[r.length] = '</table>';
+        return r.join('');
     },
+
     getStore : function() {
         var store = new Ext.data.Store( {
             autoLoad : true,
@@ -59,6 +70,7 @@ Ext.apply(zyd.api.Api.prototype, {
         });
         return store;
     },
+
     getColumnModel : function() {
         var columns = this.columns;
         var cs = [];
@@ -93,14 +105,35 @@ zyd.api.HouseApi = Ext.extend(zyd.api.Api, {
     getRequestUrl : function() {
         return '/service/object'
     },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
-    },
     getBaseParameter : function() {
         return {
             objectid : 'House',
             count : zyd.api.config.PageSize
         }
+    },
+    generateContentForInfoWindow : function(object) {
+        var r = [];
+        r[r.length] = '<table style="margin:20px;" cellpadding=5>';
+        for ( var i in object) {
+            var v = object[i];
+            if (i == 'agentPhoto' && v && v.length > 0) {
+                v = '<img src="/service/image?name=' + v + '"></img>'
+            } else if (i == 'photo' && v && v.length > 0) {
+                v = v.split(';');
+                var t = [];
+                for ( var j = 0; j < v.length; j++) {
+                    t[t.length] = '<img src="/service/image?name=' + v[j] + '"></img>';
+                }
+                v = t.join(' ');
+            }
+            r[r.length] = '<tr><td>';
+            r[r.length] = i;
+            r[r.length] = '</td><td>';
+            r[r.length] = v;
+            r[r.length] = '</tr>';
+        }
+        r[r.length] = '</table>';
+        return r.join('');
     }
 });
 
@@ -108,9 +141,6 @@ zyd.api.WifiApi = Ext.extend(zyd.api.Api, {
     columns : [ 'lng', 'lat', 'id', 'description' ],
     getRequestUrl : function() {
         return '/service/api'
-    },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
     },
     getBaseParameter : function() {
         return {
@@ -125,9 +155,6 @@ zyd.api.RestaurantApi = Ext.extend(zyd.api.Api, {
     getRequestUrl : function() {
         return '/service/api'
     },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
-    },
     getBaseParameter : function() {
         return {
             layer : 'com.zuiyidong.layer.restaurant',
@@ -140,9 +167,6 @@ zyd.api.WifiApi = Ext.extend(zyd.api.Api, {
     columns : [ 'lng', 'lat', 'id', 'description' ],
     getRequestUrl : function() {
         return '/service/api'
-    },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
     },
     getBaseParameter : function() {
         return {
@@ -157,9 +181,7 @@ zyd.api.BusLineApi = Ext.extend(zyd.api.Api, {
     getRequestUrl : function() {
         return '/service/api'
     },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
-    },
+
     getBaseParameter : function() {
         return {
             layer : 'com.zuiyidong.layer.busline',
@@ -172,9 +194,7 @@ zyd.api.BusStationApi = Ext.extend(zyd.api.Api, {
     getRequestUrl : function() {
         return '/service/api'
     },
-    generateContentForInfoWindow : function(object) {
-        return 'test content';
-    },
+
     getBaseParameter : function() {
         return {
             layer : 'com.zuiyidong.layer.busstation',
@@ -196,7 +216,7 @@ zyd.api.Explorer = {
         window.map = new google.maps.Map(document.getElementById("map"), myOptions);
     },
 
-    addMarker : function(lng, lat) {
+    addMarker : function(lng, lat, content) {
         var p = new google.maps.LatLng(lat, lng);
         var marker = new google.maps.Marker( {
             position : p,
@@ -204,6 +224,23 @@ zyd.api.Explorer = {
             title : 'lng:' + lng + ', lat:' + lat
         });
         window.map.setCenter(p);
+        this.showInfoWindow(marker, content);
+        var c = content;
+        google.maps.event.addListener(marker, 'click', function() {
+            zyd.api.Explorer.showInfoWindow(marker, c);
+        });
+    },
+
+    showInfoWindow : function(marker, content) {
+        var infoWin = zyd.api.Explorer.infoWin;
+        if (infoWin == null) {
+            infoWin = new google.maps.InfoWindow();
+            zyd.api.Explorer.infoWin = infoWin;
+        }
+        infoWin.setOptions( {
+            content : content
+        });
+        infoWin.open(window.map, marker);
     },
 
     buidlGridPanel : function() {
@@ -222,7 +259,10 @@ zyd.api.Explorer = {
                 listeners : {
                     rowselect : function(sm, row, rec) {
                         var data = rec.data;
-                        addMarker(data.lng, data.lat);
+                        if (data.lng && data.lat) {
+                            var content = zyd.api.Explorer.api.generateContentForInfoWindow(data);
+                            zyd.api.Explorer.addMarker(data.lng, data.lat, content);
+                        }
                     }
                 }
             })
@@ -297,6 +337,7 @@ zyd.api.Explorer = {
         var columnModel = api.getColumnModel();
         this.grid.reconfigure(store, columnModel);
         this.gridPagingBar.bindStore(store);
+        this.api = api;
         store.load( {
             params : {
                 start : 0
@@ -306,14 +347,16 @@ zyd.api.Explorer = {
     },
     selectFirstLayer : function() {
         setTimeout(function() {
-            zyd.api.Explorer.layerCombo.select(0);
+            var layer = 'House';
+            var api = zyd.api.config.layerMapping[layer];
+            zyd.api.Explorer.setApi(api);
+            zyd.api.Explorer.layerCombo.setValue(layer);
         }, 100);
-
     }
 
 }
 
 Ext.onReady(function() {
     zyd.api.Explorer.init();
-
+    zyd.api.Explorer.selectFirstLayer();
 });

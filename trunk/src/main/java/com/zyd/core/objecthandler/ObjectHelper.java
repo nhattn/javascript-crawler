@@ -227,7 +227,7 @@ public class ObjectHelper {
         case Types.TIMESTAMP:
             for (; startIndex < endIndex; startIndex++) {
                 try {
-                    r[startIndex] = timestamp2.parse(stringValues[startIndex]);
+                    r[startIndex] = timestamp1.parse(stringValues[startIndex]);
                 } catch (ParseException e) {
                     try {
                         r[startIndex] = timestamp2.parse(stringValues[startIndex]);

@@ -10,6 +10,7 @@ public class SearchResult {
     public int start;
     public int count;
     public Set cdataColumns;
+    public final static SearchResult NullResult = new SearchResult(null, 0, 0, 0);
 
     public SearchResult(List result, int total, int start, int count) {
         this.result = result;

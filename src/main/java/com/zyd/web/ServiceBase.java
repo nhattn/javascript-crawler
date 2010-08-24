@@ -106,12 +106,14 @@ public class ServiceBase {
     static {
         ResponseTypes = new HashMap<String, String>();
         ResponseTypes.put("html", "text/html; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
-        ResponseTypes.put("xml", "application/xhtml+xml; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put("xml", "text/xml; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
         ResponseTypes.put("js", "application/javascript; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
         ResponseTypes.put("text", "text/plain; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
     }
 
     public static String toXmlString(SearchResult result, String encoding) {
+        if (result == null)
+            result = SearchResult.NullResult;
         List list = result.result;
         StringBuffer buf = new StringBuffer();
         buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -157,5 +159,4 @@ public class ServiceBase {
         buf.append("</objects>");
         return buf.toString();
     }
-
 }

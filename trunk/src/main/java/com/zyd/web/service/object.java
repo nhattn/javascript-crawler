@@ -87,6 +87,11 @@ public class object extends ServiceBase {
      */
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter(Handler.Parameter.PARAMETER_OBJECT_ID) == null) {
+            setResponseType("text", resp);
+            output("Missing required parameter: objectid", resp);
+            return;
+        }
         setResponseType("xml", resp);
         HashMap params = requestParameterToMap(req);
         SearchResult result = objectManager.query(params);

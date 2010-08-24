@@ -222,6 +222,9 @@ function handlerProcess() {
 }
 
 function handlerProcess2(obj) {
+    createObject(obj);
+    return;
+    
     var houseImages = XPath.array(null, "//ul[@class='detail_img']//img");
     var agentImages = XPath.single(null, "//div[@class='manager_div']//img");
     if (!houseImages || houseImages.length == 0) {

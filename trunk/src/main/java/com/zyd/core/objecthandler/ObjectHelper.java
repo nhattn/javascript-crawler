@@ -112,7 +112,9 @@ public class ObjectHelper {
         }
     }
 
-    private static DateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    /** TODO: phase this out **/
+    private static DateFormat timestamp1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    private static DateFormat timestamp2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static DateFormat time = new SimpleDateFormat("HH:mm:ss");
     private static DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -225,11 +227,15 @@ public class ObjectHelper {
         case Types.TIMESTAMP:
             for (; startIndex < endIndex; startIndex++) {
                 try {
-                    r[startIndex] = timestamp.parse(stringValues[startIndex]);
+                    r[startIndex] = timestamp2.parse(stringValues[startIndex]);
                 } catch (ParseException e) {
-                    logger.warn("Wrong Timestamp format " + s);
-                    r = Constants.ZERO_OBJECT_LIST;
-                    break;
+                    try {
+                        r[startIndex] = timestamp2.parse(stringValues[startIndex]);
+                    } catch (ParseException e2) {
+                        logger.warn("Wrong Timestamp format " + s);
+                        r = Constants.ZERO_OBJECT_LIST;
+                        break;
+                    }
                 }
             }
             break;
@@ -332,8 +338,8 @@ public class ObjectHelper {
         ObjectHelper.parseCommonQueryParameters(c, params);
         List list = c.list();
         session.getTransaction().commit();
-        SearchResult result = new SearchResult(list, -1, params.get(Handler.Parameter.PARAMETER_START) == null ? 0 : Integer.parseInt((String) params.get(Handler.Parameter.PARAMETER_START)), list
-                .size());
+        SearchResult result = new SearchResult(list, -1, params.get(Handler.Parameter.PARAMETER_START) == null ? 0 : Integer.parseInt((String) params
+                .get(Handler.Parameter.PARAMETER_START)), list.size());
         return result;
     }
 }

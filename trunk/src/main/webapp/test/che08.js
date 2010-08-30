@@ -134,17 +134,6 @@ zyd.api.HouseApi = Ext.extend(zyd.api.Api, {
     }
 });
 
-zyd.api.WifiApi = Ext.extend(zyd.api.Api, {
-    columns : [ 'lng', 'lat', 'id', 'description' ],
-    getRequestUrl : function() {
-        return '/service/che08a'
-    },
-    getBaseParameter : function() {
-        return {
-            layer : 'com.zuiyidong.layer.wifi'
-        }
-    }
-});
 zyd.api.RestaurantApi = Ext.extend(zyd.api.Api, {
     columns : [ 'id', 'lng', 'lat', 'shopName', 'shopName2', 'city', 'address', 'district1', 'district2', 'district3', 'tel', 'tel2', 'areaCode',
             'categoryList', 'nearBy' ],
@@ -156,43 +145,6 @@ zyd.api.RestaurantApi = Ext.extend(zyd.api.Api, {
             layer : 'com.zuiyidong.layer.restaurant',
             lng : '0,1000',
             lat : '0,1000'
-        }
-    }
-});
-
-zyd.api.WifiApi = Ext.extend(zyd.api.Api, {
-    columns : [ 'lng', 'lat', 'id', 'description' ],
-    getRequestUrl : function() {
-        return '/service/che08a'
-    },
-    getBaseParameter : function() {
-        return {
-            layer : 'com.zuiyidong.layer.wifi'
-        }
-    }
-});
-
-zyd.api.BusLineApi = Ext.extend(zyd.api.Api, {
-    columns : [ 'id', 'name', 'city', 'description', 'updateTime' ],
-    getRequestUrl : function() {
-        return '/service/che08a'
-    },
-
-    getBaseParameter : function() {
-        return {
-            layer : 'com.zuiyidong.layer.busline'
-        }
-    }
-});
-zyd.api.BusStationApi = Ext.extend(zyd.api.Api, {
-    columns : [ 'id', 'lng', 'lat', 'busId', 'description', 'seq', 'busName', 'city', 'stopName' ],
-    getRequestUrl : function() {
-        return '/service/che08a'
-    },
-
-    getBaseParameter : function() {
-        return {
-            layer : 'com.zuiyidong.layer.busstation'
         }
     }
 });

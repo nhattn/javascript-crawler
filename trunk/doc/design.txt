@@ -98,7 +98,7 @@ based on these 3 uuids you will be able to retrieve the same image.
 
 
     
-4 statistics
+4 House Statistics
 
 Day Interval
 
@@ -106,20 +106,25 @@ city, date,  numberOfSale, numberOfRent, totalSaleSize, totalSalePrice, averageS
 
 
 
+5 java api for querying
 
-Day interval, special house
-city, date, cheap
-
-
-CityList
-cityid, cityname
-
-
-
----------
-communityList
-city,  name,  numberOfSale, numberOfRent, totalSaleSize, totalSalePrice
-
+SearchManager
+    singleton
+    caching 
+    
+SearchFilter
+    supported field, orderby, order, count,
+      
+    add(filed, value, value) , value is an object, should be double, int, long, date  
+    addInt()
+    addDouble
+    addDate
+    addTimestamp
+    addKeyword
+    
+SearchResult
+    count
+    object
 
 
 

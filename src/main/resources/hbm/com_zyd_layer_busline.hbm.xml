@@ -10,4 +10,9 @@
 		<property name="updateTime" type="timestamp" />
 		<property name="description" type="string" />
 	</class>
+	<class entity-name="com.zuiyidong.layer.busline.citylist" table="layer_com_zuiyidong_layer_busline_citylist">
+		<id name="id" type="int" column="id" />
+		<property name="city" type="string" />
+		<property name="spelling" type="string" />
+	</class>
 </hibernate-mapping>

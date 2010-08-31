@@ -127,9 +127,13 @@ SearchResult
     object
 
 
+6 How key and pass is generated
 
-
-  
+The key is generated like this
+ 1) Take each seq from seq, then divide time with it, get a remaining.
+ 2) Mods the remaining with length of the key, get another sequence
+ 3) take the char at the index of the sequence generated at step2, and form a string
+ 4) generate a md5 from time  
 
 
 

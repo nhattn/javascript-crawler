@@ -209,8 +209,11 @@ function handlerProcess() {
             handlerProcess2(obj);
         });
     } else {
-        xpath = "//div[contains(@class, 'tel_number')]"
+        xpath = "//div[contains(@class, 'tel_number')]";
         node = XPath.single(document, xpath);
+        if(!node){
+            node = XPath.single(document, "//span[contains(@class, 'ganji_phone_call_class')]");
+        }
         if (node && node.textContent && node.textContent.trim().length != 0) {
             obj.tel = node.textContent.trim();
             handlerProcess2(obj);
@@ -268,6 +271,8 @@ function processImage(obj, imgs) {
 Ext.Ajax.timeout = 60000;
 
 function createObject(obj) {
+    console.log(obj);
+    return;
     //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'

@@ -124,6 +124,17 @@ Crawler = {
             /* must return here, or there will be loops. */
             return;
         }
+        case 'Click.XPath.Node': {
+            var node = XPath.single(null, obj.param1);
+            if (node) {
+                setTimeout(function() {
+                    CrUtil.clickNode(node);
+                }, CrGlobal.NextLinkWaitTime);
+
+                processed = true;
+            }
+            break;
+        }
         case 'Run.Function': {
             try {
                 obj.param1();
@@ -131,6 +142,7 @@ Crawler = {
             } catch (e) {
                 Crawler.log('Error while runing function: ' + e);
             }
+            break;
         }
         case 'No.Action': {
             break;

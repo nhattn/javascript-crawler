@@ -1,7 +1,7 @@
 package com.zyd.linkmanager;
 
 import com.zyd.Constants;
- 
+
 public class WatchListManager {
     private static int lastWatchedLinkIndex = -1;
     private final static Link IdlePageUrl = new Link(Constants.IdlePageUrl);
@@ -15,5 +15,4 @@ public class WatchListManager {
             return Constants.WATCH_LIST[lastWatchedLinkIndex];
         }
     }
-
 }

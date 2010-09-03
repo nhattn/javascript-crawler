@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +31,11 @@ import com.zyd.core.objecthandler.Handler.Parameter;
 public class ObjectHelper {
     private static Logger logger = Logger.getLogger(ObjectHelper.class);
 
+    /**
+     * Don't call this method, call hibernate Util
+     * @param tableName
+     * @return
+     */
     public static HashMap<String, DatabaseColumnInfo> getTableMetaData(final String tableName) {
         final Object[] holder = new Object[1];
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
@@ -302,6 +308,9 @@ public class ObjectHelper {
                 case Types.FLOAT:
                     values.put(key, Float.parseFloat(value));
                     break;
+                case Types.DATE:
+                    values.put(key, date.parse(value));
+                    break;
                 case Types.VARCHAR:
                 case Types.CHAR:
                     break;
@@ -311,7 +320,28 @@ public class ObjectHelper {
             } catch (NumberFormatException e) {
                 logger.debug("Invalid format, ignoring key. Can not parse value for type: " + info.type + ", key is " + key + ", value is " + value, e);
                 values.remove(key);
+            } catch (ParseException e) {
+                logger.debug("Can not parsedate:" + value);
             }
+        }
+    }
+
+    /**
+     * dateString must be like 2010-04-29
+     */
+    public static Date parseDate(String dateString, Date defaultValue) {
+        try {
+            return date.parse(dateString);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    public static int parseInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultValue;
         }
     }
 

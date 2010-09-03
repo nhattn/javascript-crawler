@@ -10,7 +10,6 @@ XPath = {
         try {
             nodes = XPath.iterator(node, path);
         } catch (e) {
-//            Crawler.warn('Wrong xpath:' + e + ':' + path);
             return null;
         }
         if (nodes) {

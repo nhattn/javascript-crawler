@@ -54,6 +54,9 @@ public class MysqlLinkManager implements LinkManager {
     }
 
     public synchronized Link roundRobinNextLink() {
+        if (priorityQueue.size() > 0) {
+            return priorityQueue.remove(0);
+        }
         for (int i = 0, storeSize = storeList.size(); i < storeSize; i++) {
             LinkStore store = storeList.get((lastStoreIndex + i) % storeSize);
             Link link = store.nextUnprocessedLink();
@@ -205,5 +208,17 @@ public class MysqlLinkManager implements LinkManager {
             linkManager.cleanExpiredProcessingLink();
             linkManager.cleanExpiredLinkStore();
         }
+    }
+
+    private ArrayList<Link> priorityQueue = new ArrayList<Link>();
+
+    public synchronized Link addPriorityLink(String url) {
+        Link r = new Link();
+        r.url = url;
+        r.state = Link.STATE_NOT_PROCESSED;
+        r.setId(-1);
+        priorityQueue.add(r);
+        hasMore = true;
+        return r;
     }
 }

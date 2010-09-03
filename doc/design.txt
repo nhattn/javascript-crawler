@@ -137,11 +137,42 @@ The key is generated like this
 
 
 
+7 film database design
+
+theater name
+theater city
+film name
+date
+showtime
+description
 
 
+8 how object is created 
+ Object is create by making a http post to /object url, there are two ways to do this
+ 
+ 1) object can be created with tranditional http post parameters, with "objectid" specified 
+    as the object id ( this should be the same as the hibernate entity name), other fields 
+    should be the same as they appears in the database. 
+ 
+ 2) or post a json object with a "data" field set as a stringified json object, and a "format"
+    field set as "jsondata" .  The json object should have it's objectid set as the objectid, 
+    other fields should be the same as it appears in database. 
+    
+ By default object can only be created when the request came with a referer, and that
+ referer has to be in link list. If you want to skip the check, set skipUrlCheck=true in the parameter.
 
 
+9 how watch list is monitered
 
+each watch list begin with a # followed by a quartz scheduler definition defines a time.
+then an interval in seconds. 
+
+When the time arrives, a thread will be started to injecting links on the list to the link manager
+the directory to look for is watchlist/watch.list
+
+
+     
+ 
 
 
 

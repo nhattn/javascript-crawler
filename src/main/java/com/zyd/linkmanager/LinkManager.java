@@ -1,6 +1,5 @@
 package com.zyd.linkmanager;
 
-
 public interface LinkManager {
     /**
      * @param url
@@ -14,6 +13,12 @@ public interface LinkManager {
      * @return
      */
     public Link addLink(String url);
+
+    /**
+     * this adds a link into priority queue. The next call to nextlink will guarenteed to returned 
+     * this added link. this link will not be stored permenantly. 
+     */
+    public Link addPriorityLink(String url);
 
     /**
      * returns next link from each linkStore one by one. 

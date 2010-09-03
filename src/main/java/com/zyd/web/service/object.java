@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.zyd.core.Utils;
 import com.zyd.core.busi.ClientManager;
@@ -53,10 +55,11 @@ public class object extends ServiceBase {
             referer = req.getHeader("Referer");
         }
 
-        boolean doRequest = true;
+        boolean doRequest = true, skipUrlCheck = false;
         Link link = linkManager.getProcessingLink(referer);
 
         if ("true".equals(req.getParameter(Handler.Parameter.PARAMETER_SKIP_URL_CHECK))) {
+            skipUrlCheck = true;
         } else if (referer == null || link == null) {
             if (referer == null) {
                 logger.warn("Can not process link, no refeerer");
@@ -68,15 +71,28 @@ public class object extends ServiceBase {
         }
 
         if (doRequest) {
-            HashMap values = requestParameterToMap(req);
-            values.put(Columns.Link, link);
-            boolean result = (Boolean) objectManager.create(values);
-            linkManager.linkFinished(referer);
-            output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
-            if (result == false) {
-                logger.warn("Failed to handle url - " + referer);
-                logger.debug(Utils.snapshotHttpRequest(req));
+            boolean result = false;
+            if ("json".equals(req.getParameter(Handler.Parameter.PARAMETER_FORMAT))) {
+                String jsonData = req.getParameter(Handler.Parameter.PARAMETER_JSONDATA);
+                JSONObject jsonObj = null;
+                try {
+                    jsonObj = new JSONObject(jsonData);
+                    result = (Boolean) objectManager.create(jsonObj);
+                } catch (JSONException e) {
+                    logger.debug("Error parsing json data:");
+                    logger.debug(Utils.snapshotHttpRequest(req));
+                    result = false;
+                }
+            } else {
+                HashMap values = requestParameterToMap(req);
+                values.put(Columns.Link, link);
+                result = (Boolean) objectManager.create(values);
+
             }
+            if (skipUrlCheck == false) {
+                linkManager.linkFinished(referer);
+            }
+            output(result ? RESULT_CHANGE : RESULT_NO_CHANGE, resp);
             clientManager.logRequest(req);
         }
     }

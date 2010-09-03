@@ -13,6 +13,9 @@ import com.zyd.core.busi.JobManager;
 import com.zyd.core.busi.house.HouseStatasticsManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
+import com.zyd.linkmanager.watchlist.GoogleFilm;
+import com.zyd.linkmanager.watchlist.InjectableWatchlist;
+import com.zyd.linkmanager.watchlist.Weathercn;
 
 public class ZydContextListener implements ServletContextListener {
 
@@ -21,12 +24,14 @@ public class ZydContextListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent arg0) {
         ((JobManager) SpringContext.getContext().getBean("jobManager")).stopScheduler();
+        InjectableWatchlist.stopAll();
     }
 
     public void contextInitialized(ServletContextEvent arg0) {
         if (Constants.SERVER_DOMAIN == null) {
             // do nothing just to initialize 
         }
+
         JobManager jobMan = ((JobManager) SpringContext.getContext().getBean("jobManager"));
         jobMan.registerJob(IpCounter.PeriodicalJob.class, Constants.IPCOUNTER_CHECK_INTERVAL);
         jobMan.registerJob(AccessController.PeriodicalJob.class, Constants.ACCESS_CONTROLLER_EXECUTION_INTERVAL);
@@ -35,6 +40,11 @@ public class ZydContextListener implements ServletContextListener {
         jobMan.registerCronJob(HouseStatasticsManager.DailyHouseJob.class, "1 0 0 * * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
         jobMan.registerCronJob(HouseStatasticsManager.WeeklyHouseJob.class, "1 0 0 ? * MON", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
         jobMan.registerCronJob(HouseStatasticsManager.MonthlyHouseJob.class, "1 0 0 1 * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+
+        // register injection link manager
+        jobMan.registerCronJob(GoogleFilm.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(Weathercn.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+
         jobMan.startScheduler();
     }
 }

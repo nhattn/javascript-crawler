@@ -243,8 +243,11 @@ CrUtil = {
      * http://ditu.koubei.com/map/fangdetailmap.html?city=2076&searchtype=2&centerx=12141764&centery=3117466&centername=%D6%D0%BB%AA%C3%C5%B4%F3%CF%C3&rentorsell=rent"
      * param = centerx return = 12141764
      */
-    extractParameter : function(url, param) {
-        if (!url || !param) {
+    extractParameter : function(param, url) {
+        if (!url)
+            url = window.location.toString();
+
+        if (!param) {
             return '';
         }
         param = param + '=';
@@ -479,19 +482,19 @@ CrUtil = {
 
         /* 1分钟前 */
         var minBefore = 0, hasMinMatch = false;
-        s = ts.match(/([0-9]+)分钟前/);
+        s = ts.match(/([0-9]+)分钟/);
         if (s && s.length == 2) {
             minBefore = parseInt(s[1], 10);
             hasMinMatch = true;
         }
 
-        s = ts.match(/([0-9]+)小时前/);
+        s = ts.match(/([0-9]+)小时/);
         if (s && s.length == 2) {
             minBefore = parseInt(s[1], 10) * 60;
             hasMinMatch = true;
         }
 
-        s = ts.match(/([0-9]+)天前/);
+        s = ts.match(/([0-9]+)天/);
         if (s && s.length == 2) {
             minBefore = parseInt(s[1], 10) * 1440;
             hasMinMatch = true;
@@ -507,6 +510,63 @@ CrUtil = {
         for ( var i = 0; i < s.length; i++) {
             alert(CrUtil.guessTime(s[i]));
         }
-    }
+    },
+    clickNode : function(node) {
+        var e = document.createEvent('MouseEvents');
+        e.initEvent('click', true, false)
+        node.dispatchEvent(e);
+    },
 
+    dateString : function(date) {
+        if (date == null)
+            date = new Date();
+        var r = [], s;
+        r[r.length] = date.getFullYear();
+
+        s = (date.getMonth() + 1) + '';
+        if (s.length == 1) {
+            s = '0' + s;
+        }
+        r[r.length] = s;
+
+        s = date.getDate() + '';
+        if (s.length == 1) {
+            s = '0' + s;
+        }
+        r[r.length] = s;
+        return r.join('-');
+    },
+
+    extractParameter1 : function(name) {
+        var s = window.location.toString();
+        name = name + '=';
+        var start = s.indexOf(name);
+        if (start == -1)
+            console.log(null);
+        var end = s.indexOf('&', start);
+        if (end == -1) {
+            end = s.length;
+        }
+        return s.substring(start + name.length, end);
+    },
+    setCookie : function(name, value) {
+        var Days = 30;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    },
+    getCookie : function(name) {
+        var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+        if (arr != null)
+            return unescape(arr[2]);
+        return null;
+
+    },
+    delCookie : function(name) {
+        var exp = new Date();
+        exp.setMonth(exp.getMonth() - 1);
+        var cval = CrUtil.getCookie(name);
+        if (cval != null)
+            document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+    }
 }

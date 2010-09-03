@@ -271,9 +271,6 @@ function processImage(obj, imgs) {
 Ext.Ajax.timeout = 60000;
 
 function createObject(obj) {
-    console.log(obj);
-    return;
-    //console.log(obj);
     HandlerHelper.postObject(obj, {
         action : 'Goto.Next.Link'
     });

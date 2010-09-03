@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
@@ -78,6 +79,10 @@ public abstract class Handler {
         return true;
     }
 
+    public Object create(JSONObject object) {
+        throw new UnsupportedOperationException("Json create not implemented in default handler");
+    }
+
     /**
      * TODO: when error happened, should cancel and delete all created images
      * @param values
@@ -126,7 +131,8 @@ public abstract class Handler {
                 uidBuffer.append(imageUuid);
                 uidBuffer.append(';');
             } catch (IOException e) {
-                logger.warn("Can not upload image, total image count: " + count + ", current index: " + i + ", imageSuffix:" + imageSuffix + ", imageData:" + imageData.substring(0, 100));
+                logger.warn("Can not upload image, total image count: " + count + ", current index: " + i + ", imageSuffix:" + imageSuffix + ", imageData:"
+                        + imageData.substring(0, 100));
                 e.printStackTrace();
                 hasError = true;
                 break;
@@ -188,6 +194,11 @@ public abstract class Handler {
         public final static String PARAMETER_VALUE_ORDER_DESC = "desc";
         public final static String PARAMETER_OBJECT_ID = "objectid";
         public final static String PARAMETER_SEPARATOR = "separator";
+
+        /** the format of the data, json(set to json) or normal http(don't need to set) */
+        public final static String PARAMETER_FORMAT = "format";
+        /** used to store json posted data */
+        public final static String PARAMETER_JSONDATA = "jsondata";
         public final static String PARAMETER_SEPARATOR_DEFAULT_VALUE = "-";
         protected final static Integer PARAMETER_VALUE_OK_YES = new Integer(1);
         protected final static Integer PARAMETER_VALUE_OK_NO = new Integer(0);

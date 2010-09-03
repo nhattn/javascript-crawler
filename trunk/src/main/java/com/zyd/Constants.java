@@ -182,7 +182,7 @@ public class Constants {
         InputStream ins = null;
         InputStreamReader reader = null;
         try {
-            ins = Constants.class.getClassLoader().getResourceAsStream("watch.list");
+            ins = Constants.class.getClassLoader().getResourceAsStream("watchlist/watch.list");
             if (ins == null) {
                 logger.error("Can not load watch list from file watch.list under classpath");
                 return;

@@ -118,6 +118,19 @@ public class HibernateUtil {
         }
     }
 
+    public static void updateObject(String entityId, HashMap values) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.update(entityId, values);
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            logger.error("Can not save object " + entityId, e);            
+            session.getTransaction().rollback();
+            throw e;
+        }
+    }
+
     public static List loadObject(String objectid) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -147,9 +160,12 @@ public class HibernateUtil {
     }
 
     public static class EntityNames {
+        public final static String Film = "Film";
+        public final static String Weather = "Weather";
         public final static String House = "House";
         public final static String House_CityList = "House_CityList";
         public final static String House_Data_Day = "House_Data";
         public final static String GroupBuy = "GroupBuy";
+
     }
 }

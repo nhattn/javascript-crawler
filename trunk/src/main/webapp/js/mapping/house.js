@@ -75,6 +75,15 @@ CrGlobal.handlerMapping = [
 {
     pattern : 'tuan800\.com/deal/*',
     file : 'groupon/tuan800/detail'
-}
+},
 
-];
+{
+    pattern : 'www\.google\.com\.hk/movies\?',
+    file : 'film/google/detail'
+},
+
+/** http://www.weather.com.cn/html/weather/101011100.shtml **/
+{
+    pattern : 'www\.weather\.com\.cn/html/weather/[0-9]+\.shtml',
+    file : 'weather/detail'
+} ];

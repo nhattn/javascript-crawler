@@ -3,6 +3,8 @@ package com.zyd.core.objecthandler;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.objecthandler.Handler.Parameter;
@@ -33,6 +35,26 @@ public class ObjectManager {
             return false;
         }
         Object r = handler.create(values);
+        return r;
+    }
+
+    public Object create(JSONObject jsonObject) {
+        if (jsonObject.has(Parameter.PARAMETER_OBJECT_ID) == false) {
+            return false;
+        }
+        String objectName = null;
+        try {
+            objectName = jsonObject.getString(Parameter.PARAMETER_OBJECT_ID);
+        } catch (JSONException e) {
+            logger.debug(e);
+            return false;
+        }
+        Handler handler = lookupObjectHandler(objectName);
+        if (handler == null) {
+            logger.warn("Can not find handler for object with name : " + objectName);
+            return false;
+        }
+        Object r = handler.create(jsonObject);
         return r;
     }
 

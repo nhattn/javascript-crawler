@@ -1,6 +1,11 @@
 package com.zyd.core;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zyd.Constants;
+import com.zyd.linkmanager.watchlist.GoogleFilm;
 
 @SuppressWarnings("unchecked")
 public class Utils {
@@ -300,7 +306,7 @@ public class Utils {
         buf.append("Request came from ip address :");
         buf.append(req.getRemoteAddr());
         buf.append(Constants.LINE_SEPARATOR);
-        Enumeration<String> names = req.getParameterNames();        
+        Enumeration<String> names = req.getParameterNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             buf.append(name);
@@ -318,5 +324,40 @@ public class Utils {
 
     public static void main(String[] args) {
 
+    }
+
+    public static String[] stringArrayFromFile(String fileNameUnderClassPath) {
+        InputStream ins = GoogleFilm.class.getClassLoader().getResourceAsStream(fileNameUnderClassPath);
+        if (ins != null) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ins, Constants.Encoding_DEFAULT_SYSTEM));
+                ArrayList<String> r = new ArrayList<String>();
+                while (true) {
+                    String s = reader.readLine();
+                    if (s == null) {
+                        break;
+                    }
+                    s = s.trim();
+                    if (s.length() == 0) {
+                        continue;
+                    }
+                    r.add(s);
+                }
+                return r.toArray(new String[r.size()]);
+            } catch (UnsupportedEncodingException e) {
+                logger.debug(e);
+            } catch (IOException e) {
+                logger.error(e);
+            } finally {
+                if (ins != null) {
+                    try {
+                        ins.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return new String[0];
     }
 }

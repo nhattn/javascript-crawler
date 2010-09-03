@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="Film" table="Object_Film">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="theaterName" type="string" />
+		<property name="city" type="string" />
+		<property name="name" type="string" />
+		<property name="description" type="string" />
+		<property name="showTime" type="string" />
+		<property name="showDate" type="date" />
+		<property name="createTime" type="timestamp" />
+		<property name="updateTime" type="timestamp" />
+	</class>
+</hibernate-mapping>

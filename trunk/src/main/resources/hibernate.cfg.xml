@@ -28,7 +28,9 @@
 
 		<mapping resource="hbm/base.hbm.xml" />
 		<mapping resource="hbm/object_house.hbm.xml" />
+		<mapping resource="hbm/object_weather.hbm.xml" />
 		<mapping resource="hbm/object_groupbuy.hbm.xml" />
+		<mapping resource="hbm/object_film.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_restaurant.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_busstation.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_busline.hbm.xml" />

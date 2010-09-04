@@ -35,7 +35,7 @@ public class ClientManager {
         ArrayList<Client> list = new ArrayList<Client>(clients.values());
         Collections.sort(list, new Comparator<Client>() {
             public int compare(Client o1, Client o2) {
-                return o1.lastAccess.compareTo(o2.lastAccess);
+                return -o1.lastAccess.compareTo(o2.lastAccess);
             }
         });
         for (Client c : list) {

@@ -15,6 +15,44 @@ CrUtil = {
             CrUtil.removeFrames(document);
         }, 100);
     },
+    _imageCounter : 0,
+    /**
+     * exce is an array, if the src path of the image contains any elements in the array, it will be ignored.
+     */
+    removeImages : function(exce) {
+        CrUtil._imageCounter++;
+        if (CrUtil._imageCounter > 20) {
+            return;
+        }
+        var d = document.getElementsByTagName('img');
+        for ( var i = d.length - 1; i > -1; i--) {
+            var f = d[i];
+            if (f.__skip == true) {
+                continue;
+            }
+            if (exce) {
+                var src = f.src;
+                if (src) {
+                    var matched = false;
+                    for ( var j = 0; j < exce.length; j++) {
+                        if (src.indexOf(exce[j]) != -1) {
+                            f.__skip = true;
+                            matched = true;
+                            break;
+                        } else {
+                        }
+                    }
+                    if (matched == true) {
+                        continue;
+                    }
+                }
+            }
+            f.parentNode.removeChild(f);
+        }
+        setTimeout(function() {
+            CrUtil.removeImages(document);
+        }, 80);
+    },
 
     removeGA : function(document) {
         var hs = document.getElementsByTagName('script');

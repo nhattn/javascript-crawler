@@ -62,9 +62,31 @@ function handlerProcess() {
             'jsondata' : Ext.util.JSON.encode(r),
             skipUrlCheck : true
         };
+
         HandlerHelper.postObject(data, {
-            action : 'Click.XPath.Node',
-            param1 : '//div[@id="navbar"]//img[contains(@src,"next")]'
+            action : 'Run.Function',
+            param1 : nextActiona
         });
     }
+}
+function nextActiona() {
+    /* click next page if have it */
+    var nextPage = XPath.single(null, '//div[@id="navbar"]//img[contains(@src,"next")]');
+    if (!nextPage) {
+        var offset = parseInt(CrUtil.extractParameter('date'));
+        if (offset == 0) {
+            /* go to next date */
+            nextPage = XPath.single(null, '//div[@id="left_nav"]//a[contains(@href,"date=1")]');
+        }
+    }
+
+    if (nextPage) {
+        setTimeout(function() {
+            CrUtil.clickNode(nextPage);
+        }, CrGlobal.NextLinkWaitTime);
+        return;
+    }
+
+    /* go to next link */
+    Crawler.nextLink();
 }

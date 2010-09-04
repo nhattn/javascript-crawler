@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
+import com.zyd.core.busi.ClientManager;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.LinkManager;
 import com.zyd.linkmanager.mysql.DbHelper;
+import com.zyd.linkmanager.watchlist.InjectableWatchlist;
 import com.zyd.web.ServiceBase;
 
 public class controller extends ServiceBase {
@@ -49,7 +51,7 @@ public class controller extends ServiceBase {
             }
         } else if ("LinkSnapshot".equals(action)) {
             setResponseType("text", resp);
-            output(((LinkManager) SpringContext.getContext().getBean("linkManager")).linkSnapShot(), resp);
+            output(getSysinfo(), resp);
         } else if ("ConfigureSnapshot".equals(action)) {
             setResponseType("text", resp);
             output(Constants.snapShotValues(), resp);
@@ -59,8 +61,28 @@ public class controller extends ServiceBase {
         }
     }
 
-    private void wakeUpThreads() {
-//        ((WorkerThread) SpringContext.getContext().getBean("workerThread")).wakeUp();
+    private String getSysinfo() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("#############    Link Status   ############");
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(((LinkManager) SpringContext.getContext().getBean("linkManager")).linkSnapShot());
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(Constants.LINE_SEPARATOR);
+        
+        buf.append("#############    Client Status   ############");
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(((ClientManager) SpringContext.getContext().getBean("clientManager")).getClientReport());
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(Constants.LINE_SEPARATOR);
+        
+        buf.append("#############    InjectedWatchList    ############");
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(Constants.LINE_SEPARATOR);
+        buf.append(InjectableWatchlist.dumpStatus());
+
+        return buf.toString();
     }
 
     /**
@@ -79,13 +101,11 @@ public class controller extends ServiceBase {
             if (content != null) {
                 ByteArrayInputStream ins = new ByteArrayInputStream(content.getBytes());
                 Constants.loadValueFromStream(ins);
-                wakeUpThreads();
                 output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
                 return;
             }
         } else if ("ReloadConfigure".equals(action)) {
             Constants.loadValues();
-            wakeUpThreads();
             output(Utils.stringArrayToJsonString(new String[] { "result", "true" }), resp);
             return;
         }

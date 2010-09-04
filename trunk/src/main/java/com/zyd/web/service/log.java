@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.zyd.core.busi.ClientManager;
-import com.zyd.core.util.SpringContext;
 import com.zyd.web.ServiceBase;
 
 public class log extends ServiceBase {
@@ -45,15 +43,12 @@ public class log extends ServiceBase {
         if ("view".equals(action)) {
             setResponseType("html", resp);
             Writer o = resp.getWriter();
-            o.write("<html><head><script>window.setInterval('window.location = window.location.toString()', 5000)</script></head><body>");
+            o.write("<html><head><script>window.setInterval('window.location = window.location.toString()', 15000)</script></head><body>");
             for (int i = msg.size() - 1; i > -1; i--) {
                 o.write(msg.get(i).toString());
                 o.write("<br>");
             }
             o.write("</body></html>");
-        } else if ("ViewClient".equals(action)) {
-            setResponseType("text", resp);
-            resp.getWriter().write(((ClientManager) SpringContext.getContext().getBean("clientManager")).getClientReport());
         } else {
             setResponseType("text", resp);
             String level = req.getParameter("level");

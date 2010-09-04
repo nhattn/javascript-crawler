@@ -26,6 +26,8 @@ public class MysqlLinkManager implements LinkManager {
     /* how many are added so far */
     private long addedLinkCount = 0;
 
+    private long errorCount = 0;
+
     public MysqlLinkManager() {
     }
 
@@ -80,6 +82,7 @@ public class MysqlLinkManager implements LinkManager {
     }
 
     public Link linkFinishedError(String url, int state, String msg) {
+        errorCount++;
         return linkFinished(url, state, msg);
     }
 
@@ -190,6 +193,8 @@ public class MysqlLinkManager implements LinkManager {
         buf.append("Processed Link :" + processedLinkCount);
         buf.append("\n");
         buf.append("Added Link :" + addedLinkCount);
+        buf.append("\n");
+        buf.append("Error Link :" + errorCount);
         buf.append("\n");
         buf.append("Active Store  : " + storeList.size());
         buf.append("\n");

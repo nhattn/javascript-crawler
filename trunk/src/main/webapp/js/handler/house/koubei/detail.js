@@ -1,4 +1,5 @@
 function handlerProcess() {
+    CrUtil.removeImages(['showphone']);
     CrUtil.removeElementsByTagName('script');
     var s = XPath.single(document, "//div[@id='houseBaseInfo']").textContent.toString();
     var s1 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='allInfo']").textContent.toString().replace('[访问小区主页]', ''));

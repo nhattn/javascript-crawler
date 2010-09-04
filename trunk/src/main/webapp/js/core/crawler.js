@@ -168,7 +168,7 @@ Crawler = {
             if (window.location == oldlink) {
                 window.location = newlink;
             }
-        }, 300)
+        }, 1000)
     },
 
     callback : function(r, suc) {

@@ -54,6 +54,10 @@ public class Utils {
         CHARMAP.put('6', '6');
     }
 
+    public static String chineseNumberToNormalNumber(String s) {
+        return CHARMAP.get(s).toString();
+    }
+
     public static String stringToFlatList(List<String> list) {
         StringBuffer buf = new StringBuffer();
         for (String s : list) {

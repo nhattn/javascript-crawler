@@ -125,7 +125,7 @@ public class HibernateUtil {
             session.update(entityId, values);
             session.getTransaction().commit();
         } catch (HibernateException e) {
-            logger.error("Can not save object " + entityId, e);            
+            logger.error("Can not save object " + entityId, e);
             session.getTransaction().rollback();
             throw e;
         }
@@ -166,6 +166,7 @@ public class HibernateUtil {
         public final static String House_CityList = "House_CityList";
         public final static String House_Data_Day = "House_Data";
         public final static String GroupBuy = "GroupBuy";
-
+        public final static String BusLine = "com.zuiyidong.layer.busline";
+        public final static String BusStation = "com.zuiyidong.layer.busstation";
     }
 }

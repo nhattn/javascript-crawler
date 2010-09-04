@@ -172,6 +172,11 @@ the directory to look for is watchlist/watch.list
 
 
      
+9 how bus line is organized.
+
+ bus line has a field "seq1" which is the number part of the bus line, taken out. the smaller ones should be put in the front.
+ bus line has another field called "seq2", if that value is 1 or 2, then meaning there are the same lines but different direction. 
+                                            if that value is 3 then there is not another line 
  
 
 

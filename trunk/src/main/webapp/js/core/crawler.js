@@ -93,7 +93,7 @@ Crawler = {
                 Crawler.error("Error, can not locate link for XPath2: " + obj.param1);
             } else {
                 setTimeout(function() {
-                    window.location = link.href;
+                    Crawler.gotoLink(link.href);
                 }, CrGlobal.NextLinkWaitTime);
                 processed = true;
             }
@@ -118,7 +118,7 @@ Crawler = {
                     nextLink = Crawler.serverUrl + '/service/link?action=redirect';
                 }
                 setTimeout(function() {
-                    window.location = nextLink;
+                    Crawler.gotoLink(nextLink);
                 }, CrGlobal.NextLinkWaitTime);
             }
             /* must return here, or there will be loops. */
@@ -158,6 +158,17 @@ Crawler = {
         Crawler.action( {
             action : 'Goto.Next.Link'
         });
+    },
+
+    gotoLink : function(link) {
+        var oldlink = window.location.toString();
+        var newlink = link;
+        window.location = link;
+        setInterval(function() {
+            if (window.location == oldlink) {
+                window.location = newlink;
+            }
+        }, 300)
     },
 
     callback : function(r, suc) {

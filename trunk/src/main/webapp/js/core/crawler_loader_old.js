@@ -1,8 +1,8 @@
 /**
 CrConfig.RemoteLogging = false;
 CrConfig.doAction = false;
- **/
 CrConfig.NextLinkWaitTime = 5000000;
+ **/
 CrGlobal = {
     handlerPath : '/js/handler',
     restartInterval : 50,

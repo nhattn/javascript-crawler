@@ -8,7 +8,7 @@ e.initEvent('click', true, false)
 document.getElementById('nl').dispatchEvent(e);
 }
 click();
-setInterval(click, 500);
+setInterval(click, 1000);
 </script>
 </body>
 </html>

@@ -4,12 +4,14 @@ create table layer_com_zuiyidong_layer_busline (
         name               varchar(100), 
         city               varchar(20),
         description        varchar(500),
+        seq1               integer,
         updateTime         datetime,        
         PRIMARY KEY (id)
 ); 
 
 create index layer_busline_name  on layer_com_zuiyidong_layer_busline(name);
 create index layer_busline_city  on layer_com_zuiyidong_layer_busline(city);
+create index layer_busline_seq1  on layer_com_zuiyidong_layer_busline(seq1);
 
 create table layer_com_zuiyidong_layer_busline_citylist (
         id                 int auto_increment,        
@@ -36,5 +38,3 @@ insert into layer_com_zuiyidong_layer_busline_citylist(city)
     from layer_com_zuiyidong_layer_busline;
     
 */    
-    
-    

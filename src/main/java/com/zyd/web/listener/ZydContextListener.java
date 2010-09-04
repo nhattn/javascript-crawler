@@ -42,8 +42,8 @@ public class ZydContextListener implements ServletContextListener {
         jobMan.registerCronJob(HouseStatasticsManager.MonthlyHouseJob.class, "1 0 0 1 * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
 
         // register injection link manager
-        jobMan.registerCronJob(GoogleFilm.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
-        jobMan.registerCronJob(Weathercn.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        //        jobMan.registerCronJob(GoogleFilm.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(Weathercn.class, Weathercn.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
 
         jobMan.startScheduler();
     }

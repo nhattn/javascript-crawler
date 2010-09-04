@@ -2,9 +2,13 @@
 <body>
 <a id='nl' rel=noreferrer href='$p0$'>next</a>
 <script>
+function click(){
 var e = document.createEvent('MouseEvents');
 e.initEvent('click', true, false)
 document.getElementById('nl').dispatchEvent(e);
+}
+click();
+setInterval(click, 500);
 </script>
 </body>
 </html>

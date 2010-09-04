@@ -13,7 +13,9 @@ import com.zyd.core.busi.JobManager;
 import com.zyd.core.busi.house.HouseStatasticsManager;
 import com.zyd.core.util.SpringContext;
 import com.zyd.linkmanager.mysql.MysqlLinkManager;
+import com.zyd.linkmanager.watchlist.GoogleFilm;
 import com.zyd.linkmanager.watchlist.InjectableWatchlist;
+import com.zyd.linkmanager.watchlist.Weathercn;
 
 public class ZydContextListener implements ServletContextListener {
 
@@ -40,8 +42,8 @@ public class ZydContextListener implements ServletContextListener {
         jobMan.registerCronJob(HouseStatasticsManager.MonthlyHouseJob.class, "1 0 0 1 * ?", CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
 
         // register injection link manager
-        //        jobMan.registerCronJob(GoogleFilm.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
-        //        jobMan.registerCronJob(Weathercn.class, Weathercn.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(GoogleFilm.class, GoogleFilm.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+        jobMan.registerCronJob(Weathercn.class, Weathercn.CronDef, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
 
         jobMan.startScheduler();
     }

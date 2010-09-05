@@ -36,4 +36,9 @@ create table wifiok (
 insert into layer_com_zuiyidong_layer_wifi(id,lng,lat,type,description,city,province,address,isp,name) 
 select id,lng,lat,type,description,city,province,address,isp,name from wifiok;
 
+
+alter table layer_com_zuiyidong_layer_wifi change lng lat1 double;
+alter table layer_com_zuiyidong_layer_wifi change lat lng double;
+alter table layer_com_zuiyidong_layer_wifi change lat1 lat double;
+
 */

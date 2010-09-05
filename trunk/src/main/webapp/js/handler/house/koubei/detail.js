@@ -1,5 +1,5 @@
 function handlerProcess() {
-    CrUtil.removeImages(['showphone']);
+    CrUtil.removeImages( [ 'showphone' ]);
     CrUtil.removeElementsByTagName('script');
     var s = XPath.single(document, "//div[@id='houseBaseInfo']").textContent.toString();
     var s1 = CrUtil.removeNewLine(XPath.single(document, "//div[@id='allInfo']").textContent.toString().replace('[访问小区主页]', ''));
@@ -128,8 +128,8 @@ function handlerProcess() {
             var f = iframes[i];
             if (f.src && f.src.indexOf('centerx') > 0 && f.src.indexOf('centery') > 0) {
                 var url = f.src;
-                obj.lng = CrUtil.extractParameter(url, 'centerx');
-                obj.lat = CrUtil.extractParameter(url, 'centery');
+                obj.lng = CrUtil.extractParameter('centerx', url);
+                obj.lat = CrUtil.extractParameter('centery', url);
                 if (obj.lng && parseInt(obj.lng)) {
                     obj.lng = parseInt(obj.lng) / 100000;
                 }
@@ -171,7 +171,7 @@ function handlerProcess() {
 function handlerProcess2(obj) {
     createObject(obj);
     return;
-    
+
     var houseImages = XPath.array(null, "//div[@id='picInfo']//img");
     var agentImages = XPath.single(null, "//div[@class='person']//img");
     if (!houseImages || houseImages.length == 0) {

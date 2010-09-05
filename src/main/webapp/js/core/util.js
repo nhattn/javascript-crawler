@@ -575,18 +575,6 @@ CrUtil = {
         return r.join('-');
     },
 
-    extractParameter1 : function(name) {
-        var s = window.location.toString();
-        name = name + '=';
-        var start = s.indexOf(name);
-        if (start == -1)
-            console.log(null);
-        var end = s.indexOf('&', start);
-        if (end == -1) {
-            end = s.length;
-        }
-        return s.substring(start + name.length, end);
-    },
     setCookie : function(name, value) {
         var Days = 30;
         var exp = new Date();

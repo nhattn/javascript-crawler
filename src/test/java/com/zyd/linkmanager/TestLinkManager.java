@@ -176,8 +176,8 @@ public class TestLinkManager extends TestCase {
     }
 
     public void testCommonDomainPrefixSuffix() throws Exception {
-        String[] url = new String[] { "http://www.aa.com/url1", "http://www.aa.com.cn/url1", "http://www.a.com.cn/url1", "http://11a.com/1", "http://1a.com.cn/1", "http://1a.com/1",
-                "http://www.a.com/url1" };
+        String[] url = new String[] { "http://www.aa.com/url1", "http://www.aa.com.cn/url1", "http://www.a.com.cn/url1", "http://11a.com/1",
+                "http://1a.com.cn/1", "http://1a.com/1", "http://www.a.com/url1" };
         HashSet<String> urlSet = new HashSet<String>();
         for (String s : url) {
             urlSet.add(s);

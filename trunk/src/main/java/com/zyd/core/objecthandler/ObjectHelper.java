@@ -22,6 +22,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
 import com.zyd.Constants;
+import com.zyd.core.Utils;
 import com.zyd.core.db.HibernateUtil;
 import com.zyd.core.dom.DatabaseColumnInfo;
 import com.zyd.core.objecthandler.Handler.Columns;
@@ -80,19 +81,30 @@ public class ObjectHelper {
         } else {
             c.setMaxResults(Constants.LENGTH_PAGE_SIZE);
         }
+        String separator = (String) params.get(Handler.Parameter.PARAMETER_SEPARATOR);
         String orderBy = (String) params.get(Parameter.PARAMETER_ORDER_BY);
+        String[] orderByArray, orderArray;
         if (orderBy == null) {
-            orderBy = Columns.ID;
+            orderByArray = new String[] { Columns.ID };
+        } else if (orderBy.indexOf(separator) != -1) {
+            orderByArray = Utils.separateString(orderBy, separator);
+        } else {
+            orderByArray = new String[] { orderBy };
         }
         String order = (String) params.get(Parameter.PARAMETER_ORDER);
         if (order != null) {
             order = order.toLowerCase();
         }
-        if (Parameter.PARAMETER_VALUE_ORDER_ASC.equals(order)) {
-            c.addOrder(Order.asc(orderBy));
-        } else {
-            c.addOrder(Order.desc(orderBy));
+        orderArray = Utils.separateString(order, separator);
+        for (int i = 0; i < orderByArray.length; i++) {
+            order = i >= orderArray.length ? Parameter.PARAMETER_VALUE_ORDER_ASC : orderArray[i];
+            if (Parameter.PARAMETER_VALUE_ORDER_ASC.equals(order)) {
+                c.addOrder(Order.asc(orderByArray[i]));
+            } else {
+                c.addOrder(Order.desc(orderByArray[i]));
+            }
         }
+
     }
 
     public static void buildHibernateCriteria(Criteria c, HashMap<String, Object[]> params) {

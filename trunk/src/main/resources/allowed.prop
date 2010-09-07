@@ -1,6 +1,6 @@
 # by default, all of the layers include these parameters : start, count, lng, lat, layer, clientId
  
-com.zuiyidong.layer.busstation=busId,seq
+com.zuiyidong.layer.busstation=busId,seq,city,stopName
 com.zuiyidong.layer.busline=name,id,city
 com.zuiyidong.layer.busline.citylist=
 com.zuiyidong.layer.restaurant=

@@ -104,7 +104,8 @@ public class ATestUtil {
 
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
         double c = 2 * Math.asin(Math.sqrt(a));
         System.out.println(6371 * 1000 * c);
     }
@@ -129,7 +130,8 @@ public class ATestUtil {
     }
 
     public static int createSomeObject() throws Exception {
-        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1, Constants.Encoding_DEFAULT_SYSTEM);
+        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1,
+                Constants.Encoding_DEFAULT_SYSTEM);
         Set keys = map.keySet();
         Set changableValues = new HashSet();
         changableValues.add("address");
@@ -162,7 +164,8 @@ public class ATestUtil {
     }
 
     public static boolean createbjectWithReferer(String referer) throws Exception {
-        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1, Constants.Encoding_DEFAULT_SYSTEM);
+        Map map = CommonTestUtil.loadValueMapFromClassPathFile(TestObjectManipulation.class, TestObjectManipulation.testFile1,
+                Constants.Encoding_DEFAULT_SYSTEM);
         map.put(Columns.Tel, CommonTestUtil.getNonRepeatString());
         map.put(Columns.Address, "address_" + CommonTestUtil.getNonRepeatString());
         return createObject(map, referer);
@@ -199,8 +202,8 @@ public class ATestUtil {
         JSONObject r = new JSONObject(s);
         return r.getString("result");
     }
-    
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws Exception {
         System.out.println(getNextLink());
     }
 }

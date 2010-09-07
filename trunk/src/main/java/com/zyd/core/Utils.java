@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,6 +57,19 @@ public class Utils {
 
     public static String chineseNumberToNormalNumber(String s) {
         return CHARMAP.get(s).toString();
+    }
+
+    public static String[] separateString(String s, String separator) {
+        if (s == null) {
+            return new String[] {};
+        }
+        StringTokenizer ts = new StringTokenizer(s, separator);
+        String[] r = new String[ts.countTokens()];
+        int i = 0;
+        while (ts.hasMoreElements()) {
+            r[i++] = ts.nextToken();
+        }
+        return r;
     }
 
     public static String stringToFlatList(List<String> list) {

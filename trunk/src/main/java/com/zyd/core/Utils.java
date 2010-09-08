@@ -63,6 +63,9 @@ public class Utils {
         if (s == null) {
             return new String[] {};
         }
+        if (separator == null || separator.length() == 0) {
+            return new String[] { s };
+        }
         StringTokenizer ts = new StringTokenizer(s, separator);
         String[] r = new String[ts.countTokens()];
         int i = 0;

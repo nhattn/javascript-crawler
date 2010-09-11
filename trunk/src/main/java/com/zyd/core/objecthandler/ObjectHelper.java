@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,9 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.zyd.Constants;
 import com.zyd.core.Utils;
@@ -383,5 +387,20 @@ public class ObjectHelper {
         SearchResult result = new SearchResult(list, -1, params.get(Handler.Parameter.PARAMETER_START) == null ? 0 : Integer.parseInt((String) params
                 .get(Handler.Parameter.PARAMETER_START)), list.size());
         return result;
+    }
+
+    public static void jsonObjectToHashMap(HashMap values, JSONObject json) {
+        try {
+            Iterator keys = json.keys();
+            while (keys.hasNext()) {
+                String k = (String) keys.next();
+                Object obj = json.get(k);
+                if (obj instanceof JSONArray)
+                    continue;
+                values.put(k, obj.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,3 +9,4 @@ mysql -u$user -p$passwd < com.zuiyidong.layer.wifi.sql
 mysql -u$user -p$passwd < com.zuiyidong.layer.busline.sql
 mysql -u$user -p$passwd < com.zuiyidong.layer.busstation.sql
 mysql -u$user -p$passwd < com.zuiyidong.layer.restaurant.sql
+mysql -u$user -p$passwd < com.zuiyidong.layer.train.sql

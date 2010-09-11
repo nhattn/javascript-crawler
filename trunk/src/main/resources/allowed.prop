@@ -3,5 +3,7 @@
 com.zuiyidong.layer.busstation=busId,seq,city,stopName
 com.zuiyidong.layer.busline=name,id,city
 com.zuiyidong.layer.busline.citylist=
+com.zuiyidong.layer.train=trainNum,id
+com.zuiyidong.layer.trainstation=trainId
 com.zuiyidong.layer.restaurant=
 com.zuiyidong.layer.wifi=

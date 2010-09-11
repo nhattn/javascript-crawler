@@ -32,6 +32,7 @@
 		<mapping resource="hbm/object_groupbuy.hbm.xml" />
 		<mapping resource="hbm/object_film.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_restaurant.hbm.xml" />
+		<mapping resource="hbm/com_zyd_layer_train.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_busstation.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_busline.hbm.xml" />
 		<mapping resource="hbm/com_zyd_layer_wifi.hbm.xml" />

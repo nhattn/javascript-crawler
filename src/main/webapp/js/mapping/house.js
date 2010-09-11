@@ -86,4 +86,9 @@ CrGlobal.handlerMapping = [
 {
     pattern : 'www\.weather\.com\.cn/html/weather/[0-9]+\.shtml',
     file : 'weather/detail'
+},
+/** http://search.huochepiao.com/chaxun/resultc.asp?txtCheci=5816 **/
+{
+    pattern : 'search\.huochepiao\.com\/chaxun\/resultc\.asp\\?txtCheci=',
+    file : 'huochepiao/detail'
 } ];

@@ -5,7 +5,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +24,10 @@ public class ServiceBase {
     private static Logger logger = Logger.getLogger(ServiceBase.class);
     public static String RESULT_NO_CHANGE;
     public static String RESULT_CHANGE;
+    public final static String ResponseType_Html = "html";
+    public final static String ResponseType_Xml = "xml";
+    public final static String ResponseType_Js = "js";
+    public final static String ResponseType_Text = "text";
 
     static {
         try {
@@ -105,10 +108,10 @@ public class ServiceBase {
 
     static {
         ResponseTypes = new HashMap<String, String>();
-        ResponseTypes.put("html", "text/html; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
-        ResponseTypes.put("xml", "text/xml; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
-        ResponseTypes.put("js", "application/javascript; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
-        ResponseTypes.put("text", "text/plain; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put(ResponseType_Html, "text/html; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put(ResponseType_Xml, "text/xml; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put(ResponseType_Js, "application/javascript; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
+        ResponseTypes.put(ResponseType_Text, "text/plain; charset=" + Constants.ENCODING_OUT_GOING_CONTENT);
     }
 
     public static String toXmlString(SearchResult result, String encoding) {

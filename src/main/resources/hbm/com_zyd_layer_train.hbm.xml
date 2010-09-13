@@ -23,8 +23,7 @@
 		<property name="createTime" type="timestamp" />
 		<property name="updateTime" type="timestamp" />
 	</class>
-	<class entity-name="com.zuiyidong.layer.trainstation"
-		table="layer_com_zuiyidong_layer_trainstation">
+	<class entity-name="com.zuiyidong.layer.trainstation" table="layer_com_zuiyidong_layer_trainstation">
 		<id name="id" type="long" column="id">
 			<generator class="native" />
 		</id>
@@ -50,5 +49,41 @@
 		<property name="deng" type="string" />
 		<property name="createTime" type="timestamp" />
 		<property name="updateTime" type="timestamp" />
+	</class>
+	<class entity-name="com.zuiyidong.layer.trainstation_v" table="layer_com_zuiyidong_layer_trainstation_v">
+		<id name="id" type="long" column="id" />
+		<property name="trainId" type="long" />
+		<property name="lng" type="double" />
+		<property name="lat" type="double" />
+		<property name="province" type="string" />
+		<property name="city" type="string" />
+		<property name="district" type="string" />
+		<property name="lat1" type="double" />
+		<property name="lat2" type="double" />
+		<property name="lng1" type="double" />
+		<property name="lng2" type="double" />
+		<property name="seq" type="integer" />
+		<property name="name" type="string" />
+		<property name="arriveAt" type="string" />
+		<property name="leaveAt" type="string" />
+		<property name="totalMile" type="string" />
+		<property name="totalTime" type="string" />
+		<property name="zuo" type="string" />
+		<property name="yingwo" type="string" />
+		<property name="ruanwo" type="string" />
+		<property name="deng" type="string" />
+		<property name="createTime" type="timestamp" />
+		<property name="updateTime" type="timestamp" />
+
+		<!--fields below exists only in the view -->
+		<property name="trainName" type="string" />
+		<property name="trainNum" type="string" />
+		<property name="trainOrigin" type="string" />
+		<property name="trainDest" type="string" />
+		<property name="trainLeaveAt" type="string" />
+		<property name="trainArriveAt" type="string" />
+		<property name="trainType" type="string" />
+		<property name="trainTotalMile" type="string" />
+		<property name="trainTotalTime" type="string" />
 	</class>
 </hibernate-mapping>

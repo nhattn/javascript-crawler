@@ -5,5 +5,6 @@ com.zuiyidong.layer.busline=name,id,city
 com.zuiyidong.layer.busline.citylist=
 com.zuiyidong.layer.train=trainNum,id
 com.zuiyidong.layer.trainstation=trainId
+com.zuiyidong.layer.trainstation_v=trainId,name
 com.zuiyidong.layer.restaurant=
 com.zuiyidong.layer.wifi=

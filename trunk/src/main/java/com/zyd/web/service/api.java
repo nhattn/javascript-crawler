@@ -96,6 +96,11 @@ public class api extends ServiceBase {
             return;
         }
         String tableName = HibernateUtil.getTableName(layer);
+        if (tableName == null) {
+            setResponseType(ResponseType_Text, resp);
+            setStatus(HttpServletResponse.SC_BAD_REQUEST, "Invalid layer: " + layer, resp);
+            return;
+        }
         HashMap<String, DatabaseColumnInfo> meta = HibernateUtil.getTableMetaData(tableName);
         if (params.get(Handler.Parameter.PARAMETER_SEPARATOR) == null) {
             params.put(Handler.Parameter.PARAMETER_SEPARATOR, ",");

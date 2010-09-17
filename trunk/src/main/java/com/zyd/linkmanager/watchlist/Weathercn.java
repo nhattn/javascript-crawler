@@ -6,7 +6,7 @@ import com.zyd.core.Utils;
 
 public class Weathercn extends InjectableWatchlist {
     public static Logger logger = Logger.getLogger(Weathercn.class);
-    public final static String CronDef = "0 0 8,18 * * ?";
+    public final static String CronDef = "0 0 8 * * ?";
     private final static String[] Cities = Utils.stringArrayFromFile("watchlist/weathercity.list");
     private StringBuffer buf = new StringBuffer();
     private int index = 0;

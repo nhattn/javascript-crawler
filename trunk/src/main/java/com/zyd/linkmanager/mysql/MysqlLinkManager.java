@@ -1,5 +1,6 @@
 package com.zyd.linkmanager.mysql;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -225,5 +226,22 @@ public class MysqlLinkManager implements LinkManager {
         priorityQueue.add(r);
         hasMore = true;
         return r;
+    }
+
+    private final static int TableIdLength = Integer.toString(DbHelper.LinkTableInfoIdBase).length();
+
+    public Link getLinkById(String id) {
+        int value;
+        try {
+            value = Integer.parseInt(id.substring(0, TableIdLength));
+        } catch (Exception e) {
+            return null;
+        }
+        String linkTableName = DbHelper.LinkTablePrefix + Integer.toString(value);
+        try {
+            return DbHelper.loadLinkById(linkTableName, Long.parseLong(id));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

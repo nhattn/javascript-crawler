@@ -27,6 +27,12 @@ public class DbHelper {
     private final static long TableIdSuffix = 1000000000000L;
 
     /**
+     * From what value is the tableId in the link table start.
+     * The first several digits of every link should start with this id.
+     */
+    public final static int LinkTableInfoIdBase = 1000000;
+
+    /**
      * Several thing happens when create a new link table.
      * 
      * 1) An entry will be inserted into LinkTableMap. The assigned id will be taken
@@ -116,7 +122,8 @@ public class DbHelper {
                     PreparedStatement pst = null;
                     ResultSet r = null;
                     try {
-                        pst = connection.prepareStatement("insert into " + tableName + "(url, createTime, tryCount, state) values(?,?,0,0)", java.sql.Statement.RETURN_GENERATED_KEYS);
+                        pst = connection.prepareStatement("insert into " + tableName + "(url, createTime, tryCount, state) values(?,?,0,0)",
+                                java.sql.Statement.RETURN_GENERATED_KEYS);
                         Date now = new Date();
                         link.setCreateTime(now);
                         link.setState(Link.STATE_NOT_PROCESSED);
@@ -157,7 +164,8 @@ public class DbHelper {
                     Statement stmt = connection.createStatement();
                     ResultSet rset = null;
                     try {
-                        rset = stmt.executeQuery("select id, url, createTime,finishTime, tryCount from " + tableName + " where state = " + state + " limit " + count);
+                        rset = stmt.executeQuery("select id, url, createTime,finishTime, tryCount from " + tableName + " where state = " + state + " limit "
+                                + count);
                         while (rset.next()) {
                             Link link = new Link();
                             link.setCreateTime(new Date(rset.getTimestamp("createTime").getTime()));
@@ -459,7 +467,8 @@ public class DbHelper {
     }
 
     private static void createLinkTable(String tableName, Connection con) throws SQLException {
-        String sql = "create table " + tableName
+        String sql = "create table "
+                + tableName
                 + "(id bigint NOT NULL AUTO_INCREMENT,url varchar(1000),createTime timestamp,finishTime TIMESTAMP NULL DEFAULT NULL,tryCount tinyint, state tinyint, PRIMARY KEY (id))";
         executeSql(sql, con);
     }
@@ -531,6 +540,45 @@ public class DbHelper {
         } finally {
             if (stmt != null)
                 stmt.close();
+        }
+    }
+
+    public static final Link loadLinkById(String tableName, final long linkId) throws SQLException {
+        final String sql = "select id, url, createTime, finishTime, tryCount, state from " + tableName + " where id = ?";
+        final Link link = new Link();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction trx = session.beginTransaction();
+        try {
+            session.doWork(new Work() {
+                public void execute(Connection connection) throws SQLException {
+                    PreparedStatement stmt = null;
+                    try {
+                        stmt = connection.prepareStatement(sql);
+                        stmt.setLong(1, linkId);
+                        ResultSet r = stmt.executeQuery();
+                        if (r.next()) {
+                            link.setId(r.getLong(1));
+                            link.setUrl(r.getString(2));
+                            link.setCreateTime(r.getDate(3));
+                            link.setFinishTime(r.getDate(4));
+                            link.setTryCount(r.getInt(5));
+                            link.setState(r.getInt(6));
+                        }
+                    } finally {
+                        if (stmt != null)
+                            stmt.close();
+                    }
+                }
+            });
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            trx.rollback();
+        }
+        trx.commit();
+        if (link.getId() > 0)
+            return link;
+        else {
+            return null;
         }
     }
 }

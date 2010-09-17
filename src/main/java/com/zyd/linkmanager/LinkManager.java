@@ -62,4 +62,6 @@ public interface LinkManager {
     public void clearAllCache();
 
     public String linkSnapShot();
+
+    public Link getLinkById(String id);
 }

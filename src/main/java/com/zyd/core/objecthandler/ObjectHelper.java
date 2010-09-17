@@ -90,7 +90,7 @@ public class ObjectHelper {
         String[] orderByArray, orderArray;
         if (orderBy == null) {
             orderByArray = new String[] { Columns.ID };
-        } else if (orderBy.indexOf(separator) != -1) {
+        } else if (separator != null && orderBy.indexOf(separator) != -1) {
             orderByArray = Utils.separateString(orderBy, separator);
         } else {
             orderByArray = new String[] { orderBy };

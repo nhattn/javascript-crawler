@@ -10,7 +10,7 @@ import com.zyd.core.Utils;
 
 public class GoogleFilm extends InjectableWatchlist {
     public static Logger logger = Logger.getLogger(GoogleFilm.class);
-    public final static String CronDef = "0 0 8,18 * * ?";
+    public final static String CronDef = "0 0 6 * * ?";
     private final static String[] Cities = Utils.stringArrayFromFile("watchlist/googlefilm.list");
     private StringBuffer buf = new StringBuffer();
     private int index = 0;

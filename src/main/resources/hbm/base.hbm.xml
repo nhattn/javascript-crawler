@@ -23,6 +23,18 @@
 		<property name="lastAffendTime" type="timestamp" />
 	</class>
 
+	<class entity-name="CellInfo" table="CellInfo">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="lacId" type="integer" />
+		<property name="cellId" type="integer" />
+		<property name="lng" type="integer" />
+		<property name="lat" type="integer" />
+		<property name="clientId" type="string" />
+		<property name="createTime" type="timestamp" />
+	</class>
+
 	<class name="com.zyd.core.dom.access.ClientInfo" table="ClientInfo">
 		<id name="id" type="long" column="id">
 			<generator class="native" />

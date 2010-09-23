@@ -27,9 +27,9 @@ create table ClientInfo(
     clientId            varchar(10),
     email               varchar(100),
     companyName         varchar(100),
-    level               int,    
-    total               bigint,
-    totalSinceLastCycle bigint,   
+    level               integer,    
+    total               biginteger,
+    totalSinceLastCycle biginteger,   
     createTime          datetime,  
     PRIMARY KEY (id)       
 );
@@ -46,3 +46,15 @@ ALTER TABLE IpBlockList AUTO_INCREMENT = 100000000000000;
 ALTER TABLE AppLog AUTO_INCREMENT = 100000000000000;
 
 insert into ClientInfo(clientKey, clientId, level, total, totalSinceLastCycle) values('test','test', 1,0,0);
+
+create table CellInfo(
+    id                  bigint not null auto_increment,
+    lacId               integer,
+    cellId              integer,
+    lng                 integer,
+    lat                 integer,
+    clientId            varchar(50),
+    createTime          datetime,
+    PRIMARY KEY (id)       
+);
+

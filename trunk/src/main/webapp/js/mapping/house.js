@@ -91,4 +91,15 @@ CrGlobal.handlerMapping = [
 {
     pattern : 'search\.huochepiao\.com\/chaxun\/resultc\.asp\\?txtCheci=',
     file : 'huochepiao/detail'
+},
+/** sina t **/
+{
+    pattern : 't\.sina\.com.\cn/pub/news\?',
+    file : 'sina/news'
+}, {
+    pattern : 't\.sina\.com\.cn/[0-9]+$',
+    file : 'sina/user'
+}, {
+    pattern : 't\.sina\.com\.cn/[0-9a-zA-z]+$',
+    file : 'sina/user'
 } ];

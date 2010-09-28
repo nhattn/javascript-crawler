@@ -132,9 +132,11 @@ public class ServiceBase {
                     buf.append("<object>");
                     HashMap map = (HashMap) list.get(i);
                     String objectId = (String) map.remove("$type$");
-                    buf.append("<type>");
-                    buf.append(objectId);
-                    buf.append("</type>");
+                    if (objectId != null) {
+                        buf.append("<type>");
+                        buf.append(objectId);
+                        buf.append("</type>");
+                    }
                     Set keys = map.keySet();
                     for (Object k : keys) {
                         buf.append('<');

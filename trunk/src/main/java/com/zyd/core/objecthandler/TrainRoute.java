@@ -69,12 +69,10 @@ public class TrainRoute extends Handler {
                     String[] columnNames = new String[columnCount];
                     for (int i = 0; i < columnCount; i++) {
                         columnNames[i] = meta.getColumnLabel(i + 1);
-                        System.out.println(columnNames[i]);
                     }
                     while (rset.next()) {
                         HashMap<String, String> values = new HashMap<String, String>();
                         for (int i = 0; i < columnCount; i++) {
-                            System.out.println(columnNames[i]);
                             values.put(columnNames[i], rset.getString(columnNames[i]));
                         }
                         r.add(values);

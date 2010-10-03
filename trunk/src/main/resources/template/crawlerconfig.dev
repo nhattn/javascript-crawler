@@ -12,6 +12,7 @@ CrConfig = {
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
     BusObjectId : 'Bus',
+    TrainTicketObjectId : 'TrainTicket',
     jsToLoad : [
        '/js/ext/adapter/ext/ext-base.js',
        '/js/ext/ext-all.js',  

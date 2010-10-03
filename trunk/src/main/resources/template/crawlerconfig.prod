@@ -12,6 +12,7 @@ CrConfig = {
     ParameterName_ObjectId : 'objectid',
     HouseObjectId : 'House',
     BusObjectId : 'Bus',
+    TrainTicketObjectId : 'TrainTicket',    
     jsToLoad : [ 
        'http://ajax.googleapis.com/ajax/libs/ext-core/3.0.0/ext-core.js', 
        '/js/core/md.js'     

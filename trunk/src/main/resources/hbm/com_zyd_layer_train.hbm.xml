@@ -86,4 +86,22 @@
 		<property name="trainTotalMile" type="string" />
 		<property name="trainTotalTime" type="string" />
 	</class>
+
+	<class entity-name="TrainTicket" table="Object_TrainTicket">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="trainNum" type="string" />
+		<property name="origin" type="string" />
+		<property name="dest" type="string" />
+		<property name="type" type="string" />
+		<property name="contact" type="string" />
+		<property name="tel" type="string" />
+		<property name="ticketCount" type="string" />
+		<property name="ticketDate" type="date" />
+		<property name="price" type="string" />
+		<property name="note" type="string" />
+		<property name="place" type="string" />		
+		<property name="createTime" type="timestamp" />		
+	</class>
 </hibernate-mapping>

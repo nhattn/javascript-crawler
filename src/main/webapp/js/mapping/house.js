@@ -3,6 +3,7 @@ CrGlobal.handlerMapping = [
     ganji.com
 ****************************/
 
+/*** housing ***********/
 /*  http://sh.ganji.com/fang1/   or http://sh.ganji.com/fang1/f384/*/
 {
     pattern : 'http://.+\.ganji\.com/fang[0-9]+[/f[0-9]+/?]?$',
@@ -11,8 +12,21 @@ CrGlobal.handlerMapping = [
 
 /*http://sh.ganji.com/fang1/10050707_2950136.htm*/
 {
-    pattern : 'http://.+\.ganji\.com/fang[0-9]+/[^/|^\.]+\.html?$$',
+    pattern : 'http://.+\.ganji\.com/fang[0-9]+/[^/|^\.]+\.html?$',
     file : 'house/ganji/detail'
+},
+
+/**** train ticket ***************/
+/*  http://sh.ganji.com/piao/sell/ or http://sh.ganji.com/piao/sell/f32/ */
+{
+    pattern : 'http://.+\.ganji\.com/piao/sell',
+    file : 'huochepiao/ganji/list'
+},
+
+/*http://sh.ganji.com/piao/10100109_1416957.htm*/
+{
+    pattern : 'http://.+\.ganji\.com/piao/[0-9]+_[0-9]+',
+    file : 'huochepiao/ganji/detail'
 },
 
 /**************************

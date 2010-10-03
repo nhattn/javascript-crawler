@@ -73,3 +73,32 @@ update layer_com_zuiyidong_layer_trainstation set lng=115.021727, lat=27.105207,
 update layer_com_zuiyidong_layer_trainstation set lng=99.065609, lat=39.350361, province='甘肃省', city=null, district=null where name ='清水';
 
 */        
+
+create table Object_TrainTicket(
+        id                 bigint auto_increment,
+        trainNum           varchar(30),
+        type               varchar(10), 
+        origin             varchar(30),        
+        dest               varchar(30),
+        contact            varchar(10),
+        tel                varchar(15),
+        ticketCount        varchar(3),
+        ticketDate         date,
+        price              varchar(5),
+        note               varchar(500),
+        place              varchar(20),
+        createTime         datetime,         
+        PRIMARY KEY (id)
+);
+
+create index ticket_trainNum  on Object_TrainTicket(trainNum); 
+create index ticket_origin  on Object_TrainTicket(origin); 
+create index ticket_dest  on Object_TrainTicket(dest); 
+create index ticket_ticketDate  on Object_TrainTicket(ticketDate); 
+create index ticket_createTime  on Object_TrainTicket(createTime); 
+
+
+
+
+
+

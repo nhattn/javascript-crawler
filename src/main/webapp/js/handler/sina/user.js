@@ -1,3 +1,6 @@
+function log(s){
+    console.log(s);
+}
 function Couchdb(dbName, hostName) {
     this.db = dbName;
     this.host = hostName;
@@ -92,6 +95,38 @@ Ext.apply(Couchdb.prototype, {
     }
 });
 
+function MainAccount(userId, couchdb) {
+    this.userId = userId;
+    this.c = couchdb;
+    this.source = 1425496239;
+}
+Ext.apply(MainAccount.prototype, {
+    updateFollowerList : function() {
+        var _self = this;
+        CrUtil.ajax( {
+            url : 'http://api.t.sina.com.cn/followers/ids.json',
+            method : 'GET',
+            params : {
+                user_id : this.userId,
+                source : this.source
+            }
+        }, function(r) {
+            _self._followerGot(r.option, r.success, r.response);
+        });
+    },
+    _followerGot : function(opt, suc, resp) {        
+        if (!suc) {
+            console.log('Request failure, can not get follower list');
+            return;
+        }
+        var followers = JSON.parse(resp.responseText);
+        if(!followers.ids || followers.ids.length==0){            
+            return;
+        }
+        console.log(followers);
+    }        
+});
+
 function FollowUser() {
     this.c = new Couchdb('sinat', 'localhost:5984');
 }
@@ -136,6 +171,24 @@ Ext.apply(FollowUser.prototype, {
 });
 
 function handlerProcess() {
-    var c = new FollowUser();
-    c.kickOff();
+    var c = new Couchdb('sinat', 'localhost:5984');
+    var m = new MainAccount('1825789952', c);
+    m.updateFollowerList();
+}
+
+function massFollow() {
+    var uids = [];
+    for ( var i = 0; i < c.length; i++) {
+        uids.push(c[i].id);
+    }
+    console.log(uids.length);
+
+    App.doRequest( {
+        uid : uids.join(","),
+        fromuid : '1825789952'
+    }, "/attention/aj_addfollow.php", function() {
+        console.log(arguments);
+    }, function() {
+        console.log(arguments);
+    });
 }

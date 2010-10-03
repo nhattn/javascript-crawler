@@ -153,6 +153,8 @@ function handlerProcess() {
             }
         }
         console.log('created ' + len);
+//        console.log(obj);
+//        return;
         if (len == 0)
             recentPost.nextPage.defer(30000, recentPost);
         else

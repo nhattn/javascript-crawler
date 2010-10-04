@@ -28,8 +28,8 @@ create table ClientInfo(
     email               varchar(100),
     companyName         varchar(100),
     level               integer,    
-    total               biginteger,
-    totalSinceLastCycle biginteger,   
+    total               bigint,
+    totalSinceLastCycle bigint,   
     createTime          datetime,  
     PRIMARY KEY (id)       
 );

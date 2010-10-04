@@ -116,17 +116,34 @@ var ServiceHandler = {
                         response : resp
                     });
                 } catch (e) {
-                    log('Error in ServiceHandler ajax callback ' + e);
+                    /** if response is xml, the responseXML field is too complicated to be parsed as a json string **/
+                    log('Error in ServiceHandler ajax callback, will try to strip reponseXML ' + e);
+                    try {
+                        resp.responseXML = null;
+                        callback( {
+                            option : opt,
+                            success : suc,
+                            response : resp
+                        });
+                    } catch (e) {
+                        log('Error in ServiceHandler ajax callback after strip reponseXML, perment failure ' + e);
+                    }
                 }
             }
         Ext.Ajax.request(nrequest);
     },
 
     goHome : function(request, callback, sender) {
-        console.log('calling go home')
         var tabid = null;
         if (sender && sender.tab) {
             tabid = sender.tab.id;
+        }
+        try {
+            /** TODO this should fix the - opening too many widown without closing - problem, or it may not. */
+            chrome.tabs.remove(tabid);
+        } catch (e) {
+            console.log('error removing old tab');
+            return;
         }
         chrome.tabs.create( {
             url : request.url,

@@ -1,3 +1,7 @@
+/** use this to test url 
+ new RegExp('', 'i').test(window.location.toString())
+***/
+
 CrGlobal.handlerMapping = [
 /***************************
     ganji.com
@@ -116,4 +120,18 @@ CrGlobal.handlerMapping = [
 }, {
     pattern : 't\.sina\.com\.cn/[0-9a-zA-z]+$',
     file : 'sina/user'
-} ];
+},
+
+/***
+ * 58.com
+ */
+
+{
+    pattern : '58\.com/huochepiao/[a-z]+.html',
+    file : 'huochepiao/58/list'
+}, {
+    pattern : '58\.com/huochepiao/[a-z]+_[a-z]+.html',
+    file : 'huochepiao/58/detail'
+}
+
+];

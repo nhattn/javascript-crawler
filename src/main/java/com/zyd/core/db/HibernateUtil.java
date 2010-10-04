@@ -166,6 +166,8 @@ public class HibernateUtil {
         public final static String House_CityList = "House_CityList";
         public final static String Train = "com.zuiyidong.layer.train";
         public final static String TrainStation = "com.zuiyidong.layer.trainstation";
+        public final static String TrainSecondHandTicket = "TrainTicket";
+        public final static String TrainTicketOffice = "com.zuiyidong.layer.train.ticketoffice";
         public final static String House_Data_Day = "House_Data";
         public final static String GroupBuy = "GroupBuy";
         public final static String BusLine = "com.zuiyidong.layer.busline";

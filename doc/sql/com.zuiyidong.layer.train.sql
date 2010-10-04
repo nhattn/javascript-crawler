@@ -54,7 +54,7 @@ create index train_station_lat  on layer_com_zuiyidong_layer_trainstation(lat);
 create index train_station_trainId  on layer_com_zuiyidong_layer_trainstation(trainId);
  
 ALTER TABLE layer_com_zuiyidong_layer_train AUTO_INCREMENT = 100000000000000;
-ALTER TABLE layer_com_zuiyidong_layer_trainline AUTO_INCREMENT = 100000000000000;
+ALTER TABLE layer_com_zuiyidong_layer_trainstation AUTO_INCREMENT = 100000000000000;
 
 create view layer_com_zuiyidong_layer_trainstation_v as select 
         t.name as trainName, t.trainNum as trainNum, t.origin as trainOrigin, t.dest as trainDest,
@@ -99,6 +99,22 @@ create index ticket_createTime  on Object_TrainTicket(createTime);
 
 
 
+create table layer_com_zuiyidong_layer_train_ticketoffice(
+        id                 int auto_increment,
+        lng                double,
+        lat                double,     
+        province           varchar(20),
+        city               varchar(20),
+        district           varchar(20),           
+        name               varchar(100),        
+        tel                varchar(100),
+        address            varchar(200),
+        createTime         datetime,         
+        PRIMARY KEY (id)
+);
+
+
+ALTER TABLE layer_com_zuiyidong_layer_train_ticketoffice AUTO_INCREMENT = 100000;
 
 
 

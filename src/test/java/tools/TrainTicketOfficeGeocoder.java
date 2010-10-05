@@ -17,6 +17,10 @@ import com.zyd.core.db.HibernateUtil;
  *    mysqldump -uroot -proot crawler layer_com_zuiyidong_layer_train_ticketoffice > /y/workspace/webcrawl/backup/ticketoffice.sql
  *    mysql -uroot -proot crawler < /y/workspace/webcrawl/backup/ticketoffice.sql
  * 
+ * after got data, execute the following two sql
+ * update layer_com_zuiyidong_layer_train_ticketoffice  set tel = replace(tel, '－', '-') where tel like '%－%';
+ * update layer_com_zuiyidong_layer_train_ticketoffice  set tel = replace(tel, '—', '-') where tel like '%—%';
+ 
  * This class takes the train ticket office entity, and scans for those with lng field is null, 
  * then trings to do geocoding for the city+address string. For address with lng field value set, it won't redo it.
  * 

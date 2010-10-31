@@ -192,3 +192,23 @@ function massFollow() {
         console.log(arguments);
     });
 }
+
+
+
+var ids = [ 1836911850, 1836906754 ];
+var currentIndex = -1;
+/** removes followers **/
+function removeit() {
+    currentIndex++;
+    App.followOperation( {
+        fromuid : "1824612354",
+        touid : ids[currentIndex]
+    }, '/attention/aj_delfollow.php', function(o) {
+        console.log(o);
+        console.log(currentIndex);
+        if(currentIndex>400){
+            return;
+        }
+        removeit();
+    }, null, 'del');
+}
